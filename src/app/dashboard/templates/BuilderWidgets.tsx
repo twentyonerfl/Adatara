@@ -514,6 +514,9 @@ export function FramedPhoto({
   customWidth,
   customHeight,
   overlayUrl,
+  photoScale,
+  photoX,
+  photoY,
 }: {
   src: string;
   bingkai: string;
@@ -522,6 +525,9 @@ export function FramedPhoto({
   customWidth?: string;
   customHeight?: string;
   overlayUrl?: string;
+  photoScale?: number;
+  photoX?: number;
+  photoY?: number;
 }) {
   const isOverlay = bingkai && (bingkai.startsWith("overlay") || bingkai === "custom");
   const finalOverlayUrl = bingkai === "custom" ? overlayUrl : getOverlayPresetUrl(bingkai);
@@ -554,7 +560,14 @@ export function FramedPhoto({
         <img 
           src={src} 
           alt="" 
-          className="w-full h-full object-cover rounded-xl" 
+          className="absolute object-cover rounded-xl" 
+          style={{
+            width: `${photoScale || 100}%`,
+            height: `${photoScale || 100}%`,
+            left: `calc(50% + ${photoX || 0}px)`,
+            top: `calc(50% + ${photoY || 0}px)`,
+            transform: "translate(-50%, -50%)",
+          }}
         />
         {/* Overlay Frame */}
         {finalOverlayUrl && (
@@ -573,12 +586,23 @@ export function FramedPhoto({
   if (clipPath === "none") {
     const isNone = bingkai === "none";
     return (
-      <img 
-        src={src} 
-        alt="" 
-        className={`${!customWidth && !customHeight ? className : ""} object-cover ${isNone ? "" : "shadow-lg"} rounded-xl`} 
+      <div 
+        className={`${!customWidth && !customHeight ? className : ""} relative overflow-hidden rounded-xl ${isNone ? "" : "shadow-lg"}`}
         style={containerStyle}
-      />
+      >
+        <img 
+          src={src} 
+          alt="" 
+          className="absolute object-cover" 
+          style={{
+            width: `${photoScale || 100}%`,
+            height: `${photoScale || 100}%`,
+            left: `calc(50% + ${photoX || 0}px)`,
+            top: `calc(50% + ${photoY || 0}px)`,
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      </div>
     );
   }
 
@@ -593,7 +617,7 @@ export function FramedPhoto({
       }}
     >
       <div 
-        className="w-full h-full bg-slate-950 overflow-hidden flex items-center justify-center"
+        className="w-full h-full bg-slate-950 overflow-hidden flex items-center justify-center relative"
         style={{
           clipPath: clipPath,
           WebkitClipPath: clipPath,
@@ -602,7 +626,14 @@ export function FramedPhoto({
         <img 
           src={src} 
           alt="" 
-          className="w-full h-full object-cover" 
+          className="absolute object-cover" 
+          style={{
+            width: `${photoScale || 100}%`,
+            height: `${photoScale || 100}%`,
+            left: `calc(50% + ${photoX || 0}px)`,
+            top: `calc(50% + ${photoY || 0}px)`,
+            transform: "translate(-50%, -50%)",
+          }}
         />
       </div>
     </div>
@@ -1079,18 +1110,27 @@ export function PhotoStyleWidget({
   width,
   height,
   overlayUrl,
+  photoScale,
+  photoX,
+  photoY,
   onChange,
 }: {
   bingkai: string;
   width: string;
   height: string;
   overlayUrl: string;
-  onChange: (updates: { bingkai: string; width: string; height: string; overlay_url: string }) => void;
+  photoScale?: number;
+  photoX?: number;
+  photoY?: number;
+  onChange: (updates: { bingkai: string; width: string; height: string; overlay_url: string; photo_scale: number; photo_x: number; photo_y: number }) => void;
 }) {
   const safeBingkai = bingkai || "oval";
   const safeWidth = width || "120px";
   const safeHeight = height || "120px";
   const safeOverlayUrl = overlayUrl || "";
+  const safePhotoScale = photoScale ?? 100;
+  const safePhotoX = photoX ?? 0;
+  const safePhotoY = photoY ?? 0;
 
   const isCustomOverlay = safeBingkai === "custom";
 
@@ -1100,7 +1140,7 @@ export function PhotoStyleWidget({
         <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Bentuk / Bingkai Foto</label>
         <div className="flex gap-1 flex-wrap mb-2">
           {BINGKAI_OPTIONS.map(b => (
-            <button key={b} type="button" onClick={() => onChange({ bingkai: b, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl })}
+            <button key={b} type="button" onClick={() => onChange({ bingkai: b, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
               className={`px-1.5 py-0.5 rounded text-[8px] font-black border transition-all ${safeBingkai === b ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}>
               {b}
             </button>
@@ -1113,13 +1153,13 @@ export function PhotoStyleWidget({
           <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Bingkai PNG Kustom (Upload/URL)</label>
           <FileUploader 
             value={safeOverlayUrl}
-            onChange={(url) => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: url })}
+            onChange={(url) => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: url, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
             accept="image/png"
           />
           <input
             type="text"
             value={safeOverlayUrl}
-            onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: e.target.value })}
+            onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: e.target.value, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
             placeholder="Atau tempel URL gambar kustom di sini..."
             className="w-full px-2.5 py-1.5 text-[10px] font-bold bg-white border border-[#064e3b]/20 rounded-lg outline-none focus:border-[#d4af37]"
           />
@@ -1128,14 +1168,14 @@ export function PhotoStyleWidget({
 
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Lebar Foto (Width)</label>
+          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Lebar Bingkai (Width)</label>
           <div className="flex gap-1 items-center">
             <input 
               type="range" 
               min="50" 
               max="300" 
               value={parseInt(safeWidth) || 120}
-              onChange={e => onChange({ bingkai: safeBingkai, width: e.target.value + "px", height: safeHeight, overlay_url: safeOverlayUrl })}
+              onChange={e => onChange({ bingkai: safeBingkai, width: e.target.value + "px", height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
               className="flex-1 accent-[#d4af37] h-1" 
             />
             <span className="text-[9px] font-bold w-10 text-right">{safeWidth}</span>
@@ -1143,17 +1183,66 @@ export function PhotoStyleWidget({
         </div>
 
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Tinggi Foto (Height)</label>
+          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Tinggi Bingkai (Height)</label>
           <div className="flex gap-1 items-center">
             <input 
               type="range" 
               min="50" 
               max="300" 
               value={parseInt(safeHeight) || 120}
-              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: e.target.value + "px", overlay_url: safeOverlayUrl })}
+              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: e.target.value + "px", overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
               className="flex-1 accent-[#d4af37] h-1" 
             />
             <span className="text-[9px] font-bold w-10 text-right">{safeHeight}</span>
+          </div>
+        </div>
+
+        <div className="col-span-2 border-t border-[#064e3b]/10 pt-2 mt-1">
+          <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Pengaturan Foto di Dalam Bingkai</label>
+        </div>
+
+        <div className="col-span-2">
+          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Skala Foto ({safePhotoScale}%)</label>
+          <div className="flex gap-1 items-center">
+            <input 
+              type="range" 
+              min="10" 
+              max="200" 
+              value={safePhotoScale}
+              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: parseInt(e.target.value), photo_x: safePhotoX, photo_y: safePhotoY })}
+              className="flex-1 accent-[#d4af37] h-1" 
+            />
+            <span className="text-[9px] font-bold w-10 text-right">{safePhotoScale}%</span>
+          </div>
+        </div>
+
+        <div>
+          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Geser Foto X ({safePhotoX}px)</label>
+          <div className="flex gap-1 items-center">
+            <input 
+              type="range" 
+              min="-100" 
+              max="100" 
+              value={safePhotoX}
+              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: parseInt(e.target.value), photo_y: safePhotoY })}
+              className="flex-1 accent-[#d4af37] h-1" 
+            />
+            <span className="text-[9px] font-bold w-10 text-right">{safePhotoX}px</span>
+          </div>
+        </div>
+
+        <div>
+          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Geser Foto Y ({safePhotoY}px)</label>
+          <div className="flex gap-1 items-center">
+            <input 
+              type="range" 
+              min="-100" 
+              max="100" 
+              value={safePhotoY}
+              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: parseInt(e.target.value) })}
+              className="flex-1 accent-[#d4af37] h-1" 
+            />
+            <span className="text-[9px] font-bold w-10 text-right">{safePhotoY}px</span>
           </div>
         </div>
       </div>

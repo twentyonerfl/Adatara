@@ -467,12 +467,18 @@ export function PembukaForm({ data, onChange, mode }: { data: any; onChange: (d:
                   width={data.foto_setting?.width || "120px"}
                   height={data.foto_setting?.height || "120px"}
                   overlayUrl={data.foto_setting?.overlay_url || ""}
+                  photoScale={data.foto_setting?.photo_scale}
+                  photoX={data.foto_setting?.photo_x}
+                  photoY={data.foto_setting?.photo_y}
                   onChange={(updates) => upd("foto_setting", {
                     ...(data.foto_setting || {}),
                     bingkai: updates.bingkai,
                     width: updates.width,
                     height: updates.height,
                     overlay_url: updates.overlay_url,
+                    photo_scale: updates.photo_scale,
+                    photo_x: updates.photo_x,
+                    photo_y: updates.photo_y,
                   })}
                 />
                 <div>
@@ -594,6 +600,9 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
           customWidth={data.foto_setting?.width}
           customHeight={data.foto_setting?.height}
           overlayUrl={data.foto_setting?.overlay_url}
+          photoScale={data.foto_setting?.photo_scale}
+          photoX={data.foto_setting?.photo_x}
+          photoY={data.foto_setting?.photo_y}
         />
       )}
       {!isUcapanCustom && (

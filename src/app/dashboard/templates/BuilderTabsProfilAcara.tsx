@@ -79,7 +79,7 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
       {(!mode || mode === "settings") && (
         <>
           <SectionInput label="Setting Font Ucapan Profil">
-            <FontSettingsWidget label="Setting Font Ucapan" value={data.setting_ucapan_profil || {}} onChange={v => upd("setting_ucapan_profil", v)} showAnimation />
+            <FontSettingsWidget label="Setting Font Ucapan" value={data.setting_ucapan_profil || {}} onChange={v => upd("setting_ucapan_profil", v)} showAnimation showSpacing />
           </SectionInput>
 
           {profils.length > 0 && (
@@ -94,12 +94,18 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
                         width={p.foto_width || "120px"}
                         height={p.foto_height || "120px"}
                         overlayUrl={p.overlay_url || ""}
+                        photoScale={p.foto_scale}
+                        photoX={p.foto_x}
+                        photoY={p.foto_y}
                         onChange={(updates) => {
                           updProfil(i, {
                             bingkai: updates.bingkai,
                             foto_width: updates.width,
                             foto_height: updates.height,
-                            overlay_url: updates.overlay_url
+                            overlay_url: updates.overlay_url,
+                            foto_scale: updates.photo_scale,
+                            foto_x: updates.photo_x,
+                            foto_y: updates.photo_y
                           });
                         }}
                       />
@@ -144,20 +150,43 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
 export function ProfilPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const profils: any[] = data.profils || [];
+  const isUcapanCustom = data.setting_ucapan_profil?.position === "custom";
+
   return (
-    <div className="w-full min-h-[512px] flex flex-col items-center justify-center rounded-2xl overflow-hidden p-6 gap-5" style={bg}>
-      <p
-        className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap"
-        style={{
-          color: data.setting_ucapan_profil?.color || "#ffffff",
-          fontFamily: data.setting_ucapan_profil?.family || "Inter",
-          fontSize: data.setting_ucapan_profil?.size || "12px",
-          textAlign: (data.setting_ucapan_profil?.position || "center") as any,
-        }}
-      >
-        {data.ucapan_profil || "Ucapan profil belum diisi."}
-      </p>
-      <div className={`flex gap-6 justify-center flex-wrap`}>
+    <div className="w-full min-h-[512px] flex flex-col items-center justify-center relative rounded-2xl overflow-hidden p-6 gap-5" style={bg}>
+      {isUcapanCustom ? (
+        <p
+          className="opacity-80 whitespace-pre-wrap z-10"
+          style={{
+            color: data.setting_ucapan_profil?.color || "#ffffff",
+            fontFamily: data.setting_ucapan_profil?.family || "Inter",
+            fontSize: data.setting_ucapan_profil?.size || "12px",
+            position: "absolute",
+            left: `${data.setting_ucapan_profil?.x ?? 50}%`,
+            top: `${data.setting_ucapan_profil?.y ?? 15}%`,
+            transform: "translate(-50%, -50%)",
+            textAlign: "center",
+            width: data.setting_ucapan_profil?.width || "90%",
+            lineHeight: data.setting_ucapan_profil?.lineHeight || "1.5",
+          }}
+        >
+          {data.ucapan_profil || "Ucapan profil belum diisi."}
+        </p>
+      ) : (
+        <p
+          className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap z-10"
+          style={{
+            color: data.setting_ucapan_profil?.color || "#ffffff",
+            fontFamily: data.setting_ucapan_profil?.family || "Inter",
+            fontSize: data.setting_ucapan_profil?.size || "12px",
+            textAlign: (data.setting_ucapan_profil?.position || "center") as any,
+            lineHeight: data.setting_ucapan_profil?.lineHeight || "1.5",
+          }}
+        >
+          {data.ucapan_profil || "Ucapan profil belum diisi."}
+        </p>
+      )}
+      <div className={`flex gap-6 justify-center flex-wrap z-10`}>
         {profils.map((p, i) => (
           <div key={i} className="flex flex-col items-center gap-2 text-center">
             <FramedPhoto
@@ -167,6 +196,9 @@ export function ProfilPreview({ data }: { data: any }) {
               customWidth={p.foto_width}
               customHeight={p.foto_height}
               overlayUrl={p.overlay_url}
+              photoScale={p.foto_scale}
+              photoX={p.foto_x}
+              photoY={p.foto_y}
             />
             <div>
               <div 

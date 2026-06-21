@@ -1653,6 +1653,9 @@ export function BuilderEditor({
                           customWidth={data.pembuka.foto_setting?.width}
                           customHeight={data.pembuka.foto_setting?.height}
                           overlayUrl={data.pembuka.foto_setting?.overlay_url}
+                          photoScale={data.pembuka.foto_setting?.photo_scale}
+                          photoX={data.pembuka.foto_setting?.photo_x}
+                          photoY={data.pembuka.foto_setting?.photo_y}
                         />
                       </div>
                     )}
@@ -1671,7 +1674,7 @@ export function BuilderEditor({
                   {/* PREVIEW: PROFIL SECTION */}
                   <div
                     id="preview-profil"
-                    className={`p-6 text-center space-y-6 border-b border-dashed ${activeSection === "profil" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
+                    className={`p-6 text-center space-y-6 border-b border-dashed relative ${activeSection === "profil" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
                       }`}
                     style={{
                       background: data.profil?.background?.type === "image"
@@ -1685,9 +1688,38 @@ export function BuilderEditor({
                     <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
                       Kami Yang Berbahagia
                     </span>
-                    <p className="text-[10px] text-[#064e3b]/70 italic px-2">
-                      {data.profil?.ucapan_profil || "Maha suci Allah..."}
-                    </p>
+                    {data.profil?.setting_ucapan_profil?.position === "custom" ? (
+                      <p
+                        className="opacity-80 whitespace-pre-wrap z-10"
+                        style={{
+                          color: data.profil?.setting_ucapan_profil?.color || "#064e3b",
+                          fontFamily: data.profil?.setting_ucapan_profil?.family || "Inter",
+                          fontSize: data.profil?.setting_ucapan_profil?.size || "10px",
+                          position: "absolute",
+                          left: `${data.profil?.setting_ucapan_profil?.x ?? 50}%`,
+                          top: `${data.profil?.setting_ucapan_profil?.y ?? 15}%`,
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                          width: data.profil?.setting_ucapan_profil?.width || "90%",
+                          lineHeight: data.profil?.setting_ucapan_profil?.lineHeight || "1.5",
+                        }}
+                      >
+                        {data.profil?.ucapan_profil || "Maha suci Allah..."}
+                      </p>
+                    ) : (
+                      <p
+                        className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap z-10 mx-auto"
+                        style={{
+                          color: data.profil?.setting_ucapan_profil?.color || "#064e3b",
+                          fontFamily: data.profil?.setting_ucapan_profil?.family || "Inter",
+                          fontSize: data.profil?.setting_ucapan_profil?.size || "10px",
+                          textAlign: (data.profil?.setting_ucapan_profil?.position || "center") as any,
+                          lineHeight: data.profil?.setting_ucapan_profil?.lineHeight || "1.5",
+                        }}
+                      >
+                        {data.profil?.ucapan_profil || "Maha suci Allah..."}
+                      </p>
+                    )}
 
                     <div className="space-y-6 pt-2">
                       {data.profil?.profils?.map((prof: any, idx: number) => (
@@ -1699,6 +1731,9 @@ export function BuilderEditor({
                             customWidth={prof.foto_width}
                             customHeight={prof.foto_height}
                             overlayUrl={prof.overlay_url}
+                            photoScale={prof.foto_scale}
+                            photoX={prof.foto_x}
+                            photoY={prof.foto_y}
                           />
                           <div className="relative w-full min-h-[80px] mt-2">
                             <div style={getFontStyles(data.profil?.setting_nama_profil || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold">
