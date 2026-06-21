@@ -1,0 +1,237 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum Role {
+  SUPER_ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum TemplateStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum InvitationStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  EXPIRED
+}
+
+// ==========================================
+// MODELS (BETTER AUTH & APP USER)
+// ==========================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Custom Fields
+  nomor_hp      String?
+  role          Role      @default(USER)
+  status        UserStatus @default(ACTIVE)
+
+  sessions      Session[]
+  accounts      Account[]
+  invitations   Invitation[]
+  transactions  Transaction[]
+
+  @@map("user")
+  @@index([email])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+  @@map("account")
+  @@index([userId])
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([identifier, value])
+  @@map("verification")
+}
+
+// ==========================================
+// APP SPECIFIC MODELS
+// ==========================================
+
+model Template {
+  id            String         @id @default(cuid())
+  nama_template String
+  kategori      String         // Kategori acara (Pernikahan, Ulang Tahun, dll.)
+  thumbnail     String         // URL image thumbnail template
+  deskripsi     String?
+  template_json Json           // Menyimpan layout default & styling config
+  status        TemplateStatus @default(DRAFT)
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+
+  invitations   Invitation[]
+
+  @@map("template")
+  @@index([kategori])
+  @@index([status])
+}
+
+model Invitation {
+  id                 String           @id @default(cuid())
+  user_id            String
+  template_id        String
+  slug               String           @unique // URL personal (contoh: adatara.id/u/aditya-tara)
+  data_undangan_json Json             // Menyimpan modifikasi data acara, font, warna, dll.
+  status             InvitationStatus @default(DRAFT)
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
+
+  user               User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  template           Template         @relation(fields: [template_id], references: [id])
+  galleries          Gallery[]
+  guests             Guest[]
+  rsvps              RSVP[]
+
+  @@map("invitation")
+  @@index([user_id])
+  @@index([slug])
+}
+
+model MusicLibrary {
+  id         String   @id @default(cuid())
+  judul      String
+  artis      String?
+  audio_url  String   // File MP3 di Cloudflare R2
+  durasi     Int?     // Durasi dalam detik
+  created_at DateTime @default(now())
+
+  @@map("music_library")
+}
+
+model Gallery {
+  id            String     @id @default(cuid())
+  invitation_id String
+  image_url     String     // File gambar di Cloudflare R2
+  urutan        Int        @default(0) // Urutan sorting galeri
+  created_at    DateTime   @default(now())
+
+  invitation    Invitation @relation(fields: [invitation_id], references: [id], onDelete: Cascade)
+
+  @@map("gallery")
+  @@index([invitation_id])
+}
+
+model Guest {
+  id               String          @id @default(cuid())
+  invitation_id    String
+  nama             String
+  nomor_hp         String?
+  status_kehadiran String?         // PENDING, CONFIRMED, DECLINED
+  created_at       DateTime        @default(now())
+
+  invitation       Invitation      @relation(fields: [invitation_id], references: [id], onDelete: Cascade)
+  rsvp             RSVP?
+
+  @@map("guest")
+  @@index([invitation_id])
+}
+
+model RSVP {
+  id            String     @id @default(cuid())
+  invitation_id String
+  guest_id      String     @unique // Satu tamu hanya bisa mengisi 1 RSVP
+  kehadiran     Boolean    // true: Hadir, false: Tidak Hadir
+  ucapan        String     @db.Text
+  created_at    DateTime   @default(now())
+
+  invitation    Invitation @relation(fields: [invitation_id], references: [id], onDelete: Cascade)
+  guest         Guest      @relation(fields: [guest_id], references: [id], onDelete: Cascade)
+
+  @@map("rsvp")
+  @@index([invitation_id])
+}
+
+model Transaction {
+  id                String            @id @default(cuid())
+  user_id           String
+  nominal           Decimal           @db.Decimal(12, 2)
+  metode_pembayaran String?           // e.g., Gopay, Transfer Bank, Qris
+  status_pembayaran TransactionStatus @default(PENDING)
+  snap_token        String?           // Token untuk Midtrans Snap SDK
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+
+  user              User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("transaction")
+  @@index([user_id])
+  @@index([status_pembayaran])
+}
+
+model Category {
+  id         String   @id @default(cuid())
+  nama       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("category")
+}
