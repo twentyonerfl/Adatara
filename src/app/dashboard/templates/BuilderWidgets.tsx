@@ -288,8 +288,16 @@ export function FileUploader({
       });
 
       if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || "Gagal mengunggah file");
+        let errMsg = "Gagal mengunggah file";
+        try {
+          const errData = await res.json();
+          errMsg = errData.error || errMsg;
+        } catch {
+          try {
+            errMsg = await res.text() || errMsg;
+          } catch {}
+        }
+        throw new Error(errMsg);
       }
 
       const data = await res.json();
