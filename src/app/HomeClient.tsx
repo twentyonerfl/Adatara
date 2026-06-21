@@ -4,23 +4,68 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScaledCoverPreview } from "./dashboard/templates/BuilderTabsCoverPembuka";
-import { 
-  Sparkles, 
-  Layers, 
-  Music, 
-  MapPin, 
-  Gift, 
-  CheckCircle, 
-  Menu, 
-  X, 
-  ArrowRight, 
-  HelpCircle, 
+import {
+  Sparkles,
+  Layers,
+  Music,
+  MapPin,
+  Gift,
+  CheckCircle,
+  Menu,
+  X,
+  ArrowRight,
+  HelpCircle,
   ChevronDown,
   Clock,
   BellRing,
   Palette,
-  Mail
+  Mail,
+  Search
 } from "lucide-react";
+
+const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
+const PhoneIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+);
+
+const HeartIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+);
 
 const getSafeThumbnail = (url?: string) => {
   if (!url || (!url.startsWith("http") && !url.startsWith("/") && !url.startsWith("data:image"))) {
@@ -57,6 +102,29 @@ const MOCK_FAQS = [
   }
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+} as const;
+
+const itemVariants = {
+  hidden: { y: 40, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 80,
+      damping: 15
+    }
+  }
+} as const;
+
 export default function HomeClient({
   initialTemplates,
   initialCategories,
@@ -68,9 +136,13 @@ export default function HomeClient({
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [selectedPaket, setSelectedPaket] = useState("Semua");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [templates] = useState<any[]>(initialTemplates);
   const [categories] = useState<string[]>(initialCategories);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [paketDropdownOpen, setPaketDropdownOpen] = useState(false);
 
   // Set default settings if not defined or partially defined
   const defaultSettings = {
@@ -133,16 +205,20 @@ export default function HomeClient({
     return () => clearInterval(interval);
   }, [slides]);
 
-  const filteredTemplates = selectedCategory === "Semua" 
-    ? templates 
-    : templates.filter(t => t.kategori === selectedCategory);
+  const filteredTemplates = templates.filter(t => {
+    const matchesCategory = selectedCategory === "Semua" || t.kategori === selectedCategory;
+    const matchesPaket = selectedPaket === "Semua" || t.paket === selectedPaket;
+    const matchesSearch = t.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (t.deskripsi && t.deskripsi.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesPaket && matchesSearch;
+  });
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
   return (
-    <div 
+    <div
       className="flex flex-col min-h-screen overflow-x-hidden font-sans relative bg-[#f5f5dc]"
       style={{
         color: "#064e3b"
@@ -189,6 +265,18 @@ export default function HomeClient({
         .custom-btn-secondary:hover {
           background-color: #064e3b0d !important;
         }
+        .custom-card-btn {
+          background-color: transparent !important;
+          color: ${settings.text_color} !important;
+          border-color: ${settings.text_color}26 !important;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .group:hover .custom-card-btn {
+          background-color: ${settings.text_color} !important;
+          color: #ffffff !important;
+          border-color: ${settings.text_color} !important;
+          box-shadow: 0 4px 12px ${settings.text_color}20 !important;
+        }
         .custom-badge {
           background-color: rgba(255, 255, 255, 0.08) !important;
           color: #ffffff !important;
@@ -200,6 +288,12 @@ export default function HomeClient({
         }
         .custom-card-bg:hover {
           border-color: ${settings.accent_color}4d !important;
+        }
+        .custom-feature-title {
+          transition: color 0.3s ease !important;
+        }
+        .group:hover .custom-feature-title {
+          color: ${settings.accent_color} !important;
         }
 
         .custom-hero-title {
@@ -235,15 +329,15 @@ export default function HomeClient({
       `}</style>
 
       {/* HEADER NAVBAR */}
-      <header 
+      <header
         className="sticky top-0 z-50 backdrop-blur-md border-b custom-border-color transition-all"
         style={{ backgroundColor: `${settings.bg_color}e6` }}
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center select-none">
-            <img 
-              src="/logo.png" 
-              alt="Adatara Logo" 
+            <img
+              src="/logo.png"
+              alt="Adatara Logo"
               className="h-10 md:h-12 w-auto object-contain"
             />
           </Link>
@@ -260,16 +354,13 @@ export default function HomeClient({
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/login" className="text-sm font-bold opacity-80 custom-text-color custom-text-color-hover transition-colors">
-              Login Admin
-            </Link>
             <Link href={settings.hero_cta_url} className="px-6 py-2.5 rounded-full text-sm font-black border transition-all duration-300 custom-btn-primary shadow-md">
               Buat Undangan
             </Link>
           </div>
 
           {/* Mobile Menu Icon */}
-          <button 
+          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 opacity-80 hover:opacity-100 md:hidden cursor-pointer custom-text-color"
           >
@@ -280,7 +371,7 @@ export default function HomeClient({
         {/* Mobile Dropdown Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -295,9 +386,6 @@ export default function HomeClient({
               <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">FAQ</a>
               <hr className="custom-border-color my-1" />
               <div className="flex flex-col gap-3">
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="w-full text-center py-2.5 opacity-70 font-semibold custom-text-color-hover">
-                  Login Admin
-                </Link>
                 <Link href={settings.hero_cta_url} onClick={() => setMobileMenuOpen(false)} className="w-full text-center py-3 rounded-xl font-semibold border custom-btn-primary">
                   Buat Undangan
                 </Link>
@@ -308,13 +396,13 @@ export default function HomeClient({
       </header>
 
       {/* HERO SECTION WRAPPER WITH CUSTOM BACKGROUND PATTERN */}
-      <div 
+      <div
         className="w-full relative overflow-hidden isolate"
         style={{ backgroundColor: settings.bg_color }}
       >
         {/* Background Pattern Layer with Custom Opacity and Blur */}
         {settings.bg_image && (
-          <div 
+          <div
             className="absolute inset-0 -z-20 pointer-events-none"
             style={{
               backgroundImage: `url(${settings.bg_image})`,
@@ -328,7 +416,7 @@ export default function HomeClient({
         )}
 
         {/* Gradient/Color Blend Overlay Layer */}
-        <div 
+        <div
           className="absolute inset-0 -z-10 pointer-events-none"
           style={{
             background: `linear-gradient(to bottom, 
@@ -340,178 +428,176 @@ export default function HomeClient({
         {/* BACKGROUND GRADIENT GLOWS */}
         {settings.bg_gradient && (
           <>
-            <div 
-              className="absolute top-0 left-1/4 w-[500px] h-[500px] blur-[150px] rounded-full pointer-events-none -z-10 opacity-30 animate-pulse" 
+            <div
+              className="absolute top-0 left-1/4 w-[500px] h-[500px] blur-[150px] rounded-full pointer-events-none -z-10 opacity-30 animate-pulse"
               style={{ backgroundColor: settings.text_color }}
             />
-            <div 
-              className="absolute top-1/3 right-1/4 w-[600px] h-[600px] blur-[180px] rounded-full pointer-events-none -z-10 opacity-20 animate-pulse" 
+            <div
+              className="absolute top-1/3 right-1/4 w-[600px] h-[600px] blur-[180px] rounded-full pointer-events-none -z-10 opacity-20 animate-pulse"
               style={{ backgroundColor: settings.accent_color }}
             />
           </>
         )}
 
         {/* HERO SECTION */}
-      <section className="relative pt-12 pb-24 px-6 max-w-7xl mx-auto z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column (Hero Content) */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className={`lg:col-span-7 flex flex-col ${
-              settings.hero_title_align === "center"
-                ? "items-center text-center"
-                : settings.hero_title_align === "right"
-                ? "items-end text-right"
-                : "items-start text-left"
-            }`}
-          >
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black tracking-widest uppercase mb-6 select-none custom-badge">
-              <Mail className="w-3 h-3 shrink-0" /> ELEGANT NUSANTARA HERITAGE
-            </div>
-
-            {/* Heading */}
-            <h1 
-              className="text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight leading-tight mb-6 max-w-2xl custom-hero-title"
-              dangerouslySetInnerHTML={{ __html: settings.hero_title }}
-            />
-
-            {/* Subtitle / Paragraph */}
-            <p className="text-sm sm:text-base opacity-75 max-w-xl leading-relaxed mb-8 font-medium custom-hero-subtitle">
-              {settings.hero_subtitle}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <Link href={settings.hero_cta_url} className="w-full sm:w-auto px-7 py-3.5 rounded-full font-black border transition-all text-center custom-btn-primary shadow-md shadow-black/5">
-                {settings.hero_cta_text}
-              </Link>
-              <a href={settings.hero_demo_url} className="w-full sm:w-auto px-7 py-3.5 rounded-full font-black border transition-all text-center custom-btn-secondary">
-                {settings.hero_demo_text}
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Right Column (Hero Visual - Smartphone Mockup) */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 flex justify-center items-center relative"
-          >
-            {/* Soft accent glow background behind phone */}
-            <div 
-              className="absolute w-72 h-72 blur-[80px] rounded-full -z-10 pointer-events-none opacity-20" 
-              style={{ backgroundColor: settings.accent_color }}
-            />
-
-            {/* Outer Smartphone Shell with subtle floating animation */}
-            <motion.div 
-              animate={{ y: [0, -8, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="relative w-[270px] sm:w-[290px] aspect-[9/18.5] bg-[#0c1322] rounded-[45px] p-2.5 shadow-2xl border-[5px] border-[#222f46] flex flex-col justify-between"
+        <section className="relative pt-12 pb-24 px-6 max-w-7xl mx-auto z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Column (Hero Content) */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className={`lg:col-span-7 flex flex-col ${settings.hero_title_align === "center"
+                  ? "items-center text-center"
+                  : settings.hero_title_align === "right"
+                    ? "items-end text-right"
+                    : "items-start text-left"
+                }`}
             >
-              {/* Notch */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-4.5 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-slate-900" />
-                <div className="w-8 h-1 bg-slate-800 rounded-full" />
+              {/* Pill Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black tracking-widest uppercase mb-6 select-none custom-badge">
+                <Mail className="w-3 h-3 shrink-0" /> ELEGANT NUSANTARA HERITAGE
               </div>
 
-              {/* Inner Screen Container */}
-              <div 
-                className="w-full h-full rounded-[36px] overflow-hidden border border-black/10 relative flex flex-col select-none"
-                style={{ backgroundColor: settings.bg_color }}
-              >
+              {/* Heading */}
+              <h1
+                className="text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight leading-tight mb-6 max-w-2xl custom-hero-title"
+                dangerouslySetInnerHTML={{ __html: settings.hero_title }}
+              />
 
-                {/* Mock Page Content Slider (Framer Motion) */}
-                <div className="flex-1 w-full h-full relative overflow-hidden flex flex-col justify-between">
-                  {slides && slides.length > 0 ? (
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentSlide}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.5 }}
-                        className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center"
-                        style={{
-                          background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)), url(${getSafeThumbnail(slides[currentSlide]?.image_url)}) center/cover no-repeat`
-                        }}
-                      >
-                        {/* Decorative background vectors or shapes */}
-                        <div className="absolute top-3.5 left-3.5 w-14 h-14 border-t border-l pointer-events-none" style={{ borderColor: `${settings.accent_color}33` }} />
-                        <div className="absolute bottom-3.5 right-3.5 w-14 h-14 border-b border-r pointer-events-none" style={{ borderColor: `${settings.accent_color}33` }} />
-                        
-                        {/* Content elements matching smartphone inside the image */}
-                        <div className="space-y-4 max-w-[200px] my-auto text-white">
-                          {slides[currentSlide]?.badge && (
-                            <div className="inline-block px-2.5 py-0.75 rounded text-[6px] font-bold tracking-widest uppercase"
-                              style={{ backgroundColor: `${settings.accent_color}1e`, border: `1px solid ${settings.accent_color}33`, color: settings.accent_color }}
-                            >
-                              {slides[currentSlide].badge}
-                            </div>
-                          )}
+              {/* Subtitle / Paragraph */}
+              <p className="text-sm sm:text-base opacity-75 max-w-xl leading-relaxed mb-8 font-medium custom-hero-subtitle">
+                {settings.hero_subtitle}
+              </p>
 
-                          {slides[currentSlide]?.title && (
-                            <h2 className="text-lg sm:text-xl font-bold font-serif leading-tight">
-                              {slides[currentSlide].title}
-                            </h2>
-                          )}
-
-                          {/* Divider decoration */}
-                          <div className="flex items-center justify-center gap-1.5">
-                            <div className="w-5 h-[0.5px]" style={{ backgroundColor: `${settings.accent_color}33` }} />
-                            <span className="text-[7px]" style={{ color: settings.accent_color }}>✦</span>
-                            <div className="w-5 h-[0.5px]" style={{ backgroundColor: `${settings.accent_color}33` }} />
-                          </div>
-
-                          {slides[currentSlide]?.subtitle && (
-                            <p className="text-[8.5px] opacity-80 leading-relaxed font-medium">
-                              {slides[currentSlide].subtitle}
-                            </p>
-                          )}
-                        </div>
-                      </motion.div>
-                    </AnimatePresence>
-                  ) : (
-                    <div className="flex-1 flex items-center justify-center text-xs opacity-50" style={{ color: settings.text_color }}>
-                      Belum ada slide
-                    </div>
-                  )}
-
-                  {/* Navigation dots on emulator */}
-                  {slides && slides.length > 1 && (
-                    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1 z-20">
-                      {slides.map((_: any, idx: number) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentSlide(idx)}
-                          className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${
-                            currentSlide === idx 
-                              ? "w-4 bg-white" 
-                              : "bg-white/40 hover:bg-white/60"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                <Link href={settings.hero_cta_url} className="w-full sm:w-auto px-7 py-3.5 rounded-full font-black border transition-all text-center custom-btn-primary shadow-md shadow-black/5">
+                  {settings.hero_cta_text}
+                </Link>
+                <a href={settings.hero_demo_url} className="w-full sm:w-auto px-7 py-3.5 rounded-full font-black border transition-all text-center custom-btn-secondary">
+                  {settings.hero_demo_text}
+                </a>
               </div>
             </motion.div>
-          </motion.div>
-        </div>
-      </section>
+
+            {/* Right Column (Hero Visual - Smartphone Mockup) */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="lg:col-span-5 flex justify-center items-center relative"
+            >
+              {/* Soft accent glow background behind phone */}
+              <div
+                className="absolute w-72 h-72 blur-[80px] rounded-full -z-10 pointer-events-none opacity-20"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+
+              {/* Outer Smartphone Shell with subtle floating animation */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="relative w-[270px] sm:w-[290px] aspect-[9/18.5] bg-[#0c1322] rounded-[45px] p-2.5 shadow-2xl border-[5px] border-[#222f46] flex flex-col justify-between"
+              >
+                {/* Notch */}
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-4.5 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-900" />
+                  <div className="w-8 h-1 bg-slate-800 rounded-full" />
+                </div>
+
+                {/* Inner Screen Container */}
+                <div
+                  className="w-full h-full rounded-[36px] overflow-hidden border border-black/10 relative flex flex-col select-none"
+                  style={{ backgroundColor: settings.bg_color }}
+                >
+
+                  {/* Mock Page Content Slider (Framer Motion) */}
+                  <div className="flex-1 w-full h-full relative overflow-hidden flex flex-col justify-between">
+                    {slides && slides.length > 0 ? (
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={currentSlide}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.5 }}
+                          className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center"
+                          style={{
+                            background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)), url(${getSafeThumbnail(slides[currentSlide]?.image_url)}) center/cover no-repeat`
+                          }}
+                        >
+                          {/* Decorative background vectors or shapes */}
+                          <div className="absolute top-3.5 left-3.5 w-14 h-14 border-t border-l pointer-events-none" style={{ borderColor: `${settings.accent_color}33` }} />
+                          <div className="absolute bottom-3.5 right-3.5 w-14 h-14 border-b border-r pointer-events-none" style={{ borderColor: `${settings.accent_color}33` }} />
+
+                          {/* Content elements matching smartphone inside the image */}
+                          <div className="space-y-4 max-w-[200px] my-auto text-white">
+                            {slides[currentSlide]?.badge && (
+                              <div className="inline-block px-2.5 py-0.75 rounded text-[6px] font-bold tracking-widest uppercase"
+                                style={{ backgroundColor: `${settings.accent_color}1e`, border: `1px solid ${settings.accent_color}33`, color: settings.accent_color }}
+                              >
+                                {slides[currentSlide].badge}
+                              </div>
+                            )}
+
+                            {slides[currentSlide]?.title && (
+                              <h2 className="text-lg sm:text-xl font-bold font-serif leading-tight">
+                                {slides[currentSlide].title}
+                              </h2>
+                            )}
+
+                            {/* Divider decoration */}
+                            <div className="flex items-center justify-center gap-1.5">
+                              <div className="w-5 h-[0.5px]" style={{ backgroundColor: `${settings.accent_color}33` }} />
+                              <span className="text-[7px]" style={{ color: settings.accent_color }}>✦</span>
+                              <div className="w-5 h-[0.5px]" style={{ backgroundColor: `${settings.accent_color}33` }} />
+                            </div>
+
+                            {slides[currentSlide]?.subtitle && (
+                              <p className="text-[8.5px] opacity-80 leading-relaxed font-medium">
+                                {slides[currentSlide].subtitle}
+                              </p>
+                            )}
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-center text-xs opacity-50" style={{ color: settings.text_color }}>
+                        Belum ada slide
+                      </div>
+                    )}
+
+                    {/* Navigation dots on emulator */}
+                    {slides && slides.length > 1 && (
+                      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1 z-20">
+                        {slides.map((_: any, idx: number) => (
+                          <button
+                            key={idx}
+                            onClick={() => setCurrentSlide(idx)}
+                            className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${currentSlide === idx
+                                ? "w-4 bg-white"
+                                : "bg-white/40 hover:bg-white/60"
+                              }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
       </div>
 
       {/* STATS SECTION */}
-      <section 
+      <section
         className="border-y custom-border-color py-16 transition-all"
         style={{ backgroundColor: settings.stats_bg_color || "#064e3b" }}
       >
@@ -535,107 +621,10 @@ export default function HomeClient({
         </div>
       </section>
 
-      {/* FEATURES SECTION */}
-      <section id="fitur" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest">Fitur Unggulan</h2>
-          <h3 className="text-3xl sm:text-4xl font-black mt-2 mb-4 custom-text-color">Semua yang Anda Butuhkan untuk Undangan Sempurna</h3>
-          <p className="opacity-75 leading-relaxed custom-text-color">
-            Adatara dirancang dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan momen kebahagiaan Anda.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Feature Card 1 */}
-          <div className="border rounded-2xl p-8 transition-all duration-300 group custom-card-bg">
-            <div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: `${settings.text_color}15`, color: settings.text_color }}
-            >
-              <Layers className="w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-black mb-3 custom-text-color">Real-Time Template Builder</h4>
-            <p className="opacity-75 text-sm leading-relaxed custom-text-color">
-              Pilih dari 6 modul visual utama (Cover, Pembuka, Profil, Acara, Cerita/Galeri, RSVP). Edit teks, tata letak, warna, dan font secara instan.
-            </p>
-          </div>
-
-          {/* Feature Card 2 */}
-          <div className="border rounded-2xl p-8 transition-all duration-300 group custom-card-bg">
-            <div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: `${settings.accent_color}18`, color: settings.accent_color }}
-            >
-              <Music className="w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-black mb-3 custom-text-color">Audio Latar & Galeri Media</h4>
-            <p className="opacity-75 text-sm leading-relaxed custom-text-color">
-              Tambahkan musik romantis dari library kami atau unggah file MP3 Anda sendiri. Dukungan galeri foto berformat Grid, Masonry, Carousel, hingga Pinterest style.
-            </p>
-          </div>
-
-          {/* Feature Card 3 */}
-          <div className="border rounded-2xl p-8 transition-all duration-300 group custom-card-bg">
-            <div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: `${settings.text_color}15`, color: settings.text_color }}
-            >
-              <BellRing className="w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-black mb-3 custom-text-color">RSVP & Ucapan Real-Time</h4>
-            <p className="opacity-75 text-sm leading-relaxed custom-text-color">
-              Tamu dapat melakukan konfirmasi kehadiran secara instan. Anda mendapatkan daftar rekapitulasi kehadiran (RSVP) langsung dari dashboard.
-            </p>
-          </div>
-
-          {/* Feature Card 4 */}
-          <div className="border rounded-2xl p-8 transition-all duration-300 group custom-card-bg">
-            <div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: `${settings.accent_color}18`, color: settings.accent_color }}
-            >
-              <Gift className="w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-black mb-3 custom-text-color">Kado & Amplop Digital</h4>
-            <p className="opacity-75 text-sm leading-relaxed custom-text-color">
-              Sediakan nomor rekening bank, e-wallet, atau barcode QRIS di dalam undangan untuk memudahkan tamu mengirimkan kado/amplop secara cashless.
-            </p>
-          </div>
-
-          {/* Feature Card 5 */}
-          <div className="border rounded-2xl p-8 transition-all duration-300 group custom-card-bg">
-            <div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: `${settings.text_color}15`, color: settings.text_color }}
-            >
-              <MapPin className="w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-black mb-3 custom-text-color">Petunjuk Lokasi & Kalender</h4>
-            <p className="opacity-75 text-sm leading-relaxed custom-text-color">
-              Tamu Anda tidak akan tersesat berkat peta interaktif Google Maps. Dilengkapi fitur pencatatan otomatis di Google Calendar.
-            </p>
-          </div>
-
-          {/* Feature Card 6 */}
-          <div className="border rounded-2xl p-8 transition-all duration-300 group custom-card-bg">
-            <div 
-              className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
-              style={{ backgroundColor: `${settings.accent_color}18`, color: settings.accent_color }}
-            >
-              <Clock className="w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-black mb-3 custom-text-color">Countdown Hitung Mundur</h4>
-            <p className="opacity-75 text-sm leading-relaxed custom-text-color">
-              Tampilkan penghitung waktu mundur otomatis yang presisi hingga detik dimulainya acara utama untuk membangkitkan antusiasme tamu.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* TEMPLATES INTERACTIVE SHOWCASE SECTION */}
-      <section 
-        id="template" 
-        className="py-24 border-t custom-border-color px-6 scroll-mt-10 transition-all"
+      <section
+        id="template"
+        className="py-24 px-6 scroll-mt-10 transition-all"
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col mb-8 text-left">
@@ -643,22 +632,120 @@ export default function HomeClient({
             <h3 className="text-3xl sm:text-4xl font-black mt-2 custom-text-color">Pilih Template Favorit Anda</h3>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-2 mb-12 w-full justify-start">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border"
-                style={{
-                  backgroundColor: selectedCategory === cat ? settings.text_color : "white",
-                  color: selectedCategory === cat ? settings.bg_color : settings.text_color,
-                  borderColor: selectedCategory === cat ? settings.accent_color : `${settings.text_color}1c`
-                }}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Search and Category Filter Section */}
+          <div className="flex flex-col md:flex-row gap-4 mb-10 items-stretch md:items-center justify-between">
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-lg">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none opacity-50">
+                <Search className="w-5 h-5 custom-text-color" />
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari desain undangan..."
+                className="w-full pl-11 pr-4 py-3 rounded-2xl border text-sm font-medium transition-all outline-none bg-white/70 backdrop-blur-sm custom-border-color focus:border-[#d4af37] focus:bg-white custom-text-color"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-bold opacity-60 hover:opacity-100 transition-opacity custom-text-color"
+                >
+                  Batal
+                </button>
+              )}
+            </div>
+
+            {/* Dropdowns Wrapper */}
+            <div className="flex gap-3 flex-wrap md:flex-nowrap">
+              {/* Category Dropdown */}
+              <div className="relative min-w-[170px] flex-1 md:flex-none">
+                <button
+                  onClick={() => { setCategoryDropdownOpen(!categoryDropdownOpen); setPaketDropdownOpen(false); }}
+                  className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border text-sm font-bold bg-white/70 backdrop-blur-sm transition-all custom-border-color hover:border-[#d4af37] custom-text-color cursor-pointer"
+                >
+                  <span>{selectedCategory === "Semua" ? "Semua Kategori" : selectedCategory}</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${categoryDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                <AnimatePresence>
+                  {categoryDropdownOpen && (
+                    <>
+                      {/* Overlay to close when clicking outside */}
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setCategoryDropdownOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
+                      >
+                        {categories.map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => {
+                              setSelectedCategory(cat);
+                              setCategoryDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                                ? "custom-btn-primary"
+                                : "hover:bg-[#064e3b]/5 custom-text-color"
+                              }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Paket Dropdown */}
+              <div className="relative min-w-[150px] flex-1 md:flex-none">
+                <button
+                  onClick={() => { setPaketDropdownOpen(!paketDropdownOpen); setCategoryDropdownOpen(false); }}
+                  className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border text-sm font-bold bg-white/70 backdrop-blur-sm transition-all custom-border-color hover:border-[#d4af37] custom-text-color cursor-pointer"
+                >
+                  <span>{selectedPaket === "Semua" ? "Semua Paket" : selectedPaket}</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${paketDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                <AnimatePresence>
+                  {paketDropdownOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setPaketDropdownOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-full md:w-48 bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2"
+                      >
+                        {["Semua", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
+                          <button
+                            key={tier}
+                            onClick={() => {
+                              setSelectedPaket(tier);
+                              setPaketDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
+                                ? "custom-btn-primary"
+                                : "hover:bg-[#064e3b]/5 custom-text-color"
+                              }`}
+                          >
+                            {tier === "Semua" ? "Semua Paket" : tier}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
 
           {/* Template Cards Grid */}
@@ -669,7 +756,7 @@ export default function HomeClient({
               <p className="text-xs opacity-60 mt-1.5 custom-text-color">Belum ada template yang dipublikasikan dalam kategori ini.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               <AnimatePresence mode="popLayout">
                 {filteredTemplates.map((template) => (
                   <motion.div
@@ -679,72 +766,85 @@ export default function HomeClient({
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.3 }}
                     key={template.id}
-                    className="group bg-white border custom-border-color hover:border-[#d4af37]/35 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="group bg-white border custom-border-color hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
                   >
-                    <div 
-                      className="w-full aspect-[9/16] overflow-hidden relative rounded-t-2xl"
-                      style={{ backgroundColor: `${settings.text_color}10` }}
+                    <div
+                      className="w-full aspect-square overflow-hidden relative rounded-t-2xl flex items-center justify-center p-2.5"
+                      style={{ backgroundColor: `${settings.text_color}08` }}
                     >
-                      {(() => {
-                        const parsedJson = typeof template.template_json === "string"
-                          ? JSON.parse(template.template_json)
-                          : template.template_json;
-                        const coverData = parsedJson?.cover;
-                        return coverData ? (
-                          <ScaledCoverPreview 
-                            coverData={coverData} 
-                            meta={{ kategori: template.kategori, bahasa: "id" }} 
-                          />
-                        ) : (
-                          <div className="w-full h-full relative flex flex-col justify-between p-6 text-center select-none"
-                            style={{
-                              background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)), url(${getSafeThumbnail(template.image)}) center/cover no-repeat`
-                            }}
-                          >
-                            <div className="space-y-2 pt-6">
-                              <span className="font-extrabold uppercase tracking-widest text-xs text-white block">
-                                UNDANGAN {template.kategori}
-                              </span>
-                              <div className="h-[1px] w-12 bg-white/30 mx-auto" />
-                            </div>
-                            <div className="my-auto">
-                              <h1 className="leading-tight text-2xl font-black text-white break-words font-serif">
-                                {template.nama}
-                              </h1>
-                            </div>
-                            <div className="space-y-4 pb-6">
-                              <span className="text-[10px] text-white/60 block font-medium">Kepada Yth. Tamu Undangan</span>
-                              <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-xs font-bold text-white shadow-lg mx-auto">
-                                Buka Undangan
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })()}
-                    </div>
-                    <div className="p-3 flex flex-col flex-1 text-left bg-white">
-                      {/* Title & Category Badge Row */}
-                      <div className="flex items-start justify-between gap-1 min-w-0">
-                        <h4 className="text-[11px] font-black custom-text-color group-hover:text-accent transition-colors leading-tight flex-1 break-words">
-                          {template.nama}
-                        </h4>
-                        <span className="px-1 py-0.5 rounded text-[6.5px] font-extrabold uppercase tracking-wider whitespace-nowrap flex-shrink-0 mt-0.5 border custom-badge">
+                      {/* Package Tier Badge Overlay */}
+                      <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
+                        <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "SULTAN"
+                            ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                            : template.paket === "PREMIUM"
+                              ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
+                              : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                          }`}>
+                          {template.paket || "BASIC"}
+                        </span>
+                      </div>
+
+                      {/* Category Badge Overlay - Premium Glassmorphism */}
+                      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max">
+                        <span className="px-2 py-0.5 rounded-full text-[6px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-[#064e3b] border border-white/40 shadow-sm">
                           {template.kategori}
                         </span>
                       </div>
-                      
-                      <p className="text-[9px] mt-1.5 line-clamp-1 leading-normal flex-1 custom-text-color opacity-70">
-                        {template.deskripsi}
-                      </p>
-                      <div className="mt-3 pt-2.5 border-t custom-border-color">
-                        <Link 
-                          href={`/demo/${template.id}`} 
-                          className="w-full py-1.5 text-white text-[9px] font-black rounded-lg border flex items-center justify-center gap-1 transition-all shadow-sm tracking-wider uppercase custom-btn-primary"
-                        >
-                          Live Demo
-                          <ArrowRight className="w-2.5 h-2.5 text-accent" />
-                        </Link>
+
+                      {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
+                      <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                        {(() => {
+                          const parsedJson = typeof template.template_json === "string"
+                            ? JSON.parse(template.template_json)
+                            : template.template_json;
+                          const coverData = parsedJson?.cover;
+                          return coverData ? (
+                            <ScaledCoverPreview
+                              coverData={coverData}
+                              meta={{ kategori: template.kategori, bahasa: "id" }}
+                            />
+                          ) : (
+                            <div className="w-full h-full relative flex flex-col justify-between p-6 text-center select-none"
+                              style={{
+                                background: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.55)), url(${getSafeThumbnail(template.image)}) center/cover no-repeat`
+                              }}
+                            >
+                              <div className="space-y-2 pt-6">
+                                <span className="font-extrabold uppercase tracking-widest text-[10px] text-white block">
+                                  UNDANGAN {template.kategori}
+                                </span>
+                                <div className="h-[1px] w-10 bg-white/30 mx-auto" />
+                              </div>
+                              <div className="my-auto">
+                                <h1 className="leading-tight text-xl font-black text-white break-words font-serif">
+                                  {template.nama}
+                                </h1>
+                              </div>
+                              <div className="space-y-3 pb-6">
+                                <span className="text-[9px] text-white/60 block font-medium">Kepada Yth. Tamu Undangan</span>
+                                <div className="inline-block px-3 py-1 bg-white/10 backdrop-blur-md border border-white/10 rounded-lg text-[10px] font-bold text-white shadow-lg mx-auto">
+                                  Buka Undangan
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })()}
                       </div>
+                    </div>
+                    <div className="p-2 flex flex-col justify-between bg-white border-t custom-border-color">
+                      {/* Title */}
+                      <h4 className="text-[10px] font-extrabold custom-text-color tracking-wide group-hover:custom-accent-color transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
+                        {template.nama}
+                      </h4>
+
+                      {/* Button */}
+                      <Link
+                        href={`/demo/${template.id}`}
+                        className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase custom-card-btn"
+                      >
+                        Live Demo
+                        <ArrowRight className="w-2.5 h-2.5" />
+                      </Link>
                     </div>
                   </motion.div>
                 ))}
@@ -754,244 +854,587 @@ export default function HomeClient({
         </div>
       </section>
 
-      {/* PRICING SECTION */}
-      <section id="harga" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest">Paket Harga</h2>
-          <h3 className="text-3xl sm:text-4xl font-black mt-2 mb-4 custom-text-color">Investasi Kecil untuk Momen Terindah</h3>
-          <p className="opacity-75 custom-text-color">
-            Tersedia paket langganan fleksibel tanpa biaya tersembunyi.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {/* Plan 1: Free */}
-          <div className="border rounded-3xl p-8 flex flex-col transition-all duration-300 custom-card-bg">
-            <div>
-              <span className="text-xs font-bold opacity-60 uppercase tracking-wider custom-text-color">PAKET SILVER</span>
-              <h4 className="text-3xl font-extrabold custom-text-color mt-4">Rp 0</h4>
-              <p className="text-xs opacity-50 mt-1 custom-text-color">Selamanya Gratis</p>
-              <p className="opacity-75 text-sm mt-6 custom-text-color">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
-            </div>
-            
-            <hr className="custom-border-color my-8" />
-
-            <ul className="space-y-4 flex-1 text-sm opacity-90 custom-text-color">
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Masa aktif undangan 3 hari
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Maksimal 50 tamu undangan
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Desain template dasar (Silver)
-              </li>
-              <li className="flex items-center gap-3 opacity-40">
-                <span className="w-4 h-4 inline-flex items-center justify-center font-bold">✕</span>
-                Tanpa kustom musik & galeri
-              </li>
-              <li className="flex items-center gap-3 opacity-40">
-                <span className="w-4 h-4 inline-flex items-center justify-center font-bold">✕</span>
-                Terdapat watermark brand Adatara
-              </li>
-            </ul>
-
-            <Link href="/register" className="mt-8 w-full py-3 text-center rounded-xl font-bold transition-all border custom-btn-primary">
-              Mulai Gratis
-            </Link>
-          </div>
-
-          {/* Plan 2: Pro */}
-          <div 
-            className="border-2 rounded-3xl p-8 flex flex-col relative shadow-2xl hover:-translate-y-1 transition-all duration-300"
-            style={{ 
-              borderColor: settings.accent_color,
-              backgroundColor: `${settings.text_color}10`
-            }}
+      {/* FEATURES SECTION */}
+      <div className="relative overflow-hidden border-t border-b custom-border-color bg-gradient-to-tr from-[#064e3b]/[0.03] via-transparent to-[#d4af37]/[0.04] scroll-mt-10">
+        {/* Ambient Decorative Light Glows */}
+        <div className="absolute top-1/4 left-1/10 w-96 h-96 rounded-full bg-[#064e3b]/[0.03] blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
+        
+        <section id="fitur" className="py-24 px-6 max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16 relative z-10"
           >
-            <div 
-              className="absolute top-0 right-8 -translate-y-1/2 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider"
-              style={{ backgroundColor: settings.accent_color }}
+            <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Fitur Unggulan
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-black mt-2 mb-4 custom-text-color tracking-tight">Semua yang Anda Butuhkan untuk Undangan Sempurna</h3>
+            <p className="opacity-75 leading-relaxed custom-text-color font-medium">
+              Adatara dirancang dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan momen kebahagiaan Anda.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10"
+          >
+            {/* Feature Card 1 */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
-              Paling Populer
-            </div>
+              {/* Glowing Accent Corner */}
+              <div 
+                className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                style={{ backgroundColor: `${settings.text_color}08`, border: `1px solid ${settings.text_color}15`, color: settings.text_color }}
+              >
+                <Layers className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Real-Time Template Builder</h4>
+              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+                Pilih dari 6 modul visual utama (Cover, Pembuka, Profil, Acara, Cerita/Galeri, RSVP). Edit teks, tata letak, warna, dan font secara instan.
+              </p>
+            </motion.div>
 
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider custom-accent-color">PAKET GOLD</span>
-              <h4 className="text-3xl font-extrabold custom-text-color mt-4">Rp 99.000</h4>
-              <p className="text-xs opacity-50 mt-1 custom-text-color">Bayar Sekali (Aktif Selamanya)</p>
-              <p className="opacity-75 text-sm mt-6 custom-text-color">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
-            </div>
-            
-            <hr className="custom-border-color my-8" />
-
-            <ul className="space-y-4 flex-1 text-sm opacity-90 custom-text-color">
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Masa aktif undangan selamanya
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Tamu undangan tak terbatas
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Bebas kustom musik latar & audio
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Galeri foto & video tak terbatas
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                RSVP & amplop digital cashless
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Bebas watermark brand Adatara
-              </li>
-            </ul>
-
-            <Link 
-              href="/register?plan=gold" 
-              className="mt-8 w-full py-4 text-center rounded-xl font-extrabold transition-all shadow-lg hover:brightness-105"
-              style={{
-                backgroundColor: settings.accent_color,
-                color: settings.bg_color,
-                border: `1px solid ${settings.accent_color}`
-              }}
+            {/* Feature Card 2 */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
-              Pilih Paket Gold
-            </Link>
-          </div>
+              {/* Glowing Accent Corner */}
+              <div 
+                className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                style={{ backgroundColor: `${settings.accent_color}08`, border: `1px solid ${settings.accent_color}15`, color: settings.accent_color }}
+              >
+                <Music className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Audio Latar & Galeri Media</h4>
+              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+                Tambahkan musik romantis dari library kami atau unggah file MP3 Anda sendiri. Dukungan galeri foto berformat Grid, Masonry, Carousel, hingga Pinterest style.
+              </p>
+            </motion.div>
 
-          {/* Plan 3: VIP */}
-          <div className="border rounded-3xl p-8 flex flex-col transition-all duration-300 custom-card-bg">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider custom-accent-color">PAKET PLATINUM</span>
-              <h4 className="text-3xl font-extrabold custom-text-color mt-4">Rp 149.000</h4>
-              <p className="text-xs opacity-50 mt-1 custom-text-color">Bayar Sekali (Aktif Selamanya)</p>
-              <p className="opacity-75 text-sm mt-6 custom-text-color">Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.</p>
-            </div>
-            
-            <hr className="custom-border-color my-8" />
+            {/* Feature Card 3 */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+            >
+              {/* Glowing Accent Corner */}
+              <div 
+                className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                style={{ backgroundColor: `${settings.text_color}08`, border: `1px solid ${settings.text_color}15`, color: settings.text_color }}
+              >
+                <BellRing className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">RSVP & Ucapan Real-Time</h4>
+              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+                Tamu dapat melakukan konfirmasi kehadiran secara instan. Anda mendapatkan daftar rekapitulasi kehadiran (RSVP) langsung dari dashboard.
+              </p>
+            </motion.div>
 
-            <ul className="space-y-4 flex-1 text-sm opacity-90 custom-text-color">
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Semua fitur paket GOLD
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Subdomain kustom (.adatara.id/nama)
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                100 WhatsApp blast untuk undangan tamu
-              </li>
-              <li className="flex items-center gap-3">
-                <CheckCircle className="w-4 h-4 shrink-0" style={{ color: settings.text_color }} />
-                Prioritas bantuan admin 24/7
-              </li>
-            </ul>
+            {/* Feature Card 4 */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+            >
+              {/* Glowing Accent Corner */}
+              <div 
+                className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                style={{ backgroundColor: `${settings.accent_color}08`, border: `1px solid ${settings.accent_color}15`, color: settings.accent_color }}
+              >
+                <Gift className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Kado & Amplop Digital</h4>
+              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+                Sediakan nomor rekening bank, e-wallet, atau barcode QRIS di dalam undangan untuk memudahkan tamu mengirimkan kado/amplop secara cashless.
+              </p>
+            </motion.div>
 
-            <Link href="/register?plan=platinum" className="mt-8 w-full py-3 text-center rounded-xl font-bold transition-all border custom-btn-primary">
-              Pilih Paket Platinum
-            </Link>
-          </div>
-        </div>
-      </section>
+            {/* Feature Card 5 */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+            >
+              {/* Glowing Accent Corner */}
+              <div 
+                className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                style={{ backgroundColor: `${settings.text_color}08`, border: `1px solid ${settings.text_color}15`, color: settings.text_color }}
+              >
+                <MapPin className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Petunjuk Lokasi & Kalender</h4>
+              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+                Tamu Anda tidak akan tersesat berkat peta interaktif Google Maps. Dilengkapi fitur pencatatan otomatis di Google Calendar.
+              </p>
+            </motion.div>
+
+            {/* Feature Card 6 */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+            >
+              {/* Glowing Accent Corner */}
+              <div 
+                className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
+                style={{ backgroundColor: settings.accent_color }}
+              />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                style={{ backgroundColor: `${settings.accent_color}08`, border: `1px solid ${settings.accent_color}15`, color: settings.accent_color }}
+              >
+                <Clock className="w-7 h-7" />
+              </div>
+              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Countdown Hitung Mundur</h4>
+              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+                Tampilkan penghitung waktu mundur otomatis yang presisi hingga detik dimulainya acara utama untuk membangkitkan antusiasme tamu.
+              </p>
+            </motion.div>
+          </motion.div>
+        </section>
+      </div>
+
+      {/* PRICING SECTION */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#063024] via-[#042018] to-[#02100c] py-24 px-6 border-t border-b border-[#064e3b]/30">
+        {/* Ambient golden lighting glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
+        
+        <section id="harga" className="max-w-7xl mx-auto scroll-mt-10 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <h2 className="text-xs font-extrabold uppercase tracking-widest text-[#d4af37] flex items-center justify-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Paket Harga
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-black mt-2 mb-4 text-white tracking-tight">Investasi Kecil untuk Momen Terindah</h3>
+            <p className="opacity-80 text-[#f5f5dc] font-medium">
+              Tersedia paket langganan fleksibel tanpa biaya tersembunyi.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"
+          >
+            {/* Plan 1: Free */}
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="border rounded-3xl p-8 flex flex-col transition-all duration-500 bg-white/[0.02] backdrop-blur-md border-slate-800 hover:border-slate-600 hover:bg-white/[0.04] shadow-sm hover:shadow-2xl hover:shadow-black/20"
+            >
+              <div>
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-slate-800/60 text-slate-300 border border-slate-700/40 shadow-sm">
+                  PAKET BASIC
+                </span>
+                <h4 className="text-4xl font-extrabold text-slate-300 mt-4">Rp 0</h4>
+                <p className="text-xs opacity-60 mt-1 text-[#f5f5dc]">Selamanya Gratis</p>
+                <p className="opacity-80 text-sm mt-6 text-[#f5f5dc]">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
+              </div>
+
+              <hr className="border-slate-800 my-8" />
+
+              <ul className="space-y-4 flex-1 text-sm text-[#f5f5dc]/80">
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-slate-500" />
+                  Masa aktif undangan 3 hari
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-slate-500" />
+                  Maksimal 50 tamu undangan
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-slate-500" />
+                  Desain template dasar (Basic)
+                </li>
+                <li className="flex items-center gap-3 opacity-30">
+                  <span className="w-4 h-4 inline-flex items-center justify-center font-bold text-white">✕</span>
+                  Tanpa kustom musik & galeri
+                </li>
+                <li className="flex items-center gap-3 opacity-30">
+                  <span className="w-4 h-4 inline-flex items-center justify-center font-bold text-white">✕</span>
+                  Terdapat watermark brand Adatara
+                </li>
+              </ul>
+
+              <Link href="/register?plan=basic" className="mt-8 w-full py-3 text-center rounded-xl font-bold transition-all border border-slate-800 bg-slate-900/10 text-slate-400 hover:bg-slate-800 hover:text-white">
+                Mulai Gratis
+              </Link>
+            </motion.div>
+
+            {/* Plan 2: Pro */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="border rounded-3xl p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+            >
+              <div className="absolute top-0 right-8 -translate-y-1/2 text-emerald-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest bg-emerald-950 border border-emerald-800 shadow-sm">
+                Paling Populer
+              </div>
+
+              <div>
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-900/50 text-emerald-300 border border-emerald-800/40 shadow-sm">
+                  PAKET PREMIUM
+                </span>
+                <h4 className="text-4xl font-extrabold text-emerald-300 mt-4">Rp 99.000</h4>
+                <p className="text-xs opacity-75 mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
+                <p className="opacity-80 text-sm mt-6 text-[#f5f5dc]">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
+              </div>
+
+              <hr className="border-emerald-900/30 my-8" />
+
+              <ul className="space-y-4 flex-1 text-sm text-[#f5f5dc]/90">
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                  Masa aktif undangan selamanya
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                  Tamu undangan tak terbatas
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                  Bebas kustom musik latar & audio
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                  Galeri foto & video tak terbatas
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                  RSVP & amplop digital cashless
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                  Bebas watermark brand Adatara
+                </li>
+              </ul>
+
+              <Link
+                href="/register?plan=premium"
+                className="mt-8 w-full py-3 text-center rounded-xl font-bold transition-all border border-emerald-700 bg-emerald-800/20 text-emerald-300 hover:bg-emerald-500 hover:text-[#063024] hover:shadow-lg shadow-emerald-500/10"
+              >
+                Pilih Paket Premium
+              </Link>
+            </motion.div>
+
+            {/* Plan 3: VIP */}
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="border-2 rounded-3xl p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-[#d4af37]/15 via-[#063024]/10 to-transparent backdrop-blur-md border-[#d4af37] hover:from-[#d4af37]/20 hover:shadow-[#d4af37]/15"
+            >
+              <div className="absolute top-0 right-8 -translate-y-1/2 text-[#063024] text-[10px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-amber-400 to-[#d4af37] shadow-lg shadow-[#d4af37]/30 animate-pulse">
+                Rekomendasi VIP
+              </div>
+
+              <div>
+                <span className="inline-block px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-[#063024] border border-amber-300/30 shadow-md">
+                  PAKET SULTAN
+                </span>
+                <h4 className="text-4xl font-black text-[#d4af37] mt-4 drop-shadow-sm">Rp 149.000</h4>
+                <p className="text-xs opacity-75 mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
+                <p className="opacity-95 text-sm mt-6 text-[#f5f5dc] font-medium">Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.</p>
+              </div>
+
+              <hr className="border-[#d4af37]/20 my-8" />
+
+              <ul className="space-y-4 flex-1 text-sm text-white font-medium">
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                  Semua fitur paket PREMIUM
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                  Subdomain kustom (.adatara.id/nama)
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                  100 WhatsApp blast untuk undangan tamu
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                  Prioritas bantuan admin 24/7
+                </li>
+              </ul>
+
+              <Link 
+                href="/register?plan=sultan" 
+                className="mt-8 w-full py-4 text-center rounded-xl font-black transition-all shadow-lg shadow-[#d4af37]/10 hover:shadow-[#d4af37]/25 bg-[#d4af37] text-[#063024] hover:bg-[#c5a030] hover:scale-[1.02]"
+              >
+                Pilih Paket Sultan
+              </Link>
+            </motion.div>
+          </motion.div>
+        </section>
+      </div>
 
       {/* FAQ SECTION */}
-      <section id="faq" className="py-24 border-t custom-border-color px-6 scroll-mt-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest">Tanya Jawab</h2>
-            <h3 className="text-3xl sm:text-4xl font-black mt-2 custom-text-color">Pertanyaan yang Sering Diajukan</h3>
-          </div>
+      <section id="faq" className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-transparent via-white to-transparent scroll-mt-10">
+        {/* Soft elegant glows */}
+        <div className="absolute top-1/4 left-10 w-72 h-72 rounded-full bg-[#064e3b]/[0.02] blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-72 h-72 rounded-full bg-[#d4af37]/[0.03] blur-3xl pointer-events-none" />
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <HelpCircle className="w-3.5 h-3.5" /> Tanya Jawab
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-black mt-2 custom-text-color tracking-tight">Pertanyaan yang Sering Diajukan</h3>
+            <p className="opacity-75 mt-3 text-sm font-medium custom-text-color max-w-lg mx-auto">
+              Temukan jawaban cepat untuk pertanyaan umum seputar fitur, pemesanan, dan pengelolaan undangan digital Anda.
+            </p>
+          </motion.div>
 
-          <div className="space-y-4">
-            {MOCK_FAQS.map((faq, idx) => (
-              <div 
-                key={idx}
-                className="border rounded-2xl overflow-hidden transition-all custom-card-bg"
-              >
-                <button
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left font-bold custom-text-color custom-text-color-hover transition-colors cursor-pointer"
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="space-y-4"
+          >
+            {MOCK_FAQS.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <motion.div
+                  key={idx}
+                  variants={itemVariants}
+                  className={`border rounded-2xl overflow-hidden transition-all duration-300 bg-white ${
+                    isOpen 
+                      ? "border-[#064e3b]/35 shadow-md shadow-[#064e3b]/5 bg-gradient-to-r from-[#064e3b]/[0.02] to-transparent" 
+                      : "border-[#064e3b]/10 shadow-sm hover:shadow-md hover:border-[#064e3b]/25"
+                  }`}
                 >
-                  <span className="flex items-center gap-3">
-                    <HelpCircle className="w-5 h-5 custom-accent-color shrink-0" />
-                    {faq.tanya}
-                  </span>
-                  <ChevronDown 
-                    className="w-5 h-5 opacity-50 transition-transform" 
-                    style={{
-                      transform: openFaq === idx ? "rotate(180deg)" : "none",
-                      color: openFaq === idx ? settings.accent_color : settings.text_color
-                    }}
-                  />
-                </button>
-                
-                <AnimatePresence initial={false}>
-                  {openFaq === idx && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-6 pb-6 pt-1 text-sm opacity-80 leading-relaxed border-t custom-border-color"
-                    >
-                      {faq.jawab}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </div>
+                  <button
+                    onClick={() => toggleFaq(idx)}
+                    className="w-full px-6 py-5 flex items-center justify-between text-left font-bold custom-text-color transition-colors cursor-pointer group"
+                  >
+                    <span className="flex items-center gap-3 pr-4">
+                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                        isOpen 
+                          ? "bg-[#064e3b] text-[#f5f5dc]" 
+                          : "bg-[#064e3b]/5 text-[#064e3b] group-hover:bg-[#064e3b]/10"
+                      }`}>
+                        <HelpCircle className="w-4 h-4" />
+                      </span>
+                      <span className="text-base sm:text-lg font-black tracking-tight">{faq.tanya}</span>
+                    </span>
+                    <span className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                      isOpen ? "bg-[#064e3b]/10" : "bg-transparent"
+                    }`}>
+                      <ChevronDown
+                        className="w-4 h-4 transition-transform duration-300"
+                        style={{
+                          transform: isOpen ? "rotate(180deg)" : "none",
+                          color: isOpen ? "#064e3b" : "currentColor"
+                        }}
+                      />
+                    </span>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="px-6 pb-6 pt-1 text-sm text-[#064e3b]/85 leading-relaxed font-medium pl-[52px]">
+                          {faq.jawab}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 
-      {/* CALL TO ACTION SECTION */}
-      <section 
-        className="py-24 px-6 relative overflow-hidden border-t custom-border-color transition-all"
-        style={{
-          background: `linear-gradient(to top right, ${settings.text_color || "#064e3b"}18, #f5f5dc, ${settings.accent_color}14)`
-        }}
-      >
-        <div className="absolute inset-0 opacity-40 pointer-events-none bg-[#f5f5dc]" />
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-6 custom-text-color">
-            Siap Membuat Momen Acara Anda Menjadi Lebih Indah?
-          </h2>
-          <p className="opacity-75 text-lg max-w-2xl mx-auto mb-10 leading-relaxed custom-text-color">
-            Daftar sekarang dan mulailah merancang undangan digital Anda. Gratis biaya pembuatan untuk masa percobaan awal.
-          </p>
-          <Link href="/register" className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold transition-all shadow-xl shadow-black/5 group custom-btn-primary border">
-            Mulai Buat Sekarang
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-      </section>
 
       {/* FOOTER */}
-      <footer 
-        className="border-t custom-border-color py-12 px-6 bg-[#f5f5dc]"
-      >
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm opacity-70 custom-text-color">
-          <div className="flex items-center gap-2 font-bold text-lg custom-text-color">
-            <Sparkles className="w-5 h-5 custom-accent-color" />
-            Adatara
+      <footer className="relative overflow-hidden bg-gradient-to-b from-[#05291e] to-[#031c14] text-[#f5f5dc]/70 border-t border-[#064e3b]/40 pt-20 pb-10 px-6">
+        {/* Subtle decorative glow */}
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            
+            {/* Column 1: Brand Info */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 select-none">
+                <img
+                  src="/logo-white.png"
+                  alt="Adatara Logo"
+                  className="h-10 md:h-12 w-auto object-contain"
+                />
+              </div>
+              <p className="text-sm leading-relaxed text-[#f5f5dc]/80 font-medium">
+                Platform pembuatan undangan digital premium terbaik di Indonesia. Hadirkan momen terindah Anda secara elegan, cepat, dan ramah lingkungan.
+              </p>
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://instagram.com" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                >
+                  <InstagramIcon className="w-5 h-5" />
+                </a>
+                <a 
+                  href="https://wa.me" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                >
+                  <PhoneIcon className="w-5 h-5" />
+                </a>
+                <a 
+                  href="mailto:support@adatara.id" 
+                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Column 2: Tautan Penting */}
+            <div className="space-y-6">
+              <h4 className="text-white font-bold text-base uppercase tracking-wider">Tautan Penting</h4>
+              <ul className="space-y-3.5 text-sm font-medium">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Beranda
+                  </a>
+                </li>
+                <li>
+                  <a href="#katalog" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Katalog Undangan
+                  </a>
+                </li>
+                <li>
+                  <a href="#harga" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Paket Harga
+                  </a>
+                </li>
+                <li>
+                  <a href="#faq" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Tanya Jawab
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Dukungan & Legal */}
+            <div className="space-y-6">
+              <h4 className="text-white font-bold text-base uppercase tracking-wider">Dukungan & Legal</h4>
+              <ul className="space-y-3.5 text-sm font-medium">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Syarat & Ketentuan
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Kebijakan Privasi
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Hubungi Admin
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Pusat Bantuan
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Kontak & Jam Layanan */}
+            <div className="space-y-6">
+              <h4 className="text-white font-bold text-base uppercase tracking-wider">Kantor & Jam Layanan</h4>
+              <ul className="space-y-4 text-sm font-medium">
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
+                  <span>Yogyakarta, Indonesia</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
+                  <span>Jam Layanan:<br />Setiap Hari (08.00 - 17.00 WIB)</span>
+                </li>
+                <li className="flex items-center gap-2 text-xs font-bold text-[#d4af37] bg-white/5 border border-[#d4af37]/20 rounded-full px-3 py-1.5 w-fit">
+                  <HeartIcon className="w-3.5 h-3.5 fill-current text-[#d4af37]" />
+                  <span>Dibuat dengan cinta untuk Anda</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
-          <p className="text-center md:text-left">
-            © {new Date().getFullYear()} Adatara. Hak Cipta Dilindungi Undang-Undang.
-          </p>
-          <div className="flex gap-6">
-            <a href="#" className="custom-text-color-hover transition-colors">Syarat & Ketentuan</a>
-            <a href="#" className="custom-text-color-hover transition-colors">Kebijakan Privasi</a>
+
+          <hr className="border-white/5 my-8" />
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium">
+            <p>
+              © {new Date().getFullYear()} Adatara. Hak Cipta Dilindungi Undang-Undang.
+            </p>
+            <p className="flex items-center gap-1 text-[#f5f5dc]/55">
+              Powered by <span className="text-white font-bold">Adatara Invitation</span>
+            </p>
           </div>
         </div>
       </footer>

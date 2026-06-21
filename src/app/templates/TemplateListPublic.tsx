@@ -4,18 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { createInvitationPublic } from "./actions";
-import { 
-  Palette, 
-  ArrowRight, 
-  X, 
-  Sparkles, 
-  Link as LinkIcon, 
+import {
+  Palette,
+  ArrowRight,
+  X,
+  Sparkles,
+  Link as LinkIcon,
   Loader2,
   CheckCircle,
   AlertCircle,
   User,
   Phone,
-  Mail
+  Mail,
+  Search,
+  ChevronDown
 } from "lucide-react";
 
 import { ScaledCoverPreview } from "../dashboard/templates/BuilderTabsCoverPembuka";
@@ -24,6 +26,7 @@ type TemplateType = {
   id: string;
   nama_template: string;
   kategori: string;
+  paket?: string;
   thumbnail: string;
   deskripsi: string | null;
   template_json?: any;
@@ -36,17 +39,21 @@ const getSafeThumbnail = (url?: string) => {
   return url;
 };
 
-export function TemplateListPublic({ 
+export function TemplateListPublic({
   templates,
   categories = ["Semua"]
-}: { 
+}: {
   templates: TemplateType[];
   categories?: string[];
 }) {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [selectedPaket, setSelectedPaket] = useState("Semua");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType | null>(null);
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [paketDropdownOpen, setPaketDropdownOpen] = useState(false);
+
   // Guest inputs
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -57,9 +64,13 @@ export function TemplateListPublic({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const filteredTemplates = selectedCategory === "Semua"
-    ? templates
-    : templates.filter((t) => t.kategori === selectedCategory);
+  const filteredTemplates = templates.filter((t) => {
+    const matchesCategory = selectedCategory === "Semua" || t.kategori === selectedCategory;
+    const matchesPaket = selectedPaket === "Semua" || t.paket === selectedPaket;
+    const matchesSearch = t.nama_template.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (t.deskripsi && t.deskripsi.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesPaket && matchesSearch;
+  });
 
   const handleOpenModal = (template: TemplateType) => {
     setSelectedTemplate(template);
@@ -111,21 +122,120 @@ export function TemplateListPublic({
 
   return (
     <div className="space-y-6 text-[#064e3b]">
-      {/* Category Filter Buttons */}
-      <div className="flex flex-wrap gap-2 w-full justify-start">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
-              selectedCategory === cat
-                ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37] shadow-md shadow-[#064e3b]/10"
-                : "bg-white/60 hover:bg-white text-[#064e3b]/80 border-[#064e3b]/10 hover:border-[#064e3b]/20 hover:text-[#064e3b]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      {/* Search and Category Filter Section */}
+      <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+        {/* Search Input */}
+        <div className="relative flex-1 max-w-lg">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none opacity-50">
+            <Search className="w-5 h-5 text-[#064e3b]" />
+          </span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cari desain undangan..."
+            className="w-full pl-11 pr-4 py-3 rounded-2xl border text-sm font-medium transition-all outline-none bg-white/70 backdrop-blur-sm border-[#064e3b]/10 focus:border-[#d4af37] focus:bg-white text-[#064e3b]"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-bold opacity-60 hover:opacity-100 transition-opacity text-[#064e3b]"
+            >
+              Batal
+            </button>
+          )}
+        </div>
+
+        {/* Dropdowns Wrapper */}
+        <div className="flex gap-3 flex-wrap md:flex-nowrap">
+          {/* Category Dropdown */}
+          <div className="relative min-w-[170px] flex-1 md:flex-none">
+            <button
+              onClick={() => { setCategoryDropdownOpen(!categoryDropdownOpen); setPaketDropdownOpen(false); }}
+              className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border text-sm font-bold bg-white/70 backdrop-blur-sm border-[#064e3b]/10 hover:border-[#d4af37] text-[#064e3b] cursor-pointer"
+            >
+              <span>{selectedCategory === "Semua" ? "Semua Kategori" : selectedCategory}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${categoryDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {categoryDropdownOpen && (
+                <>
+                  {/* Overlay to close when clicking outside */}
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setCategoryDropdownOpen(false)}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
+                  >
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setCategoryDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                            ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                            : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                          }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Paket Dropdown */}
+          <div className="relative min-w-[150px] flex-1 md:flex-none">
+            <button
+              onClick={() => { setPaketDropdownOpen(!paketDropdownOpen); setCategoryDropdownOpen(false); }}
+              className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border text-sm font-bold bg-white/70 backdrop-blur-sm border-[#064e3b]/10 hover:border-[#d4af37] text-[#064e3b] cursor-pointer"
+            >
+              <span>{selectedPaket === "Semua" ? "Semua Paket" : selectedPaket}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${paketDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {paketDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setPaketDropdownOpen(false)} />
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-full md:w-48 bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2"
+                  >
+                    {["Semua", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
+                      <button
+                        key={tier}
+                        onClick={() => {
+                          setSelectedPaket(tier);
+                          setPaketDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
+                            ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                            : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                          }`}
+                      >
+                        {tier === "Semua" ? "Semua Paket" : tier}
+                      </button>
+                    ))}
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
       {/* Templates Grid */}
@@ -136,7 +246,7 @@ export function TemplateListPublic({
           <p className="text-[#064e3b]/50 text-xs mt-1">Belum ada template yang terdaftar dalam kategori ini.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filteredTemplates.map((template) => {
             const parsedJson = typeof template.template_json === "string" ? JSON.parse(template.template_json) : template.template_json;
             const coverData = parsedJson?.cover || {};
@@ -146,46 +256,59 @@ export function TemplateListPublic({
             return (
               <div
                 key={template.id}
-                className="group bg-white border border-[#064e3b]/5 hover:border-[#d4af37]/35 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
+                className="group bg-white border border-[#064e3b]/5 hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 {/* Thumbnail / Live Cover Preview */}
-                <div className="w-full aspect-[9/16] overflow-hidden relative bg-[#064e3b]/10 rounded-t-2xl">
-                  {hasCoverData ? (
-                    <ScaledCoverPreview coverData={coverData} meta={meta} />
-                  ) : template.thumbnail ? (
-                    <img
-                      src={getSafeThumbnail(template.thumbnail)}
-                      alt={template.nama_template}
-                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
-                  )}
-                </div>
+                <div className="w-full aspect-square overflow-hidden relative bg-[#064e3b]/5 rounded-t-2xl flex items-center justify-center p-2.5">
+                  {/* Package Tier Badge Overlay */}
+                  <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
+                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "SULTAN"
+                        ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                        : template.paket === "PREMIUM"
+                          ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
+                          : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                      }`}>
+                      {template.paket || "BASIC"}
+                    </span>
+                  </div>
 
-                {/* Body */}
-                <div className="p-3 flex flex-col flex-1 text-left">
-                  {/* Title & Category Badge Row */}
-                  <div className="flex items-start justify-between gap-1 min-w-0">
-                    <h4 className="text-[11px] font-black text-[#064e3b] group-hover:text-[#d4af37] transition-colors leading-tight flex-1 break-words">
-                      {template.nama_template}
-                    </h4>
-                    <span className="px-1 py-0.5 rounded bg-[#064e3b]/5 text-[#d4af37]/90 border border-[#d4af37]/15 text-[6.5px] font-extrabold uppercase tracking-wider whitespace-nowrap flex-shrink-0 mt-0.5">
+                  {/* Category Badge Overlay - Premium Glassmorphism */}
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max">
+                    <span className="px-2 py-0.5 rounded-full text-[6px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-[#064e3b] border border-white/40 shadow-sm">
                       {template.kategori}
                     </span>
                   </div>
 
-                  <p className="text-[#064e3b]/60 text-[9.5px] mt-1.5 line-clamp-1 leading-normal flex-1">
-                    {template.deskripsi || "Tidak ada deskripsi."}
-                  </p>
+                  {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
+                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                    {hasCoverData ? (
+                      <ScaledCoverPreview coverData={coverData} meta={meta} />
+                    ) : template.thumbnail ? (
+                      <img
+                        src={getSafeThumbnail(template.thumbnail)}
+                        alt={template.nama_template}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
+                  {/* Title */}
+                  <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
+                    {template.nama_template}
+                  </h4>
 
                   {/* Action */}
                   <button
                     onClick={() => handleOpenModal(template)}
-                    className="mt-3 w-full py-1.5 bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white font-black text-[9px] flex items-center justify-center gap-1 cursor-pointer transition-all shadow-sm shadow-[#064e3b]/5 tracking-wider uppercase rounded-lg"
+                    className="mt-1.5 w-full py-1.5 border border-[#064e3b]/15 hover:border-[#064e3b] bg-transparent text-[#064e3b] hover:bg-[#064e3b] hover:text-white font-black text-[8.5px] flex items-center justify-center gap-1.5 cursor-pointer transition-all duration-300 shadow-sm tracking-widest uppercase rounded-md"
                   >
                     Gunakan Template
-                    <ArrowRight className="w-2.5 h-2.5 text-[#d4af37]" />
+                    <ArrowRight className="w-2.5 h-2.5" />
                   </button>
                 </div>
               </div>

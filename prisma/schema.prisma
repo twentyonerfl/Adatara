@@ -38,6 +38,12 @@ enum TransactionStatus {
   EXPIRED
 }
 
+enum PaketTier {
+  BASIC
+  PREMIUM
+  SULTAN
+}
+
 // ==========================================
 // MODELS (BETTER AUTH & APP USER)
 // ==========================================
@@ -121,6 +127,7 @@ model Template {
   id            String         @id @default(cuid())
   nama_template String
   kategori      String         // Kategori acara (Pernikahan, Ulang Tahun, dll.)
+  paket         PaketTier      @default(BASIC)
   thumbnail     String         // URL image thumbnail template
   deskripsi     String?
   template_json Json           // Menyimpan layout default & styling config
@@ -133,6 +140,7 @@ model Template {
   @@map("template")
   @@index([kategori])
   @@index([status])
+  @@index([paket])
 }
 
 model Invitation {

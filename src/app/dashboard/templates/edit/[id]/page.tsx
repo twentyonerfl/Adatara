@@ -26,6 +26,7 @@ export default async function EditTemplatePage({ params }: { params: Promise<{ i
       initialData={savedJson}
       initialName={template.nama_template}
       initialKategori={template.kategori}
+      initialPaket={template.paket}
       initialThumbnail={template.thumbnail}
       initialDeskripsi={template.deskripsi || ""}
       initialStatus={template.status}

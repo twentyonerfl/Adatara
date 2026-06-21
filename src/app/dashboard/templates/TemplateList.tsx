@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { createInvitation } from "./actions";
-import { 
-  Palette, 
-  ArrowRight, 
-  X, 
-  Sparkles, 
-  Link as LinkIcon, 
+import {
+  Palette,
+  ArrowRight,
+  X,
+  Sparkles,
+  Link as LinkIcon,
   Loader2,
   CheckCircle,
   AlertCircle
@@ -21,6 +21,7 @@ type TemplateType = {
   id: string;
   nama_template: string;
   kategori: string;
+  paket?: string;
   thumbnail: string;
   deskripsi: string | null;
   template_json?: any;
@@ -29,6 +30,7 @@ type TemplateType = {
 export function TemplateList({ templates }: { templates: TemplateType[] }) {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [selectedPaket, setSelectedPaket] = useState("Semua");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType | null>(null);
   const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,9 +39,11 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
 
   const categories = ["Semua", ...Array.from(new Set(templates.map((t) => t.kategori)))];
 
-  const filteredTemplates = selectedCategory === "Semua"
-    ? templates
-    : templates.filter((t) => t.kategori === selectedCategory);
+  const filteredTemplates = templates.filter((t) => {
+    const matchesCategory = selectedCategory === "Semua" || t.kategori === selectedCategory;
+    const matchesPaket = selectedPaket === "Semua" || t.paket === selectedPaket;
+    return matchesCategory && matchesPaket;
+  });
 
   const handleOpenModal = (template: TemplateType) => {
     setSelectedTemplate(template);
@@ -86,21 +90,39 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
 
   return (
     <div className="space-y-6 text-[#064e3b]">
-      {/* Category Filter Buttons */}
-      <div className="flex flex-wrap gap-2 bg-[#064e3b]/5 p-1.5 rounded-2xl border border-[#064e3b]/10 w-fit">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              selectedCategory === cat
-                ? "bg-[#064e3b] text-white border border-[#d4af37] shadow-md shadow-[#064e3b]/10"
-                : "text-[#064e3b]/70 hover:text-[#064e3b]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      {/* Filter Row */}
+      <div className="flex flex-col gap-3">
+        {/* Category Filter Buttons */}
+        <div className="flex flex-wrap gap-2 bg-[#064e3b]/5 p-1.5 rounded-2xl border border-[#064e3b]/10 w-fit">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                  ? "bg-[#064e3b] text-white border border-[#d4af37] shadow-md shadow-[#064e3b]/10"
+                  : "text-[#064e3b]/70 hover:text-[#064e3b]"
+                }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Paket Filter Buttons */}
+        <div className="flex flex-wrap gap-2 bg-[#064e3b]/5 p-1.5 rounded-2xl border border-[#064e3b]/10 w-fit">
+          {["Semua Paket", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
+            <button
+              key={tier}
+              onClick={() => setSelectedPaket(tier === "Semua Paket" ? "Semua" : tier)}
+              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${(tier === "Semua Paket" && selectedPaket === "Semua") || selectedPaket === tier
+                  ? "bg-[#064e3b] text-white border border-[#d4af37] shadow-md shadow-[#064e3b]/10"
+                  : "text-[#064e3b]/70 hover:text-[#064e3b]"
+                }`}
+            >
+              {tier === "Semua Paket" ? "Semua Paket" : tier}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Templates Grid */}
@@ -111,56 +133,68 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
           <p className="text-[#064e3b]/50 text-xs mt-1">Belum ada template yang terdaftar dalam kategori ini.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filteredTemplates.map((template) => {
             const parsedJson = typeof template.template_json === "string" ? JSON.parse(template.template_json) : template.template_json;
             const coverData = parsedJson?.cover || {};
             const meta = { kategori: template.kategori, bahasa: coverData.bahasa || "id" };
             const hasCoverData = coverData && Object.keys(coverData).length > 0;
-
             return (
               <div
                 key={template.id}
-                className="group bg-white border border-[#064e3b]/5 hover:border-[#d4af37]/35 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
+                className="group bg-white border border-[#064e3b]/5 hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 {/* Thumbnail / Live Cover Preview */}
-                <div className="w-full aspect-[9/16] overflow-hidden relative bg-[#064e3b]/10">
-                  {hasCoverData ? (
-                    <ScaledCoverPreview coverData={coverData} meta={meta} />
-                  ) : template.thumbnail ? (
-                    <img
-                      src={template.thumbnail}
-                      alt={template.nama_template}
-                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
-                  )}
-                </div>
+                <div className="w-full aspect-square overflow-hidden relative bg-[#064e3b]/5 rounded-t-2xl flex items-center justify-center p-2.5">
+                  {/* Package Tier Badge Overlay */}
+                  <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
+                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "SULTAN"
+                        ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                        : template.paket === "PREMIUM"
+                          ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
+                          : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                      }`}>
+                      {template.paket || "BASIC"}
+                    </span>
+                  </div>
 
-                {/* Body */}
-                <div className="p-3 flex flex-col flex-1 text-left">
-                  {/* Title & Category Badge Row */}
-                  <div className="flex items-start justify-between gap-1 min-w-0">
-                    <h4 className="text-[11px] font-black text-[#064e3b] group-hover:text-[#d4af37] transition-colors leading-tight flex-1 break-words">
-                      {template.nama_template}
-                    </h4>
-                    <span className="px-1 py-0.5 rounded bg-[#064e3b]/5 text-[#d4af37]/90 border border-[#d4af37]/15 text-[6.5px] font-extrabold uppercase tracking-wider whitespace-nowrap flex-shrink-0 mt-0.5">
+                  {/* Category Badge Overlay - Premium Glassmorphism */}
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max">
+                    <span className="px-2 py-0.5 rounded-full text-[6px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-[#064e3b] border border-white/40 shadow-sm">
                       {template.kategori}
                     </span>
                   </div>
 
-                  <p className="text-[#064e3b]/60 text-[9.5px] mt-1.5 line-clamp-1 leading-normal flex-1">
-                    {template.deskripsi || "Tidak ada deskripsi."}
-                  </p>
+                  {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
+                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                    {hasCoverData ? (
+                      <ScaledCoverPreview coverData={coverData} meta={meta} />
+                    ) : template.thumbnail ? (
+                      <img
+                        src={template.thumbnail}
+                        alt={template.nama_template}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
+                  {/* Title */}
+                  <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
+                    {template.nama_template}
+                  </h4>
 
                   {/* Action */}
                   <button
                     onClick={() => handleOpenModal(template)}
-                    className="mt-3 w-full py-1.5 bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white font-black text-[9px] flex items-center justify-center gap-1 cursor-pointer transition-all shadow-sm shadow-[#064e3b]/5 tracking-wider uppercase rounded-lg"
+                    className="mt-1.5 w-full py-1.5 border border-[#064e3b]/15 hover:border-[#064e3b] bg-transparent text-[#064e3b] hover:bg-[#064e3b] hover:text-white font-black text-[8.5px] flex items-center justify-center gap-1.5 cursor-pointer transition-all duration-300 shadow-sm tracking-widest uppercase rounded-md"
                   >
                     Gunakan Template
-                    <ArrowRight className="w-2.5 h-2.5 text-[#d4af37]" />
+                    <ArrowRight className="w-2.5 h-2.5" />
                   </button>
                 </div>
               </div>

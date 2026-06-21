@@ -52,9 +52,6 @@ export default async function TemplatesPublicPage() {
             <Link href="/" className="px-4 py-2 text-sm font-bold hover:text-[#064e3b] text-[#064e3b]/70 transition-colors">
               Beranda
             </Link>
-            <Link href="/login" className="px-5 py-2.5 rounded-full text-sm font-bold bg-[#064e3b]/10 hover:bg-[#064e3b]/15 text-[#064e3b] border border-[#064e3b]/20 transition-all duration-300">
-              Admin Panel
-            </Link>
           </div>
         </div>
       </header>

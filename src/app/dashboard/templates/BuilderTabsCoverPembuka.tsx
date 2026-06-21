@@ -219,16 +219,16 @@ export function CoverForm({ data, onChange, musicLibrary, mode }: { data: any; o
   );
 }
 
-export function CoverPreview({ 
-  data, 
-  meta, 
-  onOpen, 
-  guestName 
-}: { 
-  data: any; 
-  meta: any; 
-  onOpen?: () => void; 
-  guestName?: string; 
+export function CoverPreview({
+  data,
+  meta,
+  onOpen,
+  guestName
+}: {
+  data: any;
+  meta: any;
+  onOpen?: () => void;
+  guestName?: string;
 }) {
   const bg = getBgStyle(data.background);
   const fontTitle = data.setting_font || {};
@@ -251,12 +251,12 @@ export function CoverPreview({
     <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative overflow-hidden rounded-2xl"
       style={bg}>
       {data.background?.type === "video" && data.background?.value && (
-        <video 
+        <video
           key={data.background.value}
           src={data.background.value}
-          autoPlay 
-          muted 
-          loop 
+          autoPlay
+          muted
+          loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -379,13 +379,13 @@ export function CoverPreview({
               width: "100%",
             }}
             className={`mt-1 flex flex-col gap-2 ${btn.position === "left" ? "items-start text-left"
-                : btn.position === "right" ? "items-end text-right"
-                  : "items-center text-center"
+              : btn.position === "right" ? "items-end text-right"
+                : "items-center text-center"
               }`}
           >
             <div className={`space-y-1 flex flex-col ${btn.position === "left" ? "items-start"
-                : btn.position === "right" ? "items-end"
-                  : "items-center"
+              : btn.position === "right" ? "items-end"
+                : "items-center"
               }`}>
               <span className="text-[10px] opacity-75 block font-medium" style={{ color: fontTitle.color }}>
                 Kepada Yth. Bpk/Ibu/Saudara/i
@@ -573,8 +573,8 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
         </div>
       )}
       {!isTanggalCustom && data.tanggal_acara && (
-        <div 
-          style={{ 
+        <div
+          style={{
             fontSize: fontTanggal.size || "12px",
             color: fontTanggal.color || "#ffffff",
             fontFamily: fontTanggal.family || "Inter",
@@ -626,12 +626,12 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
   return (
     <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative rounded-2xl overflow-hidden p-6 gap-4" style={bg}>
       {data.background?.type === "video" && data.background?.value && (
-        <video 
+        <video
           key={data.background.value}
           src={data.background.value}
-          autoPlay 
-          muted 
-          loop 
+          autoPlay
+          muted
+          loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
         />
@@ -996,19 +996,21 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
     if (!containerRef.current) return;
     const updateScale = () => {
       if (containerRef.current) {
-        const width = containerRef.current.getBoundingClientRect().width;
-        // The original design width is 288px
-        setScale(width / 288);
+        const rect = containerRef.current.getBoundingClientRect();
+        const scaleX = rect.width / 288;
+        const scaleY = rect.height / 512;
+        // Fit cover exactly within container bounds (contain fit)
+        setScale(Math.min(scaleX, scaleY));
         setHasMeasured(true);
       }
     };
 
     updateScale();
-    
+
     // Set up ResizeObserver to handle layout/resize changes
     const observer = new ResizeObserver(updateScale);
     observer.observe(containerRef.current);
-    
+
     return () => observer.disconnect();
   }, []);
 
@@ -1016,16 +1018,17 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
   const activeMeta = meta || {};
 
   return (
-    <div ref={containerRef} className="absolute inset-0 w-full h-full select-none pointer-events-none rounded-t-2xl overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 w-full h-full select-none pointer-events-none rounded-t-2xl overflow-hidden flex items-center justify-center">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;600;700&family=Great+Vibes&family=Inter:wght@300;400;600;700;900&family=Lato:wght@300;400;700&family=Outfit:wght@300;400;600;700;900&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
-      <div 
-        className="absolute top-0 left-0 origin-top-left transition-opacity duration-300"
+      <div
+        className="transition-opacity duration-300 flex-shrink-0"
         style={{
           width: "288px",
           height: "512px",
           transform: `scale(${scale})`,
+          transformOrigin: "center center",
           opacity: hasMeasured ? 1 : 0,
         }}
       >

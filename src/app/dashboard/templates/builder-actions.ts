@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { PaketTier } from "@prisma/client";
 
 async function verifyAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -17,6 +18,7 @@ async function verifyAdmin() {
 export async function createTemplate(formData: {
   nama_template: string;
   kategori: string;
+  paket: PaketTier;
   thumbnail: string;
   deskripsi: string;
   template_json: any;
@@ -27,6 +29,7 @@ export async function createTemplate(formData: {
       data: {
         nama_template: formData.nama_template,
         kategori: formData.kategori,
+        paket: formData.paket,
         thumbnail: formData.thumbnail,
         deskripsi: formData.deskripsi,
         template_json: formData.template_json,
@@ -46,6 +49,7 @@ export async function updateTemplate(
   formData: {
     nama_template: string;
     kategori: string;
+    paket: PaketTier;
     thumbnail: string;
     deskripsi: string;
     template_json: any;
@@ -58,6 +62,7 @@ export async function updateTemplate(
       data: {
         nama_template: formData.nama_template,
         kategori: formData.kategori,
+        paket: formData.paket,
         thumbnail: formData.thumbnail,
         deskripsi: formData.deskripsi,
         template_json: formData.template_json,

@@ -16,6 +16,8 @@ import { ProfilForm, ProfilPreview } from "./BuilderTabsProfilAcara";
 import { AcaraForm, AcaraPreview } from "./BuilderTabsProfilAcara";
 import { CeritaForm, CeritaPreview, PenutupForm, PenutupPreview } from "./BuilderTabsCeritaPenutup";
 
+import { PaketTier } from "@prisma/client";
+
 const TABS = [
   { id: "cover",   label: "Cover",         icon: Layout },
   { id: "pembuka", label: "Pembuka",        icon: BookOpen },
@@ -30,6 +32,7 @@ interface Props {
   initialData?: any;
   initialName?: string;
   initialKategori?: string;
+  initialPaket?: PaketTier;
   initialThumbnail?: string;
   initialDeskripsi?: string;
   initialStatus?: string;
@@ -40,6 +43,7 @@ interface Props {
 
 export default function TemplateBuilderEditor({
   templateId, initialData, initialName = "", initialKategori = "",
+  initialPaket = "BASIC",
   initialThumbnail = "", initialDeskripsi = "", initialStatus = "DRAFT",
   initialBahasa = "id", musicLibrary = [], categories = []
 }: Props) {
@@ -50,6 +54,7 @@ export default function TemplateBuilderEditor({
   // Meta fields
   const [namaTemplate, setNamaTemplate] = useState(initialName);
   const [kategori, setKategori] = useState(initialKategori);
+  const [paket, setPaket] = useState<PaketTier>(initialPaket);
   const [thumbnail, setThumbnail] = useState(initialThumbnail);
   const [deskripsi, setDeskripsi] = useState(initialDeskripsi);
   const [bahasa, setBahasa] = useState<"id" | "en">(initialBahasa);
@@ -82,7 +87,7 @@ export default function TemplateBuilderEditor({
     setSaveStatus("saving");
     setErrorMsg("");
     startTransition(async () => {
-      const payload = { nama_template: namaTemplate, kategori, thumbnail, deskripsi, template_json: buildJson() };
+      const payload = { nama_template: namaTemplate, kategori, paket, thumbnail, deskripsi, template_json: buildJson() };
       const res = templateId ? await updateTemplate(templateId, payload) : await createTemplate(payload);
       if (res.error) { setSaveStatus("error"); setErrorMsg(res.error); }
       else {
@@ -119,20 +124,30 @@ export default function TemplateBuilderEditor({
           <ArrowLeft className="w-5 h-5" />
         </button>
 
-        {/* Name & Kategori */}
+        {/* Name & Kategori & Paket */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <input value={namaTemplate} onChange={e => setNamaTemplate(e.target.value)} placeholder="Nama Template..."
-            className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-56 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors" />
+            className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-44 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors" />
 
           <select
             value={kategori}
             onChange={e => { setKategori(e.target.value); setCoverData((p: any) => ({ ...p, kategori: e.target.value })); }}
-            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] max-w-[200px]"
+            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] max-w-[150px]"
           >
             <option value="">-- Kategori --</option>
             {(categories.length > 0 ? categories.map(c => c.nama) : KATEGORI_OPTIONS).map(k => (
               <option key={k} value={k}>{k}</option>
             ))}
+          </select>
+
+          <select
+            value={paket}
+            onChange={e => setPaket(e.target.value as PaketTier)}
+            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[120px]"
+          >
+            <option value="BASIC">BASIC</option>
+            <option value="PREMIUM">PREMIUM</option>
+            <option value="SULTAN">SULTAN</option>
           </select>
         </div>
 
