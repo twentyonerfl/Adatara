@@ -10,7 +10,8 @@ import {
   CreditCard,
   Layers,
   FileText,
-  Gift
+  Gift,
+  Home
 } from "lucide-react";
 import { LogoutButton } from "./LogoutButton";
 
@@ -64,6 +65,13 @@ export default async function DashboardLayout({
           >
             <LayoutDashboard className="w-4 h-4 text-[#d4af37]" />
             Overview
+          </Link>
+          <Link
+            href="/dashboard/homepage"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black text-[#064e3b]/70 hover:text-[#064e3b] hover:bg-[#064e3b]/5 border border-transparent hover:border-[#064e3b]/10 transition-all uppercase tracking-wider"
+          >
+            <Home className="w-4 h-4 text-[#d4af37]" />
+            Kustom Beranda
           </Link>
           <Link
             href="/dashboard/categories"

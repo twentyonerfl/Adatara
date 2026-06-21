@@ -28,6 +28,31 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Fallback: If Cloudinary credentials are not set, save locally to public/uploads
+    if (
+      !process.env.CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET
+    ) {
+      const fs = require("fs").promises;
+      const path = require("path");
+      
+      const uploadDir = path.join(process.cwd(), "public", "uploads");
+      
+      // Ensure directory exists
+      await fs.mkdir(uploadDir, { recursive: true });
+      
+      // Generate a unique filename
+      const uniqueFilename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+      const filePath = path.join(uploadDir, uniqueFilename);
+      
+      // Write file buffer
+      await fs.writeFile(filePath, buffer);
+      
+      // Return local URL
+      return NextResponse.json({ success: true, url: `/uploads/${uniqueFilename}` });
+    }
+
     // 4. Upload to Cloudinary using upload_stream
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(

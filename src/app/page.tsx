@@ -111,10 +111,20 @@ export default async function Home() {
     console.error("Gagal memuat kategori dari database: ", err);
   }
 
+  // Fetch homepage settings
+  let settings = null;
+  try {
+    settings = await db.homepageSetting.findFirst();
+  } catch (err) {
+    console.error("Gagal memuat setting homepage dari database: ", err);
+  }
+
   return (
     <HomeClient 
       initialTemplates={templates} 
       initialCategories={categories} 
+      settings={settings ? JSON.parse(JSON.stringify(settings)) : null}
     />
   );
 }
+
