@@ -255,6 +255,7 @@ export function PublicInvitationView({
             className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950"
           >
             <div
+              className="rounded-2xl border border-slate-800"
               style={{
                 width: "288px",
                 height: "512px",
@@ -278,7 +279,7 @@ export function PublicInvitationView({
 
       {/* SCREEN 2: MAIN SCROLLABLE INVITATION */}
       {isOpen && (
-        <div className="w-full max-w-md mx-auto bg-slate-950 border-x border-slate-900 shadow-2xl relative">
+        <div className="w-full max-w-md mx-auto bg-slate-950 md:rounded-2xl md:border border-slate-900 md:my-6 shadow-2xl relative overflow-hidden">
           <ScaledSection scale={scale}>
             <PembukaPreview data={data.pembuka} coverData={data.cover} bahasa={bahasa} />
           </ScaledSection>

@@ -9,8 +9,35 @@ export default async function TemplatesPublicPage() {
   // Fetch published templates from database
   const templates = await db.template.findMany({
     where: { status: "PUBLISHED" },
-    orderBy: { created_at: "desc" },
+    orderBy: [
+      { created_at: "desc" },
+      { id: "asc" }
+    ],
   });
+
+  // Fetch categories from database
+  const categoriesDb = await db.category.findMany({
+    orderBy: { nama: "asc" },
+  });
+
+  const categories = categoriesDb.length > 0 
+    ? ["Semua", ...categoriesDb.map(c => c.nama)]
+    : [
+        "Semua",
+        "Keagamaan",
+        "Aqiqah & Kelahiran",
+        "Bisnis & Promosi",
+        "Hiburan & Event",
+        "Khitanan",
+        "Komunitas & Reuni",
+        "Lamaran & Pertunangan",
+        "Pernikahan",
+        "Resepsi Pernikahan",
+        "Seminar & Workshop",
+        "Syukuran Keluarga",
+        "Ulang Tahun",
+        "Wisuda & Kelulusan"
+      ];
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f5f5dc] text-[#064e3b] font-sans">
@@ -45,7 +72,7 @@ export default async function TemplatesPublicPage() {
           </p>
         </div>
 
-        <TemplateListPublic templates={templates} />
+        <TemplateListPublic templates={templates} categories={categories} />
       </main>
 
       {/* FOOTER */}

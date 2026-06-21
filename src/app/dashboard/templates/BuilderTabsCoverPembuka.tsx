@@ -330,14 +330,14 @@ export function CoverPreview({
             transform: "translate(-50%, -50%)",
             width: "90%",
           }}
-          className="flex flex-col items-center text-center gap-3 z-10"
+          className="flex flex-col items-center text-center gap-2.5 z-10"
         >
-          <div className="space-y-1.5 flex flex-col items-center">
+          <div className="space-y-1 flex flex-col items-center">
             <span className="text-[10px] opacity-75 block font-medium" style={{ color: fontTitle.color }}>
               Kepada Yth. Bpk/Ibu/Saudara/i
             </span>
-            <div className="inline-block px-3.5 py-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl text-[11px] font-bold shadow-sm"
-              style={{ color: fontTitle.color, borderColor: fontTitle.color + '20' }}
+            <div className="inline-block px-3.5 py-1 bg-white/10 backdrop-blur-sm border rounded-xl text-[11px] font-bold shadow-sm"
+              style={{ color: fontTitle.color, borderColor: fontTitle.color && fontTitle.color.startsWith("#") ? fontTitle.color + '20' : 'rgba(255,255,255,0.2)' }}
             >
               {guestName || "Tamu Undangan"}
             </div>
@@ -346,9 +346,9 @@ export function CoverPreview({
             onClick={onOpen}
             style={{
               fontSize: btn.size || "12px",
-              color: btn.color || "#ffffff",
+              color: btn.color || (fontTitle.color || "#ffffff"),
               backgroundColor: btn.bg_color || "transparent",
-              borderColor: btn.border_color || "#ffffff",
+              borderColor: btn.border_color || (fontTitle.color || "#ffffff"),
               borderWidth: btn.border_color === "transparent" ? "0px" : "2px",
               fontFamily: btn.family || "Inter",
             }}
@@ -360,7 +360,7 @@ export function CoverPreview({
       )}
 
       {/* Normal flex container for remaining/non-custom elements */}
-      <div className="relative z-10 flex flex-col items-center text-center p-6 w-full gap-4">
+      <div className="relative z-10 flex flex-col items-center text-center p-4 w-full gap-2">
         {!isTitleCustom && (
           <div style={{ fontSize: fontTitle.size, color: fontTitle.color, fontFamily: fontTitle.family, textAlign: fontTitle.position as any, lineHeight: 1.2 }} className="font-bold">
             {displayKategori}
@@ -378,20 +378,20 @@ export function CoverPreview({
             style={{
               width: "100%",
             }}
-            className={`mt-2 flex flex-col gap-3 ${btn.position === "left" ? "items-start text-left"
+            className={`mt-1 flex flex-col gap-2 ${btn.position === "left" ? "items-start text-left"
                 : btn.position === "right" ? "items-end text-right"
                   : "items-center text-center"
               }`}
           >
-            <div className={`space-y-1.5 flex flex-col ${btn.position === "left" ? "items-start"
+            <div className={`space-y-1 flex flex-col ${btn.position === "left" ? "items-start"
                 : btn.position === "right" ? "items-end"
                   : "items-center"
               }`}>
               <span className="text-[10px] opacity-75 block font-medium" style={{ color: fontTitle.color }}>
                 Kepada Yth. Bpk/Ibu/Saudara/i
               </span>
-              <div className="inline-block px-3.5 py-1.5 bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl text-[11px] font-bold shadow-sm"
-                style={{ color: fontTitle.color, borderColor: fontTitle.color + '20' }}
+              <div className="inline-block px-3.5 py-1 bg-white/10 backdrop-blur-sm border rounded-xl text-[11px] font-bold shadow-sm"
+                style={{ color: fontTitle.color, borderColor: fontTitle.color && fontTitle.color.startsWith("#") ? fontTitle.color + '20' : 'rgba(255,255,255,0.2)' }}
               >
                 {guestName || "Tamu Undangan"}
               </div>
@@ -400,13 +400,13 @@ export function CoverPreview({
               onClick={onOpen}
               style={{
                 fontSize: btn.size || "12px",
-                color: btn.color || "#ffffff",
+                color: btn.color || (fontTitle.color || "#ffffff"),
                 backgroundColor: btn.bg_color || "transparent",
-                borderColor: btn.border_color || "#ffffff",
+                borderColor: btn.border_color || (fontTitle.color || "#ffffff"),
                 borderWidth: btn.border_color === "transparent" ? "0px" : "2px",
                 fontFamily: btn.family || "Inter",
               }}
-              className="px-6 py-2 rounded-full font-bold cursor-pointer hover:scale-105 active:scale-95 transition-all"
+              className="px-6 py-1.5 rounded-full font-bold cursor-pointer hover:scale-105 active:scale-95 transition-all"
             >
               {btn.text || "Buka Undangan"}
             </button>
@@ -981,6 +981,7 @@ function YoutubeMusicLoader({
 export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: any }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [hasMeasured, setHasMeasured] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -989,6 +990,7 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
         const width = containerRef.current.getBoundingClientRect().width;
         // The original design width is 288px
         setScale(width / 288);
+        setHasMeasured(true);
       }
     };
 
@@ -1005,16 +1007,17 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
   const activeMeta = meta || {};
 
   return (
-    <div ref={containerRef} className="w-full aspect-[9/16] relative overflow-hidden bg-[#064e3b]/5 select-none pointer-events-none rounded-t-2xl">
+    <div ref={containerRef} className="absolute inset-0 w-full h-full select-none pointer-events-none rounded-t-2xl overflow-hidden">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;600;700&family=Great+Vibes&family=Inter:wght@300;400;600;700;900&family=Lato:wght@300;400;700&family=Outfit:wght@300;400;600;700;900&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
       <div 
-        className="absolute top-0 left-0 origin-top-left"
+        className="absolute top-0 left-0 origin-top-left transition-opacity duration-300"
         style={{
           width: "288px",
           height: "512px",
           transform: `scale(${scale})`,
+          opacity: hasMeasured ? 1 : 0,
         }}
       >
         <CoverPreview data={data} meta={activeMeta} />

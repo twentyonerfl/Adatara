@@ -100,11 +100,26 @@ export async function getPublishedTemplates() {
   try {
     const templates = await db.template.findMany({
       where: { status: "PUBLISHED" },
-      orderBy: { created_at: "desc" },
+      orderBy: [
+        { created_at: "desc" },
+        { id: "asc" }
+      ],
     });
     return { success: true, templates };
   } catch (err) {
     console.error("Gagal mengambil template: ", err);
     return { success: false, error: "Gagal memuat template" };
+  }
+}
+
+export async function getPublicCategories() {
+  try {
+    const categories = await db.category.findMany({
+      orderBy: { nama: "asc" },
+    });
+    return { success: true, categories };
+  } catch (err) {
+    console.error("Gagal mengambil kategori: ", err);
+    return { success: false, error: "Gagal memuat kategori" };
   }
 }

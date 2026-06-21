@@ -11,7 +11,10 @@ export default async function TemplatesPage() {
   if (!session || session.user.role !== "SUPER_ADMIN") redirect("/login");
 
   const templates = await db.template.findMany({
-    orderBy: { created_at: "desc" },
+    orderBy: [
+      { created_at: "desc" },
+      { id: "asc" }
+    ],
   });
 
   return (

@@ -111,7 +111,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
           <p className="text-[#064e3b]/50 text-xs mt-1">Belum ada template yang terdaftar dalam kategori ini.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
           {filteredTemplates.map((template) => {
             const parsedJson = typeof template.template_json === "string" ? JSON.parse(template.template_json) : template.template_json;
             const coverData = parsedJson?.cover || {};
@@ -121,7 +121,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
             return (
               <div
                 key={template.id}
-                className="group bg-white border border-[#064e3b]/10 hover:border-[#d4af37]/35 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm"
+                className="group bg-white border border-[#064e3b]/5 hover:border-[#d4af37]/35 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 {/* Thumbnail / Live Cover Preview */}
                 <div className="w-full aspect-[9/16] overflow-hidden relative bg-[#064e3b]/10">
@@ -136,29 +136,31 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                   )}
-                  <div className="absolute top-3 left-3 z-20">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-white bg-[#064e3b] border border-[#d4af37] uppercase tracking-wider">
-                      {template.kategori}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Body */}
-                <div className="p-5 flex flex-col flex-1 text-left">
-                  <h4 className="text-lg font-bold text-[#064e3b] group-hover:text-[#d4af37] transition-colors">
-                    {template.nama_template}
-                  </h4>
-                  <p className="text-[#064e3b]/70 text-xs mt-2 line-clamp-2 leading-relaxed flex-1">
+                <div className="p-3 flex flex-col flex-1 text-left">
+                  {/* Title & Category Badge Row */}
+                  <div className="flex items-start justify-between gap-1 min-w-0">
+                    <h4 className="text-[11px] font-black text-[#064e3b] group-hover:text-[#d4af37] transition-colors leading-tight flex-1 break-words">
+                      {template.nama_template}
+                    </h4>
+                    <span className="px-1 py-0.5 rounded bg-[#064e3b]/5 text-[#d4af37]/90 border border-[#d4af37]/15 text-[6.5px] font-extrabold uppercase tracking-wider whitespace-nowrap flex-shrink-0 mt-0.5">
+                      {template.kategori}
+                    </span>
+                  </div>
+
+                  <p className="text-[#064e3b]/60 text-[9.5px] mt-1.5 line-clamp-1 leading-normal flex-1">
                     {template.deskripsi || "Tidak ada deskripsi."}
                   </p>
 
                   {/* Action */}
                   <button
                     onClick={() => handleOpenModal(template)}
-                    className="mt-6 w-full py-3 rounded-xl bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md shadow-[#064e3b]/10"
+                    className="mt-3 w-full py-1.5 bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white font-black text-[9px] flex items-center justify-center gap-1 cursor-pointer transition-all shadow-sm shadow-[#064e3b]/5 tracking-wider uppercase rounded-lg"
                   >
                     Gunakan Template
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-2.5 h-2.5 text-[#d4af37]" />
                   </button>
                 </div>
               </div>

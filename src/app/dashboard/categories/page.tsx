@@ -16,7 +16,12 @@ export default async function CategoriesPage() {
   // Fetch all categories and templates from db
   const [categories, templates] = await Promise.all([
     db.category.findMany({ orderBy: { nama: "asc" } }),
-    db.template.findMany({ orderBy: { created_at: "desc" } }),
+    db.template.findMany({ 
+      orderBy: [
+        { created_at: "desc" },
+        { id: "asc" }
+      ] 
+    }),
   ]);
 
   // Map category groups with dynamic counts and template listings

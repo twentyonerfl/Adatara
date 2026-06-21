@@ -235,7 +235,7 @@ const defaultTemplates = [
   },
   {
     nama_template: "Syukuran Aqiqah",
-    kategori: "Syukuran",
+    kategori: "Syukuran Keluarga",
     thumbnail: "https://images.unsplash.com/photo-1507504038482-762618d23dd5?q=80&w=600&auto=format&fit=crop",
     deskripsi: "Desain lembut berkarakter ilustrasi anak yang bersih, ramah, dan bernuansa islami.",
     status: "PUBLISHED" as const,
