@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,25 +28,29 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // 4. Generate unique filename
-    const originalName = file.name;
-    const extension = originalName.substring(originalName.lastIndexOf("."));
-    const filename = `${crypto.randomUUID()}${extension}`;
+    // 4. Upload to Cloudinary using upload_stream
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        {
+          folder: "adatara",
+          resource_type: "auto",
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      ).end(buffer);
+    }) as any;
 
-    // 5. Ensure uploads folder exists
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
-
-    // 6. Write file
-    const filePath = join(uploadDir, filename);
-    await writeFile(filePath, buffer);
-
-    // 7. Return public URL path
-    const url = `/uploads/${filename}`;
-    return NextResponse.json({ success: true, url });
+    // 5. Return the secure URL from Cloudinary
+    return NextResponse.json({ success: true, url: uploadResult.secure_url });
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
     console.error("Upload error:", err);
     return NextResponse.json({ error: "Gagal mengunggah file: " + err.message }, { status: 500 });
   }
 }
+
