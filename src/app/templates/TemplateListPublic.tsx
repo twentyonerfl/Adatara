@@ -269,12 +269,12 @@ export function TemplateListPublic({
                 <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
                   {/* Package Tier Badge */}
                   <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
-                      ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
+                      ? "bg-[#800020] text-white border-[#6a001a]"
                       : template.paket === "SULTAN"
-                        ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                        ? "bg-[#B8860B] text-white border-[#986f08]"
                         : template.paket === "PREMIUM"
-                          ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
-                          : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                          ? "bg-emerald-600 text-white border-emerald-700"
+                          : "bg-slate-400 text-white border-slate-500"
                     }`}>
                     {template.paket || "BASIC"}
                   </span>
