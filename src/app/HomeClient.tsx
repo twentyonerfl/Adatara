@@ -1014,7 +1014,7 @@ export default function HomeClient({
                       <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
                         ? "bg-[#800020] text-white border-[#6a001a]"
                         : template.paket === "SULTAN"
-                          ? "bg-[#B8860B] text-white border-[#986f08]"
+                          ? "bg-[#78350f] text-[#fef08a] border-[#b45309]/40"
                           : template.paket === "PREMIUM"
                             ? "bg-emerald-600 text-white border-emerald-700"
                             : "bg-slate-400 text-white border-slate-500"
@@ -1311,7 +1311,7 @@ export default function HomeClient({
               if (pkg.badgeStyle === "emerald") {
                 badgeColorClass = "text-emerald-300 bg-emerald-950 border border-emerald-800";
               } else if (pkg.badgeStyle === "amber") {
-                badgeColorClass = "text-amber-300 bg-amber-950 border border-amber-800";
+                badgeColorClass = "text-[#fef08a] bg-[#451a03] border border-[#78350f]";
               } else if (pkg.badgeStyle === "purple") {
                 badgeColorClass = "text-[#ffe4e6] bg-[#500010] border border-[#700018]";
               } else {
@@ -1335,7 +1335,7 @@ export default function HomeClient({
                     <span className={`inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider shadow-sm ${
                       isBasic ? "bg-slate-800/60 text-slate-300 border border-slate-700/40" :
                       isPopular ? "bg-emerald-900/50 text-emerald-300 border border-emerald-800/40" :
-                      isSultan ? "bg-amber-900/50 text-amber-300 border border-amber-800/40" :
+                      isSultan ? "bg-[#451a03]/80 text-[#fef08a] border border-[#78350f]/40" :
                       "bg-[#500010] text-[#ffe4e6] border border-[#700018]/50"
                     }`}>
                       {pkg.name}
@@ -1370,7 +1370,7 @@ export default function HomeClient({
                     className={`mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border ${
                       isBasic ? "border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200" :
                       isPopular ? "border-emerald-600 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-600/30 hover:text-emerald-200" :
-                      isSultan ? "border-amber-600 bg-amber-500/10 text-amber-400 hover:bg-amber-600/30 hover:text-amber-200" :
+                      isSultan ? "border-[#78350f] bg-[#451a03]/20 text-[#d97706] hover:bg-[#78350f]/40 hover:text-white" :
                       "border-[#700018] bg-[#500010]/20 text-[#ffe4e6] hover:bg-[#700018] hover:text-white"
                     }`}
                   >

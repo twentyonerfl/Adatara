@@ -150,7 +150,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                   <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
                       ? "bg-[#800020] text-white border-[#6a001a]"
                       : template.paket === "SULTAN"
-                        ? "bg-[#B8860B] text-white border-[#986f08]"
+                        ? "bg-[#78350f] text-[#fef08a] border-[#b45309]/40"
                         : template.paket === "PREMIUM"
                           ? "bg-emerald-600 text-white border-emerald-700"
                           : "bg-slate-400 text-white border-slate-500"

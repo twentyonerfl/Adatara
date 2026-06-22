@@ -170,7 +170,7 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
     switch (badgeStyle) {
       case "slate": return "bg-slate-600 text-white";
       case "emerald": return "bg-emerald-700 text-white";
-      case "amber": return "bg-amber-600 text-white";
+      case "amber": return "bg-[#78350f] text-[#fef08a]";
       case "purple": return "bg-[#500010] text-[#ffe4e6]";
       default: return "bg-[#064e3b] text-white";
     }
