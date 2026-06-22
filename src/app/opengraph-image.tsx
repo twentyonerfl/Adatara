@@ -13,7 +13,9 @@ export default async function OgImage() {
   try {
     const settings = await db.homepageSetting.findFirst();
     if (settings?.bg_image) {
-      bgImage = settings.bg_image;
+      const raw = settings.bg_image;
+      // next/og requires absolute URLs — convert relative paths
+      bgImage = raw.startsWith("http") ? raw : `${BASE_URL}${raw.startsWith("/") ? "" : "/"}${raw}`;
     }
   } catch {}
 

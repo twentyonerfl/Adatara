@@ -7,17 +7,23 @@ export const contentType = "image/png";
 
 const BASE_URL = "https://adatara.my.id";
 
+function toAbsoluteUrl(url: string): string {
+  if (!url) return "";
+  if (url.startsWith("http")) return url;
+  return `${BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
 function extractCoverImage(dataJson: any, templateThumbnail?: string | null): string | null {
   try {
     const cover = dataJson?.cover;
     if (cover?.background?.type === "image" && cover?.background?.value) {
-      return cover.background.value;
+      return toAbsoluteUrl(cover.background.value);
     }
-    if (cover?.foto && typeof cover.foto === "string" && cover.foto.startsWith("http")) {
-      return cover.foto;
+    if (cover?.foto && typeof cover.foto === "string") {
+      return toAbsoluteUrl(cover.foto);
     }
-    if (templateThumbnail && templateThumbnail.startsWith("http")) {
-      return templateThumbnail;
+    if (templateThumbnail) {
+      return toAbsoluteUrl(templateThumbnail);
     }
   } catch {}
   return null;
