@@ -34,7 +34,13 @@ export async function createCategory(nama: string) {
 
     revalidatePath("/dashboard/categories");
     revalidatePath("/dashboard/templates");
-    return { success: true, category };
+    return {
+      success: true,
+      category: {
+        id: category.id,
+        nama: category.nama
+      }
+    };
   } catch (err) {
     console.error(err);
     return { error: "Gagal membuat kategori" };
