@@ -209,16 +209,7 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                       }`}>
                       {t.paket || "BASIC"}
                     </span>
-                  </div>
-
-                  {/* Category Badge Overlay - Premium Glassmorphism */}
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max">
-                    <span className="px-2 py-0.5 rounded-full text-[6px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-[#064e3b] border border-white/40 shadow-sm">
-                      {t.kategori || "—"}
-                    </span>
-                  </div>
-
-                  {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
+                  </div>                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
@@ -229,8 +220,8 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                     )}
                   </div>
                   {/* Status Overlay */}
-                  <div className="absolute top-2.5 right-2.5 z-20">
-                    <span className={`px-2 py-0.5 rounded-full text-[8px] font-black border uppercase tracking-wider ${t.status === "PUBLISHED"
+                  <div className="absolute top-2 right-2 z-20">
+                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold border uppercase tracking-wider ${t.status === "PUBLISHED"
                         ? "bg-emerald-50 border-emerald-200 text-emerald-800"
                         : "bg-amber-50 border-amber-200 text-amber-800"
                       }`}>{t.status}</span>
@@ -240,6 +231,10 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                 {/* Body */}
                 <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
                   <div className="w-full text-center">
+                    {/* Category Label */}
+                    <span className="text-[7.5px] font-black uppercase tracking-wider text-[#d4af37] block mb-0.5">
+                      {t.kategori || "—"}
+                    </span>
                     {/* Title */}
                     <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full py-0.5">{t.nama_template}</h4>
                   </div>

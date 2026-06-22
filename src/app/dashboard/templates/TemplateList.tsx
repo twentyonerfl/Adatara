@@ -160,14 +160,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                     </span>
                   </div>
 
-                  {/* Category Badge Overlay - Premium Glassmorphism */}
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max">
-                    <span className="px-2 py-0.5 rounded-full text-[6px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-[#064e3b] border border-white/40 shadow-sm">
-                      {template.kategori}
-                    </span>
-                  </div>
-
-                  {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
+                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
@@ -185,10 +178,16 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
 
                 {/* Body */}
                 <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
-                  {/* Title */}
-                  <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
-                    {template.nama_template}
-                  </h4>
+                  <div className="w-full text-center">
+                    {/* Category Label */}
+                    <span className="text-[7.5px] font-black uppercase tracking-wider text-[#d4af37] block mb-0.5">
+                      {template.kategori || "—"}
+                    </span>
+                    {/* Title */}
+                    <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
+                      {template.nama_template}
+                    </h4>
+                  </div>
 
                   {/* Action */}
                   <button
