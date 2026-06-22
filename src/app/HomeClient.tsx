@@ -541,11 +541,17 @@ export default function HomeClient({
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                <Link href={settings.hero_cta_url} className="w-full sm:w-auto px-7 py-3.5 rounded-full font-black border transition-all text-center custom-btn-primary shadow-md shadow-black/5">
+              <div className="flex flex-row items-center gap-2 w-full sm:w-auto justify-center">
+                <Link
+                  href={settings.hero_cta_url}
+                  className="flex-1 sm:flex-none px-2.5 sm:px-7 py-2.5 sm:py-3.5 rounded-full font-black border transition-all text-center custom-btn-primary shadow-md shadow-black/5 text-[10px] min-[360px]:text-xs sm:text-base"
+                >
                   {settings.hero_cta_text}
                 </Link>
-                <a href={settings.hero_demo_url} className="w-full sm:w-auto px-7 py-3.5 rounded-full font-black border transition-all text-center custom-btn-secondary">
+                <a
+                  href={settings.hero_demo_url}
+                  className="flex-1 sm:flex-none px-2.5 sm:px-7 py-2.5 sm:py-3.5 rounded-full font-black border transition-all text-center custom-btn-secondary text-[10px] min-[360px]:text-xs sm:text-base"
+                >
                   {settings.hero_demo_text}
                 </a>
               </div>
