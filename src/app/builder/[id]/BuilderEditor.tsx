@@ -374,7 +374,7 @@ export function BuilderEditor({
     }
     return "";
   };
-  const primaryInvitationUrl = `${getBaseUrl()}/u/${invitationSlug}`;
+  const primaryInvitationUrl = `${getBaseUrl()}/${invitationSlug}`;
   const customGuestUrl = guestNameInput
     ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`
     : primaryInvitationUrl;
@@ -640,7 +640,7 @@ export function BuilderEditor({
                     <div>
                       <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5">Tautan Kustom (Slug URL)</label>
                       <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
-                        <span className="opacity-50 font-semibold">adatara.id/u/</span>
+                        <span className="opacity-50 font-semibold">adatara.id/</span>
                         <input
                           type="text"
                           value={invitationSlug}

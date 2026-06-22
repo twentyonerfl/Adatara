@@ -8,7 +8,7 @@ export function CopyButton({ slug }: { slug: string }) {
 
   const handleCopy = async () => {
     // Bangun URL absolut berdasarkan window location
-    const url = `${window.location.origin}/u/${slug}`;
+    const url = `${window.location.origin}/${slug}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);

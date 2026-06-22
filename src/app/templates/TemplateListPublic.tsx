@@ -478,7 +478,7 @@ export function TemplateListPublic({
                   <div className="p-3 rounded-xl bg-[#064e3b]/5 border border-[#064e3b]/10 text-xs">
                     <span className="text-[#064e3b]/60 block font-semibold">Tampilan Link Undangan Anda:</span>
                     <span className="text-[#064e3b] font-bold break-all mt-0.5 block">
-                      {typeof window !== "undefined" ? window.location.origin : ""}/u/{slug || "..."}
+                      {typeof window !== "undefined" ? window.location.origin : ""}/{slug || "..."}
                     </span>
                   </div>
 

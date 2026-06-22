@@ -9,9 +9,9 @@ import {
   VolumeX
 } from "lucide-react";
 
-import { CoverPreview, PembukaPreview } from "../../dashboard/templates/BuilderTabsCoverPembuka";
-import { ProfilPreview, AcaraPreview } from "../../dashboard/templates/BuilderTabsProfilAcara";
-import { CeritaPreview, PenutupPreview } from "../../dashboard/templates/BuilderTabsCeritaPenutup";
+import { CoverPreview, PembukaPreview } from "../dashboard/templates/BuilderTabsCoverPembuka";
+import { ProfilPreview, AcaraPreview } from "../dashboard/templates/BuilderTabsProfilAcara";
+import { CeritaPreview, PenutupPreview } from "../dashboard/templates/BuilderTabsCeritaPenutup";
 
 type InvitationType = {
   id: string;

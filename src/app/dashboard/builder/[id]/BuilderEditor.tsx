@@ -601,7 +601,7 @@ export function BuilderEditor({
               </span>
             </div>
             <span className="text-[10px] font-semibold text-[#064e3b]/60 block mt-1">
-              /u/{invitation.slug} • Draft saved just now
+              /{invitation.slug} • Draft saved just now
             </span>
           </div>
         </div>
@@ -624,7 +624,7 @@ export function BuilderEditor({
 
           {/* Public Link Preview */}
           <Link
-            href={`/u/${invitation.slug}`}
+            href={`/${invitation.slug}`}
             target="_blank"
             className="px-4 py-2 rounded-xl border border-[#064e3b]/20 bg-[#f5f5dc] hover:bg-[#064e3b]/10 text-[#064e3b] text-xs font-extrabold flex items-center gap-1.5 transition-all"
           >

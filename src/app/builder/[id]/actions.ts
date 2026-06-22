@@ -35,7 +35,7 @@ export async function saveInvitationPublic(
     });
 
     revalidatePath(`/builder/${id}`);
-    revalidatePath(`/u/${invitation.slug}`);
+    revalidatePath(`/${invitation.slug}`);
 
     return { success: true };
   } catch (err) {

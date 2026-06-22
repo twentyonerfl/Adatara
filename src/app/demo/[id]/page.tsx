@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { PublicInvitationView } from "@/app/u/[slug]/PublicInvitationView";
+import { PublicInvitationView } from "@/app/[slug]/PublicInvitationView";
 
 export const revalidate = 0; // Disable cache for real-time preview
 

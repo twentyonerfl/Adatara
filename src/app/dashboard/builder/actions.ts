@@ -40,7 +40,7 @@ export async function saveInvitation(
     // Revalidate paths to reflect changes in the dashboard
     revalidatePath("/dashboard");
     revalidatePath(`/dashboard/builder/${id}`);
-    revalidatePath(`/u/${invitation.slug}`);
+    revalidatePath(`/${invitation.slug}`);
 
     return { success: true };
   } catch (err) {

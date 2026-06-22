@@ -72,7 +72,7 @@ export default function InvitationsListAdmin({
   };
 
   const handleDelete = async (id: string, slug: string) => {
-    if (!confirm(`Apakah Anda yakin ingin menghapus undangan /u/${slug}? Tindakan ini tidak dapat dibatalkan.`)) {
+    if (!confirm(`Apakah Anda yakin ingin menghapus undangan /${slug}? Tindakan ini tidak dapat dibatalkan.`)) {
       return;
     }
     setUpdatingId(id);
@@ -135,11 +135,11 @@ export default function InvitationsListAdmin({
                     <div className="flex items-center gap-1.5">
                       <Link2 className="w-3.5 h-3.5 text-[#d4af37]" />
                       <Link 
-                        href={`/u/${inv.slug}`} 
+                        href={`/${inv.slug}`} 
                         target="_blank" 
                         className="hover:underline flex items-center gap-1"
                       >
-                        /u/{inv.slug}
+                        /{inv.slug}
                         <ExternalLink className="w-3 h-3 opacity-60" />
                       </Link>
                     </div>

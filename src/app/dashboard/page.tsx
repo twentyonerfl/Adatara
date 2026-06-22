@@ -162,7 +162,7 @@ export default async function DashboardPage() {
               <div key={inv.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-[#064e3b]">/u/{inv.slug}</span>
+                    <span className="font-extrabold text-sm text-[#064e3b]">/{inv.slug}</span>
                     <span className={`text-[8px] font-black px-2 py-0.5 rounded-full border ${
                       inv.status === "ACTIVE"
                         ? "bg-emerald-50 border-emerald-200 text-emerald-800"

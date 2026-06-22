@@ -88,7 +88,7 @@ export async function submitRsvp(formData: {
     }
 
     // Revalidate public invitation page cache
-    revalidatePath(`/u/${invitation.slug}`);
+    revalidatePath(`/${invitation.slug}`);
 
     return { success: true };
   } catch (err) {

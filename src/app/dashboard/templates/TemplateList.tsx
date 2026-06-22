@@ -299,7 +299,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                   <div className="p-4 rounded-xl bg-[#064e3b]/5 border border-[#064e3b]/10 text-xs">
                     <span className="text-[#064e3b]/60 block font-semibold">Tampilan Link Undangan Anda:</span>
                     <span className="text-[#064e3b] font-bold break-all mt-1 block">
-                      {window.location.origin}/u/{slug || "..."}
+                      {window.location.origin}/{slug || "..."}
                     </span>
                   </div>
 
