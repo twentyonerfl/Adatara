@@ -1459,15 +1459,15 @@ export default function HomeClient({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16 max-w-3xl mx-auto"
+            className="text-center mb-8 sm:mb-16 max-w-3xl mx-auto"
           >
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
+            <span className="inline-flex items-center gap-1.5 text-[9px] sm:text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-[#064e3b]/10">
               <HelpCircle className="w-3.5 h-3.5" /> Tanya Jawab
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
+            <h2 className="text-lg sm:text-4xl font-extrabold mt-3 sm:mt-4 custom-text-color tracking-tight leading-tight">
               Pertanyaan yang Sering Diajukan
             </h2>
-            <p className="opacity-75 text-xs sm:text-sm mt-3 font-medium custom-text-color">
+            <p className="opacity-75 text-[10px] sm:text-sm mt-2 sm:mt-3 font-medium custom-text-color px-2 sm:px-0">
               Temukan jawaban cepat untuk pertanyaan umum seputar fitur, pemesanan, dan pengelolaan undangan digital Anda.
             </p>
           </motion.div>
