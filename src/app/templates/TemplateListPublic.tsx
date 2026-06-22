@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { createInvitationPublic } from "./actions";
@@ -63,6 +63,19 @@ export function TemplateListPublic({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  // Close dropdowns on outside clicks
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".dropdown-container")) {
+        setCategoryDropdownOpen(false);
+        setPaketDropdownOpen(false);
+      }
+    }
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
 
   const filteredTemplates = templates.filter((t) => {
     const matchesCategory = selectedCategory === "Semua" || t.kategori === selectedCategory;
@@ -149,7 +162,7 @@ export function TemplateListPublic({
         {/* Dropdowns Wrapper */}
         <div className="flex gap-3 flex-wrap md:flex-nowrap">
           {/* Category Dropdown */}
-          <div className="relative min-w-[170px] flex-1 md:flex-none">
+          <div className="relative min-w-[170px] flex-1 md:flex-none dropdown-container">
             <button
               onClick={() => { setCategoryDropdownOpen(!categoryDropdownOpen); setPaketDropdownOpen(false); }}
               className="w-full flex items-center justify-between gap-3 px-6 py-3 rounded-full border text-sm font-bold bg-white/60 backdrop-blur-md border-[#064e3b]/15 hover:border-[#d4af37] text-[#064e3b] cursor-pointer shadow-sm transition-all"
@@ -160,42 +173,35 @@ export function TemplateListPublic({
 
             <AnimatePresence>
               {categoryDropdownOpen && (
-                <>
-                  {/* Overlay to close when clicking outside */}
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setCategoryDropdownOpen(false)}
-                  />
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
-                  >
-                    {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          setSelectedCategory(cat);
-                          setCategoryDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
-                            ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
-                            : "hover:bg-[#064e3b]/5 text-[#064e3b]"
-                          }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </motion.div>
-                </>
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
+                >
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setCategoryDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                          ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                          : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                        }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
 
           {/* Paket Dropdown */}
-          <div className="relative min-w-[150px] flex-1 md:flex-none">
+          <div className="relative min-w-[150px] flex-1 md:flex-none dropdown-container">
             <button
               onClick={() => { setPaketDropdownOpen(!paketDropdownOpen); setCategoryDropdownOpen(false); }}
               className="w-full flex items-center justify-between gap-3 px-6 py-3 rounded-full border text-sm font-bold bg-white/60 backdrop-blur-md border-[#064e3b]/15 hover:border-[#d4af37] text-[#064e3b] cursor-pointer shadow-sm transition-all"
@@ -206,32 +212,29 @@ export function TemplateListPublic({
 
             <AnimatePresence>
               {paketDropdownOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setPaketDropdownOpen(false)} />
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-full md:w-48 bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2"
-                  >
-                    {["Semua", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
-                      <button
-                        key={tier}
-                        onClick={() => {
-                          setSelectedPaket(tier);
-                          setPaketDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
-                            ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
-                            : "hover:bg-[#064e3b]/5 text-[#064e3b]"
-                          }`}
-                      >
-                        {tier === "Semua" ? "Semua Paket" : tier}
-                      </button>
-                    ))}
-                  </motion.div>
-                </>
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-0 mt-2 w-full md:w-48 bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2"
+                >
+                  {["Semua", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
+                    <button
+                      key={tier}
+                      onClick={() => {
+                        setSelectedPaket(tier);
+                        setPaketDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
+                          ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                          : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                        }`}
+                    >
+                      {tier === "Semua" ? "Semua Paket" : tier}
+                    </button>
+                  ))}
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
@@ -255,7 +258,6 @@ export function TemplateListPublic({
 
             return (
               <motion.div
-                layout
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 12 }}

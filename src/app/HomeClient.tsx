@@ -253,6 +253,19 @@ export default function HomeClient({
     return () => clearInterval(interval);
   }, [slides]);
 
+  // Close dropdowns on outside clicks
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".dropdown-container")) {
+        setCategoryDropdownOpen(false);
+        setPaketDropdownOpen(false);
+      }
+    }
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
   const filteredTemplates = templates.filter(t => {
     const matchesCategory = selectedCategory === "Semua" || t.kategori === selectedCategory;
     const matchesPaket = selectedPaket === "Semua" || t.paket === selectedPaket;
@@ -497,7 +510,7 @@ export default function HomeClient({
         )}
 
         {/* HERO SECTION */}
-        <section className="relative pt-12 pb-24 px-6 max-w-7xl mx-auto z-10">
+        <section className="relative pt-8 pb-12 sm:pt-12 sm:pb-24 px-4 sm:px-6 max-w-7xl mx-auto z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column (Hero Content) */}
             <motion.div
@@ -655,10 +668,10 @@ export default function HomeClient({
 
       {/* STATS SECTION */}
       <section
-        className="border-y custom-border-color py-16 transition-all"
+        className="border-y custom-border-color py-8 sm:py-16 transition-all"
         style={{ backgroundColor: settings.stats_bg_color || "#064e3b" }}
       >
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
             <div className="text-3xl sm:text-4xl font-extrabold text-white">
               <AnimatedCounter value={1000} suffix="+" />
@@ -689,7 +702,7 @@ export default function HomeClient({
       {/* CARA ORDER SECTION */}
       <section
         id="cara-order"
-        className="py-24 px-6 bg-gradient-to-b from-[#f5f5dc] via-[#fcfcf7] to-[#f5f5dc] relative overflow-hidden scroll-mt-10"
+        className="py-12 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-[#f5f5dc] via-[#fcfcf7] to-[#f5f5dc] relative overflow-hidden scroll-mt-24"
       >
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
@@ -778,7 +791,7 @@ export default function HomeClient({
       {/* TEMPLATES INTERACTIVE SHOWCASE SECTION */}
       <section
         id="template"
-        className="py-24 px-6 scroll-mt-10 transition-all"
+        className="py-12 sm:py-24 px-4 sm:px-6 scroll-mt-24 transition-all"
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col mb-8 text-left">
@@ -813,7 +826,7 @@ export default function HomeClient({
             {/* Dropdowns Wrapper */}
             <div className="flex gap-3 flex-wrap md:flex-nowrap">
               {/* Category Dropdown */}
-              <div className="relative min-w-[170px] flex-1 md:flex-none">
+              <div className="relative min-w-[170px] flex-1 md:flex-none dropdown-container">
                 <button
                   onClick={() => { setCategoryDropdownOpen(!categoryDropdownOpen); setPaketDropdownOpen(false); }}
                   className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border text-sm font-bold bg-white/70 backdrop-blur-sm transition-all custom-border-color hover:border-[#d4af37] custom-text-color cursor-pointer"
@@ -824,42 +837,35 @@ export default function HomeClient({
 
                 <AnimatePresence>
                   {categoryDropdownOpen && (
-                    <>
-                      {/* Overlay to close when clicking outside */}
-                      <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setCategoryDropdownOpen(false)}
-                      />
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
-                      >
-                        {categories.map((cat) => (
-                          <button
-                            key={cat}
-                            onClick={() => {
-                              setSelectedCategory(cat);
-                              setCategoryDropdownOpen(false);
-                            }}
-                            className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
-                              ? "custom-btn-primary"
-                              : "hover:bg-[#064e3b]/5 custom-text-color"
-                              }`}
-                          >
-                            {cat}
-                          </button>
-                        ))}
-                      </motion.div>
-                    </>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
+                    >
+                      {categories.map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => {
+                            setSelectedCategory(cat);
+                            setCategoryDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                            ? "custom-btn-primary"
+                            : "hover:bg-[#064e3b]/5 custom-text-color"
+                            }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
               {/* Paket Dropdown */}
-              <div className="relative min-w-[150px] flex-1 md:flex-none">
+              <div className="relative min-w-[150px] flex-1 md:flex-none dropdown-container">
                 <button
                   onClick={() => { setPaketDropdownOpen(!paketDropdownOpen); setCategoryDropdownOpen(false); }}
                   className="w-full flex items-center justify-between gap-3 px-5 py-3 rounded-2xl border text-sm font-bold bg-white/70 backdrop-blur-sm transition-all custom-border-color hover:border-[#d4af37] custom-text-color cursor-pointer"
@@ -870,32 +876,29 @@ export default function HomeClient({
 
                 <AnimatePresence>
                   {paketDropdownOpen && (
-                    <>
-                      <div className="fixed inset-0 z-40" onClick={() => setPaketDropdownOpen(false)} />
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-full md:w-48 bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2"
-                      >
-                        {["Semua", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
-                          <button
-                            key={tier}
-                            onClick={() => {
-                              setSelectedPaket(tier);
-                              setPaketDropdownOpen(false);
-                            }}
-                            className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
-                              ? "custom-btn-primary"
-                              : "hover:bg-[#064e3b]/5 custom-text-color"
-                              }`}
-                          >
-                            {tier === "Semua" ? "Semua Paket" : tier}
-                          </button>
-                        ))}
-                      </motion.div>
-                    </>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-2 w-full md:w-48 bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2"
+                    >
+                      {["Semua", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
+                        <button
+                          key={tier}
+                          onClick={() => {
+                            setSelectedPaket(tier);
+                            setPaketDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
+                            ? "custom-btn-primary"
+                            : "hover:bg-[#064e3b]/5 custom-text-color"
+                            }`}
+                        >
+                          {tier === "Semua" ? "Semua Paket" : tier}
+                        </button>
+                      ))}
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </div>
@@ -911,10 +914,9 @@ export default function HomeClient({
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence>
                 {filteredTemplates.map((template) => (
                   <motion.div
-                    layout
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
@@ -1011,12 +1013,12 @@ export default function HomeClient({
       </section>
 
       {/* FEATURES SECTION */}
-      <div className="relative overflow-hidden border-t border-b custom-border-color bg-gradient-to-tr from-[#064e3b]/[0.03] via-transparent to-[#d4af37]/[0.04] scroll-mt-10">
+      <div className="relative overflow-hidden border-t border-b custom-border-color bg-gradient-to-tr from-[#064e3b]/[0.03] via-transparent to-[#d4af37]/[0.04]">
         {/* Ambient Decorative Light Glows */}
         <div className="absolute top-1/4 left-1/10 w-96 h-96 rounded-full bg-[#064e3b]/[0.03] blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
 
-        <section id="fitur" className="py-24 px-6 max-w-7xl mx-auto">
+        <section id="fitur" className="py-12 sm:py-24 px-4 sm:px-6 max-w-7xl mx-auto scroll-mt-24">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1180,11 +1182,11 @@ export default function HomeClient({
       </div>
 
       {/* PRICING SECTION */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#063024] via-[#042018] to-[#02100c] py-24 px-6 border-t border-b border-[#064e3b]/30">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#063024] via-[#042018] to-[#02100c] py-12 sm:py-24 px-4 sm:px-6 border-t border-b border-[#064e3b]/30">
         {/* Ambient golden lighting glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
 
-        <section id="harga" className="max-w-7xl mx-auto scroll-mt-10 relative z-10">
+        <section id="harga" className="max-w-7xl mx-auto scroll-mt-24 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1413,7 +1415,7 @@ export default function HomeClient({
       </div>
 
       {/* FAQ SECTION */}
-      <section id="faq" className="py-24 px-6 relative overflow-hidden bg-gradient-to-b from-transparent via-white to-transparent scroll-mt-10">
+      <section id="faq" className="py-12 sm:py-24 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-transparent via-white to-transparent scroll-mt-24">
         {/* Soft elegant glows */}
         <div className="absolute top-1/4 left-10 w-72 h-72 rounded-full bg-[#064e3b]/[0.02] blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 right-10 w-72 h-72 rounded-full bg-[#d4af37]/[0.03] blur-3xl pointer-events-none" />
