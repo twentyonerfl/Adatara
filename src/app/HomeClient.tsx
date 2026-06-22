@@ -473,7 +473,7 @@ export default function HomeClient({
         {/* Background Pattern Layer with Custom Opacity and Blur */}
         {settings.bg_image && (
           <div
-            className="fixed inset-0 -z-20 pointer-events-none"
+            className="absolute inset-0 -z-20 pointer-events-none"
             style={{
               backgroundImage: `url(${settings.bg_image})`,
               backgroundSize: "cover",
@@ -816,9 +816,13 @@ export default function HomeClient({
         className="py-12 sm:py-24 px-4 sm:px-6 scroll-mt-24 transition-all"
       >
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col mb-8 text-left">
-            <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest">Galeri Desain</h2>
-            <h3 className="text-3xl sm:text-4xl font-black mt-2 custom-text-color">Pilih Template Favorit Anda</h3>
+          <div className="flex flex-col mb-8 text-left items-start">
+            <span className="text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10 w-max">
+              Galeri Desain
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
+              Pilih Template Favorit Anda
+            </h2>
           </div>
 
           {/* Search and Category Filter Section */}
@@ -1048,11 +1052,13 @@ export default function HomeClient({
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-16 relative z-10"
           >
-            <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest flex items-center justify-center gap-1.5">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
               <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Fitur Unggulan
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
+              Semua yang Anda Butuhkan untuk Undangan Sempurna
             </h2>
-            <h3 className="text-3xl sm:text-4xl font-black mt-2 mb-4 custom-text-color tracking-tight">Semua yang Anda Butuhkan untuk Undangan Sempurna</h3>
-            <p className="opacity-75 leading-relaxed custom-text-color font-medium">
+            <p className="text-[#064e3b]/70 text-xs sm:text-sm mt-3 font-medium">
               Adatara dirancang dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan momen kebahagiaan Anda.
             </p>
           </motion.div>          <motion.div
@@ -1216,11 +1222,13 @@ export default function HomeClient({
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <h2 className="text-xs font-extrabold uppercase tracking-widest text-[#d4af37] flex items-center justify-center gap-1.5">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#d4af37] bg-[#d4af37]/10 px-4 py-1.5 rounded-full border border-[#d4af37]/20">
               <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Paket Harga
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 text-white tracking-tight leading-tight">
+              Investasi Kecil untuk Momen Terindah
             </h2>
-            <h3 className="text-3xl sm:text-4xl font-black mt-2 mb-4 text-white tracking-tight">Investasi Kecil untuk Momen Terindah</h3>
-            <p className="opacity-80 text-[#f5f5dc] font-medium">
+            <p className="text-[#f5f5dc]/70 text-xs sm:text-sm mt-3 font-medium">
               Tersedia paket langganan fleksibel tanpa biaya tersembunyi.
             </p>
           </motion.div>
@@ -1448,13 +1456,15 @@ export default function HomeClient({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-16 max-w-3xl mx-auto"
           >
-            <h2 className="text-xs font-extrabold custom-accent-color uppercase tracking-widest flex items-center justify-center gap-1.5">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
               <HelpCircle className="w-3.5 h-3.5" /> Tanya Jawab
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
+              Pertanyaan yang Sering Diajukan
             </h2>
-            <h3 className="text-3xl sm:text-4xl font-black mt-2 custom-text-color tracking-tight">Pertanyaan yang Sering Diajukan</h3>
-            <p className="opacity-75 mt-3 text-sm font-medium custom-text-color max-w-lg mx-auto">
+            <p className="opacity-75 text-xs sm:text-sm mt-3 font-medium custom-text-color">
               Temukan jawaban cepat untuk pertanyaan umum seputar fitur, pemesanan, dan pengelolaan undangan digital Anda.
             </p>
           </motion.div>
