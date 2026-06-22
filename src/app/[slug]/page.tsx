@@ -1,13 +1,33 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { PublicInvitationView } from "./PublicInvitationView";
-import type { Metadata } from "next";
 
 const BASE_URL = "https://adatara.my.id";
 
-// --- Dynamic OG metadata per invitation ---
+/** Extract the best OG image from the invitation JSON data */
+function extractOgImage(dataJson: any, templateThumbnail?: string | null): string {
+  try {
+    const cover = dataJson?.cover;
+    // 1st choice: cover background image uploaded by user
+    if (cover?.background?.type === "image" && cover?.background?.value) {
+      return cover.background.value;
+    }
+    // 2nd choice: framed photo / couple photo on cover
+    if (cover?.foto && typeof cover.foto === "string" && cover.foto.startsWith("http")) {
+      return cover.foto;
+    }
+    // 3rd choice: template thumbnail
+    if (templateThumbnail && templateThumbnail.startsWith("http")) {
+      return templateThumbnail;
+    }
+  } catch {}
+  // Fallback: Adatara logo
+  return `${BASE_URL}/logo.png`;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -17,67 +37,45 @@ export async function generateMetadata({
 
   const invitation = await db.invitation.findUnique({
     where: { slug },
-    select: {
-      slug: true,
-      data_undangan_json: true,
-      template: { select: { kategori: true } },
-    },
+    include: { template: true },
   });
 
   if (!invitation) {
-    return {
-      title: "Undangan Tidak Ditemukan",
-      description: "Undangan ini tidak ditemukan atau telah dihapus.",
-    };
+    return { title: "Undangan tidak ditemukan – Adatara" };
   }
 
-  const data = invitation.data_undangan_json as any;
-  const cover = data?.cover || {};
+  const dataJson = invitation.data_undangan_json as any;
+  const namaAcara: string = dataJson?.cover?.nama_acara || "Undangan Spesial";
+  const ogImage = extractOgImage(dataJson, invitation.template.thumbnail);
 
-  // Try to get couple/event names
-  const namaLengkap1: string = data?.profil?.nama_lengkap_1 || data?.profil?.nama_panggilan_1 || "";
-  const namaLengkap2: string = data?.profil?.nama_lengkap_2 || data?.profil?.nama_panggilan_2 || "";
-  const kategori: string = invitation.template?.kategori || "Acara";
-
-  let title = "Undangan Digital";
-  let description = "Anda diundang! Buka link ini untuk melihat undangan digital.";
-
-  if (namaLengkap1 && namaLengkap2) {
-    title = `Undangan ${kategori}: ${namaLengkap1} & ${namaLengkap2}`;
-    description = `Dengan hormat, kami mengundang Anda untuk hadir di acara ${kategori.toLowerCase()} ${namaLengkap1} & ${namaLengkap2}. Buka undangan digital di link ini.`;
-  } else if (namaLengkap1) {
-    title = `Undangan ${kategori}: ${namaLengkap1}`;
-    description = `Anda diundang ke acara ${kategori.toLowerCase()} ${namaLengkap1}. Buka undangan digital di link ini.`;
-  }
-
-  // Cover image priority: custom upload → template image
-  const coverImage: string | undefined =
-    cover?.custom_image_url ||
-    cover?.bg_image ||
-    cover?.image_url ||
-    undefined;
-
-  const ogUrl = `${BASE_URL}/${slug}`;
-  const images = coverImage
-    ? [{ url: coverImage, width: 1200, height: 630, alt: title }]
-    : [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: "Adatara - Undangan Digital" }];
+  const title = `${namaAcara} – Undangan Digital`;
+  const description = `Anda mendapat undangan dari ${namaAcara}. Buka link ini untuk melihat undangan digital interaktif di Adatara.`;
 
   return {
     title,
     description,
+    metadataBase: new URL(BASE_URL),
     openGraph: {
-      type: "website",
-      siteName: "Adatara",
       title,
       description,
-      url: ogUrl,
-      images,
+      url: `${BASE_URL}/${slug}`,
+      siteName: "Adatara",
+      locale: "id_ID",
+      type: "website",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: images.map((i) => i.url),
+      images: [ogImage],
     },
   };
 }
@@ -149,3 +147,4 @@ export default async function PublicInvitationPage({
     />
   );
 }
+
