@@ -43,7 +43,7 @@ type TemplateType = {
   thumbnail: string;
   deskripsi: string | null;
   template_json: any;
-  paket: "BASIC" | "PREMIUM" | "SULTAN";
+  paket: "BASIC" | "PREMIUM" | "SULTAN" | "EXCLUSIVE";
 };
 
 type UserType = {
