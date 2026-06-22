@@ -99,7 +99,7 @@ export function BuilderEditor({
   const [showActiveEditForm, setShowActiveEditForm] = useState(false);
 
   // Checkout states
-  const [selectedPackage, setSelectedPackage] = useState<"SILVER" | "GOLD" | "PLATINUM">("GOLD");
+  const [selectedPackage, setSelectedPackage] = useState<"PREMIUM" | "SULTAN" | "EXCLUSIVE">("PREMIUM");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
@@ -110,12 +110,12 @@ export function BuilderEditor({
 
   // Map PaketTier to package names
   useEffect(() => {
-    if (invitation.template.paket === "BASIC") {
-      setSelectedPackage("SILVER");
-    } else if (invitation.template.paket === "PREMIUM") {
-      setSelectedPackage("GOLD");
-    } else if (invitation.template.paket === "SULTAN" || invitation.template.paket === "EXCLUSIVE") {
-      setSelectedPackage("PLATINUM");
+    if (invitation.template.paket === "BASIC" || invitation.template.paket === "PREMIUM") {
+      setSelectedPackage("PREMIUM");
+    } else if (invitation.template.paket === "SULTAN") {
+      setSelectedPackage("SULTAN");
+    } else if (invitation.template.paket === "EXCLUSIVE") {
+      setSelectedPackage("EXCLUSIVE");
     }
   }, [invitation.template.paket]);
 
@@ -1338,7 +1338,7 @@ export function BuilderEditor({
                       <div>
                         <span className="text-[10px] opacity-75 uppercase block font-semibold">Total Biaya Aktivasi:</span>
                         <span className="text-2xl font-black text-white">
-                          {selectedPackage === "SILVER" ? "Rp 49.000" : selectedPackage === "GOLD" ? "Rp 99.000" : "Rp 149.000"}
+                          {selectedPackage === "PREMIUM" ? "Rp 99.000" : selectedPackage === "SULTAN" ? "Rp 149.000" : "Rp 299.000"}
                         </span>
                       </div>
 

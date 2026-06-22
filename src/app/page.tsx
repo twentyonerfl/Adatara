@@ -126,11 +126,24 @@ export default async function Home() {
     console.error("Gagal memuat setting homepage dari database: ", err);
   }
 
+  // Load packages.json
+  let packages = null;
+  try {
+    const fs = require("fs/promises");
+    const path = require("path");
+    const configPath = path.join(process.cwd(), "src/config/packages.json");
+    const configRaw = await fs.readFile(configPath, "utf-8");
+    packages = JSON.parse(configRaw);
+  } catch (err) {
+    console.error("Gagal membaca config packages.json: ", err);
+  }
+
   return (
     <HomeClient 
       initialTemplates={templates} 
       initialCategories={categories} 
       settings={settings ? JSON.parse(JSON.stringify(settings)) : null}
+      packages={packages}
     />
   );
 }

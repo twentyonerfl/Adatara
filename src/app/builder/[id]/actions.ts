@@ -5,11 +5,35 @@ import midtransClient from "midtrans-client";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-const packagePrices = {
-  SILVER: 49000,
-  GOLD: 99000,
-  PLATINUM: 149000
-};
+import fs from "fs/promises";
+import path from "path";
+
+async function getPackagePrices() {
+  try {
+    const configPath = path.join(process.cwd(), "src/config/packages.json");
+    const configRaw = await fs.readFile(configPath, "utf-8");
+    const config = JSON.parse(configRaw);
+    return {
+      PREMIUM: config.PREMIUM.price,
+      SULTAN: config.SULTAN.price,
+      EXCLUSIVE: config.EXCLUSIVE.price,
+      // Compatibility mapping
+      SILVER: config.PREMIUM.price,
+      GOLD: config.SULTAN.price,
+      PLATINUM: config.EXCLUSIVE.price
+    };
+  } catch (err) {
+    console.error("Gagal membaca config packages.json, using defaults: ", err);
+    return {
+      PREMIUM: 99000,
+      SULTAN: 149000,
+      EXCLUSIVE: 299000,
+      SILVER: 99000,
+      GOLD: 149000,
+      PLATINUM: 299000
+    };
+  }
+}
 
 export async function saveInvitationPublic(
   id: string, 
@@ -46,9 +70,10 @@ export async function saveInvitationPublic(
 
 export async function createPaymentPublic(
   invitationId: string,
-  packageType: "SILVER" | "GOLD" | "PLATINUM"
+  packageType: "SILVER" | "GOLD" | "PLATINUM" | "PREMIUM" | "SULTAN" | "EXCLUSIVE"
 ) {
-  const amount = packagePrices[packageType];
+  const prices = await getPackagePrices();
+  const amount = prices[packageType];
   if (!amount) {
     return { error: "Paket tidak valid." };
   }

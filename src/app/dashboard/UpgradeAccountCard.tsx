@@ -15,7 +15,7 @@ export function UpgradeAccountCard({ userStatus }: { userStatus: string }) {
   const [loading, setLoading] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  const handleUpgrade = async (packageType: "SILVER" | "GOLD" | "PLATINUM") => {
+  const handleUpgrade = async (packageType: "PREMIUM" | "SULTAN" | "EXCLUSIVE") => {
     setLoading(packageType);
     setMessage(null);
 
@@ -111,46 +111,10 @@ export function UpgradeAccountCard({ userStatus }: { userStatus: string }) {
 
       {/* Pricing options list */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Silver */}
+        {/* Premium */}
         <div className="bg-white border border-[#064e3b]/10 rounded-2xl p-5 flex flex-col justify-between space-y-5 hover:border-[#d4af37]/35 transition-all text-left">
           <div className="space-y-2">
-            <h4 className="text-[#064e3b] font-extrabold text-sm">Paket Silver</h4>
-            <div className="text-xl font-black text-[#064e3b]">Rp 49.000</div>
-            <ul className="text-[10px] text-[#064e3b]/70 space-y-2 pt-3 border-t border-[#064e3b]/10">
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Template Pilihan
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Aktif 3 Bulan
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Maksimal 100 RSVP
-              </li>
-            </ul>
-          </div>
-          <button
-            disabled={loading !== null}
-            onClick={() => handleUpgrade("SILVER")}
-            className="w-full py-2.5 rounded-xl bg-[#f5f5dc] hover:bg-[#064e3b]/5 border border-[#064e3b]/20 text-[#064e3b] font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
-          >
-            {loading === "SILVER" ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              "Pilih Silver"
-            )}
-          </button>
-        </div>
-
-        {/* Gold */}
-        <div className="bg-white border border-[#d4af37]/50 rounded-2xl p-5 flex flex-col justify-between space-y-5 hover:border-[#d4af37] relative transition-all text-left">
-          <div className="absolute top-3.5 right-3.5 px-2 py-0.5 rounded text-[8px] font-bold bg-[#d4af37] text-white uppercase tracking-wider">
-            Terpopuler
-          </div>
-          <div className="space-y-2">
-            <h4 className="text-[#064e3b] font-extrabold text-sm">Paket Gold</h4>
+            <h4 className="text-[#064e3b] font-extrabold text-sm">Paket Premium</h4>
             <div className="text-xl font-black text-[#064e3b]">Rp 99.000</div>
             <ul className="text-[10px] text-[#064e3b]/70 space-y-2 pt-3 border-t border-[#064e3b]/10">
               <li className="flex items-center gap-1.5">
@@ -159,64 +123,104 @@ export function UpgradeAccountCard({ userStatus }: { userStatus: string }) {
               </li>
               <li className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Aktif 6 Bulan
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Maksimal 500 RSVP
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Custom Background Musik
-              </li>
-            </ul>
-          </div>
-          <button
-            disabled={loading !== null}
-            onClick={() => handleUpgrade("GOLD")}
-            className="w-full py-2.5 rounded-xl bg-[#d4af37] hover:bg-[#d4af37]/90 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
-          >
-            {loading === "GOLD" ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              "Pilih Gold"
-            )}
-          </button>
-        </div>
-
-        {/* Platinum */}
-        <div className="bg-white border border-[#064e3b]/10 rounded-2xl p-5 flex flex-col justify-between space-y-5 hover:border-[#d4af37]/35 transition-all text-left">
-          <div className="space-y-2">
-            <h4 className="text-[#064e3b] font-extrabold text-sm">Paket Platinum</h4>
-            <div className="text-xl font-black text-[#064e3b]">Rp 149.000</div>
-            <ul className="text-[10px] text-[#064e3b]/70 space-y-2 pt-3 border-t border-[#064e3b]/10">
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Semua Fitur Gold
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
                 Aktif Selamanya
               </li>
               <li className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Unlimit RSVP & Tamu
+                Tamu Tak Terbatas
               </li>
               <li className="flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
-                Domain Kustom Mandiri
+                Kustom Musik Latar
               </li>
             </ul>
           </div>
           <button
             disabled={loading !== null}
-            onClick={() => handleUpgrade("PLATINUM")}
-            className="w-full py-2.5 rounded-xl bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
+            onClick={() => handleUpgrade("PREMIUM")}
+            className="w-full py-2.5 rounded-xl bg-[#f5f5dc] hover:bg-[#064e3b]/5 border border-[#064e3b]/20 text-[#064e3b] font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
           >
-            {loading === "PLATINUM" ? (
+            {loading === "PREMIUM" ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              "Pilih Platinum"
+              "Pilih Premium"
+            )}
+          </button>
+        </div>
+
+        {/* Sultan */}
+        <div className="bg-white border border-[#d4af37]/50 rounded-2xl p-5 flex flex-col justify-between space-y-5 hover:border-[#d4af37] relative transition-all text-left">
+          <div className="absolute top-3.5 right-3.5 px-2 py-0.5 rounded text-[8px] font-bold bg-[#d4af37] text-white uppercase tracking-wider">
+            Terpopuler
+          </div>
+          <div className="space-y-2">
+            <h4 className="text-[#064e3b] font-extrabold text-sm">Paket Sultan</h4>
+            <div className="text-xl font-black text-[#064e3b]">Rp 149.000</div>
+            <ul className="text-[10px] text-[#064e3b]/70 space-y-2 pt-3 border-t border-[#064e3b]/10">
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Semua Fitur Premium
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Subdomain Kustom (.id/nama)
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                100 WA Blast
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Bantuan Prioritas 24/7
+              </li>
+            </ul>
+          </div>
+          <button
+            disabled={loading !== null}
+            onClick={() => handleUpgrade("SULTAN")}
+            className="w-full py-2.5 rounded-xl bg-[#d4af37] hover:bg-[#d4af37]/90 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
+          >
+            {loading === "SULTAN" ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              "Pilih Sultan"
+            )}
+          </button>
+        </div>
+
+        {/* Exclusive */}
+        <div className="bg-white border border-[#064e3b]/10 rounded-2xl p-5 flex flex-col justify-between space-y-5 hover:border-[#d4af37]/35 transition-all text-left">
+          <div className="space-y-2">
+            <h4 className="text-[#064e3b] font-extrabold text-sm">Paket Exclusive</h4>
+            <div className="text-xl font-black text-[#064e3b]">Rp 299.000</div>
+            <ul className="text-[10px] text-[#064e3b]/70 space-y-2 pt-3 border-t border-[#064e3b]/10">
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Semua Fitur Sultan
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Pembuatan Dibantu Desainer
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Revisi Tanpa Batas
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#d4af37] shrink-0" />
+                Kustom Domain (.com/.id)
+              </li>
+            </ul>
+          </div>
+          <button
+            disabled={loading !== null}
+            onClick={() => handleUpgrade("EXCLUSIVE")}
+            className="w-full py-2.5 rounded-xl bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
+          >
+            {loading === "EXCLUSIVE" ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              "Pilih Exclusive"
             )}
           </button>
         </div>

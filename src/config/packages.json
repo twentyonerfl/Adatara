@@ -1,0 +1,54 @@
+{
+  "BASIC": {
+    "price": 0,
+    "name": "PAKET BASIC",
+    "sub": "Selamanya Gratis",
+    "desc": "Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.",
+    "features": [
+      "Masa aktif undangan 3 hari",
+      "Maksimal 50 tamu undangan",
+      "Desain template dasar (Basic)",
+      "Tanpa kustom musik & galeri",
+      "Terdapat watermark brand Adatara"
+    ]
+  },
+  "PREMIUM": {
+    "price": 99000,
+    "name": "PAKET PREMIUM",
+    "sub": "Bayar Sekali (Aktif Selamanya)",
+    "desc": "Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.",
+    "features": [
+      "Masa aktif undangan selamanya",
+      "Tamu undangan tak terbatas",
+      "Bebas kustom musik latar & audio",
+      "Galeri foto & video tak terbatas",
+      "RSVP & amplop digital cashless",
+      "Bebas watermark brand Adatara"
+    ]
+  },
+  "SULTAN": {
+    "price": 149000,
+    "name": "PAKET SULTAN",
+    "sub": "Bayar Sekali (Aktif Selamanya)",
+    "desc": "Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.",
+    "features": [
+      "Semua fitur paket PREMIUM",
+      "Subdomain kustom (.adatara.id/nama)",
+      "100 WhatsApp blast untuk undangan tamu",
+      "Prioritas bantuan admin 24/7"
+    ]
+  },
+  "EXCLUSIVE": {
+    "price": 299000,
+    "name": "PAKET EXCLUSIVE",
+    "sub": "Bayar Sekali (Aktif Selamanya)",
+    "desc": "Layanan premium terima beres. Tim kami yang akan menginput data dan mendesain undangan Anda sepenuhnya.",
+    "features": [
+      "Semua fitur paket SULTAN",
+      "Pembuatan dibantu desainer kami",
+      "Revisi tanpa batas sepuasnya",
+      "WhatsApp Blast tak terbatas",
+      "Kustom domain pribadi (.com/.id)"
+    ]
+  }
+}

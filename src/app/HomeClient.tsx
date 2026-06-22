@@ -176,12 +176,70 @@ function AnimatedCounter({
 export default function HomeClient({
   initialTemplates,
   initialCategories,
-  settings: initialSettings
+  settings: initialSettings,
+  packages: initialPackages
 }: {
   initialTemplates: any[];
   initialCategories: string[];
   settings: any;
+  packages?: any;
 }) {
+  const defaultPackages = {
+    BASIC: {
+      price: 0,
+      name: "PAKET BASIC",
+      sub: "Selamanya Gratis",
+      desc: "Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.",
+      features: [
+        "Masa aktif undangan 3 hari",
+        "Maksimal 50 tamu undangan",
+        "Desain template dasar (Basic)",
+        "Tanpa kustom musik & galeri",
+        "Terdapat watermark brand Adatara"
+      ]
+    },
+    PREMIUM: {
+      price: 99000,
+      name: "PAKET PREMIUM",
+      sub: "Bayar Sekali (Aktif Selamanya)",
+      desc: "Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.",
+      features: [
+        "Masa aktif undangan selamanya",
+        "Tamu undangan tak terbatas",
+        "Bebas kustom musik latar & audio",
+        "Galeri foto & video tak terbatas",
+        "RSVP & amplop digital cashless",
+        "Bebas watermark brand Adatara"
+      ]
+    },
+    SULTAN: {
+      price: 149000,
+      name: "PAKET SULTAN",
+      sub: "Bayar Sekali (Aktif Selamanya)",
+      desc: "Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.",
+      features: [
+        "Semua fitur paket PREMIUM",
+        "Subdomain kustom (.adatara.id/nama)",
+        "100 WhatsApp blast untuk undangan tamu",
+        "Prioritas bantuan admin 24/7"
+      ]
+    },
+    EXCLUSIVE: {
+      price: 299000,
+      name: "PAKET EXCLUSIVE",
+      sub: "Bayar Sekali (Aktif Selamanya)",
+      desc: "Layanan premium terima beres. Tim kami yang akan menginput data dan mendesain undangan Anda sepenuhnya.",
+      features: [
+        "Semua fitur paket SULTAN",
+        "Pembuatan dibantu desainer kami",
+        "Revisi tanpa batas sepuasnya",
+        "WhatsApp Blast tak terbatas",
+        "Kustom domain pribadi (.com/.id)"
+      ]
+    }
+  };
+
+  const activePackages = initialPackages || defaultPackages;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [selectedPaket, setSelectedPaket] = useState("Semua");
@@ -1240,209 +1298,89 @@ export default function HomeClient({
             viewport={{ once: true, margin: "-50px" }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 items-stretch"
           >
-            {/* Plan 1: Free */}
-            <motion.div
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
-            >
-              <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-slate-800/60 text-slate-300 border border-slate-700/40 shadow-sm">
-                  PAKET BASIC
-                </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">Rp 0</h4>
-                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Selamanya Gratis</p>
-                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/80">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
-              </div>
+            {["BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((key) => {
+              const pkg = activePackages[key];
+              if (!pkg) return null;
+              
+              const isPopular = key === "PREMIUM";
+              const isBasic = key === "BASIC";
+              const isSultan = key === "SULTAN";
+              const isExclusive = key === "EXCLUSIVE";
 
-              <hr className="border-emerald-900/30 my-4 md:my-8" />
+              let badgeText = "";
+              let badgeColorClass = "";
+              if (isPopular) {
+                badgeText = "Paling Populer";
+                badgeColorClass = "text-emerald-300 bg-emerald-950 border border-emerald-800";
+              } else if (isSultan) {
+                badgeText = "Rekomendasi VIP";
+                badgeColorClass = "text-amber-300 bg-amber-950 border border-amber-800";
+              } else if (isExclusive) {
+                badgeText = "Terima Beres";
+                badgeColorClass = "text-purple-300 bg-purple-950 border border-purple-800";
+              }
 
-              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Masa aktif undangan 3 hari
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Maksimal 50 tamu undangan
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Desain template dasar (Basic)
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3 opacity-30">
-                  <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-bold text-white">✕</span>
-                  Tanpa kustom musik & galeri
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3 opacity-30">
-                  <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-bold text-white">✕</span>
-                  Terdapat watermark brand Adatara
-                </li>
-              </ul>
+              return (
+                <motion.div
+                  key={key}
+                  variants={itemVariants}
+                  whileHover={{ y: -8 }}
+                  className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+                >
+                  {badgeText && (
+                    <div className={`absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest shadow-sm ${badgeColorClass}`}>
+                      {badgeText}
+                    </div>
+                  )}
 
-              <Link
-                href="/register?plan=basic"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200"
-              >
-                Mulai Gratis
-              </Link>
-            </motion.div>
+                  <div>
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider shadow-sm ${
+                      isBasic ? "bg-slate-800/60 text-slate-300 border border-slate-700/40" :
+                      isPopular ? "bg-emerald-900/50 text-emerald-300 border border-emerald-800/40" :
+                      isSultan ? "bg-amber-900/50 text-amber-300 border border-amber-800/40" :
+                      "bg-purple-900/50 text-purple-300 border border-purple-800/40"
+                    }`}>
+                      {pkg.name}
+                    </span>
+                    <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">
+                      {pkg.price === 0 ? "Rp 0" : `Rp ${pkg.price.toLocaleString("id-ID")}`}
+                    </h4>
+                    <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">{pkg.sub}</p>
+                    <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/80">{pkg.desc}</p>
+                  </div>
 
-            {/* Plan 2: Pro */}
-            <motion.div
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
-            >
-              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-emerald-300 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest bg-emerald-950 border border-emerald-800 shadow-sm">
-                Paling Populer
-              </div>
+                  <hr className="border-emerald-900/30 my-4 md:my-8" />
 
-              <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-emerald-900/50 text-emerald-300 border border-emerald-800/40 shadow-sm">
-                  PAKET PREMIUM
-                </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">Rp 99.000</h4>
-                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
-                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/80">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
-              </div>
+                  <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
+                    {pkg.features.map((feat: string, fIdx: number) => {
+                      const isCrossed = feat.startsWith("✕ ") || feat.startsWith("Tanpa ") || feat.startsWith("Terdapat ");
+                      return (
+                        <li key={fIdx} className={`flex items-center gap-1.5 md:gap-3 ${isCrossed ? "opacity-35" : ""}`}>
+                          {isCrossed ? (
+                            <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-bold text-white shrink-0">✕</span>
+                          ) : (
+                            <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+                          )}
+                          <span>{feat}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
 
-              <hr className="border-emerald-900/30 my-4 md:my-8" />
-
-              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Masa aktif undangan selamanya
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Tamu undangan tak terbatas
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Bebas kustom musik latar & audio
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Galeri foto & video tak terbatas
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  RSVP & amplop digital cashless
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Bebas watermark brand Adatara
-                </li>
-              </ul>
-
-              <Link
-                href="/register?plan=premium"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200"
-              >
-                Pilih Premium
-              </Link>
-            </motion.div>
-
-            {/* Plan 3: VIP */}
-            <motion.div
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
-            >
-              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-amber-300 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest bg-amber-950 border border-amber-800 shadow-sm">
-                Rekomendasi VIP
-              </div>
-
-              <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-amber-900/50 text-amber-300 border border-amber-800/40 shadow-sm">
-                  PAKET SULTAN
-                </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">Rp 149.000</h4>
-                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
-                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/80">Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.</p>
-              </div>
-
-              <hr className="border-emerald-900/30 my-4 md:my-8" />
-
-              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Semua fitur paket PREMIUM
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Subdomain kustom (.adatara.id/nama)
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  100 WhatsApp blast untuk undangan tamu
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Prioritas bantuan admin 24/7
-                </li>
-              </ul>
-
-              <Link
-                href="/register?plan=sultan"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200"
-              >
-                Pilih Sultan
-              </Link>
-            </motion.div>
-
-            {/* Plan 4: Exclusive */}
-            <motion.div
-              variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
-            >
-              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-purple-300 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest bg-purple-950 border border-purple-800 shadow-sm">
-                Terima Beres
-              </div>
-
-              <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-purple-900/50 text-purple-300 border border-purple-800/40 shadow-sm">
-                  PAKET EXCLUSIVE
-                </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">Rp 299.000</h4>
-                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
-                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/80">Layanan premium terima beres. Tim kami yang akan menginput data dan mendesain undangan Anda sepenuhnya.</p>
-              </div>
-
-              <hr className="border-emerald-900/30 my-4 md:my-8" />
-
-              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Semua fitur paket SULTAN
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Pembuatan dibantu desainer kami
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Revisi tanpa batas sepuasnya
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  WhatsApp Blast tak terbatas
-                </li>
-                <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
-                  Kustom domain pribadi (.com/.id)
-                </li>
-              </ul>
-
-              <Link
-                href="/register?plan=exclusive"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200"
-              >
-                Pilih Exclusive
-              </Link>
-            </motion.div>
+                  <Link
+                    href={`/register?plan=${key.toLowerCase()}`}
+                    className={`mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border ${
+                      isBasic ? "border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200" :
+                      isPopular ? "border-emerald-600 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-600/30 hover:text-emerald-200" :
+                      isSultan ? "border-amber-600 bg-amber-500/10 text-amber-400 hover:bg-amber-600/30 hover:text-amber-200" :
+                      "border-purple-600 bg-purple-500/10 text-purple-400 hover:bg-purple-600/30 hover:text-purple-200"
+                    }`}
+                  >
+                    {isBasic ? "Mulai Gratis" : `Pilih ${pkg.name.split(" ").slice(1).join(" ")}`}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </section>
       </div>
