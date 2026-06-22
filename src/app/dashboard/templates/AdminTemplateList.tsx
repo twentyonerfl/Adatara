@@ -8,6 +8,13 @@ import { ScaledCoverPreview } from "./BuilderTabsCoverPembuka";
 import { motion, AnimatePresence } from "framer-motion";
 import { KATEGORI_OPTIONS } from "./builder-constants";
 
+const getSafeThumbnail = (url?: string) => {
+  if (!url || (!url.startsWith("http") && !url.startsWith("/") && !url.startsWith("data:image"))) {
+    return "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=600&auto=format&fit=crop";
+  }
+  return url;
+};
+
 type Template = {
   id: string;
   nama_template: string;
@@ -225,12 +232,24 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
 
                 {/* Thumbnail / Live Cover Preview */}
                 <div className="relative w-full aspect-square bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
+                  {/* Background Image of the catalog card container */}
+                  {t.thumbnail && (
+                    <>
+                      <img
+                        src={getSafeThumbnail(t.thumbnail)}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover blur-[5px] opacity-35 scale-[1.08] pointer-events-none transition-transform duration-700 ease-out group-hover:scale-[1.12]"
+                      />
+                      <div className="absolute inset-0 bg-[#064e3b]/10 pointer-events-none" />
+                    </>
+                  )}
+
                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
-                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04] z-10">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
                     ) : t.thumbnail ? (
-                      <img src={t.thumbnail} alt={t.nama_template} className="w-full h-full object-cover" />
+                      <img src={getSafeThumbnail(t.thumbnail)} alt={t.nama_template} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                     )}

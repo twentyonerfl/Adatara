@@ -287,8 +287,20 @@ export function TemplateListPublic({
 
                 {/* Thumbnail / Live Cover Preview Container */}
                 <div className="w-full aspect-square overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
+                  {/* Background Image of the catalog card container */}
+                  {template.thumbnail && (
+                    <>
+                      <img
+                        src={getSafeThumbnail(template.thumbnail)}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover blur-[5px] opacity-35 scale-[1.08] pointer-events-none transition-transform duration-700 ease-out group-hover:scale-[1.12]"
+                      />
+                      <div className="absolute inset-0 bg-[#064e3b]/10 pointer-events-none" />
+                    </>
+                  )}
+
                   {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
-                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04] z-10">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
                     ) : template.thumbnail ? (

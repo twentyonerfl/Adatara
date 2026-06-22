@@ -1032,8 +1032,20 @@ export default function HomeClient({
                       className="w-full aspect-square overflow-hidden relative flex items-center justify-center p-2.5"
                       style={{ backgroundColor: `${settings.text_color}08` }}
                     >
+                      {/* Background Image of the catalog card container */}
+                      {template.image && (
+                        <>
+                          <img
+                            src={getSafeThumbnail(template.image)}
+                            alt=""
+                            className="absolute inset-0 w-full h-full object-cover blur-[5px] opacity-35 scale-[1.08] pointer-events-none transition-transform duration-700 ease-out group-hover:scale-[1.12]"
+                          />
+                          <div className="absolute inset-0 bg-[#064e3b]/10 pointer-events-none" />
+                        </>
+                      )}
+
                       {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
-                      <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                      <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04] z-10">
                         {(() => {
                           const parsedJson = typeof template.template_json === "string"
                             ? JSON.parse(template.template_json)
