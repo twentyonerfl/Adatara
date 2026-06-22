@@ -44,21 +44,25 @@ export default function CategoriesClient({ initialGroups }: { initialGroups: Cat
     setError(null);
     setSuccess(null);
     startTransition(async () => {
-      const res = await createCategory(trimmed);
-      if (res.error) {
-        setError(res.error);
-      } else if (res.category) {
-        setGroups(prev => [
-          ...prev,
-          {
-            id: res.category.id,
-            nama: res.category.nama,
-            count: 0,
-            items: []
-          }
-        ].sort((a, b) => a.nama.localeCompare(b.nama)));
-        setNewCategoryName("");
-        setSuccess(`Kategori "${trimmed}" berhasil ditambahkan.`);
+      try {
+        const res = await createCategory(trimmed);
+        if (res.error) {
+          setError(res.error);
+        } else if (res.category) {
+          setGroups(prev => [
+            ...prev,
+            {
+              id: res.category.id,
+              nama: res.category.nama,
+              count: 0,
+              items: []
+            }
+          ].sort((a, b) => a.nama.localeCompare(b.nama)));
+          setNewCategoryName("");
+          setSuccess(`Kategori "${trimmed}" berhasil ditambahkan.`);
+        }
+      } catch (err: any) {
+        setError(err?.message || "Terjadi kesalahan saat menghubungi server.");
       }
     });
   };
@@ -70,14 +74,19 @@ export default function CategoriesClient({ initialGroups }: { initialGroups: Cat
     setSuccess(null);
     setLoadingId(id);
     startTransition(async () => {
-      const res = await deleteCategory(id);
-      if (res.error) {
-        setError(res.error);
-      } else {
-        setGroups(prev => prev.filter(g => g.id !== id));
-        setSuccess(`Kategori "${name}" berhasil dihapus.`);
+      try {
+        const res = await deleteCategory(id);
+        if (res.error) {
+          setError(res.error);
+        } else {
+          setGroups(prev => prev.filter(g => g.id !== id));
+          setSuccess(`Kategori "${name}" berhasil dihapus.`);
+        }
+      } catch (err: any) {
+        setError(err?.message || "Terjadi kesalahan saat menghubungi server.");
+      } finally {
+        setLoadingId(null);
       }
-      setLoadingId(null);
     });
   };
 

@@ -14,13 +14,13 @@ async function verifyAdmin() {
 }
 
 export async function createCategory(nama: string) {
-  await verifyAdmin();
-  const trimmed = nama.trim();
-  if (!trimmed) {
-    return { error: "Nama kategori tidak boleh kosong" };
-  }
-
   try {
+    await verifyAdmin();
+    const trimmed = nama.trim();
+    if (!trimmed) {
+      return { error: "Nama kategori tidak boleh kosong" };
+    }
+
     const existing = await db.category.findUnique({
       where: { nama: trimmed }
     });
@@ -41,16 +41,16 @@ export async function createCategory(nama: string) {
         nama: category.nama
       }
     };
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
-    return { error: "Gagal membuat kategori" };
+    return { error: err?.message || "Gagal membuat kategori" };
   }
 }
 
 export async function deleteCategory(id: string) {
-  await verifyAdmin();
-
   try {
+    await verifyAdmin();
+
     const category = await db.category.findUnique({
       where: { id }
     });
@@ -75,8 +75,8 @@ export async function deleteCategory(id: string) {
     revalidatePath("/dashboard/categories");
     revalidatePath("/dashboard/templates");
     return { success: true };
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
-    return { error: "Gagal menghapus kategori" };
+    return { error: err?.message || "Gagal menghapus kategori" };
   }
 }
