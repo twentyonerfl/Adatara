@@ -1034,14 +1034,11 @@ export default function HomeClient({
                     >
                       {/* Background Image of the catalog card container */}
                       {template.image && (
-                        <>
-                          <img
-                            src={getSafeThumbnail(template.image)}
-                            alt=""
-                            className="absolute inset-0 w-full h-full object-cover blur-[5px] opacity-35 scale-[1.08] pointer-events-none transition-transform duration-700 ease-out group-hover:scale-[1.12]"
-                          />
-                          <div className="absolute inset-0 bg-[#064e3b]/10 pointer-events-none" />
-                        </>
+                        <img
+                          src={getSafeThumbnail(template.image)}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
                       )}
 
                       {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}

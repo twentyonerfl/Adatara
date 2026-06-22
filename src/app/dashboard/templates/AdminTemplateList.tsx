@@ -234,14 +234,11 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                 <div className="relative w-full aspect-square bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
                   {/* Background Image of the catalog card container */}
                   {t.thumbnail && (
-                    <>
-                      <img
-                        src={getSafeThumbnail(t.thumbnail)}
-                        alt=""
-                        className="absolute inset-0 w-full h-full object-cover blur-[5px] opacity-35 scale-[1.08] pointer-events-none transition-transform duration-700 ease-out group-hover:scale-[1.12]"
-                      />
-                      <div className="absolute inset-0 bg-[#064e3b]/10 pointer-events-none" />
-                    </>
+                    <img
+                      src={getSafeThumbnail(t.thumbnail)}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
                   )}
 
                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
