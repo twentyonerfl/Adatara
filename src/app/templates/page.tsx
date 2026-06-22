@@ -125,50 +125,50 @@ export default async function TemplatesPublicPage() {
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
 
             {/* Column 1: Brand Info */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6 col-span-2 md:col-span-1">
               <div className="flex items-center gap-2 select-none">
                 <img
                   src="/logo-white.png"
                   alt="Adatara Logo"
-                  className="h-10 md:h-12 w-auto object-contain"
+                  className="h-8 md:h-12 w-auto object-contain"
                 />
               </div>
-              <p className="text-sm leading-relaxed text-[#f5f5dc]/80 font-medium">
+              <p className="text-xs md:text-sm leading-relaxed text-[#f5f5dc]/80 font-medium">
                 Platform pembuatan undangan digital premium terbaik di Indonesia. Hadirkan momen terindah Anda secara elegan, cepat, dan ramah lingkungan.
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <a
                   href="https://instagram.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
-                  <InstagramIcon className="w-5 h-5" />
+                  <InstagramIcon className="w-4 h-4 md:w-5 md:h-5" />
                 </a>
                 <a
                   href="https://wa.me"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
-                  <PhoneIcon className="w-5 h-5" />
+                  <PhoneIcon className="w-4 h-4 md:w-5 md:h-5" />
                 </a>
                 <a
                   href="mailto:support@adatara.id"
-                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
-                  <Mail className="w-5 h-5" />
+                  <Mail className="w-4 h-4 md:w-5 md:h-5" />
                 </a>
               </div>
             </div>
 
             {/* Column 2: Tautan Penting */}
-            <div className="space-y-6">
-              <h4 className="text-white font-bold text-base uppercase tracking-wider">Tautan Penting</h4>
-              <ul className="space-y-3.5 text-sm font-medium">
+            <div className="space-y-4 md:space-y-6">
+              <h4 className="text-white font-bold text-sm md:text-base uppercase tracking-wider">Tautan Penting</h4>
+              <ul className="space-y-2 md:space-y-3.5 text-xs md:text-sm font-medium">
                 <li>
                   <Link href="/" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
@@ -197,9 +197,9 @@ export default async function TemplatesPublicPage() {
             </div>
 
             {/* Column 3: Dukungan & Legal */}
-            <div className="space-y-6">
-              <h4 className="text-white font-bold text-base uppercase tracking-wider">Dukungan & Legal</h4>
-              <ul className="space-y-3.5 text-sm font-medium">
+            <div className="space-y-4 md:space-y-6">
+              <h4 className="text-white font-bold text-sm md:text-base uppercase tracking-wider">Dukungan & Legal</h4>
+              <ul className="space-y-2 md:space-y-3.5 text-xs md:text-sm font-medium">
                 <li>
                   <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
@@ -228,19 +228,19 @@ export default async function TemplatesPublicPage() {
             </div>
 
             {/* Column 4: Kontak & Jam Layanan */}
-            <div className="space-y-6">
-              <h4 className="text-white font-bold text-base uppercase tracking-wider">Kantor & Jam Layanan</h4>
-              <ul className="space-y-4 text-sm font-medium">
-                <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
+            <div className="space-y-4 md:space-y-6 col-span-2 md:col-span-1">
+              <h4 className="text-white font-bold text-sm md:text-base uppercase tracking-wider">Kantor & Jam Layanan</h4>
+              <ul className="space-y-3 md:space-y-4 text-xs md:text-sm font-medium">
+                <li className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#d4af37] shrink-0 mt-0.5" />
                   <span>Kota Juang,Bireuen,Aceh,Indonesia</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
+                <li className="flex items-start gap-2.5">
+                  <Clock className="w-4 h-4 text-[#d4af37] shrink-0 mt-0.5" />
                   <span>Jam Layanan:<br />Setiap Hari (08.00 - 17.00 WIB)</span>
                 </li>
-                <li className="flex items-center gap-2 text-xs font-bold text-[#d4af37] bg-white/5 border border-[#d4af37]/20 rounded-full px-3 py-1.5 w-fit">
-                  <HeartIcon className="w-3.5 h-3.5 fill-current text-[#d4af37]" />
+                <li className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-[#d4af37] bg-white/5 border border-[#d4af37]/20 rounded-full px-2.5 py-1 w-fit">
+                  <HeartIcon className="w-3 h-3 fill-current text-[#d4af37]" />
                   <span>Dibuat dengan cinta untuk Anda</span>
                 </li>
               </ul>
