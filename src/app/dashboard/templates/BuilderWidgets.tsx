@@ -275,6 +275,13 @@ export function FileUploader({
   };
 
   const uploadFile = async (file: File) => {
+    // Batas ukuran file 4.5MB untuk kompatibilitas Vercel
+    const MAX_SIZE = 4.5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setError("Ukuran file terlalu besar. Maksimal ukuran file adalah 4.5 MB.");
+      return;
+    }
+
     setIsUploading(true);
     setError(null);
 
