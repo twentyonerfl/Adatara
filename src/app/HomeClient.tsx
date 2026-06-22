@@ -473,7 +473,7 @@ export default function HomeClient({
         {/* Background Pattern Layer with Custom Opacity and Blur */}
         {settings.bg_image && (
           <div
-            className="absolute inset-0 -z-20 pointer-events-none"
+            className="fixed inset-0 -z-20 pointer-events-none"
             style={{
               backgroundImage: `url(${settings.bg_image})`,
               backgroundSize: "cover",
@@ -518,10 +518,10 @@ export default function HomeClient({
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className={`lg:col-span-7 flex flex-col items-center text-center ${settings.hero_title_align === "center"
-                  ? "lg:items-center lg:text-center"
-                  : settings.hero_title_align === "right"
-                    ? "lg:items-end lg:text-right"
-                    : "lg:items-start lg:text-left"
+                ? "lg:items-center lg:text-center"
+                : settings.hero_title_align === "right"
+                  ? "lg:items-end lg:text-right"
+                  : "lg:items-start lg:text-left"
                 }`}
             >
               {/* Pill Badge */}
@@ -728,7 +728,7 @@ export default function HomeClient({
       >
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
-        
+
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-[10px] font-extrabold text-[#064e3b] uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
@@ -738,7 +738,7 @@ export default function HomeClient({
               Hanya 4 Langkah Mudah
             </h2>
             <p className="text-[#064e3b]/70 text-xs sm:text-sm mt-3 font-medium">
-              Buat undangan digital premium Anda sendiri dalam hitungan menit tanpa ribet.
+              Buat undangan digital premium Anda sendiri dalam hitungan menit tanpa ribet dengan 4 langkah mudah.
             </p>
           </div>
 
@@ -748,7 +748,7 @@ export default function HomeClient({
             <div className="hidden sm:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-emerald-100 via-[#d4af37]/35 to-emerald-100 -translate-y-10 z-0" />
 
             {/* Step 1 */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -763,7 +763,7 @@ export default function HomeClient({
             </motion.div>
 
             {/* Step 2 */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -778,7 +778,7 @@ export default function HomeClient({
             </motion.div>
 
             {/* Step 3 */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -793,7 +793,7 @@ export default function HomeClient({
             </motion.div>
 
             {/* Step 4 */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -1473,8 +1473,8 @@ export default function HomeClient({
                   key={idx}
                   variants={itemVariants}
                   className={`border rounded-2xl overflow-hidden transition-all duration-300 bg-white ${isOpen
-                      ? "border-[#064e3b]/35 shadow-md shadow-[#064e3b]/5 bg-gradient-to-r from-[#064e3b]/[0.02] to-transparent"
-                      : "border-[#064e3b]/10 shadow-sm hover:shadow-md hover:border-[#064e3b]/25"
+                    ? "border-[#064e3b]/35 shadow-md shadow-[#064e3b]/5 bg-gradient-to-r from-[#064e3b]/[0.02] to-transparent"
+                    : "border-[#064e3b]/10 shadow-sm hover:shadow-md hover:border-[#064e3b]/25"
                     }`}
                 >
                   <button
@@ -1483,8 +1483,8 @@ export default function HomeClient({
                   >
                     <span className="flex items-center gap-3 pr-4">
                       <span className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isOpen
-                          ? "bg-[#064e3b] text-[#f5f5dc]"
-                          : "bg-[#064e3b]/5 text-[#064e3b] group-hover:bg-[#064e3b]/10"
+                        ? "bg-[#064e3b] text-[#f5f5dc]"
+                        : "bg-[#064e3b]/5 text-[#064e3b] group-hover:bg-[#064e3b]/10"
                         }`}>
                         <HelpCircle className="w-4 h-4" />
                       </span>
