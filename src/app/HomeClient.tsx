@@ -20,7 +20,9 @@ import {
   BellRing,
   Palette,
   Mail,
-  Search
+  Search,
+  CreditCard,
+  FileText
 } from "lucide-react";
 
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -682,6 +684,82 @@ export default function HomeClient({
               <AnimatedCounter value={99.9} decimals={1} suffix="%" />
             </div>
             <p className="text-sm opacity-80 mt-2 font-bold text-white/80">Uptime Server</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CARA ORDER SECTION */}
+      <section
+        id="cara-order"
+        className="py-20 px-6 border-b custom-border-color transition-all relative overflow-hidden"
+        style={{ backgroundColor: "#f5f5dc" }}
+      >
+        {/* Subtle background decoration */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.03] blur-[120px] pointer-events-none rounded-full" />
+        
+        <div className="max-w-7xl mx-auto relative z-10 text-center">
+          {/* Header */}
+          <div className="flex flex-col mb-16 items-center">
+            <span className="text-xs font-extrabold custom-accent-color uppercase tracking-widest bg-emerald-950/5 border border-emerald-950/10 px-3.5 py-1.5 rounded-full">
+              Cara Order
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black mt-4 custom-text-color tracking-tight">
+              Hanya 3 Langkah Mudah
+            </h2>
+            <p className="text-sm opacity-70 mt-2 max-w-lg font-medium custom-text-color">
+              Proses pembuatan cepat dan instan tanpa perlu menunggu berhari-hari.
+            </p>
+          </div>
+
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative">
+            {/* Step 1 */}
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="bg-white/40 border border-[#064e3b]/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#d4af37]/50"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-[#064e3b] text-white flex items-center justify-center shadow-lg shadow-[#064e3b]/10 mb-6">
+                <Palette className="w-8 h-8 text-[#d4af37]" />
+              </div>
+              <span className="text-xs font-black custom-accent-color uppercase tracking-wider mb-2">Langkah 1</span>
+              <h3 className="text-xl font-extrabold custom-text-color">Pilih Template</h3>
+              <p className="text-xs opacity-75 mt-3 text-center leading-relaxed custom-text-color">
+                Temukan desain undangan impian Anda dari katalog template premium kami yang elegan dan responsif.
+              </p>
+            </motion.div>
+
+            {/* Step 2 */}
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="bg-white/40 border border-[#064e3b]/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#d4af37]/50"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-[#064e3b] text-white flex items-center justify-center shadow-lg shadow-[#064e3b]/10 mb-6">
+                <FileText className="w-8 h-8 text-[#d4af37]" />
+              </div>
+              <span className="text-xs font-black custom-accent-color uppercase tracking-wider mb-2">Langkah 2</span>
+              <h3 className="text-xl font-extrabold custom-text-color">Isi Data</h3>
+              <p className="text-xs opacity-75 mt-3 text-center leading-relaxed custom-text-color">
+                Masukkan detail acara seperti nama mempelai, lokasi map, tanggal, cerita cinta, dan galeri foto di editor kami.
+              </p>
+            </motion.div>
+
+            {/* Step 3 */}
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="bg-white/40 border border-[#064e3b]/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#d4af37]/50"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-[#064e3b] text-white flex items-center justify-center shadow-lg shadow-[#064e3b]/10 mb-6">
+                <CreditCard className="w-8 h-8 text-[#d4af37]" />
+              </div>
+              <span className="text-xs font-black custom-accent-color uppercase tracking-wider mb-2">Langkah 3</span>
+              <h3 className="text-xl font-extrabold custom-text-color">Payment & Selesai</h3>
+              <p className="text-xs opacity-75 mt-3 text-center leading-relaxed custom-text-color">
+                Lakukan pembayaran aman instan (QRIS/VA), dan link undangan digital Anda langsung aktif untuk disebarkan!
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
