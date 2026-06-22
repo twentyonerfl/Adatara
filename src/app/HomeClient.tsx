@@ -1314,7 +1314,7 @@ export default function HomeClient({
               } else if (pkg.badgeStyle === "amber") {
                 badgeColorClass = "text-amber-300 bg-amber-950 border border-amber-800";
               } else if (pkg.badgeStyle === "purple") {
-                badgeColorClass = "text-purple-300 bg-purple-950 border border-purple-800";
+                badgeColorClass = "text-rose-100 bg-rose-800 border border-rose-600";
               } else {
                 badgeColorClass = "text-slate-300 bg-slate-950 border border-slate-800";
               }
@@ -1324,7 +1324,11 @@ export default function HomeClient({
                   key={key}
                   variants={itemVariants}
                   whileHover={{ y: -8 }}
-                  className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+                  className={`border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 backdrop-blur-md ${
+                    isExclusive
+                      ? "bg-rose-950/20 border-rose-900/60 hover:border-rose-500 hover:shadow-rose-950/20"
+                      : "bg-emerald-950/15 border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+                  }`}
                 >
                   {badgeText && (
                     <div className={`absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest shadow-sm ${badgeColorClass}`}>
@@ -1337,11 +1341,11 @@ export default function HomeClient({
                       isBasic ? "bg-slate-800/60 text-slate-300 border border-slate-700/40" :
                       isPopular ? "bg-emerald-900/50 text-emerald-300 border border-emerald-800/40" :
                       isSultan ? "bg-amber-900/50 text-amber-300 border border-amber-800/40" :
-                      "bg-purple-900/50 text-purple-300 border border-purple-800/40"
+                      "bg-rose-950/60 text-rose-300 border border-rose-800/40"
                     }`}>
                       {pkg.name}
                     </span>
-                    <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">
+                    <h4 className={`text-base sm:text-2xl md:text-4xl font-extrabold mt-2 md:mt-4 ${isExclusive ? "text-rose-400" : "text-emerald-400"}`}>
                       {pkg.price === 0 ? "Rp 0" : `Rp ${pkg.price.toLocaleString("id-ID")}`}
                     </h4>
                     <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">{pkg.sub}</p>
@@ -1358,7 +1362,7 @@ export default function HomeClient({
                           {isCrossed ? (
                             <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-bold text-white shrink-0">✕</span>
                           ) : (
-                            <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+                            <CheckCircle className={`w-3.5 h-3.5 shrink-0 ${isExclusive ? "text-rose-400" : "text-emerald-500"}`} />
                           )}
                           <span>{feat}</span>
                         </li>
@@ -1372,7 +1376,7 @@ export default function HomeClient({
                       isBasic ? "border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200" :
                       isPopular ? "border-emerald-600 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-600/30 hover:text-emerald-200" :
                       isSultan ? "border-amber-600 bg-amber-500/10 text-amber-400 hover:bg-amber-600/30 hover:text-amber-200" :
-                      "border-purple-600 bg-purple-500/10 text-purple-400 hover:bg-purple-600/30 hover:text-purple-200"
+                      "border-rose-600 bg-rose-500/10 text-rose-400 hover:bg-rose-600/30 hover:text-rose-200"
                     }`}
                   >
                     {pkg.buttonText || (isBasic ? "Mulai Gratis" : "Pilih Paket")}
