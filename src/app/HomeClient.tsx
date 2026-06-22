@@ -708,21 +708,21 @@ export default function HomeClient({
           </div>
 
           {/* Steps Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 relative">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-6 md:gap-8 relative">
             {/* Connecting line for desktop/tablet */}
-            <div className="hidden lg:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-emerald-100 via-[#d4af37]/35 to-emerald-100 -translate-y-10 z-0" />
+            <div className="hidden sm:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-emerald-100 via-[#d4af37]/35 to-emerald-100 -translate-y-10 z-0" />
 
             {/* Step 1 */}
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 01
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Pilih Template</h3>
-              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Pilih Template</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Temukan desain undangan digital terindah dan favorit Anda dari katalog lengkap kami.
               </p>
             </motion.div>
@@ -731,13 +731,13 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 02
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Isi Data</h3>
-              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Isi Data</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Lengkapi seluruh informasi detail acara, profil mempelai, cerita cinta, dan galeri foto terbaik Anda.
               </p>
             </motion.div>
@@ -746,13 +746,13 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 03
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Payment</h3>
-              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Payment</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Lakukan pembayaran aman dan instan untuk mengaktifkan seluruh fitur premium undangan Anda.
               </p>
             </motion.div>
@@ -761,13 +761,13 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 04
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Selesai</h3>
-              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Selesai</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Undangan siap digunakan dan dibagikan secara instan kepada seluruh keluarga dan kerabat terdekat!
               </p>
             </motion.div>
