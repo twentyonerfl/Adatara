@@ -12,9 +12,37 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const BASE_URL = "https://adatara.my.id";
+
 export const metadata: Metadata = {
-  title: "Adatara - Platform SaaS Undangan Digital Premium",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Adatara - Platform Undangan Digital Premium",
+    template: "%s | Adatara",
+  },
   description: "Buat undangan digital elegan untuk pernikahan, ulang tahun, syukuran, dan acara bisnis Anda dengan Template Builder instan, musik latar, RSVP otomatis, dan amplop digital.",
+  openGraph: {
+    type: "website",
+    siteName: "Adatara",
+    title: "Adatara - Platform Undangan Digital Premium",
+    description: "Platform SaaS undangan digital premium nomor satu di Indonesia. Didesain dengan perpaduan keindahan ornamen Nusantara, kemewahan modern, dan animasi interaktif terbaik.",
+    url: BASE_URL,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Adatara - Platform Undangan Digital Premium",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@adatara_id",
+    title: "Adatara - Platform Undangan Digital Premium",
+    description: "Platform SaaS undangan digital premium nomor satu di Indonesia. Buat undangan pernikahan, ulang tahun & acara bisnis Anda secara instan.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
