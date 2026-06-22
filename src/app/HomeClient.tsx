@@ -689,20 +689,20 @@ export default function HomeClient({
       {/* CARA ORDER SECTION */}
       <section
         id="cara-order"
-        className="py-24 px-6 bg-[#0b0e14] relative overflow-hidden"
+        className="py-24 px-6 bg-gradient-to-b from-[#f5f5dc] via-[#fcfcf7] to-[#f5f5dc] relative overflow-hidden scroll-mt-10"
       >
         {/* Decorative background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.03] blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-extrabold text-[#d4af37] uppercase tracking-widest bg-[#d4af37]/10 px-4 py-1.5 rounded-full border border-[#d4af37]/20">
+            <span className="text-[10px] font-extrabold text-[#064e3b] uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
               Langkah Pembuatan
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black mt-4 text-white tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 text-[#064e3b] tracking-tight leading-tight">
               Hanya 4 Langkah Mudah
             </h2>
-            <p className="text-[#f5f5dc]/75 text-xs sm:text-sm mt-3 font-medium">
+            <p className="text-[#064e3b]/70 text-xs sm:text-sm mt-3 font-medium">
               Buat undangan digital premium Anda sendiri dalam hitungan menit tanpa ribet.
             </p>
           </div>
@@ -710,19 +710,19 @@ export default function HomeClient({
           {/* Steps Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 relative">
             {/* Connecting line for desktop/tablet */}
-            <div className="hidden lg:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-slate-800 via-[#d4af37]/45 to-slate-800 -translate-y-12 z-0" />
+            <div className="hidden lg:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-emerald-100 via-[#d4af37]/35 to-emerald-100 -translate-y-10 z-0" />
 
             {/* Step 1 */}
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-emerald-500/20 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-emerald-500/10 mb-4">
                 01
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Pilih Template</h3>
-              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Pilih Template</h3>
+              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
                 Temukan desain undangan digital terindah dan favorit Anda dari katalog lengkap kami.
               </p>
             </motion.div>
@@ -731,13 +731,13 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-amber-400 to-[#d4af37] flex items-center justify-center text-[#063024] font-black text-sm shadow-md shadow-amber-500/20 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-amber-400 to-[#d4af37] flex items-center justify-center text-[#063024] font-black text-base shadow-lg shadow-amber-500/10 mb-4">
                 02
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Isi Data</h3>
-              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Isi Data</h3>
+              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
                 Lengkapi seluruh informasi detail acara, profil mempelai, cerita cinta, dan galeri foto terbaik Anda.
               </p>
             </motion.div>
@@ -746,13 +746,13 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-emerald-500/20 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-teal-500 to-teal-700 flex items-center justify-center text-white font-black text-base shadow-lg shadow-teal-500/10 mb-4">
                 03
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Payment</h3>
-              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Payment</h3>
+              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
                 Lakukan pembayaran aman dan instan untuk mengaktifkan seluruh fitur premium undangan Anda.
               </p>
             </motion.div>
@@ -761,13 +761,13 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-purple-500/20 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-purple-500/10 mb-4">
                 04
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Selesai</h3>
-              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+              <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Selesai</h3>
+              <p className="text-[11px] sm:text-xs text-[#064e3b]/70 font-medium leading-relaxed">
                 Undangan siap digunakan dan dibagikan secara instan kepada seluruh keluarga dan kerabat terdekat!
               </p>
             </motion.div>
