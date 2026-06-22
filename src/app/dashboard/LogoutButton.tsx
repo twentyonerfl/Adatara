@@ -29,7 +29,7 @@ export function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={loading}
-      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black text-[#064e3b]/50 hover:text-red-700 hover:bg-red-50 border border-transparent hover:border-red-100 transition-all cursor-pointer disabled:opacity-50 uppercase tracking-wider"
+      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black text-white/60 hover:text-white hover:bg-red-950/40 border border-transparent hover:border-red-900/30 transition-all cursor-pointer disabled:opacity-50 uppercase tracking-wider"
     >
       {loading ? (
         <>
