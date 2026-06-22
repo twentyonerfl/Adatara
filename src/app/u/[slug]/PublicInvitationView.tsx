@@ -136,7 +136,23 @@ export function PublicInvitationView({
     } else if (audioRef.current && musicUrl) {
       const startSec = Number(data.cover?.music_start_second || 0);
       if (startSec > 0 && audioRef.current.currentTime === 0) {
-        audioRef.current.currentTime = startSec;
+        try {
+          if (audioRef.current.readyState >= 1) {
+            audioRef.current.currentTime = startSec;
+          } else {
+            const audioEl = audioRef.current;
+            const setTime = () => {
+              try {
+                audioEl.currentTime = startSec;
+              } catch (e) {
+                console.error("Failed to set currentTime on load:", e);
+              }
+            };
+            audioEl.addEventListener("loadedmetadata", setTime, { once: true });
+          }
+        } catch (e) {
+          console.error("Failed to set currentTime:", e);
+        }
       }
       audioRef.current.play()
         .then(() => setIsPlaying(true))
@@ -155,7 +171,23 @@ export function PublicInvitationView({
       } else {
         const startSec = Number(data.cover?.music_start_second || 0);
         if (startSec > 0 && audioRef.current.currentTime === 0) {
-          audioRef.current.currentTime = startSec;
+          try {
+            if (audioRef.current.readyState >= 1) {
+              audioRef.current.currentTime = startSec;
+            } else {
+              const audioEl = audioRef.current;
+              const setTime = () => {
+                try {
+                  audioEl.currentTime = startSec;
+                } catch (e) {
+                  console.error("Failed to set currentTime on load:", e);
+                }
+              };
+              audioEl.addEventListener("loadedmetadata", setTime, { once: true });
+            }
+          } catch (e) {
+            console.error("Failed to set currentTime:", e);
+          }
         }
         audioRef.current.play()
           .then(() => setIsPlaying(true))
