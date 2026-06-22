@@ -133,7 +133,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
           <p className="text-[#064e3b]/50 text-xs mt-1">Belum ada template yang terdaftar dalam kategori ini.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {filteredTemplates.map((template) => {
             const parsedJson = typeof template.template_json === "string" ? JSON.parse(template.template_json) : template.template_json;
             const coverData = parsedJson?.cover || {};
