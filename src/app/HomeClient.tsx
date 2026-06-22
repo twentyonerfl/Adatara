@@ -540,8 +540,8 @@ export default function HomeClient({
                 {settings.hero_subtitle}
               </p>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-row items-center gap-2 w-full sm:w-auto justify-center">
+              {/* CTA Buttons - Desktop Only */}
+              <div className="hidden lg:flex flex-row items-center gap-2 w-full sm:w-auto justify-center">
                 <Link
                   href={settings.hero_cta_url}
                   className="flex-1 sm:flex-none px-2.5 sm:px-7 py-2.5 sm:py-3.5 rounded-full font-black border transition-all text-center custom-btn-primary shadow-md shadow-black/5 text-[10px] min-[360px]:text-xs sm:text-base"
@@ -562,7 +562,7 @@ export default function HomeClient({
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="lg:col-span-5 flex justify-center items-center relative"
+              className="lg:col-span-5 flex flex-col items-center justify-center relative"
             >
               {/* Soft accent glow background behind phone */}
               <div
@@ -578,7 +578,7 @@ export default function HomeClient({
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="relative w-[270px] sm:w-[290px] aspect-[9/18.5] bg-[#0c1322] rounded-[38px] p-1 shadow-2xl border-[3px] border-[#222f46] flex flex-col justify-between"
+                className="relative w-[290px] sm:w-[315px] aspect-[9/17.5] bg-[#0c1322] rounded-[38px] p-1 shadow-2xl border-[3px] border-[#222f46] flex flex-col justify-between"
               >
                 {/* Notch */}
                 <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-28 h-4 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-3">
@@ -667,6 +667,22 @@ export default function HomeClient({
 
                 </div>
               </motion.div>
+
+              {/* CTA Buttons - Mobile Only */}
+              <div className="flex lg:hidden flex-row items-center gap-2 w-full max-w-[290px] sm:max-w-[315px] justify-center mt-6">
+                <Link
+                  href={settings.hero_cta_url}
+                  className="flex-1 px-2.5 py-2.5 rounded-full font-black border transition-all text-center custom-btn-primary shadow-md shadow-black/5 text-[10px] min-[360px]:text-xs"
+                >
+                  {settings.hero_cta_text}
+                </Link>
+                <a
+                  href={settings.hero_demo_url}
+                  className="flex-1 px-2.5 py-2.5 rounded-full font-black border transition-all text-center custom-btn-secondary text-[10px] min-[360px]:text-xs"
+                >
+                  {settings.hero_demo_text}
+                </a>
+              </div>
             </motion.div>
           </div>
         </section>
