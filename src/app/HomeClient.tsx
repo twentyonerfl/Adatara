@@ -718,7 +718,7 @@ export default function HomeClient({
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-emerald-500/10 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
                 01
               </div>
               <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Pilih Template</h3>
@@ -733,7 +733,7 @@ export default function HomeClient({
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-amber-400 to-[#d4af37] flex items-center justify-center text-[#063024] font-black text-base shadow-lg shadow-amber-500/10 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
                 02
               </div>
               <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Isi Data</h3>
@@ -748,7 +748,7 @@ export default function HomeClient({
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-teal-500 to-teal-700 flex items-center justify-center text-white font-black text-base shadow-lg shadow-teal-500/10 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
                 03
               </div>
               <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Payment</h3>
@@ -763,7 +763,7 @@ export default function HomeClient({
               whileHover={{ y: -8 }}
               className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-purple-500/10 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-base shadow-md shadow-[#064e3b]/10 mb-4">
                 04
               </div>
               <h3 className="text-base sm:text-lg font-bold text-[#064e3b] mb-2">Selesai</h3>
