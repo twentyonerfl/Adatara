@@ -177,44 +177,44 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
   };
 
   return (
-    <div className="space-y-8 text-[#064e3b] pb-24">
+    <div className="space-y-5 text-[#064e3b] pb-16">
       {/* HEADER SECTION */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#064e3b]/10 pb-4">
         <div>
-          <span className="text-[10px] font-black text-[#d4af37] uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-            <Gift className="w-3.5 h-3.5" />
+          <span className="text-[9px] font-black text-[#d4af37] uppercase tracking-widest flex items-center gap-1.5 mb-1">
+            <Gift className="w-3 h-3" />
             Pengaturan Layanan
           </span>
-          <h1 className="text-3xl font-black text-[#064e3b] tracking-tight">Kelola Paket & Harga</h1>
-          <p className="text-[#064e3b]/70 text-sm mt-1">
-            Konfigurasikan harga nominal, sub-judul, deskripsi, dan butir fitur. Anda dapat mengedit, menghapus, atau menambah paket baru secara fleksibel.
+          <h1 className="text-xl sm:text-2xl font-black text-[#064e3b] tracking-tight">Kelola Paket & Harga</h1>
+          <p className="text-[#064e3b]/70 text-xs mt-0.5">
+            Konfigurasikan harga nominal, sub-judul, deskripsi, dan butir fitur paket secara fleksibel.
           </p>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handleAddNewPackage}
-            className="px-4 py-3 bg-white hover:bg-slate-50 text-[#064e3b] border border-[#064e3b]/20 rounded-2xl text-xs font-black flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+            className="px-3.5 py-2 bg-white hover:bg-slate-50 text-[#064e3b] border border-[#064e3b]/20 rounded-xl text-[11px] font-black flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 shadow-sm"
           >
-            <FolderPlus className="w-4 h-4 text-[#d4af37]" />
+            <FolderPlus className="w-3.5 h-3.5 text-[#d4af37]" />
             Tambah Paket
           </button>
           
           <button
             onClick={handleSaveAll}
             disabled={saving}
-            className="px-6 py-3 bg-[#064e3b] hover:bg-[#054030] text-white border border-[#d4af37]/30 rounded-2xl text-xs font-black flex items-center gap-2 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+            className="px-4.5 py-2 bg-[#064e3b] hover:bg-[#054030] text-white border border-[#d4af37]/30 rounded-xl text-[11px] font-black flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 disabled:opacity-50 shadow-sm"
           >
             {saving ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 Menyimpan...
               </>
             ) : (
               <>
-                <Save className="w-4 h-4" />
-                Simpan Semua Paket
+                <Save className="w-3.5 h-3.5" />
+                Simpan Semua
               </>
             )}
           </button>
@@ -223,20 +223,20 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
 
       {/* STATUS MESSAGES */}
       {successMsg && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-5 py-3 rounded-2xl text-xs font-black flex items-center gap-2 shadow-sm">
-          <CheckCircle className="w-4.5 h-4.5" />
+        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-2 rounded-xl text-[11px] font-black flex items-center gap-1.5 shadow-sm">
+          <CheckCircle className="w-4 h-4" />
           <span>{successMsg}</span>
         </div>
       )}
       {errorMsg && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-5 py-3 rounded-2xl text-xs font-black flex items-center gap-2 shadow-sm">
-          <AlertCircle className="w-4.5 h-4.5" />
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-xl text-[11px] font-black flex items-center gap-1.5 shadow-sm">
+          <AlertCircle className="w-4 h-4" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {/* CARDS LISTING FOR EDIT */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {Object.keys(packages).map((key) => {
           const pkg = packages[key];
           if (!pkg) return null;
@@ -244,48 +244,48 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
           return (
             <div 
               key={key} 
-              className={`bg-white border rounded-3xl p-6 relative flex flex-col justify-between hover:shadow-md transition-all ${getCardColor(pkg.badgeStyle)}`}
+              className={`bg-white border rounded-2xl p-4 relative flex flex-col justify-between hover:shadow-sm transition-all ${getCardColor(pkg.badgeStyle)}`}
             >
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {/* Header Info */}
-                <div className="flex items-center justify-between gap-4 border-b border-[#064e3b]/10 pb-4">
+                <div className="flex items-center justify-between gap-3 border-b border-[#064e3b]/10 pb-2.5">
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
                       value={key}
                       onChange={(e) => handleRenameKey(key, e.target.value)}
-                      placeholder="KODE_PAKET"
+                      placeholder="KODE"
                       title="Kode paket unik (kapital, tanpa spasi)"
-                      className="px-2 py-1 bg-slate-100 focus:bg-white border border-slate-200 focus:border-[#d4af37] rounded-lg text-[10px] font-black uppercase outline-none w-28 text-center text-[#064e3b]"
+                      className="px-1.5 py-0.5 bg-slate-100 focus:bg-white border border-slate-200 focus:border-[#d4af37] rounded-md text-[9px] font-black uppercase outline-none w-20 text-center text-[#064e3b]"
                     />
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${getBadgeColor(pkg.badgeStyle)}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${getBadgeColor(pkg.badgeStyle)}`}>
                       {pkg.name || "NAMA PAKET"}
                     </span>
                   </div>
                   
                   {/* Sales Count / Delete Option */}
-                  <div className="flex items-center gap-2">
-                    <div className="text-[10px] font-bold text-[#064e3b]/60 uppercase tracking-wider flex items-center gap-1.5 bg-[#064e3b]/5 px-2.5 py-1 rounded-lg">
-                      <TrendingUp className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <div className="flex items-center gap-1.5">
+                    <div className="text-[9px] font-bold text-[#064e3b]/60 uppercase tracking-wider flex items-center gap-1 bg-[#064e3b]/5 px-2 py-0.5 rounded-md">
+                      <TrendingUp className="w-3 h-3 text-[#d4af37]" />
                       <span>Sales: {salesStats[key] || 0}</span>
                     </div>
 
                     <button
                       onClick={() => handleDeletePackage(key)}
                       title="Hapus Paket Ini"
-                      className="p-1.5 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg cursor-pointer transition-all"
+                      className="p-1 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md cursor-pointer transition-all"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
 
                 {/* Edit Form */}
-                <div className="space-y-4 text-left">
-                  <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-3 text-left">
+                  <div className="grid grid-cols-2 gap-3">
                     {/* Name */}
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                      <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                         Nama Tampilan Paket
                       </label>
                       <input
@@ -293,47 +293,47 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
                         value={pkg.name}
                         onChange={(e) => handleFieldChange(key, "name", e.target.value)}
                         placeholder="Nama Paket"
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-bold text-[#064e3b] outline-none"
+                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-[11px] font-bold text-[#064e3b] outline-none"
                       />
                     </div>
 
                     {/* Price */}
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                      <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                         Harga Paket (Rupiah)
                       </label>
-                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
-                        <span className="text-xs font-extrabold text-[#064e3b]/50">Rp</span>
+                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5">
+                        <span className="text-[11px] font-extrabold text-[#064e3b]/50">Rp</span>
                         <input
                           type="number"
                           min={0}
                           value={pkg.price}
                           onChange={(e) => handleFieldChange(key, "price", parseInt(e.target.value, 10) || 0)}
                           placeholder="0"
-                          className="bg-transparent border-none outline-none font-bold text-[#064e3b] text-xs w-full"
+                          className="bg-transparent border-none outline-none font-bold text-[#064e3b] text-[11px] w-full"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     {/* Subtitle / Active period */}
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                      <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                         Sub-judul / Durasi
                       </label>
                       <input
                         type="text"
                         value={pkg.sub}
                         onChange={(e) => handleFieldChange(key, "sub", e.target.value)}
-                        placeholder="Bayar Sekali (Aktif Selamanya)"
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-bold text-[#064e3b] outline-none"
+                        placeholder="Bayar Sekali"
+                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-[11px] font-bold text-[#064e3b] outline-none"
                       />
                     </div>
 
                     {/* Button Text */}
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                      <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                         Label Tombol CTA
                       </label>
                       <input
@@ -341,35 +341,35 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
                         value={pkg.buttonText || "Pilih Paket"}
                         onChange={(e) => handleFieldChange(key, "buttonText", e.target.value)}
                         placeholder="Pilih Paket"
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-bold text-[#064e3b] outline-none"
+                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-[11px] font-bold text-[#064e3b] outline-none"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     {/* Badge Text */}
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                      <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                         Label Banner Atas (Badge)
                       </label>
                       <input
                         type="text"
                         value={pkg.badgeText || ""}
                         onChange={(e) => handleFieldChange(key, "badgeText", e.target.value)}
-                        placeholder="e.g. Terpopuler (Opsional)"
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-bold text-[#064e3b] outline-none"
+                        placeholder="e.g. Terpopuler"
+                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-[11px] font-bold text-[#064e3b] outline-none"
                       />
                     </div>
 
                     {/* Badge Style */}
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                      <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                         Warna Desain Card
                       </label>
                       <select
                         value={pkg.badgeStyle || "slate"}
                         onChange={(e) => handleFieldChange(key, "badgeStyle", e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-bold text-[#064e3b] outline-none cursor-pointer"
+                        className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-[11px] font-bold text-[#064e3b] outline-none cursor-pointer"
                       >
                         <option value="slate">Slate (Abu-abu / Default)</option>
                         <option value="emerald">Emerald (Hijau Emas)</option>
@@ -381,48 +381,48 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
 
                   {/* Description */}
                   <div>
-                    <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-1">
+                    <label className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 mb-0.5">
                       Deskripsi Paket
                     </label>
                     <textarea
-                      rows={2}
+                      rows={1.5}
                       value={pkg.desc}
                       onChange={(e) => handleFieldChange(key, "desc", e.target.value)}
                       placeholder="Tulis penjelasan singkat paket..."
-                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-bold text-[#064e3b] outline-none resize-none"
+                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 focus:border-[#d4af37] rounded-xl text-[11px] font-bold text-[#064e3b] outline-none resize-none leading-snug"
                     />
                   </div>
 
                   {/* Features List Editor */}
-                  <div className="space-y-3 pt-2">
-                    <span className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]/60 border-b border-[#064e3b]/5 pb-1">
+                  <div className="space-y-2 pt-1.5">
+                    <span className="block text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 border-b border-[#064e3b]/5 pb-0.5">
                       Butir Fitur Paket ({(pkg.features || []).length})
                     </span>
 
                     {/* Features list items */}
-                    <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                    <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                       {(pkg.features || []).map((feat, idx) => (
                         <div 
                           key={idx} 
-                          className="flex items-center justify-between gap-3 p-2 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl"
+                          className="flex items-center justify-between gap-2 p-1.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl"
                         >
-                          <span className="text-xs font-semibold text-[#064e3b]/80 leading-snug">
+                          <span className="text-[11px] font-semibold text-[#064e3b]/80 leading-tight">
                             {feat}
                           </span>
                           <button
                             type="button"
                             onClick={() => handleRemoveFeature(key, idx)}
-                            className="p-1.5 text-red-600 hover:bg-red-500/10 rounded-lg cursor-pointer transition-colors"
+                            className="p-1 text-red-600 hover:bg-red-500/10 rounded-lg cursor-pointer transition-colors shrink-0"
                             title="Hapus Fitur"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-3 h-3" />
                           </button>
                         </div>
                       ))}
                     </div>
 
                     {/* Add new feature input */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5">
                       <input
                         type="text"
                         value={newFeatures[key] || ""}
@@ -434,14 +434,14 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
                           }
                         }}
                         placeholder="Tulis butir fitur baru..."
-                        className="flex-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:border-[#d4af37]"
+                        className="flex-1 px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-semibold outline-none focus:border-[#d4af37]"
                       />
                       <button
                         type="button"
                         onClick={() => handleAddFeature(key)}
-                        className="px-3 py-2 bg-[#064e3b] hover:bg-[#064e3b]/90 text-white rounded-xl text-xs font-black flex items-center justify-center gap-1 cursor-pointer transition-all"
+                        className="px-2.5 py-1.5 bg-[#064e3b] hover:bg-[#064e3b]/90 text-white rounded-xl text-[11px] font-black flex items-center justify-center gap-0.5 cursor-pointer transition-all"
                       >
-                        <Plus className="w-3.5 h-3.5" />
+                        <Plus className="w-3 h-3" />
                         Tambah
                       </button>
                     </div>
