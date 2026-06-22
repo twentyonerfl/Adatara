@@ -1,9 +1,53 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { Sparkles, Heart } from "lucide-react";
+import { Sparkles, Heart, MapPin, Clock, Mail } from "lucide-react";
 import { TemplateListPublic } from "./TemplateListPublic";
 
 export const revalidate = 0; // Disable server cache for real-time listings
+
+const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
+const PhoneIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+);
+
+const HeartIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={props.className}
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+);
 
 export default async function TemplatesPublicPage() {
   // Fetch published templates from database
@@ -44,9 +88,12 @@ export default async function TemplatesPublicPage() {
       {/* HEADER NAVBAR */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-[#f5f5dc]/80 border-b border-[#064e3b]/10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-bold text-2xl tracking-wide text-[#064e3b]">
-            <Sparkles className="w-7 h-7 text-[#d4af37] animate-pulse" />
-            Adatara
+          <Link href="/" className="flex items-center select-none">
+            <img
+              src="/logo.png"
+              alt="Adatara Logo"
+              className="h-10 md:h-12 w-auto object-contain"
+            />
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/" className="px-4 py-2 text-sm font-bold hover:text-[#064e3b] text-[#064e3b]/70 transition-colors">
@@ -73,15 +120,144 @@ export default async function TemplatesPublicPage() {
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-[#f5f5dc] border-t border-[#064e3b]/10 py-12 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-[#064e3b]/60">
-          <div className="flex items-center gap-2 font-bold text-lg text-[#064e3b]">
-            <Sparkles className="w-5 h-5 text-[#d4af37]" />
-            Adatara
+      <footer className="relative overflow-hidden bg-gradient-to-b from-[#05291e] to-[#031c14] text-[#f5f5dc]/70 border-t border-[#064e3b]/40 pt-20 pb-10 px-6">
+        {/* Subtle decorative glow */}
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            
+            {/* Column 1: Brand Info */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 select-none">
+                <img
+                  src="/logo-white.png"
+                  alt="Adatara Logo"
+                  className="h-10 md:h-12 w-auto object-contain"
+                />
+              </div>
+              <p className="text-sm leading-relaxed text-[#f5f5dc]/80 font-medium">
+                Platform pembuatan undangan digital premium terbaik di Indonesia. Hadirkan momen terindah Anda secara elegan, cepat, dan ramah lingkungan.
+              </p>
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://instagram.com" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                >
+                  <InstagramIcon className="w-5 h-5" />
+                </a>
+                <a 
+                  href="https://wa.me" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                >
+                  <PhoneIcon className="w-5 h-5" />
+                </a>
+                <a 
+                  href="mailto:support@adatara.id" 
+                  className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Column 2: Tautan Penting */}
+            <div className="space-y-6">
+              <h4 className="text-white font-bold text-base uppercase tracking-wider">Tautan Penting</h4>
+              <ul className="space-y-3.5 text-sm font-medium">
+                <li>
+                  <Link href="/" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Beranda
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/templates" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Katalog Undangan
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#harga" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Paket Harga
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#faq" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Tanya Jawab
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Dukungan & Legal */}
+            <div className="space-y-6">
+              <h4 className="text-white font-bold text-base uppercase tracking-wider">Dukungan & Legal</h4>
+              <ul className="space-y-3.5 text-sm font-medium">
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Syarat & Ketentuan
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Kebijakan Privasi
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Hubungi Admin
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors duration-250 flex items-center gap-1.5 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] scale-0 group-hover:scale-100 transition-transform duration-200" />
+                    Pusat Bantuan
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 4: Kontak & Jam Layanan */}
+            <div className="space-y-6">
+              <h4 className="text-white font-bold text-base uppercase tracking-wider">Kantor & Jam Layanan</h4>
+              <ul className="space-y-4 text-sm font-medium">
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
+                  <span>Yogyakarta, Indonesia</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
+                  <span>Jam Layanan:<br />Setiap Hari (08.00 - 17.00 WIB)</span>
+                </li>
+                <li className="flex items-center gap-2 text-xs font-bold text-[#d4af37] bg-white/5 border border-[#d4af37]/20 rounded-full px-3 py-1.5 w-fit">
+                  <HeartIcon className="w-3.5 h-3.5 fill-current text-[#d4af37]" />
+                  <span>Dibuat dengan cinta untuk Anda</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
-          <p className="text-center md:text-left">
-            © {new Date().getFullYear()} Adatara. Hak Cipta Dilindungi Undang-Undang.
-          </p>
+
+          <hr className="border-white/5 my-8" />
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium">
+            <p>
+              © {new Date().getFullYear()} Adatara. Hak Cipta Dilindungi Undang-Undang.
+            </p>
+            <p className="flex items-center gap-1 text-[#f5f5dc]/55">
+              Powered by <span className="text-white font-bold">Adatara Invitation</span>
+            </p>
+          </div>
         </div>
       </footer>
     </div>

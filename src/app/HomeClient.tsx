@@ -306,12 +306,19 @@ export default function HomeClient({
           opacity: 0.95;
         }
         .custom-btn-secondary {
-          background-color: transparent !important;
+          background-color: rgba(255, 255, 255, 0.4) !important;
+          backdrop-filter: blur(12px) !important;
+          -webkit-backdrop-filter: blur(12px) !important;
           color: #064e3b !important;
-          border-color: #064e3b33 !important;
+          border-color: rgba(6, 78, 59, 0.15) !important;
+          box-shadow: 0 8px 32px 0 rgba(6, 78, 59, 0.04) !important;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
         .custom-btn-secondary:hover {
-          background-color: #064e3b0d !important;
+          background-color: rgba(255, 255, 255, 0.6) !important;
+          border-color: rgba(6, 78, 59, 0.3) !important;
+          box-shadow: 0 8px 32px 0 rgba(6, 78, 59, 0.08) !important;
+          transform: translateY(-2px) !important;
         }
         .custom-card-btn {
           background-color: transparent !important;
@@ -347,17 +354,18 @@ export default function HomeClient({
         .custom-hero-title {
           font-family: '${settings.hero_title_font || "Playfair Display"}', serif !important;
           color: ${settings.hero_title_color || "#064e3b"} !important;
-          text-align: ${settings.hero_title_align || "left"} !important;
-          font-size: calc(${settings.hero_title_size || 56}px * 0.7) !important;
+          text-align: center !important;
+          font-size: calc(${settings.hero_title_size || 56}px * 0.55) !important;
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.06) !important;
         }
         @media (min-width: 640px) {
           .custom-hero-title {
-            font-size: calc(${settings.hero_title_size || 56}px * 0.85) !important;
+            font-size: calc(${settings.hero_title_size || 56}px * 0.75) !important;
           }
         }
         @media (min-width: 1024px) {
           .custom-hero-title {
+            text-align: ${settings.hero_title_align || "left"} !important;
             font-size: ${settings.hero_title_size || 56}px !important;
           }
         }
@@ -365,12 +373,13 @@ export default function HomeClient({
         .custom-hero-subtitle {
           font-family: '${settings.hero_subtitle_font || "Inter"}', sans-serif !important;
           color: ${settings.hero_subtitle_color || "#064e3b"} !important;
-          text-align: ${settings.hero_subtitle_align || "left"} !important;
-          font-size: calc(${settings.hero_subtitle_size || 16}px * 0.9) !important;
+          text-align: center !important;
+          font-size: calc(${settings.hero_subtitle_size || 16}px * 0.85) !important;
           text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
         }
         @media (min-width: 1024px) {
           .custom-hero-subtitle {
+            text-align: ${settings.hero_subtitle_align || "left"} !important;
             font-size: ${settings.hero_subtitle_size || 16}px !important;
           }
         }
@@ -495,12 +504,13 @@ export default function HomeClient({
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className={`lg:col-span-7 flex flex-col ${settings.hero_title_align === "center"
-                  ? "items-center text-center"
+              className={`lg:col-span-7 flex flex-col items-center text-center ${
+                settings.hero_title_align === "center"
+                  ? "lg:items-center lg:text-center"
                   : settings.hero_title_align === "right"
-                    ? "items-end text-right"
-                    : "items-start text-left"
-                }`}
+                    ? "lg:items-end lg:text-right"
+                    : "lg:items-start lg:text-left"
+              }`}
             >
               {/* Pill Badge */}
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black tracking-widest uppercase mb-6 select-none custom-badge">
@@ -931,20 +941,18 @@ export default function HomeClient({
             <p className="opacity-75 leading-relaxed custom-text-color font-medium">
               Adatara dirancang dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan momen kebahagiaan Anda.
             </p>
-          </motion.div>
-
-          <motion.div 
+          </motion.div>          <motion.div 
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10"
+            className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 relative z-10"
           >
             {/* Feature Card 1 */}
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div 
@@ -952,13 +960,13 @@ export default function HomeClient({
                 style={{ backgroundColor: settings.accent_color }}
               />
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                className="w-8 h-8 md:w-14 md:h-14 rounded-lg md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110 shrink-0"
                 style={{ backgroundColor: `${settings.text_color}08`, border: `1px solid ${settings.text_color}15`, color: settings.text_color }}
               >
-                <Layers className="w-7 h-7" />
+                <Layers className="w-4 h-4 md:w-7 md:h-7" />
               </div>
-              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Real-Time Template Builder</h4>
-              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+              <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Real-Time Template Builder</h4>
+              <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
                 Pilih dari 6 modul visual utama (Cover, Pembuka, Profil, Acara, Cerita/Galeri, RSVP). Edit teks, tata letak, warna, dan font secara instan.
               </p>
             </motion.div>
@@ -967,7 +975,7 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div 
@@ -975,13 +983,13 @@ export default function HomeClient({
                 style={{ backgroundColor: settings.accent_color }}
               />
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                className="w-8 h-8 md:w-14 md:h-14 rounded-lg md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110 shrink-0"
                 style={{ backgroundColor: `${settings.accent_color}08`, border: `1px solid ${settings.accent_color}15`, color: settings.accent_color }}
               >
-                <Music className="w-7 h-7" />
+                <Music className="w-4 h-4 md:w-7 md:h-7" />
               </div>
-              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Audio Latar & Galeri Media</h4>
-              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+              <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Audio Latar & Galeri Media</h4>
+              <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
                 Tambahkan musik romantis dari library kami atau unggah file MP3 Anda sendiri. Dukungan galeri foto berformat Grid, Masonry, Carousel, hingga Pinterest style.
               </p>
             </motion.div>
@@ -990,7 +998,7 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div 
@@ -998,13 +1006,13 @@ export default function HomeClient({
                 style={{ backgroundColor: settings.accent_color }}
               />
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                className="w-8 h-8 md:w-14 md:h-14 rounded-lg md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110 shrink-0"
                 style={{ backgroundColor: `${settings.text_color}08`, border: `1px solid ${settings.text_color}15`, color: settings.text_color }}
               >
-                <BellRing className="w-7 h-7" />
+                <BellRing className="w-4 h-4 md:w-7 md:h-7" />
               </div>
-              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">RSVP & Ucapan Real-Time</h4>
-              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+              <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">RSVP & Ucapan Real-Time</h4>
+              <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
                 Tamu dapat melakukan konfirmasi kehadiran secara instan. Anda mendapatkan daftar rekapitulasi kehadiran (RSVP) langsung dari dashboard.
               </p>
             </motion.div>
@@ -1013,7 +1021,7 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div 
@@ -1021,13 +1029,13 @@ export default function HomeClient({
                 style={{ backgroundColor: settings.accent_color }}
               />
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                className="w-8 h-8 md:w-14 md:h-14 rounded-lg md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110 shrink-0"
                 style={{ backgroundColor: `${settings.accent_color}08`, border: `1px solid ${settings.accent_color}15`, color: settings.accent_color }}
               >
-                <Gift className="w-7 h-7" />
+                <Gift className="w-4 h-4 md:w-7 md:h-7" />
               </div>
-              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Kado & Amplop Digital</h4>
-              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+              <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Kado & Amplop Digital</h4>
+              <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
                 Sediakan nomor rekening bank, e-wallet, atau barcode QRIS di dalam undangan untuk memudahkan tamu mengirimkan kado/amplop secara cashless.
               </p>
             </motion.div>
@@ -1036,7 +1044,7 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div 
@@ -1044,13 +1052,13 @@ export default function HomeClient({
                 style={{ backgroundColor: settings.accent_color }}
               />
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                className="w-8 h-8 md:w-14 md:h-14 rounded-lg md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110 shrink-0"
                 style={{ backgroundColor: `${settings.text_color}08`, border: `1px solid ${settings.text_color}15`, color: settings.text_color }}
               >
-                <MapPin className="w-7 h-7" />
+                <MapPin className="w-4 h-4 md:w-7 md:h-7" />
               </div>
-              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Petunjuk Lokasi & Kalender</h4>
-              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+              <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Petunjuk Lokasi & Kalender</h4>
+              <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
                 Tamu Anda tidak akan tersesat berkat peta interaktif Google Maps. Dilengkapi fitur pencatatan otomatis di Google Calendar.
               </p>
             </motion.div>
@@ -1059,7 +1067,7 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-3xl p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div 
@@ -1067,13 +1075,13 @@ export default function HomeClient({
                 style={{ backgroundColor: settings.accent_color }}
               />
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110"
+                className="w-8 h-8 md:w-14 md:h-14 rounded-lg md:rounded-2xl flex items-center justify-center mb-3 md:mb-6 transition-all duration-500 shadow-sm group-hover:rotate-6 group-hover:scale-110 shrink-0"
                 style={{ backgroundColor: `${settings.accent_color}08`, border: `1px solid ${settings.accent_color}15`, color: settings.accent_color }}
               >
-                <Clock className="w-7 h-7" />
+                <Clock className="w-4 h-4 md:w-7 md:h-7" />
               </div>
-              <h4 className="text-xl font-black mb-3 custom-text-color tracking-tight custom-feature-title">Countdown Hitung Mundur</h4>
-              <p className="opacity-75 text-sm leading-relaxed custom-text-color font-medium">
+              <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Countdown Hitung Mundur</h4>
+              <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
                 Tampilkan penghitung waktu mundur otomatis yang presisi hingga detik dimulainya acara utama untuk membangkitkan antusiasme tamu.
               </p>
             </motion.div>
@@ -1108,49 +1116,49 @@ export default function HomeClient({
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"
+            className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 items-stretch"
           >
             {/* Plan 1: Free */}
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="border rounded-3xl p-8 flex flex-col transition-all duration-500 bg-white/[0.02] backdrop-blur-md border-slate-800 hover:border-slate-600 hover:bg-white/[0.04] shadow-sm hover:shadow-2xl hover:shadow-black/20"
+              className="border rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col transition-all duration-500 bg-white/[0.02] backdrop-blur-md border-slate-800 hover:border-slate-600 hover:bg-white/[0.04] shadow-sm hover:shadow-2xl hover:shadow-black/20"
             >
               <div>
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-slate-800/60 text-slate-300 border border-slate-700/40 shadow-sm">
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-slate-800/60 text-slate-300 border border-slate-700/40 shadow-sm">
                   PAKET BASIC
                 </span>
-                <h4 className="text-4xl font-extrabold text-slate-300 mt-4">Rp 0</h4>
-                <p className="text-xs opacity-60 mt-1 text-[#f5f5dc]">Selamanya Gratis</p>
-                <p className="opacity-80 text-sm mt-6 text-[#f5f5dc]">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-slate-300 mt-2 md:mt-4">Rp 0</h4>
+                <p className="text-[9px] sm:text-xs opacity-60 mt-0.5 md:mt-1 text-[#f5f5dc]">Selamanya Gratis</p>
+                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
               </div>
 
-              <hr className="border-slate-800 my-8" />
+              <hr className="border-slate-800 my-4 md:my-8" />
 
-              <ul className="space-y-4 flex-1 text-sm text-[#f5f5dc]/80">
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-slate-500" />
+              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/80">
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-slate-500" />
                   Masa aktif undangan 3 hari
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-slate-500" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-slate-500" />
                   Maksimal 50 tamu undangan
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-slate-500" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-slate-500" />
                   Desain template dasar (Basic)
                 </li>
-                <li className="flex items-center gap-3 opacity-30">
-                  <span className="w-4 h-4 inline-flex items-center justify-center font-bold text-white">✕</span>
+                <li className="flex items-center gap-1.5 md:gap-3 opacity-30">
+                  <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-bold text-white">✕</span>
                   Tanpa kustom musik & galeri
                 </li>
-                <li className="flex items-center gap-3 opacity-30">
-                  <span className="w-4 h-4 inline-flex items-center justify-center font-bold text-white">✕</span>
+                <li className="flex items-center gap-1.5 md:gap-3 opacity-30">
+                  <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-bold text-white">✕</span>
                   Terdapat watermark brand Adatara
                 </li>
               </ul>
 
-              <Link href="/register?plan=basic" className="mt-8 w-full py-3 text-center rounded-xl font-bold transition-all border border-slate-800 bg-slate-900/10 text-slate-400 hover:bg-slate-800 hover:text-white">
+              <Link href="/register?plan=basic" className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-slate-800 bg-slate-900/10 text-slate-400 hover:bg-slate-800 hover:text-white">
                 Mulai Gratis
               </Link>
             </motion.div>
@@ -1159,55 +1167,55 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="border rounded-3xl p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+              className="border rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
             >
-              <div className="absolute top-0 right-8 -translate-y-1/2 text-emerald-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest bg-emerald-950 border border-emerald-800 shadow-sm">
+              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-emerald-300 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest bg-emerald-950 border border-emerald-800 shadow-sm">
                 Paling Populer
               </div>
 
               <div>
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-900/50 text-emerald-300 border border-emerald-800/40 shadow-sm">
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-emerald-900/50 text-emerald-300 border border-emerald-800/40 shadow-sm">
                   PAKET PREMIUM
                 </span>
-                <h4 className="text-4xl font-extrabold text-emerald-300 mt-4">Rp 99.000</h4>
-                <p className="text-xs opacity-75 mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
-                <p className="opacity-80 text-sm mt-6 text-[#f5f5dc]">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-300 mt-2 md:mt-4">Rp 99.000</h4>
+                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
+                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
               </div>
 
-              <hr className="border-emerald-900/30 my-8" />
+              <hr className="border-emerald-900/30 my-4 md:my-8" />
 
-              <ul className="space-y-4 flex-1 text-sm text-[#f5f5dc]/90">
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Masa aktif undangan selamanya
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Tamu undangan tak terbatas
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Bebas kustom musik latar & audio
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Galeri foto & video tak terbatas
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   RSVP & amplop digital cashless
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Bebas watermark brand Adatara
                 </li>
               </ul>
 
               <Link
                 href="/register?plan=premium"
-                className="mt-8 w-full py-3 text-center rounded-xl font-bold transition-all border border-emerald-700 bg-emerald-800/20 text-emerald-300 hover:bg-emerald-500 hover:text-[#063024] hover:shadow-lg shadow-emerald-500/10"
+                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-800/20 text-emerald-300 hover:bg-emerald-500 hover:text-[#063024] hover:shadow-lg shadow-emerald-500/10"
               >
-                Pilih Paket Premium
+                Pilih Premium
               </Link>
             </motion.div>
 
@@ -1215,47 +1223,47 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.01 }}
-              className="border-2 rounded-3xl p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-[#d4af37]/15 via-[#063024]/10 to-transparent backdrop-blur-md border-[#d4af37] hover:from-[#d4af37]/20 hover:shadow-[#d4af37]/15"
+              className="border-2 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-[#d4af37]/15 via-[#063024]/10 to-transparent backdrop-blur-md border-[#d4af37] hover:from-[#d4af37]/20 hover:shadow-[#d4af37]/15"
             >
-              <div className="absolute top-0 right-8 -translate-y-1/2 text-[#063024] text-[10px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-amber-400 to-[#d4af37] shadow-lg shadow-[#d4af37]/30 animate-pulse">
+              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[#063024] text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-amber-400 to-[#d4af37] shadow-lg shadow-[#d4af37]/30 animate-pulse">
                 Rekomendasi VIP
               </div>
 
               <div>
-                <span className="inline-block px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-[#063024] border border-amber-300/30 shadow-md">
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-[#063024] border border-amber-300/30 shadow-md">
                   PAKET SULTAN
                 </span>
-                <h4 className="text-4xl font-black text-[#d4af37] mt-4 drop-shadow-sm">Rp 149.000</h4>
-                <p className="text-xs opacity-75 mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
-                <p className="opacity-95 text-sm mt-6 text-[#f5f5dc] font-medium">Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.</p>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-black text-[#d4af37] mt-2 md:mt-4 drop-shadow-sm">Rp 149.000</h4>
+                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
+                <p className="opacity-95 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc] font-medium">Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.</p>
               </div>
 
-              <hr className="border-[#d4af37]/20 my-8" />
+              <hr className="border-[#d4af37]/20 my-4 md:my-8" />
 
-              <ul className="space-y-4 flex-1 text-sm text-white font-medium">
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-white font-medium">
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
                   Semua fitur paket PREMIUM
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
                   Subdomain kustom (.adatara.id/nama)
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
                   100 WhatsApp blast untuk undangan tamu
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-[#d4af37]" />
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
                   Prioritas bantuan admin 24/7
                 </li>
               </ul>
 
               <Link 
                 href="/register?plan=sultan" 
-                className="mt-8 w-full py-4 text-center rounded-xl font-black transition-all shadow-lg shadow-[#d4af37]/10 hover:shadow-[#d4af37]/25 bg-[#d4af37] text-[#063024] hover:bg-[#c5a030] hover:scale-[1.02]"
+                className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-[#d4af37]/10 hover:shadow-[#d4af37]/25 bg-[#d4af37] text-[#063024] hover:bg-[#c5a030] hover:scale-[1.02]"
               >
-                Pilih Paket Sultan
+                Pilih Sultan
               </Link>
             </motion.div>
           </motion.div>
