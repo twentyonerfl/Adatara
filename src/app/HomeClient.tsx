@@ -20,9 +20,7 @@ import {
   BellRing,
   Palette,
   Mail,
-  Search,
-  CreditCard,
-  FileText
+  Search
 } from "lucide-react";
 
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -404,7 +402,7 @@ export default function HomeClient({
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold opacity-80">
             <a href="#" className="custom-text-color font-bold transition-colors">Beranda</a>
-            <a href="#fitur" className="custom-text-color-hover transition-colors">Cara Order</a>
+            <a href="#cara-order" className="custom-text-color-hover transition-colors">Cara Order</a>
             <a href="#template" className="custom-text-color-hover transition-colors">Katalog</a>
             <a href="#fitur" className="custom-text-color-hover transition-colors">Fitur</a>
             <a href="#harga" className="custom-text-color-hover transition-colors">Paket Harga</a>
@@ -438,7 +436,7 @@ export default function HomeClient({
               style={{ backgroundColor: settings.bg_color }}
             >
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className="custom-text-color font-bold">Beranda</Link>
-              <a href="#fitur" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Cara Order</a>
+              <a href="#cara-order" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Cara Order</a>
               <a href="#template" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Katalog</a>
               <a href="#fitur" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Fitur</a>
               <a href="#harga" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Paket Harga</a>
@@ -691,41 +689,41 @@ export default function HomeClient({
       {/* CARA ORDER SECTION */}
       <section
         id="cara-order"
-        className="py-20 px-6 border-b custom-border-color transition-all relative overflow-hidden"
-        style={{ backgroundColor: "#f5f5dc" }}
+        className="py-24 px-6 bg-[#0b0e14] relative overflow-hidden"
       >
-        {/* Subtle background decoration */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.03] blur-[120px] pointer-events-none rounded-full" />
+        {/* Decorative background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.03] blur-3xl pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          {/* Header */}
-          <div className="flex flex-col mb-16 items-center">
-            <span className="text-xs font-extrabold custom-accent-color uppercase tracking-widest bg-emerald-950/5 border border-emerald-950/10 px-3.5 py-1.5 rounded-full">
-              Cara Order
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-extrabold text-[#d4af37] uppercase tracking-widest bg-[#d4af37]/10 px-4 py-1.5 rounded-full border border-[#d4af37]/20">
+              Langkah Pembuatan
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black mt-4 custom-text-color tracking-tight">
-              Hanya 3 Langkah Mudah
+            <h2 className="text-2xl sm:text-4xl font-black mt-4 text-white tracking-tight leading-tight">
+              Hanya 4 Langkah Mudah
             </h2>
-            <p className="text-sm opacity-70 mt-2 max-w-lg font-medium custom-text-color">
-              Proses pembuatan cepat dan instan tanpa perlu menunggu berhari-hari.
+            <p className="text-[#f5f5dc]/75 text-xs sm:text-sm mt-3 font-medium">
+              Buat undangan digital premium Anda sendiri dalam hitungan menit tanpa ribet.
             </p>
           </div>
 
-          {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative">
+          {/* Steps Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 relative">
+            {/* Connecting line for desktop/tablet */}
+            <div className="hidden lg:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-slate-800 via-[#d4af37]/45 to-slate-800 -translate-y-12 z-0" />
+
             {/* Step 1 */}
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 border border-[#064e3b]/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#d4af37]/50"
+              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
             >
-              <div className="w-16 h-16 rounded-2xl bg-[#064e3b] text-white flex items-center justify-center shadow-lg shadow-[#064e3b]/10 mb-6">
-                <Palette className="w-8 h-8 text-[#d4af37]" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-emerald-500/20 mb-5">
+                01
               </div>
-              <span className="text-xs font-black custom-accent-color uppercase tracking-wider mb-2">Langkah 1</span>
-              <h3 className="text-xl font-extrabold custom-text-color">Pilih Template</h3>
-              <p className="text-xs opacity-75 mt-3 text-center leading-relaxed custom-text-color">
-                Temukan desain undangan impian Anda dari katalog template premium kami yang elegan dan responsif.
+              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Pilih Template</h3>
+              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+                Temukan desain undangan digital terindah dan favorit Anda dari katalog lengkap kami.
               </p>
             </motion.div>
 
@@ -733,15 +731,14 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 border border-[#064e3b]/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#d4af37]/50"
+              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
             >
-              <div className="w-16 h-16 rounded-2xl bg-[#064e3b] text-white flex items-center justify-center shadow-lg shadow-[#064e3b]/10 mb-6">
-                <FileText className="w-8 h-8 text-[#d4af37]" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-amber-400 to-[#d4af37] flex items-center justify-center text-[#063024] font-black text-sm shadow-md shadow-amber-500/20 mb-5">
+                02
               </div>
-              <span className="text-xs font-black custom-accent-color uppercase tracking-wider mb-2">Langkah 2</span>
-              <h3 className="text-xl font-extrabold custom-text-color">Isi Data</h3>
-              <p className="text-xs opacity-75 mt-3 text-center leading-relaxed custom-text-color">
-                Masukkan detail acara seperti nama mempelai, lokasi map, tanggal, cerita cinta, dan galeri foto di editor kami.
+              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Isi Data</h3>
+              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+                Lengkapi seluruh informasi detail acara, profil mempelai, cerita cinta, dan galeri foto terbaik Anda.
               </p>
             </motion.div>
 
@@ -749,15 +746,29 @@ export default function HomeClient({
             <motion.div 
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="bg-white/40 border border-[#064e3b]/10 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center transition-all duration-300 shadow-sm hover:shadow-md hover:border-[#d4af37]/50"
+              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
             >
-              <div className="w-16 h-16 rounded-2xl bg-[#064e3b] text-white flex items-center justify-center shadow-lg shadow-[#064e3b]/10 mb-6">
-                <CreditCard className="w-8 h-8 text-[#d4af37]" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-emerald-500/20 mb-5">
+                03
               </div>
-              <span className="text-xs font-black custom-accent-color uppercase tracking-wider mb-2">Langkah 3</span>
-              <h3 className="text-xl font-extrabold custom-text-color">Payment & Selesai</h3>
-              <p className="text-xs opacity-75 mt-3 text-center leading-relaxed custom-text-color">
-                Lakukan pembayaran aman instan (QRIS/VA), dan link undangan digital Anda langsung aktif untuk disebarkan!
+              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Payment</h3>
+              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+                Lakukan pembayaran aman dan instan untuk mengaktifkan seluruh fitur premium undangan Anda.
+              </p>
+            </motion.div>
+
+            {/* Step 4 */}
+            <motion.div 
+              variants={itemVariants}
+              whileHover={{ y: -8 }}
+              className="bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center relative z-10 hover:bg-white/[0.05] hover:border-[#d4af37]/50 transition-all duration-300 shadow-xl"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-purple-500/20 mb-5">
+                04
+              </div>
+              <h3 className="text-base sm:text-lg font-bold text-white mb-2">Selesai</h3>
+              <p className="text-[11px] sm:text-xs text-[#f5f5dc]/70 font-medium">
+                Undangan siap digunakan dan dibagikan secara instan kepada seluruh keluarga dan kerabat terdekat!
               </p>
             </motion.div>
           </div>
