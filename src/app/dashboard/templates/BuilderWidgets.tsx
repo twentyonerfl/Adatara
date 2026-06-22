@@ -275,16 +275,62 @@ export function FileUploader({
   };
 
   const uploadFile = async (file: File) => {
-    // Batas ukuran file 4.5MB untuk kompatibilitas Vercel
-    const MAX_SIZE = 4.5 * 1024 * 1024;
+    // Batas ukuran file 10MB
+    const MAX_SIZE = 10 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      setError("Ukuran file terlalu besar. Maksimal ukuran file adalah 4.5 MB.");
+      setError("Ukuran file terlalu besar. Maksimal ukuran file adalah 10 MB.");
       return;
     }
 
     setIsUploading(true);
     setError(null);
 
+    // Coba lakukan Direct Upload ke Cloudinary menggunakan Signature (Bypass Vercel 4.5MB limit)
+    try {
+      const sigRes = await fetch("/api/upload/signature", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+
+      if (sigRes.ok) {
+        const sigData = await sigRes.json();
+        if (sigData.success && sigData.signature) {
+          const directFormData = new FormData();
+          directFormData.append("file", file);
+          directFormData.append("api_key", sigData.apiKey);
+          directFormData.append("timestamp", sigData.timestamp.toString());
+          directFormData.append("signature", sigData.signature);
+          directFormData.append("folder", sigData.folder);
+
+          const uploadRes = await fetch(
+            `https://api.cloudinary.com/v1_1/${sigData.cloudName}/auto/upload`,
+            {
+              method: "POST",
+              body: directFormData,
+            }
+          );
+
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json();
+            if (uploadData.secure_url) {
+              onChange(uploadData.secure_url);
+              setIsUploading(false);
+              return;
+            }
+          } else {
+            const errData = await uploadRes.json().catch(() => ({}));
+            console.warn("Direct Cloudinary upload failed response:", errData);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Direct upload error, falling back to server upload:", err);
+    }
+
+    // Fallback: Mengunggah lewat Server API Route (terbatas 4.5MB di Vercel, tetapi tanpa batas di Localhost)
     const formData = new FormData();
     formData.append("file", file);
 
