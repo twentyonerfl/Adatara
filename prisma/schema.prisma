@@ -278,6 +278,7 @@ model HomepageSetting {
   stats_bg_color     String   @default("#064e3b")
 
   emulator_covers Json     // Array of slides: [{image_url, badge, title, subtitle}]
+  packages_config Json?    // Dynamic package settings
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 

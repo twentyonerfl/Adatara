@@ -3,10 +3,7 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import fs from "fs/promises";
-import path from "path";
-
-const configPath = path.join(process.cwd(), "src/config/packages.json");
+import { savePackagesConfig } from "@/lib/packages";
 
 export async function savePackagesAction(updatedPackages: any) {
   const session = await auth.api.getSession({
@@ -24,13 +21,17 @@ export async function savePackagesAction(updatedPackages: any) {
       if (typeof pkg.price !== "number" || pkg.price < 0) {
         return { error: `Harga paket ${key} tidak valid.` };
       }
-      if (!pkg.name || !pkg.sub || !pkg.desc || !Array.isArray(pkg.features)) {
+      if (!pkg.name || !pkg.sub || !Array.isArray(pkg.features)) {
         return { error: `Format paket ${key} tidak lengkap.` };
+      }
+      // Ensure desc defaults to empty string if missing
+      if (pkg.desc === undefined || pkg.desc === null) {
+        pkg.desc = "";
       }
     }
 
-    // Write to packages.json
-    await fs.writeFile(configPath, JSON.stringify(updatedPackages, null, 2), "utf-8");
+    // Save package configuration to DB & fallback to file
+    await savePackagesConfig(updatedPackages);
 
     // Revalidate landing page and packages page
     revalidatePath("/");

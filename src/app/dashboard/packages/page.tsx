@@ -2,9 +2,8 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import fs from "fs/promises";
-import path from "path";
 import PackagesClient from "./PackagesClient";
+import { getPackagesConfig } from "@/lib/packages";
 
 export const revalidate = 0; // Disable server cache for real-time stats
 
@@ -17,15 +16,8 @@ export default async function PackagesPageAdmin() {
     redirect("/login");
   }
 
-  // Load packages.json
-  let packages = {};
-  try {
-    const configPath = path.join(process.cwd(), "src/config/packages.json");
-    const configRaw = await fs.readFile(configPath, "utf-8");
-    packages = JSON.parse(configRaw);
-  } catch (err) {
-    console.error("Gagal membaca config packages.json: ", err);
-  }
+  // Load packages config
+  const packages = await getPackagesConfig();
 
   // Count sales statistics dynamically by successful transactions nominals
   const transactions = await db.transaction.findMany({

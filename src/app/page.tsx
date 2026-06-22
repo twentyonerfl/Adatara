@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import HomeClient from "./HomeClient";
+import { getPackagesConfig } from "@/lib/packages";
 
 export const revalidate = 0; // Disable server cache for real-time listings
 
@@ -126,17 +127,8 @@ export default async function Home() {
     console.error("Gagal memuat setting homepage dari database: ", err);
   }
 
-  // Load packages.json
-  let packages = null;
-  try {
-    const fs = require("fs/promises");
-    const path = require("path");
-    const configPath = path.join(process.cwd(), "src/config/packages.json");
-    const configRaw = await fs.readFile(configPath, "utf-8");
-    packages = JSON.parse(configRaw);
-  } catch (err) {
-    console.error("Gagal membaca config packages.json: ", err);
-  }
+  // Load packages config from DB or fallback
+  const packages = await getPackagesConfig();
 
   return (
     <HomeClient 

@@ -6,15 +6,14 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { getPackagesConfig } from "@/lib/packages";
 
 import fs from "fs/promises";
 import path from "path";
 
 async function getPackagePrices() {
   try {
-    const configPath = path.join(process.cwd(), "src/config/packages.json");
-    const configRaw = await fs.readFile(configPath, "utf-8");
-    const config = JSON.parse(configRaw);
+    const config = await getPackagesConfig();
     return {
       PREMIUM: config.PREMIUM.price,
       SULTAN: config.SULTAN.price,
@@ -25,7 +24,7 @@ async function getPackagePrices() {
       PLATINUM: config.EXCLUSIVE.price
     };
   } catch (err) {
-    console.error("Gagal membaca config packages.json, using defaults: ", err);
+    console.error("Gagal memuat config packages: ", err);
     return {
       PREMIUM: 99000,
       SULTAN: 149000,
