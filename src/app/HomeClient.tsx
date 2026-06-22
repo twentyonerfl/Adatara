@@ -1244,30 +1244,30 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col transition-all duration-500 bg-white/[0.02] backdrop-blur-md border-slate-800 hover:border-slate-600 hover:bg-white/[0.04] shadow-sm hover:shadow-2xl hover:shadow-black/20"
+              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col transition-all duration-500 bg-emerald-950/[0.02] backdrop-blur-md border-emerald-950/60 hover:border-emerald-900/40 hover:bg-emerald-950/[0.05] shadow-sm hover:shadow-2xl hover:shadow-emerald-950/20"
             >
               <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-slate-800/60 text-slate-300 border border-slate-700/40 shadow-sm">
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-emerald-950/80 text-emerald-600/80 border border-emerald-900/20 shadow-sm">
                   PAKET BASIC
                 </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-slate-300 mt-2 md:mt-4">Rp 0</h4>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-800 mt-2 md:mt-4">Rp 0</h4>
                 <p className="text-[9px] sm:text-xs opacity-60 mt-0.5 md:mt-1 text-[#f5f5dc]">Selamanya Gratis</p>
-                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
+                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/70">Cocok untuk mencoba fitur builder dasar kami sebelum memutuskan berlangganan.</p>
               </div>
 
-              <hr className="border-slate-800 my-4 md:my-8" />
+              <hr className="border-emerald-950/40 my-4 md:my-8" />
 
-              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/80">
+              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/60">
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-slate-500" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-900/60" />
                   Masa aktif undangan 3 hari
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-slate-500" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-900/60" />
                   Maksimal 50 tamu undangan
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-slate-500" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-900/60" />
                   Desain template dasar (Basic)
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3 opacity-30">
@@ -1280,7 +1280,7 @@ export default function HomeClient({
                 </li>
               </ul>
 
-              <Link href="/register?plan=basic" className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-slate-800 bg-slate-900/10 text-slate-400 hover:bg-slate-800 hover:text-white">
+              <Link href="/register?plan=basic" className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-900 bg-emerald-950/10 text-emerald-600/80 hover:bg-emerald-900/10 hover:text-emerald-500">
                 Mulai Gratis
               </Link>
             </motion.div>
@@ -1299,43 +1299,43 @@ export default function HomeClient({
                 <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-emerald-900/50 text-emerald-300 border border-emerald-800/40 shadow-sm">
                   PAKET PREMIUM
                 </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-300 mt-2 md:mt-4">Rp 99.000</h4>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold text-emerald-400 mt-2 md:mt-4">Rp 99.000</h4>
                 <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
-                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
+                <p className="opacity-80 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc]/80">Fitur terlengkap untuk menghadirkan undangan yang elegan dengan ornamen terbaik.</p>
               </div>
 
               <hr className="border-emerald-900/30 my-4 md:my-8" />
 
               <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                   Masa aktif undangan selamanya
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                   Tamu undangan tak terbatas
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                   Bebas kustom musik latar & audio
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                   Galeri foto & video tak terbatas
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                   RSVP & amplop digital cashless
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
                   Bebas watermark brand Adatara
                 </li>
               </ul>
 
               <Link
                 href="/register?plan=premium"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-800/20 text-emerald-300 hover:bg-emerald-500 hover:text-[#063024] hover:shadow-lg shadow-emerald-500/10"
+                className="mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200"
               >
                 Pilih Premium
               </Link>
@@ -1345,45 +1345,45 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.01 }}
-              className="border-2 rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-[#d4af37]/15 via-[#063024]/10 to-transparent backdrop-blur-md border-[#d4af37] hover:from-[#d4af37]/20 hover:shadow-[#d4af37]/15"
+              className="border-2 rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-emerald-500/10 via-[#063024]/10 to-transparent backdrop-blur-md border-emerald-600 hover:from-emerald-500/15 hover:shadow-emerald-600/15"
             >
-              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[#063024] text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-amber-400 to-[#d4af37] shadow-lg shadow-[#d4af37]/30 animate-pulse">
+              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[#063024] text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-emerald-400 to-emerald-500 shadow-lg shadow-emerald-500/30 animate-pulse">
                 Rekomendasi VIP
               </div>
 
               <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-[#063024] border border-amber-300/30 shadow-md">
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 text-white border border-emerald-500/30 shadow-md">
                   PAKET SULTAN
                 </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-black text-[#d4af37] mt-2 md:mt-4 drop-shadow-sm">Rp 149.000</h4>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-black text-emerald-300 mt-2 md:mt-4 drop-shadow-sm">Rp 149.000</h4>
                 <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
                 <p className="opacity-95 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc] font-medium">Layanan ekstra VIP untuk Anda yang menginginkan integrasi pesan WhatsApp otomatis.</p>
               </div>
 
-              <hr className="border-[#d4af37]/20 my-4 md:my-8" />
+              <hr className="border-emerald-500/20 my-4 md:my-8" />
 
               <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-white font-medium">
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Semua fitur paket PREMIUM
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Subdomain kustom (.adatara.id/nama)
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   100 WhatsApp blast untuk undangan tamu
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-[#d4af37]" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
                   Prioritas bantuan admin 24/7
                 </li>
               </ul>
 
               <Link
                 href="/register?plan=sultan"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-[#d4af37]/10 hover:shadow-[#d4af37]/25 bg-[#d4af37] text-[#063024] hover:bg-[#c5a030] hover:scale-[1.02]"
+                className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/25 bg-emerald-600 text-[#063024] hover:bg-emerald-500 hover:scale-[1.02]"
               >
                 Pilih Sultan
               </Link>
@@ -1393,49 +1393,49 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.01 }}
-              className="border-2 rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-purple-950/20 via-[#063024]/10 to-transparent backdrop-blur-md border-purple-500 hover:from-purple-900/25 hover:shadow-purple-500/20"
+              className="border-2 rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-emerald-500/20 via-[#063024]/10 to-transparent backdrop-blur-md border-emerald-400 hover:from-emerald-900/25 hover:shadow-emerald-400/20"
             >
-              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-white text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/30 animate-pulse">
+              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-white text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-emerald-400 to-emerald-300 shadow-lg shadow-emerald-500/30 animate-pulse">
                 Terima Beres
               </div>
 
               <div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-gradient-to-r from-purple-500 to-indigo-500 text-white border border-purple-400/30 shadow-md">
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-gradient-to-r from-emerald-400 to-emerald-300 text-[#063024] border border-emerald-300/30 shadow-md">
                   PAKET EXCLUSIVE
                 </span>
-                <h4 className="text-base sm:text-2xl md:text-4xl font-black text-purple-300 mt-2 md:mt-4 drop-shadow-sm">Rp 299.000</h4>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-black text-emerald-300 mt-2 md:mt-4 drop-shadow-sm">Rp 299.000</h4>
                 <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
                 <p className="opacity-95 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc] font-medium">Layanan premium terima beres. Tim kami yang akan menginput data dan mendesain undangan Anda sepenuhnya.</p>
               </div>
 
-              <hr className="border-purple-500/20 my-4 md:my-8" />
+              <hr className="border-emerald-400/20 my-4 md:my-8" />
 
               <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-white font-medium">
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-300" />
                   Semua fitur paket SULTAN
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-300" />
                   Pembuatan dibantu desainer kami
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-300" />
                   Revisi tanpa batas sepuasnya
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-300" />
                   WhatsApp Blast tak terbatas
                 </li>
                 <li className="flex items-center gap-1.5 md:gap-3">
-                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-emerald-300" />
                   Kustom domain pribadi (.com/.id)
                 </li>
               </ul>
 
               <Link
                 href="/register?plan=exclusive"
-                className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-purple-500/10 hover:shadow-purple-500/25 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:opacity-90 hover:scale-[1.02]"
+                className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-emerald-400/10 hover:shadow-emerald-400/25 bg-gradient-to-r from-emerald-400 to-emerald-300 text-[#063024] hover:opacity-90 hover:scale-[1.02]"
               >
                 Pilih Exclusive
               </Link>
