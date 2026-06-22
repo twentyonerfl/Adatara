@@ -161,7 +161,7 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
       case "slate": return "border-slate-600/20 shadow-sm";
       case "emerald": return "border-[#d4af37] ring-1 ring-[#d4af37]/35 shadow-[#d4af37]/5";
       case "amber": return "border-amber-600/35 ring-1 ring-amber-600/25";
-      case "purple": return "border-rose-600/35 ring-1 ring-rose-600/25";
+      case "purple": return "border-[#064e3b]/10";
       default: return "border-[#064e3b]/10";
     }
   };
@@ -171,7 +171,7 @@ export default function PackagesClient({ initialPackages, salesStats }: Packages
       case "slate": return "bg-slate-600 text-white";
       case "emerald": return "bg-emerald-700 text-white";
       case "amber": return "bg-amber-600 text-white";
-      case "purple": return "bg-rose-700 text-white";
+      case "purple": return "bg-[#500010] text-[#ffe4e6]";
       default: return "bg-[#064e3b] text-white";
     }
   };
