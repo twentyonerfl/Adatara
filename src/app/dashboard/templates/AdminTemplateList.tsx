@@ -195,21 +195,37 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
             return (
               <div key={t.id}
                 className="group bg-white border border-[#064e3b]/5 hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all duration-300">
+                {/* Badges Header Bar */}
+                <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
+                  {/* Package Tier Badge */}
+                  <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${t.paket === "EXCLUSIVE"
+                      ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
+                      : t.paket === "SULTAN"
+                        ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                        : t.paket === "PREMIUM"
+                          ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
+                          : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                    }`}>
+                    {t.paket || "BASIC"}
+                  </span>
+
+                  <div className="flex items-center gap-1">
+                    {/* Category Badge */}
+                    <span className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
+                      {t.kategori || "—"}
+                    </span>
+
+                    {/* Status Badge */}
+                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold border uppercase tracking-wider ${t.status === "PUBLISHED"
+                        ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                        : "bg-amber-50 border-amber-200 text-amber-800"
+                      }`}>{t.status}</span>
+                  </div>
+                </div>
+
                 {/* Thumbnail / Live Cover Preview */}
                 <div className="relative w-full aspect-square bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
-                  {/* Package Tier Badge Overlay */}
-                  <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
-                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${t.paket === "EXCLUSIVE"
-                        ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
-                        : t.paket === "SULTAN"
-                          ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
-                          : t.paket === "PREMIUM"
-                            ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
-                            : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
-                      }`}>
-                      {t.paket || "BASIC"}
-                    </span>
-                  </div>                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
+                  {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
@@ -219,22 +235,11 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                       <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                     )}
                   </div>
-                  {/* Status Overlay */}
-                  <div className="absolute top-2 right-2 z-20">
-                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold border uppercase tracking-wider ${t.status === "PUBLISHED"
-                        ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-                        : "bg-amber-50 border-amber-200 text-amber-800"
-                      }`}>{t.status}</span>
-                  </div>
                 </div>
 
                 {/* Body */}
                 <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
                   <div className="w-full text-center">
-                    {/* Category Label */}
-                    <span className="text-[7.5px] font-black uppercase tracking-wider text-[#d4af37] block mb-0.5">
-                      {t.kategori || "—"}
-                    </span>
                     {/* Title */}
                     <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full py-0.5">{t.nama_template}</h4>
                   </div>

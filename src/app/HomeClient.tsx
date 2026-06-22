@@ -1008,31 +1008,30 @@ export default function HomeClient({
                     key={template.id}
                     className="group bg-white border custom-border-color hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
                   >
+                    {/* Badges Header Bar */}
+                    <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
+                      {/* Package Tier Badge */}
+                      <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
+                        ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
+                        : template.paket === "SULTAN"
+                          ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                          : template.paket === "PREMIUM"
+                            ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
+                            : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                        }`}>
+                        {template.paket || "BASIC"}
+                      </span>
+
+                      {/* Category Badge */}
+                      <span className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
+                        {template.kategori || "—"}
+                      </span>
+                    </div>
+
                     <div
-                      className="w-full aspect-square overflow-hidden relative rounded-t-2xl flex items-center justify-center p-2.5"
+                      className="w-full aspect-square overflow-hidden relative flex items-center justify-center p-2.5"
                       style={{ backgroundColor: `${settings.text_color}08` }}
                     >
-                      {/* Package Tier Badge Overlay */}
-                      <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
-                        <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
-                          ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
-                          : template.paket === "SULTAN"
-                            ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
-                            : template.paket === "PREMIUM"
-                              ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
-                              : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
-                          }`}>
-                          {template.paket || "BASIC"}
-                        </span>
-                      </div>
-
-                      {/* Category Badge Overlay - Premium Glassmorphism */}
-                      <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max">
-                        <span className="px-2 py-0.5 rounded-full text-[6px] font-black uppercase tracking-wider bg-white/80 backdrop-blur-md text-[#064e3b] border border-white/40 shadow-sm">
-                          {template.kategori}
-                        </span>
-                      </div>
-
                       {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
                       <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                         {(() => {
