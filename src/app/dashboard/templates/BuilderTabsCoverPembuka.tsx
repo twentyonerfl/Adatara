@@ -939,6 +939,9 @@ function YoutubeMusicLoader({
           {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : "Muat"}
         </button>
       </form>
+      <p className="text-[9px] text-[#064e3b]/55 leading-normal text-left font-semibold">
+        ⚠️ <strong className="text-red-700">Penting untuk iOS (iPhone):</strong> Lagu dari YouTube tidak dapat diputar otomatis di perangkat iOS karena kebijakan keamanan Safari. Gunakan <em>iTunes Library</em> atau <em>Upload MP3</em> kustom agar musik lancar di semua perangkat.
+      </p>
 
       {error && (
         <p className="text-[9px] font-bold text-red-600 bg-red-50 border border-red-100 rounded-lg px-2 py-0.5">
