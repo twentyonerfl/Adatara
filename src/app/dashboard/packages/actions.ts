@@ -19,11 +19,8 @@ export async function savePackagesAction(updatedPackages: any) {
 
   try {
     // Validate inputs
-    for (const key of ["BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"]) {
+    for (const key of Object.keys(updatedPackages)) {
       const pkg = updatedPackages[key];
-      if (!pkg) {
-        return { error: `Paket ${key} tidak ditemukan dalam data update.` };
-      }
       if (typeof pkg.price !== "number" || pkg.price < 0) {
         return { error: `Harga paket ${key} tidak valid.` };
       }

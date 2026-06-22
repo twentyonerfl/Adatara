@@ -10,7 +10,10 @@
       "Desain template dasar (Basic)",
       "Tanpa kustom musik & galeri",
       "Terdapat watermark brand Adatara"
-    ]
+    ],
+    "badgeText": "",
+    "badgeStyle": "slate",
+    "buttonText": "Mulai Gratis"
   },
   "PREMIUM": {
     "price": 99000,
@@ -24,7 +27,10 @@
       "Galeri foto & video tak terbatas",
       "RSVP & amplop digital cashless",
       "Bebas watermark brand Adatara"
-    ]
+    ],
+    "badgeText": "Paling Populer",
+    "badgeStyle": "emerald",
+    "buttonText": "Pilih Premium"
   },
   "SULTAN": {
     "price": 149000,
@@ -36,7 +42,10 @@
       "Subdomain kustom (.adatara.id/nama)",
       "100 WhatsApp blast untuk undangan tamu",
       "Prioritas bantuan admin 24/7"
-    ]
+    ],
+    "badgeText": "Rekomendasi VIP",
+    "badgeStyle": "amber",
+    "buttonText": "Pilih Sultan"
   },
   "EXCLUSIVE": {
     "price": 299000,
@@ -49,6 +58,9 @@
       "Revisi tanpa batas sepuasnya",
       "WhatsApp Blast tak terbatas",
       "Kustom domain pribadi (.com/.id)"
-    ]
+    ],
+    "badgeText": "Terima Beres",
+    "badgeStyle": "purple",
+    "buttonText": "Pilih Exclusive"
   }
 }

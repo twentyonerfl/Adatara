@@ -1298,26 +1298,25 @@ export default function HomeClient({
             viewport={{ once: true, margin: "-50px" }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 items-stretch"
           >
-            {["BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((key) => {
+            {Object.keys(activePackages).map((key) => {
               const pkg = activePackages[key];
               if (!pkg) return null;
               
-              const isPopular = key === "PREMIUM";
-              const isBasic = key === "BASIC";
-              const isSultan = key === "SULTAN";
-              const isExclusive = key === "EXCLUSIVE";
+              const isPopular = pkg.badgeStyle === "emerald";
+              const isBasic = pkg.badgeStyle === "slate";
+              const isSultan = pkg.badgeStyle === "amber";
+              const isExclusive = pkg.badgeStyle === "purple";
 
-              let badgeText = "";
+              const badgeText = pkg.badgeText || "";
               let badgeColorClass = "";
-              if (isPopular) {
-                badgeText = "Paling Populer";
+              if (pkg.badgeStyle === "emerald") {
                 badgeColorClass = "text-emerald-300 bg-emerald-950 border border-emerald-800";
-              } else if (isSultan) {
-                badgeText = "Rekomendasi VIP";
+              } else if (pkg.badgeStyle === "amber") {
                 badgeColorClass = "text-amber-300 bg-amber-950 border border-amber-800";
-              } else if (isExclusive) {
-                badgeText = "Terima Beres";
+              } else if (pkg.badgeStyle === "purple") {
                 badgeColorClass = "text-purple-300 bg-purple-950 border border-purple-800";
+              } else {
+                badgeColorClass = "text-slate-300 bg-slate-950 border border-slate-800";
               }
 
               return (
@@ -1352,7 +1351,7 @@ export default function HomeClient({
                   <hr className="border-emerald-900/30 my-4 md:my-8" />
 
                   <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-[#f5f5dc]/90">
-                    {pkg.features.map((feat: string, fIdx: number) => {
+                    {(pkg.features || []).map((feat: string, fIdx: number) => {
                       const isCrossed = feat.startsWith("✕ ") || feat.startsWith("Tanpa ") || feat.startsWith("Terdapat ");
                       return (
                         <li key={fIdx} className={`flex items-center gap-1.5 md:gap-3 ${isCrossed ? "opacity-35" : ""}`}>
@@ -1376,7 +1375,7 @@ export default function HomeClient({
                       "border-purple-600 bg-purple-500/10 text-purple-400 hover:bg-purple-600/30 hover:text-purple-200"
                     }`}
                   >
-                    {isBasic ? "Mulai Gratis" : `Pilih ${pkg.name.split(" ").slice(1).join(" ")}`}
+                    {pkg.buttonText || (isBasic ? "Mulai Gratis" : "Pilih Paket")}
                   </Link>
                 </motion.div>
               );
