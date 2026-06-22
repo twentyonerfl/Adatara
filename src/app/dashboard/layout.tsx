@@ -37,14 +37,13 @@ export default async function DashboardLayout({
       {/* SIDEBAR */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/10 bg-[#064e3b] md:sticky md:top-0 md:h-screen flex flex-col shrink-0 shadow-lg shadow-[#064e3b]/20">
         {/* Logo */}
-        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-black/15">
-          <Link href="/dashboard" className="flex items-center gap-2 select-none">
+        <div className="p-6 border-b border-white/10 flex items-center justify-center bg-black/15">
+          <Link href="/dashboard" className="flex items-center justify-center select-none">
             <img
               src="/logo-white.png"
               alt="Adatara Logo"
               className="h-8 w-auto object-contain"
             />
-            <span className="font-black text-lg tracking-wider text-white">Panel</span>
           </Link>
         </div>
 
