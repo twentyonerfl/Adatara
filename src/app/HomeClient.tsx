@@ -511,7 +511,7 @@ export default function HomeClient({
 
         {/* HERO SECTION */}
         <section className="relative pt-8 pb-12 sm:pt-12 sm:pb-24 px-4 sm:px-6 max-w-7xl mx-auto z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             {/* Left Column (Hero Content) */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -536,7 +536,7 @@ export default function HomeClient({
               />
 
               {/* Subtitle / Paragraph */}
-              <p className="text-sm sm:text-base opacity-75 max-w-xl leading-relaxed mb-8 font-medium custom-hero-subtitle">
+              <p className="text-sm sm:text-base opacity-75 max-w-xl leading-relaxed mb-4 lg:mb-8 font-medium custom-hero-subtitle">
                 {settings.hero_subtitle}
               </p>
 
