@@ -263,12 +263,12 @@ export function TemplateListPublic({
                 exit={{ opacity: 0, y: 12 }}
                 transition={{ duration: 0.4 }}
                 key={template.id}
-                className="group bg-white/70 backdrop-blur-md border border-[#064e3b]/10 hover:border-[#d4af37]/60 hover:-translate-y-2 rounded-3xl overflow-hidden flex flex-col transition-all duration-500 shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:bg-white cursor-pointer"
+                className="group bg-white border border-[#064e3b]/10 hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer"
               >
                 {/* Badges Header Bar */}
-                <div className="px-3.5 py-2.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
+                <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
                   {/* Package Tier Badge */}
-                  <span className={`px-2 py-0.5 rounded-full text-[6px] sm:text-[8px] font-black uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
+                  <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
                       ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
                       : template.paket === "SULTAN"
                         ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
@@ -280,15 +280,15 @@ export function TemplateListPublic({
                   </span>
 
                   {/* Category Badge */}
-                  <span className="px-2 py-0.5 rounded-full text-[6px] sm:text-[7.5px] font-black uppercase tracking-widest bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
+                  <span className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
                     {template.kategori || "—"}
                   </span>
                 </div>
 
                 {/* Thumbnail / Live Cover Preview Container */}
-                <div className="w-full aspect-square overflow-hidden relative bg-gradient-to-b from-[#064e3b]/[0.03] to-[#064e3b]/[0.01] flex items-center justify-center p-3.5">
-                  {/* Cover Preview smartphone bezel wrapper */}
-                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-lg border-[3px] border-[#064e3b]/80 rounded-[14px] transition-transform duration-700 ease-out group-hover:scale-[1.05] ring-2 ring-[#064e3b]/10">
+                <div className="w-full aspect-square overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
+                  {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
+                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
                     ) : template.thumbnail ? (
@@ -304,24 +304,21 @@ export function TemplateListPublic({
                 </div>
 
                 {/* Body */}
-                <div className="p-3.5 sm:p-4 flex flex-col justify-between bg-white border-t border-[#064e3b]/5 flex-grow">
+                <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
                   {/* Title */}
-                  <div className="text-center">
-                    <h4 className="text-[11px] sm:text-sm font-black text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-snug tracking-wide line-clamp-1">
+                  <div className="w-full text-center">
+                    <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
                       {template.nama_template}
                     </h4>
-                    <p className="text-[9px] sm:text-[10px] opacity-60 text-[#064e3b] mt-1 font-medium">
-                      Desain {template.kategori}
-                    </p>
                   </div>
 
                   {/* Action */}
                   <button
                     onClick={() => handleOpenModal(template)}
-                    className="mt-3.5 w-full py-2 bg-[#064e3b]/5 hover:bg-[#064e3b] text-[#064e3b] hover:text-white font-extrabold text-[9px] sm:text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all duration-300 rounded-xl border border-[#064e3b]/10 hover:border-[#064e3b] shadow-sm tracking-wider uppercase"
+                    className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border border-[#064e3b]/15 hover:border-[#064e3b] bg-transparent text-[#064e3b] hover:bg-[#064e3b] hover:text-white flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase"
                   >
                     Buat Undangan
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    <ArrowRight className="w-2.5 h-2.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </button>
                 </div>
               </motion.div>
