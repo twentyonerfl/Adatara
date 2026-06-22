@@ -1111,7 +1111,7 @@ export default function HomeClient({
             className="text-center max-w-3xl mx-auto mb-16 relative z-10"
           >
             <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
-              <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Fitur Unggulan
+              Fitur Unggulan
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
               Semua yang Anda Butuhkan untuk Undangan Sempurna
@@ -1281,7 +1281,7 @@ export default function HomeClient({
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#d4af37] bg-[#d4af37]/10 px-4 py-1.5 rounded-full border border-[#d4af37]/20">
-              <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Paket Harga
+              Paket Harga
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 text-white tracking-tight leading-tight">
               Investasi Kecil untuk Momen Terindah
