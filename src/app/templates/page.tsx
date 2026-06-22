@@ -64,24 +64,24 @@ export default async function TemplatesPublicPage() {
     orderBy: { nama: "asc" },
   });
 
-  const categories = categoriesDb.length > 0 
+  const categories = categoriesDb.length > 0
     ? ["Semua", ...categoriesDb.map(c => c.nama)]
     : [
-        "Semua",
-        "Keagamaan",
-        "Aqiqah & Kelahiran",
-        "Bisnis & Promosi",
-        "Hiburan & Event",
-        "Khitanan",
-        "Komunitas & Reuni",
-        "Lamaran & Pertunangan",
-        "Pernikahan",
-        "Resepsi Pernikahan",
-        "Seminar & Workshop",
-        "Syukuran Keluarga",
-        "Ulang Tahun",
-        "Wisuda & Kelulusan"
-      ];
+      "Semua",
+      "Keagamaan",
+      "Aqiqah & Kelahiran",
+      "Bisnis & Promosi",
+      "Hiburan & Event",
+      "Khitanan",
+      "Komunitas & Reuni",
+      "Lamaran & Pertunangan",
+      "Pernikahan",
+      "Resepsi Pernikahan",
+      "Seminar & Workshop",
+      "Syukuran Keluarga",
+      "Ulang Tahun",
+      "Wisuda & Kelulusan"
+    ];
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f5f5dc] text-[#064e3b] font-sans">
@@ -123,10 +123,10 @@ export default async function TemplatesPublicPage() {
       <footer className="relative overflow-hidden bg-gradient-to-b from-[#05291e] to-[#031c14] text-[#f5f5dc]/70 border-t border-[#064e3b]/40 pt-20 pb-10 px-6">
         {/* Subtle decorative glow */}
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
-        
+
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            
+
             {/* Column 1: Brand Info */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 select-none">
@@ -140,24 +140,24 @@ export default async function TemplatesPublicPage() {
                 Platform pembuatan undangan digital premium terbaik di Indonesia. Hadirkan momen terindah Anda secara elegan, cepat, dan ramah lingkungan.
               </p>
               <div className="flex items-center gap-3">
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
-                  rel="noreferrer" 
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
                   <InstagramIcon className="w-5 h-5" />
                 </a>
-                <a 
-                  href="https://wa.me" 
-                  target="_blank" 
-                  rel="noreferrer" 
+                <a
+                  href="https://wa.me"
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
                   <PhoneIcon className="w-5 h-5" />
                 </a>
-                <a 
-                  href="mailto:support@adatara.id" 
+                <a
+                  href="mailto:support@adatara.id"
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
                   <Mail className="w-5 h-5" />
@@ -233,7 +233,7 @@ export default async function TemplatesPublicPage() {
               <ul className="space-y-4 text-sm font-medium">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
-                  <span>Yogyakarta, Indonesia</span>
+                  <span>Kota Juang,Bireuen,Aceh,Indonesia</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />

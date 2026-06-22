@@ -148,6 +148,7 @@ export default function TemplateBuilderEditor({
             <option value="BASIC">BASIC</option>
             <option value="PREMIUM">PREMIUM</option>
             <option value="SULTAN">SULTAN</option>
+            <option value="EXCLUSIVE">EXCLUSIVE</option>
           </select>
         </div>
 

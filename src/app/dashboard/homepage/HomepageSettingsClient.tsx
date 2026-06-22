@@ -1107,12 +1107,12 @@ export default function HomepageSettingsClient({
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="relative w-[185px] aspect-[9/18.5] bg-[#0c1322] rounded-[32px] p-1.5 shadow-2xl border-[3px] border-[#222f46] flex flex-col justify-between mt-3"
+                  className="relative w-[185px] aspect-[9/18.5] bg-[#0c1322] rounded-[28px] p-1 shadow-2xl border-[2px] border-[#222f46] flex flex-col justify-between mt-3"
                 >
                   
                   {/* Notch */}
-                  <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-2">
-                    <div className="w-1 h-1 rounded-full bg-slate-900" />
+                  <div className="absolute top-1 left-1/2 -translate-x-1/2 w-16 h-2.5 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-2">
+                    <div className="w-0.5 h-0.5 rounded-full bg-slate-900" />
                     <div className="w-4 h-0.5 bg-slate-800 rounded-full" />
                   </div>
 

@@ -149,10 +149,10 @@ function AnimatedCounter({
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      
+
       // easeOutQuad easing
       const easeProgress = progress * (2 - progress);
-      
+
       const currentVal = easeProgress * value;
       setCount(currentVal);
 
@@ -198,7 +198,7 @@ export default function HomeClient({
     hero_subtitle: "Platform SaaS undangan digital premium nomor satu di Indonesia. Didesain khusus dengan perpaduan keindahan ornamen Nusantara, kemewahan modern, dan animasi interaktif terbaik.",
     hero_cta_text: "Buat Undangan Sekarang",
     hero_cta_url: "/templates",
-    hero_demo_text: "Lihat Katalog Demo",
+    hero_demo_text: "Lihat Katalog Undangan",
     hero_demo_url: "#template",
     bg_color: "#f5f5dc",
     text_color: "#064e3b",
@@ -504,13 +504,12 @@ export default function HomeClient({
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className={`lg:col-span-7 flex flex-col items-center text-center ${
-                settings.hero_title_align === "center"
+              className={`lg:col-span-7 flex flex-col items-center text-center ${settings.hero_title_align === "center"
                   ? "lg:items-center lg:text-center"
                   : settings.hero_title_align === "right"
                     ? "lg:items-end lg:text-right"
                     : "lg:items-start lg:text-left"
-              }`}
+                }`}
             >
               {/* Pill Badge */}
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black tracking-widest uppercase mb-6 select-none custom-badge">
@@ -560,17 +559,17 @@ export default function HomeClient({
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="relative w-[270px] sm:w-[290px] aspect-[9/18.5] bg-[#0c1322] rounded-[45px] p-2.5 shadow-2xl border-[5px] border-[#222f46] flex flex-col justify-between"
+                className="relative w-[270px] sm:w-[290px] aspect-[9/18.5] bg-[#0c1322] rounded-[38px] p-1 shadow-2xl border-[3px] border-[#222f46] flex flex-col justify-between"
               >
                 {/* Notch */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-28 h-4.5 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-slate-900" />
-                  <div className="w-8 h-1 bg-slate-800 rounded-full" />
+                <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-28 h-4 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-3">
+                  <div className="w-2 h-2 rounded-full bg-slate-900" />
+                  <div className="w-8 h-0.5 bg-slate-800 rounded-full" />
                 </div>
 
                 {/* Inner Screen Container */}
                 <div
-                  className="w-full h-full rounded-[36px] overflow-hidden border border-black/10 relative flex flex-col select-none"
+                  className="w-full h-full rounded-[34px] overflow-hidden border border-black/10 relative flex flex-col select-none"
                   style={{ backgroundColor: settings.bg_color }}
                 >
 
@@ -638,8 +637,8 @@ export default function HomeClient({
                             key={idx}
                             onClick={() => setCurrentSlide(idx)}
                             className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${currentSlide === idx
-                                ? "w-4 bg-white"
-                                : "bg-white/40 hover:bg-white/60"
+                              ? "w-4 bg-white"
+                              : "bg-white/40 hover:bg-white/60"
                               }`}
                           />
                         ))}
@@ -757,8 +756,8 @@ export default function HomeClient({
                               setCategoryDropdownOpen(false);
                             }}
                             className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
-                                ? "custom-btn-primary"
-                                : "hover:bg-[#064e3b]/5 custom-text-color"
+                              ? "custom-btn-primary"
+                              : "hover:bg-[#064e3b]/5 custom-text-color"
                               }`}
                           >
                             {cat}
@@ -791,7 +790,7 @@ export default function HomeClient({
                         transition={{ duration: 0.15 }}
                         className="absolute right-0 mt-2 w-full md:w-48 bg-white border custom-border-color rounded-2xl shadow-xl z-50 p-2"
                       >
-                        {["Semua", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
+                        {["Semua", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
                           <button
                             key={tier}
                             onClick={() => {
@@ -799,8 +798,8 @@ export default function HomeClient({
                               setPaketDropdownOpen(false);
                             }}
                             className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
-                                ? "custom-btn-primary"
-                                : "hover:bg-[#064e3b]/5 custom-text-color"
+                              ? "custom-btn-primary"
+                              : "hover:bg-[#064e3b]/5 custom-text-color"
                               }`}
                           >
                             {tier === "Semua" ? "Semua Paket" : tier}
@@ -840,7 +839,9 @@ export default function HomeClient({
                     >
                       {/* Package Tier Badge Overlay */}
                       <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
-                        <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "SULTAN"
+                        <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
+                          ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
+                          : template.paket === "SULTAN"
                             ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
                             : template.paket === "PREMIUM"
                               ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
@@ -925,9 +926,9 @@ export default function HomeClient({
         {/* Ambient Decorative Light Glows */}
         <div className="absolute top-1/4 left-1/10 w-96 h-96 rounded-full bg-[#064e3b]/[0.03] blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
-        
+
         <section id="fitur" className="py-24 px-6 max-w-7xl mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -941,12 +942,12 @@ export default function HomeClient({
             <p className="opacity-75 leading-relaxed custom-text-color font-medium">
               Adatara dirancang dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan momen kebahagiaan Anda.
             </p>
-          </motion.div>          <motion.div 
+          </motion.div>          <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 relative z-10"
+            className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-8 relative z-10"
           >
             {/* Feature Card 1 */}
             <motion.div
@@ -955,7 +956,7 @@ export default function HomeClient({
               className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
-              <div 
+              <div
                 className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
                 style={{ backgroundColor: settings.accent_color }}
               />
@@ -978,7 +979,7 @@ export default function HomeClient({
               className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
-              <div 
+              <div
                 className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
                 style={{ backgroundColor: settings.accent_color }}
               />
@@ -1001,7 +1002,7 @@ export default function HomeClient({
               className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
-              <div 
+              <div
                 className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
                 style={{ backgroundColor: settings.accent_color }}
               />
@@ -1024,7 +1025,7 @@ export default function HomeClient({
               className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
-              <div 
+              <div
                 className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
                 style={{ backgroundColor: settings.accent_color }}
               />
@@ -1047,7 +1048,7 @@ export default function HomeClient({
               className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
-              <div 
+              <div
                 className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
                 style={{ backgroundColor: settings.accent_color }}
               />
@@ -1070,7 +1071,7 @@ export default function HomeClient({
               className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
-              <div 
+              <div
                 className="absolute -right-16 -top-16 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none"
                 style={{ backgroundColor: settings.accent_color }}
               />
@@ -1093,9 +1094,9 @@ export default function HomeClient({
       <div className="relative overflow-hidden bg-gradient-to-br from-[#063024] via-[#042018] to-[#02100c] py-24 px-6 border-t border-b border-[#064e3b]/30">
         {/* Ambient golden lighting glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
-        
+
         <section id="harga" className="max-w-7xl mx-auto scroll-mt-10 relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1111,18 +1112,18 @@ export default function HomeClient({
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 items-stretch"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 items-stretch"
           >
             {/* Plan 1: Free */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col transition-all duration-500 bg-white/[0.02] backdrop-blur-md border-slate-800 hover:border-slate-600 hover:bg-white/[0.04] shadow-sm hover:shadow-2xl hover:shadow-black/20"
+              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col transition-all duration-500 bg-white/[0.02] backdrop-blur-md border-slate-800 hover:border-slate-600 hover:bg-white/[0.04] shadow-sm hover:shadow-2xl hover:shadow-black/20"
             >
               <div>
                 <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-slate-800/60 text-slate-300 border border-slate-700/40 shadow-sm">
@@ -1167,7 +1168,7 @@ export default function HomeClient({
             <motion.div
               variants={itemVariants}
               whileHover={{ y: -8 }}
-              className="border rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+              className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 bg-emerald-950/15 backdrop-blur-md border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
             >
               <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-emerald-300 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest bg-emerald-950 border border-emerald-800 shadow-sm">
                 Paling Populer
@@ -1220,10 +1221,10 @@ export default function HomeClient({
             </motion.div>
 
             {/* Plan 3: VIP */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.01 }}
-              className="border-2 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-[#d4af37]/15 via-[#063024]/10 to-transparent backdrop-blur-md border-[#d4af37] hover:from-[#d4af37]/20 hover:shadow-[#d4af37]/15"
+              className="border-2 rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-[#d4af37]/15 via-[#063024]/10 to-transparent backdrop-blur-md border-[#d4af37] hover:from-[#d4af37]/20 hover:shadow-[#d4af37]/15"
             >
               <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[#063024] text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-amber-400 to-[#d4af37] shadow-lg shadow-[#d4af37]/30 animate-pulse">
                 Rekomendasi VIP
@@ -1259,11 +1260,63 @@ export default function HomeClient({
                 </li>
               </ul>
 
-              <Link 
-                href="/register?plan=sultan" 
+              <Link
+                href="/register?plan=sultan"
                 className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-[#d4af37]/10 hover:shadow-[#d4af37]/25 bg-[#d4af37] text-[#063024] hover:bg-[#c5a030] hover:scale-[1.02]"
               >
                 Pilih Sultan
+              </Link>
+            </motion.div>
+
+            {/* Plan 4: Exclusive */}
+            <motion.div
+              variants={itemVariants}
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="border-2 rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-2xl transition-all duration-500 bg-gradient-to-b from-purple-950/20 via-[#063024]/10 to-transparent backdrop-blur-md border-purple-500 hover:from-purple-900/25 hover:shadow-purple-500/20"
+            >
+              <div className="absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-white text-[6px] sm:text-[10px] font-black px-1.5 py-0.5 sm:px-3.5 sm:py-1.5 rounded-full uppercase tracking-widest bg-gradient-to-r from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/30 animate-pulse">
+                Terima Beres
+              </div>
+
+              <div>
+                <span className="inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider bg-gradient-to-r from-purple-500 to-indigo-500 text-white border border-purple-400/30 shadow-md">
+                  PAKET EXCLUSIVE
+                </span>
+                <h4 className="text-base sm:text-2xl md:text-4xl font-black text-purple-300 mt-2 md:mt-4 drop-shadow-sm">Rp 299.000</h4>
+                <p className="text-[9px] sm:text-xs opacity-75 mt-0.5 md:mt-1 text-[#f5f5dc]">Bayar Sekali (Aktif Selamanya)</p>
+                <p className="opacity-95 text-[9px] sm:text-xs md:text-sm mt-3 md:mt-6 text-[#f5f5dc] font-medium">Layanan premium terima beres. Tim kami yang akan menginput data dan mendesain undangan Anda sepenuhnya.</p>
+              </div>
+
+              <hr className="border-purple-500/20 my-4 md:my-8" />
+
+              <ul className="space-y-2 md:space-y-4 flex-1 text-[9px] sm:text-xs md:text-sm text-white font-medium">
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  Semua fitur paket SULTAN
+                </li>
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  Pembuatan dibantu desainer kami
+                </li>
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  Revisi tanpa batas sepuasnya
+                </li>
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  WhatsApp Blast tak terbatas
+                </li>
+                <li className="flex items-center gap-1.5 md:gap-3">
+                  <CheckCircle className="w-3.5 h-3.5 shrink-0 text-purple-400" />
+                  Kustom domain pribadi (.com/.id)
+                </li>
+              </ul>
+
+              <Link
+                href="/register?plan=exclusive"
+                className="mt-4 md:mt-8 w-full py-2 sm:py-4 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-black transition-all shadow-lg shadow-purple-500/10 hover:shadow-purple-500/25 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:opacity-90 hover:scale-[1.02]"
+              >
+                Pilih Exclusive
               </Link>
             </motion.div>
           </motion.div>
@@ -1275,9 +1328,9 @@ export default function HomeClient({
         {/* Soft elegant glows */}
         <div className="absolute top-1/4 left-10 w-72 h-72 rounded-full bg-[#064e3b]/[0.02] blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 right-10 w-72 h-72 rounded-full bg-[#d4af37]/[0.03] blur-3xl pointer-events-none" />
-        
+
         <div className="max-w-4xl mx-auto relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1293,7 +1346,7 @@ export default function HomeClient({
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -1306,29 +1359,26 @@ export default function HomeClient({
                 <motion.div
                   key={idx}
                   variants={itemVariants}
-                  className={`border rounded-2xl overflow-hidden transition-all duration-300 bg-white ${
-                    isOpen 
-                      ? "border-[#064e3b]/35 shadow-md shadow-[#064e3b]/5 bg-gradient-to-r from-[#064e3b]/[0.02] to-transparent" 
+                  className={`border rounded-2xl overflow-hidden transition-all duration-300 bg-white ${isOpen
+                      ? "border-[#064e3b]/35 shadow-md shadow-[#064e3b]/5 bg-gradient-to-r from-[#064e3b]/[0.02] to-transparent"
                       : "border-[#064e3b]/10 shadow-sm hover:shadow-md hover:border-[#064e3b]/25"
-                  }`}
+                    }`}
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
                     className="w-full px-6 py-5 flex items-center justify-between text-left font-bold custom-text-color transition-colors cursor-pointer group"
                   >
                     <span className="flex items-center gap-3 pr-4">
-                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                        isOpen 
-                          ? "bg-[#064e3b] text-[#f5f5dc]" 
+                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isOpen
+                          ? "bg-[#064e3b] text-[#f5f5dc]"
                           : "bg-[#064e3b]/5 text-[#064e3b] group-hover:bg-[#064e3b]/10"
-                      }`}>
+                        }`}>
                         <HelpCircle className="w-4 h-4" />
                       </span>
                       <span className="text-base sm:text-lg font-black tracking-tight">{faq.tanya}</span>
                     </span>
-                    <span className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                      isOpen ? "bg-[#064e3b]/10" : "bg-transparent"
-                    }`}>
+                    <span className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-[#064e3b]/10" : "bg-transparent"
+                      }`}>
                       <ChevronDown
                         className="w-4 h-4 transition-transform duration-300"
                         style={{
@@ -1365,10 +1415,10 @@ export default function HomeClient({
       <footer className="relative overflow-hidden bg-gradient-to-b from-[#05291e] to-[#031c14] text-[#f5f5dc]/70 border-t border-[#064e3b]/40 pt-20 pb-10 px-6">
         {/* Subtle decorative glow */}
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
-        
+
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            
+
             {/* Column 1: Brand Info */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 select-none">
@@ -1382,24 +1432,24 @@ export default function HomeClient({
                 Platform pembuatan undangan digital premium terbaik di Indonesia. Hadirkan momen terindah Anda secara elegan, cepat, dan ramah lingkungan.
               </p>
               <div className="flex items-center gap-3">
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
-                  rel="noreferrer" 
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
                   <InstagramIcon className="w-5 h-5" />
                 </a>
-                <a 
-                  href="https://wa.me" 
-                  target="_blank" 
-                  rel="noreferrer" 
+                <a
+                  href="https://wa.me"
+                  target="_blank"
+                  rel="noreferrer"
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
                   <PhoneIcon className="w-5 h-5" />
                 </a>
-                <a 
-                  href="mailto:support@adatara.id" 
+                <a
+                  href="mailto:support@adatara.id"
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:text-[#d4af37] hover:border-[#d4af37]/50 hover:bg-white/10 transition-all duration-300"
                 >
                   <Mail className="w-5 h-5" />
@@ -1475,7 +1525,7 @@ export default function HomeClient({
               <ul className="space-y-4 text-sm font-medium">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />
-                  <span>Yogyakarta, Indonesia</span>
+                  <span>Kota Juang,Bireuen,Aceh,Indonesia</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-[#d4af37] shrink-0 mt-0.5" />

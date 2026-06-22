@@ -144,7 +144,7 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                   transition={{ duration: 0.15 }}
                   className="absolute left-0 mt-2 w-48 bg-white border border-[#064e3b]/10 rounded-xl shadow-xl z-50 p-1.5"
                 >
-                  {["Semua Paket", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
+                  {["Semua Paket", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
                     <button
                       key={tier}
                       onClick={() => {
@@ -199,11 +199,13 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                 <div className="relative w-full aspect-square bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
                   {/* Package Tier Badge Overlay */}
                   <div className="absolute top-2 left-2 z-20 pointer-events-none w-max">
-                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${t.paket === "SULTAN"
-                        ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
-                        : t.paket === "PREMIUM"
-                          ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
-                          : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
+                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${t.paket === "EXCLUSIVE"
+                        ? "bg-gradient-to-r from-purple-500 via-fuchsia-600 to-indigo-600 text-white border-purple-500/40 shadow-purple-500/20"
+                        : t.paket === "SULTAN"
+                          ? "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white border-emerald-500/40 shadow-emerald-500/20"
+                          : t.paket === "PREMIUM"
+                            ? "bg-gradient-to-r from-amber-400 via-[#d4af37] to-yellow-500 text-white border-amber-400/40 shadow-amber-500/20"
+                            : "bg-gradient-to-r from-slate-200 via-zinc-300 to-slate-400 text-slate-800 border-slate-300/40 shadow-slate-500/10"
                       }`}>
                       {t.paket || "BASIC"}
                     </span>

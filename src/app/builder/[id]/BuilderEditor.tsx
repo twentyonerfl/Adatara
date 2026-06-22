@@ -114,7 +114,7 @@ export function BuilderEditor({
       setSelectedPackage("SILVER");
     } else if (invitation.template.paket === "PREMIUM") {
       setSelectedPackage("GOLD");
-    } else if (invitation.template.paket === "SULTAN") {
+    } else if (invitation.template.paket === "SULTAN" || invitation.template.paket === "EXCLUSIVE") {
       setSelectedPackage("PLATINUM");
     }
   }, [invitation.template.paket]);

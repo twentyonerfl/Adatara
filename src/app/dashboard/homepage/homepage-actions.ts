@@ -39,7 +39,7 @@ export async function getHomepageSettings() {
           hero_subtitle: "Platform SaaS undangan digital premium nomor satu di Indonesia. Didesain khusus dengan perpaduan keindahan ornamen Nusantara, kemewahan modern, dan animasi interaktif terbaik.",
           hero_cta_text: "Buat Undangan Sekarang",
           hero_cta_url: "/templates",
-          hero_demo_text: "Lihat Katalog Demo",
+          hero_demo_text: "Lihat Katalog Undangan",
           hero_demo_url: "#template",
           bg_color: "#f5f5dc",
           text_color: "#064e3b",
