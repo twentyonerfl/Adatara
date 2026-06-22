@@ -14,7 +14,7 @@ export default async function PublicBuilderPage({
   // Fetch invitation details
   const invitation = await db.invitation.findUnique({
     where: { id },
-    include: { template: true },
+    include: { template: true, user: true },
   });
 
   if (!invitation) {

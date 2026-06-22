@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ScaledCoverPreview } from "./dashboard/templates/BuilderTabsCoverPembuka";
 import {
   Sparkles,
@@ -124,6 +124,54 @@ const itemVariants = {
     }
   }
 } as const;
+
+function AnimatedCounter({
+  value,
+  duration = 2,
+  suffix = "",
+  decimals = 0,
+}: {
+  value: number;
+  duration?: number;
+  suffix?: string;
+  decimals?: number;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+      
+      // easeOutQuad easing
+      const easeProgress = progress * (2 - progress);
+      
+      const currentVal = easeProgress * value;
+      setCount(currentVal);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [value, duration, isInView]);
+
+  const formatted = count.toLocaleString("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+
+  return <span ref={ref}>{formatted}{suffix}</span>;
+}
 
 export default function HomeClient({
   initialTemplates,
@@ -603,19 +651,27 @@ export default function HomeClient({
       >
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl sm:text-4xl font-extrabold text-white">10,000+</div>
+            <div className="text-3xl sm:text-4xl font-extrabold text-white">
+              <AnimatedCounter value={1000} suffix="+" />
+            </div>
             <p className="text-sm opacity-80 mt-2 font-bold text-white/80">Undangan Dibuat</p>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-extrabold text-white">150,000+</div>
+            <div className="text-3xl sm:text-4xl font-extrabold text-white">
+              <AnimatedCounter value={50000} suffix="+" />
+            </div>
             <p className="text-sm opacity-80 mt-2 font-bold text-white/80">Tamu Terundang</p>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-extrabold text-white">50+</div>
+            <div className="text-3xl sm:text-4xl font-extrabold text-white">
+              <AnimatedCounter value={50} suffix="+" />
+            </div>
             <p className="text-sm opacity-80 mt-2 font-bold text-white/80">Template Premium</p>
           </div>
           <div>
-            <div className="text-3xl sm:text-4xl font-extrabold text-white">99.9%</div>
+            <div className="text-3xl sm:text-4xl font-extrabold text-white">
+              <AnimatedCounter value={99.9} decimals={1} suffix="%" />
+            </div>
             <p className="text-sm opacity-80 mt-2 font-bold text-white/80">Uptime Server</p>
           </div>
         </div>

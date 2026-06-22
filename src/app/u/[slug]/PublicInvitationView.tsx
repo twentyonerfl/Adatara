@@ -63,6 +63,7 @@ function ScaledSection({ children, scale }: { children: React.ReactNode; scale: 
           transform: `scale(${scale})`,
           transformOrigin: "top center",
           position: "absolute",
+          top: 0,
           left: "50%",
           marginLeft: "-144px",
         }}
@@ -255,7 +256,7 @@ export function PublicInvitationView({
             className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950"
           >
             <div
-              className="rounded-2xl border border-slate-800"
+              className="rounded-none"
               style={{
                 width: "288px",
                 height: "512px",
@@ -279,7 +280,7 @@ export function PublicInvitationView({
 
       {/* SCREEN 2: MAIN SCROLLABLE INVITATION */}
       {isOpen && (
-        <div className="w-full max-w-md mx-auto bg-slate-950 md:rounded-2xl md:border border-slate-900 md:my-6 shadow-2xl relative overflow-hidden">
+        <div className="w-full max-w-md mx-auto bg-slate-950 relative overflow-hidden min-h-screen">
           <ScaledSection scale={scale}>
             <PembukaPreview data={data.pembuka} coverData={data.cover} bahasa={bahasa} />
           </ScaledSection>

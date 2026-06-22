@@ -193,7 +193,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                     onClick={() => handleOpenModal(template)}
                     className="mt-1.5 w-full py-1.5 border border-[#064e3b]/15 hover:border-[#064e3b] bg-transparent text-[#064e3b] hover:bg-[#064e3b] hover:text-white font-black text-[8.5px] flex items-center justify-center gap-1.5 cursor-pointer transition-all duration-300 shadow-sm tracking-widest uppercase rounded-md"
                   >
-                    Gunakan Template
+                    Buat Undangan
                     <ArrowRight className="w-2.5 h-2.5" />
                   </button>
                 </div>

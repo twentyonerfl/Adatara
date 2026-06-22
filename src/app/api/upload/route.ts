@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { v2 as cloudinary } from "cloudinary";
 
+import { db } from "@/lib/db";
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -11,15 +13,31 @@ cloudinary.config({
 
 export async function POST(req: NextRequest) {
   try {
+    // Parse FormData first to check parameters
+    const formData = await req.formData();
+    const invitationId = formData.get("invitationId") as string | null;
+    const file = formData.get("file") as File | null;
+
+    let authorized = false;
+
     // 1. Authenticate user as admin
     const session = await auth.api.getSession({ headers: await headers() });
-    if (!session || session.user.role !== "SUPER_ADMIN") {
+    if (session && session.user.role === "SUPER_ADMIN") {
+      authorized = true;
+    } else if (invitationId) {
+      // Validate that this invitation exists in the DB
+      const invitation = await db.invitation.findUnique({
+        where: { id: invitationId },
+      });
+      if (invitation) {
+        authorized = true;
+      }
+    }
+
+    if (!authorized) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2. Parse FormData
-    const formData = await req.formData();
-    const file = formData.get("file") as File | null;
     if (!file) {
       return NextResponse.json({ error: "Tidak ada file yang diunggah" }, { status: 400 });
     }

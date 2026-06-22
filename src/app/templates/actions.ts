@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { z } from "zod";
+import { clearTemplateUserData } from "@/lib/invitation-helper";
 
 const createPublicInvitationSchema = z.object({
   templateId: z.string(),
@@ -79,12 +80,13 @@ export async function createInvitationPublic(formData: {
     }
 
     // 4. Create the new invitation
+    const cleanJson = clearTemplateUserData(template.template_json);
     const invitation = await db.invitation.create({
       data: {
         user_id: user.id,
         template_id: templateId,
         slug: formattedSlug,
-        data_undangan_json: template.template_json as any,
+        data_undangan_json: cleanJson as any,
         status: "DRAFT",
       }
     });

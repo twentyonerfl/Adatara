@@ -248,7 +248,7 @@ export function CoverPreview({
   const displayKategori = bahasa === "en" ? kategoriLabel : `Undangan ${kategoriLabel}`;
 
   return (
-    <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative overflow-hidden rounded-2xl"
+    <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative overflow-hidden rounded-none"
       style={bg}>
       {data.background?.type === "video" && data.background?.value && (
         <video
@@ -624,7 +624,7 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
   );
 
   return (
-    <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative rounded-2xl overflow-hidden p-6 gap-4" style={bg}>
+    <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative rounded-none overflow-hidden p-6 gap-4" style={bg}>
       {data.background?.type === "video" && data.background?.value && (
         <video
           key={data.background.value}

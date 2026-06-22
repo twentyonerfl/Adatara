@@ -153,7 +153,7 @@ export function ProfilPreview({ data }: { data: any }) {
   const isUcapanCustom = data.setting_ucapan_profil?.position === "custom";
 
   return (
-    <div className="w-full min-h-[512px] flex flex-col items-center justify-center relative rounded-2xl overflow-hidden p-6 gap-5" style={bg}>
+    <div className="w-full min-h-[512px] flex flex-col items-center justify-center relative rounded-none overflow-hidden p-6 gap-5" style={bg}>
       {isUcapanCustom ? (
         <p
           className="opacity-80 whitespace-pre-wrap z-10"
@@ -454,7 +454,7 @@ export function AcaraPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const acaras: any[] = data.acaras || [];
   return (
-    <div className="w-full min-h-[512px] rounded-2xl overflow-hidden p-6 space-y-4" style={bg}>
+    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-4" style={bg}>
       <div className="text-center mb-4">
         <div className="text-xs font-black uppercase tracking-wider opacity-60 text-[#064e3b]">Jadwal & Lokasi</div>
         <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { headers } from "next/headers";
 import { z } from "zod";
+import { clearTemplateUserData } from "@/lib/invitation-helper";
 
 const createInvitationSchema = z.object({
   templateId: z.string(),
@@ -50,12 +51,13 @@ export async function createInvitation(formData: { templateId: string; slug: str
     }
 
     // Create the new invitation
+    const cleanJson = clearTemplateUserData(template.template_json);
     const invitation = await db.invitation.create({
       data: {
         user_id: session.user.id,
         template_id: templateId,
         slug,
-        data_undangan_json: template.template_json as any, // Mulai dengan setting default template
+        data_undangan_json: cleanJson as any, // Mulai dengan setting default template yang dibersihkan
         status: "DRAFT",
       }
     });

@@ -165,7 +165,7 @@ export function CeritaPreview({ data }: { data: any }) {
   };
 
   return (
-    <div className="rounded-2xl overflow-hidden min-h-[512px] bg-[#f5f5dc]">
+    <div className="rounded-none overflow-hidden min-h-[512px] bg-[#f5f5dc]">
       {/* Cerita Section */}
       <div className="p-6 space-y-4" style={bgCerita}>
         <div style={getFontStyles(data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
@@ -348,7 +348,7 @@ export function PenutupPreview({
   };
 
   return (
-    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-2xl overflow-hidden p-6 space-y-5" style={bgPenutup}>
+    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-5" style={bgPenutup}>
       {data.rsvp_aktif && (
         <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 text-center space-y-3 shadow-md relative">
           <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase">

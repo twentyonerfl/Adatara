@@ -1,49 +1,40 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { saveInvitationPublic, createPaymentPublic } from "./actions";
 import Script from "next/script";
-import { 
-  Sparkles, 
-  ArrowLeft, 
-  Save, 
-  Eye, 
+import {
+  Sparkles,
+  ArrowLeft,
+  Save,
+  Eye,
   Loader2,
-  Undo2,
-  Redo2,
-  Monitor,
-  Tablet,
-  Smartphone,
   Share2,
-  Type,
-  Paintbrush,
-  Compass,
-  Activity,
   Plus,
   Trash2,
   Music,
   MapPin,
   Calendar,
   Heart,
-  PlusCircle,
   Clock,
   Gift,
-  HelpCircle,
   Info,
   ChevronRight,
+  ChevronLeft,
+  Copy,
+  CheckCircle,
+  AlertCircle,
+  Phone,
+  Mail,
   User as UserIcon,
   MessageSquare,
-  Copy,
-  ChevronDown,
-  X,
-  CheckCircle,
-  AlertCircle
+  Lock,
+  ExternalLink,
+  Upload
 } from "lucide-react";
-
-import { FramedPhoto, PhotoStyleWidget } from "../../dashboard/templates/BuilderWidgets";
 
 type TemplateType = {
   id: string;
@@ -52,6 +43,14 @@ type TemplateType = {
   thumbnail: string;
   deskripsi: string | null;
   template_json: any;
+  paket: "BASIC" | "PREMIUM" | "SULTAN";
+};
+
+type UserType = {
+  id: string;
+  name: string;
+  email: string;
+  nomor_hp: string | null;
 };
 
 type InvitationType = {
@@ -61,6 +60,8 @@ type InvitationType = {
   template_id: string;
   data_undangan_json: any;
   status: "DRAFT" | "ACTIVE" | "INACTIVE";
+  user: UserType;
+  template: TemplateType;
 };
 
 type MusicType = {
@@ -71,223 +72,188 @@ type MusicType = {
   durasi: number | null;
 };
 
-// --- PRESETS FOR CULTURAL ORNAMENTS ---
-const culturalOrnaments = [
-  {
-    id: "pucuk-rebung",
-    name: "Pucuk Rebung",
-    svg: (
-      <svg className="w-full h-8 text-current" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 20L15 5L20 20M30 20L35 5L40 20M50 20L55 5L60 20M70 20L75 5L80 20M90 20L95 5L100 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M5 20L15 10L25 20M25 20L35 10L45 20M45 20L55 10L65 20M65 20L75 10L85 20M85 20L95 10L105 20" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2"/>
-      </svg>
-    )
-  },
-  {
-    id: "pintu-aceh",
-    name: "Pintu Aceh",
-    svg: (
-      <svg className="w-full h-8 text-current" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 2C40 2 38 12 38 20H62C62 12 60 2 50 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <circle cx="50" cy="9" r="3" stroke="currentColor" strokeWidth="1"/>
-        <path d="M44 20C44 16 46 14 50 14C54 14 56 16 56 20" stroke="currentColor" strokeWidth="1"/>
-        <path d="M20 20C25 15 35 15 40 20M60 20C65 15 75 15 80 20" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-      </svg>
-    )
-  },
-  {
-    id: "gorga-batak",
-    name: "Gorga Batak",
-    svg: (
-      <svg className="w-full h-8 text-current" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 10C10 2 20 18 30 10C40 2 50 18 60 10C70 2 80 18 90 10C95 6 98 10 100 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M0 15C5 15 8 11 12 8C16 5 22 5 26 9C30 13 36 13 40 9C44 5 50 5 54 9C58 13 64 13 68 9C72 5 78 5 82 9C86 13 92 13 96 9" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-        <circle cx="42" cy="12" r="1.5" fill="currentColor"/>
-        <circle cx="72" cy="12" r="1.5" fill="currentColor"/>
-      </svg>
-    )
-  },
-  {
-    id: "mandalika",
-    name: "Mandalika",
-    svg: (
-      <svg className="w-full h-8 text-current" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="10" r="8" stroke="currentColor" strokeWidth="1.5"/>
-        <circle cx="50" cy="10" r="4" stroke="currentColor" strokeWidth="1"/>
-        <path d="M50 0V20M40 10H60M43 3L57 17M43 17L57 3" stroke="currentColor" strokeWidth="0.8"/>
-        <circle cx="20" cy="10" r="5" stroke="currentColor" strokeWidth="1"/>
-        <circle cx="80" cy="10" r="5" stroke="currentColor" strokeWidth="1"/>
-      </svg>
-    )
-  }
-];
-
-// --- PRESETS FOR INDONESIAN MOTIFS ---
-const indonesianMotifs = [
-  {
-    id: "mega-mendung",
-    name: "Mega Mendung",
-    region: "CIREBON STYLE",
-    svg: (
-      <svg className="w-8 h-8 text-[#064e3b]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 18C4 15 7 13 10 14C12 11 16 11 18 13C21 10 26 11 28 14C29 16 29 19 27 21C25 23 21 23 19 21C17 23 13 23 11 21C8 23 5 22 4 18Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-        <path d="M8 18C8 16 10 15 12 16C13 14 16 14 17 15C19 13 22 14 23 16" stroke="currentColor" strokeWidth="1"/>
-      </svg>
-    )
-  },
-  {
-    id: "parang-rusak",
-    name: "Parang Rusak",
-    region: "CENTRAL JAVA",
-    svg: (
-      <svg className="w-8 h-8 text-[#064e3b]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 26L26 6M10 28L28 10M4 22L22 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M9 13C7 15 7 18 9 20C11 22 14 22 16 20" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-        <path d="M17 5C15 7 15 10 17 12C19 14 22 14 24 12" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-      </svg>
-    )
-  },
-  {
-    id: "kawung",
-    name: "Kawung",
-    region: "YOGYAKARTA",
-    svg: (
-      <svg className="w-8 h-8 text-[#064e3b]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="16" cy="16" r="10" stroke="currentColor" strokeWidth="1"/>
-        <path d="M16 6C12 10 12 22 16 26" stroke="currentColor" strokeWidth="1.2"/>
-        <path d="M16 6C20 10 20 22 16 26" stroke="currentColor" strokeWidth="1.2"/>
-        <path d="M6 16C10 12 22 12 26 16" stroke="currentColor" strokeWidth="1.2"/>
-        <path d="M6 16C10 20 22 20 26 16" stroke="currentColor" strokeWidth="1.2"/>
-        <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
-      </svg>
-    )
-  },
-  {
-    id: "sido-mukti",
-    name: "Sido Mukti",
-    region: "SOLO STYLE",
-    svg: (
-      <svg className="w-8 h-8 text-[#064e3b]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="6" width="20" height="20" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M6 16H26M16 6V26" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2"/>
-        <path d="M10 12L16 16L22 12M10 20L16 16L22 20" stroke="currentColor" strokeWidth="1"/>
-      </svg>
-    )
-  }
-];
-
 export function BuilderEditor({
   invitation,
   musicList
 }: {
-  invitation: InvitationType & { template: TemplateType };
+  invitation: InvitationType;
   musicList: MusicType[];
 }) {
   const router = useRouter();
-  const [activeSection, setActiveSection] = useState<"cover" | "pembuka" | "profil" | "acara" | "cerita" | "penutup">("cover");
   const [status, setStatus] = useState<"DRAFT" | "ACTIVE" | "INACTIVE">(invitation.status);
-  const [data, setData] = useState<any>(invitation.data_undangan_json);
+  const [data, setData] = useState<any>(invitation.data_undangan_json || {});
+  
+  // Contacts/Default Info States
+  const [contactName, setContactName] = useState(invitation.user.name || "");
+  const [contactPhone, setContactPhone] = useState(invitation.user.nomor_hp || "");
+  const [contactEmail, setContactEmail] = useState(invitation.user.email || "");
+  const [invitationSlug, setInvitationSlug] = useState(invitation.slug || "");
+
+  // Wizard Navigation
+  const [activeStep, setActiveStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // Manage view toggle: show editing form inside active screen
+  const [showActiveEditForm, setShowActiveEditForm] = useState(false);
+
   // Checkout states
-  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<"SILVER" | "GOLD" | "PLATINUM">("GOLD");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
-  // Left sidebar active tab
-  const [leftTab, setLeftTab] = useState<"components" | "layers" | "assets">("components");
-  
-  // Right sidebar properties active tab
-  const [rightPanelTab, setRightPanelTab] = useState<"typography" | "appearance" | "ornaments" | "animations">("typography");
+  // Guest Link Generator State
+  const [guestNameInput, setGuestNameInput] = useState("");
+  const [copiedLink, setCopiedLink] = useState(false);
 
-  // Phone preview zoom/frame settings
-  const [viewportMode, setViewportMode] = useState<"mobile" | "tablet" | "desktop">("mobile");
+  // Map PaketTier to package names
+  useEffect(() => {
+    if (invitation.template.paket === "BASIC") {
+      setSelectedPackage("SILVER");
+    } else if (invitation.template.paket === "PREMIUM") {
+      setSelectedPackage("GOLD");
+    } else if (invitation.template.paket === "SULTAN") {
+      setSelectedPackage("PLATINUM");
+    }
+  }, [invitation.template.paket]);
 
-  // Temporary Inputs
-  const [tempProfileName, setTempProfileName] = useState("");
-  const [tempProfileDesc, setTempProfileDesc] = useState("");
-  const [tempProfileUrutan, setTempProfileUrutan] = useState("");
-  const [tempProfileFoto, setTempProfileFoto] = useState("");
-  const [tempProfileBingkai, setTempProfileBingkai] = useState("oval");
-  const [activeProfileEditIdx, setActiveProfileEditIdx] = useState<number | null>(null);
+  // Ensure JSON sections exist
+  useEffect(() => {
+    const updated = { ...data };
+    let changed = false;
 
-  const [tempEventName, setTempEventName] = useState("");
-  const [tempEventDate, setTempEventDate] = useState("");
-  const [tempEventTime, setTempEventTime] = useState("");
-  const [tempEventAddress, setTempEventAddress] = useState("");
-  const [tempEventMaps, setTempEventMaps] = useState("");
+    if (!updated.cover) {
+      updated.cover = { nama_acara: "", music_url: "", background: { type: "image", value: "" } };
+      changed = true;
+    }
+    if (!updated.pembuka) {
+      updated.pembuka = { ucapan: "", tanggal_acara: "", foto_pembuka: "" };
+      changed = true;
+    }
+    if (!updated.profil) {
+      updated.profil = { ucapan_profil: "", profils: [] };
+      changed = true;
+    }
+    if (!updated.acara) {
+      updated.acara = { acaras: [] };
+      changed = true;
+    }
+    if (!updated.cerita) {
+      updated.cerita = { ceritas: [], galeris: [] };
+      changed = true;
+    }
+    if (!updated.penutup) {
+      updated.penutup = { amplops: [], rsvp_aktif: true, ucapan_aktif: true, pesan_penutup: "", salam: "", tertanda: "" };
+      changed = true;
+    }
 
-  const [tempStoryTitle, setTempStoryTitle] = useState("");
-  const [tempStoryDate, setTempStoryDate] = useState("");
-  const [tempStoryContent, setTempStoryContent] = useState("");
+    // Initialize Profiles if empty based on category
+    const isWedding = ["pernikahan", "lamaran & pertunangan", "resepsi pernikahan"].includes(
+      invitation.template.kategori.toLowerCase()
+    );
+    const requiredProfileCount = isWedding ? 2 : 1;
 
-  const [tempGaleriUrl, setTempGaleriUrl] = useState("");
-
-  const [tempBankName, setTempBankName] = useState("");
-  const [tempBankAccount, setTempBankAccount] = useState("");
-  const [tempBankOwner, setTempBankOwner] = useState("");
-
-  const [selectedFontKey, setSelectedFontKey] = useState<string | null>(null);
-
-  // Sync scroll of the live mobile view
-  const previewScrollContainerRef = useRef<HTMLDivElement>(null);
-
-  const scrollToSection = (sectionName: string) => {
-    if (previewScrollContainerRef.current) {
-      const targetElement = document.getElementById(`preview-${sectionName}`);
-      if (targetElement) {
-        previewScrollContainerRef.current.scrollTo({
-          top: targetElement.offsetTop - 50,
-          behavior: "smooth"
+    if (!updated.profil.profils || updated.profil.profils.length < requiredProfileCount) {
+      const current = updated.profil.profils || [];
+      const newProfiles = [...current];
+      for (let i = current.length; i < requiredProfileCount; i++) {
+        newProfiles.push({
+          nama: "",
+          nama_panggilan: "",
+          keterangan: isWedding 
+            ? (i === 0 ? "Putra dari Bpk. X & Ibu Y" : "Putri dari Bpk. A & Ibu B")
+            : "Putra/i dari Bpk. X & Ibu Y",
+          urutan_anak: "",
+          foto: "",
+          bingkai: "oval"
         });
       }
+      updated.profil.profils = newProfiles;
+      changed = true;
     }
-  };
 
-  useEffect(() => {
-    scrollToSection(activeSection);
-    setSelectedFontKey(null);
-  }, [activeSection]);
-
-  // General Update Handler
-  const updateData = (section: string, key: string, value: any) => {
-    setData((prev: any) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [key]: value
+    // Initialize Acaras if empty
+    if (!updated.acara.acaras || updated.acara.acaras.length === 0) {
+      updated.acara.acaras = [
+        { nama: isWedding ? "Akad Nikah" : "Acara Utama", tanggal: "", jam_mulai: "08:00", jam_selesai: "10:00", alamat: "", link_maps: "", embed_maps: "" }
+      ];
+      if (isWedding) {
+        updated.acara.acaras.push({
+          nama: "Resepsi Pernikahan", tanggal: "", jam_mulai: "11:00", jam_selesai: "13:00", alamat: "", link_maps: "", embed_maps: ""
+        });
       }
-    }));
-  };
+      changed = true;
+    }
 
-  // Typography/Font Update Handler
-  const updateFont = (section: string, fontKey: string, property: string, value: any) => {
+    if (changed) {
+      setData(updated);
+    }
+  }, [data, invitation.template.kategori]);
+
+  // Handle direct modifications in data structure
+  const updateNestedVal = (section: string, key: string, val: any) => {
     setData((prev: any) => {
-      const sectionData = prev[section] || {};
-      const fontData = sectionData[fontKey] || {};
-      return {
-        ...prev,
-        [section]: {
-          ...sectionData,
-          [fontKey]: {
-            ...fontData,
-            [property]: value
-          }
-        }
-      };
+      const next = { ...prev };
+      if (!next[section]) next[section] = {};
+      next[section][key] = val;
+      return next;
     });
   };
 
-  const handleSave = async () => {
+  const handleProfileChange = (idx: number, key: string, val: any) => {
+    setData((prev: any) => {
+      const next = { ...prev };
+      if (!next.profil) next.profil = { profils: [] };
+      if (!next.profil.profils) next.profil.profils = [];
+      const list = [...next.profil.profils];
+      if (list[idx]) {
+        list[idx] = { ...list[idx], [key]: val };
+      }
+      next.profil.profils = list;
+      return next;
+    });
+  };
+
+  // Auto-generate Cover Nama Acara & Penutup Tertanda based on profiles nickname
+  useEffect(() => {
+    const profs = data?.profil?.profils || [];
+    if (profs.length > 0) {
+      const isWedding = ["pernikahan", "lamaran & pertunangan", "resepsi pernikahan"].includes(
+        invitation.template.kategori.toLowerCase()
+      );
+      if (isWedding && profs[0] && profs[1]) {
+        const nickname1 = profs[0].nama_panggilan || profs[0].nama || "";
+        const nickname2 = profs[1].nama_panggilan || profs[1].nama || "";
+        const combined = nickname1 && nickname2 ? `${nickname1} & ${nickname2}` : "";
+        if (combined) {
+          if (data?.cover?.nama_acara !== combined) {
+            updateNestedVal("cover", "nama_acara", combined);
+          }
+          if (data?.penutup?.tertanda !== combined) {
+            updateNestedVal("penutup", "tertanda", combined);
+          }
+        }
+      } else if (profs[0]) {
+        const nickname = profs[0].nama_panggilan || profs[0].nama || "";
+        if (nickname) {
+          if (data?.cover?.nama_acara !== nickname) {
+            updateNestedVal("cover", "nama_acara", nickname);
+          }
+          if (data?.penutup?.tertanda !== nickname) {
+            updateNestedVal("penutup", "tertanda", nickname);
+          }
+        }
+      }
+    }
+  }, [data?.profil?.profils]);
+
+  // Save to DB (Draft/Active state save action)
+  const saveDraft = async () => {
     setSaving(true);
     setSaveSuccess(false);
     setSaveError(null);
-
     try {
       const res = await saveInvitationPublic(invitation.id, data, status);
       if (res?.error) {
@@ -297,17 +263,45 @@ export function BuilderEditor({
         setTimeout(() => setSaveSuccess(false), 2000);
       }
     } catch (err) {
-      setSaveError("Terjadi kesalahan koneksi.");
+      setSaveError("Gagal terhubung ke server.");
     } finally {
       setSaving(false);
     }
   };
 
+  // Image Upload handler
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+  const handleFileUpload = async (file: File, callback: (url: string) => void, fieldId: string) => {
+    setUploadingField(fieldId);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("invitationId", invitation.id);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const resJson = await res.json();
+      if (resJson.error) {
+        alert("Gagal upload: " + resJson.error);
+      } else if (resJson.url) {
+        callback(resJson.url);
+      }
+    } catch (err) {
+      alert("Error uploading file.");
+    } finally {
+      setUploadingField(null);
+    }
+  };
+
+  // checkout execution
   const handleCheckout = async () => {
     setCheckoutLoading(true);
     setCheckoutError(null);
     try {
-      // Auto-save current edits first
+      // Save draft first
       await saveInvitationPublic(invitation.id, data, status);
 
       const res = await createPaymentPublic(invitation.id, selectedPackage);
@@ -317,2242 +311,1113 @@ export function BuilderEditor({
         return;
       }
 
-      if (res?.token && window.snap) {
-        window.snap.pay(res.token, {
+      if (res?.token && (window as any).snap) {
+        (window as any).snap.pay(res.token, {
           onSuccess: function (result: any) {
             setCheckoutSuccess(true);
             setCheckoutLoading(false);
             setTimeout(() => {
               window.location.reload();
-            }, 1500);
+            }, 1200);
           },
           onPending: function (result: any) {
-            setCheckoutError("Menunggu pembayaran...");
+            setCheckoutError("Menunggu pembayaran di Midtrans Snap...");
             setCheckoutLoading(false);
           },
           onError: function (result: any) {
-            setCheckoutError("Pembayaran gagal. Silakan coba kembali.");
+            setCheckoutError("Pembayaran gagal. Silakan coba lagi.");
             setCheckoutLoading(false);
           },
           onClose: function () {
-            setCheckoutError("Pembayaran dibatalkan.");
+            setCheckoutError("Pembayaran dibatalkan oleh pengguna.");
             setCheckoutLoading(false);
           }
         });
       } else {
-        setCheckoutError("Gagal memuat sistem pembayaran Midtrans. Coba segarkan halaman.");
+        setCheckoutError("Sistem pembayaran Midtrans Snap gagal dimuat. Coba refresh halaman.");
         setCheckoutLoading(false);
       }
     } catch (err) {
       console.error(err);
-      setCheckoutError("Terjadi kesalahan sistem saat menghubungi pembayaran.");
+      setCheckoutError("Kesalahan sistem dalam memproses pembayaran.");
       setCheckoutLoading(false);
     }
   };
 
-  // Profile management
-  const addProfile = () => {
-    if (!tempProfileName) return;
-    const currentList = data.profil?.profils || [];
-    updateData("profil", "profils", [
-      ...currentList,
-      {
-        nama: tempProfileName,
-        keterangan: tempProfileDesc,
-        urutan_anak: tempProfileUrutan,
-        foto: tempProfileFoto || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200",
-        bingkai: tempProfileBingkai,
-        foto_width: "120px",
-        foto_height: "120px",
-        overlay_url: ""
-      }
-    ]);
-    setTempProfileName("");
-    setTempProfileDesc("");
-    setTempProfileUrutan("");
-    setTempProfileFoto("");
-  };
+  const steps = [
+    { name: "Informasi Dasar", icon: Info },
+    { name: "Cover & Musik", icon: Music },
+    { name: "Profil Pasangan / Tokoh", icon: Heart },
+    { name: "Rangkaian Acara", icon: Calendar },
+    { name: "Cerita & Galeri", icon: Sparkles },
+    { name: "RSVP & Hadiah", icon: Gift },
+    ...(status === "DRAFT" ? [{ name: "Aktivasi Pembayaran", icon: Lock }] : [])
+  ];
 
-  const removeProfile = (idx: number) => {
-    const currentList = data.profil?.profils || [];
-    updateData("profil", "profils", currentList.filter((_: any, i: number) => i !== idx));
-  };
-
-  // Event management
-  const addEvent = () => {
-    if (!tempEventName || !tempEventDate) return;
-    const currentList = data.acara?.acaras || [];
-    updateData("acara", "acaras", [
-      ...currentList,
-      {
-        nama: tempEventName,
-        tanggal: tempEventDate,
-        jam: tempEventTime,
-        alamat: tempEventAddress,
-        link_maps: tempEventMaps
-      }
-    ]);
-    setTempEventName("");
-    setTempEventDate("");
-    setTempEventTime("");
-    setTempEventAddress("");
-    setTempEventMaps("");
-  };
-
-  const removeEvent = (idx: number) => {
-    const currentList = data.acara?.acaras || [];
-    updateData("acara", "acaras", currentList.filter((_: any, i: number) => i !== idx));
-  };
-
-  // Story management
-  const addStory = () => {
-    if (!tempStoryTitle || !tempStoryContent) return;
-    const currentList = data.cerita?.ceritas || [];
-    updateData("cerita", "ceritas", [
-      ...currentList,
-      {
-        judul: tempStoryTitle,
-        waktu: tempStoryDate,
-        isi: tempStoryContent
-      }
-    ]);
-    setTempStoryTitle("");
-    setTempStoryDate("");
-    setTempStoryContent("");
-  };
-
-  const removeStory = (idx: number) => {
-    const currentList = data.cerita?.ceritas || [];
-    updateData("cerita", "ceritas", currentList.filter((_: any, i: number) => i !== idx));
-  };
-
-  // Gallery management
-  const addGalleryImage = () => {
-    if (!tempGaleriUrl) return;
-    const currentList = data.cerita?.galeris || [];
-    updateData("cerita", "galeris", [...currentList, tempGaleriUrl]);
-    setTempGaleriUrl("");
-  };
-
-  const removeGalleryImage = (idx: number) => {
-    const currentList = data.cerita?.galeris || [];
-    updateData("cerita", "galeris", currentList.filter((_: any, i: number) => i !== idx));
-  };
-
-  // Cashless Bank management
-  const addBank = () => {
-    if (!tempBankName || !tempBankAccount) return;
-    const currentList = data.penutup?.amplops || [];
-    updateData("penutup", "amplops", [
-      ...currentList,
-      {
-        bank: tempBankName,
-        nomor_rekening: tempBankAccount,
-        atas_nama: tempBankOwner
-      }
-    ]);
-    setTempBankName("");
-    setTempBankAccount("");
-    setTempBankOwner("");
-  };
-
-  const removeBank = (idx: number) => {
-    const currentList = data.penutup?.amplops || [];
-    updateData("penutup", "amplops", currentList.filter((_: any, i: number) => i !== idx));
-  };
-
-  const getFontOptions = () => {
-    switch(activeSection) {
-      case "cover":
-        return [
-          { key: "setting_nama", label: "Nama Pasangan / Acara" },
-          { key: "setting_font", label: "Header (Kategori)" }
-        ];
-      case "pembuka":
-        return [
-          { key: "setting_ucapan", label: "Kalimat Pembuka" },
-          { key: "setting_kategori", label: "Kategori Acara" },
-          { key: "setting_nama", label: "Nama Pasangan / Acara" }
-        ];
-      default:
-        return [];
+  const nextStep = () => {
+    if (activeStep < steps.length - 1) {
+      saveDraft();
+      setActiveStep(activeStep + 1);
     }
   };
 
-  // Helper to resolve font settings based on active section
-  const getSectionFontConfig = () => {
-    const defaultKeys: Record<string, string> = {
-      cover: "setting_nama",
-      pembuka: "setting_ucapan",
-      profil: "setting_nama",
-      acara: "setting_nama",
-      cerita: "setting_nama",
-      penutup: "setting_nama"
-    };
-    const key = selectedFontKey || defaultKeys[activeSection] || "setting_nama";
-    const sectionData = data[activeSection] || {};
-    return { key: key as any, data: sectionData[key] || {} };
+  const prevStep = () => {
+    if (activeStep > 0) {
+      setActiveStep(activeStep - 1);
+    }
   };
 
-  const fontConfig = getSectionFontConfig();
+  // Generated Link Calculations
+  const getBaseUrl = () => {
+    if (typeof window !== "undefined") {
+      return `${window.location.origin}`;
+    }
+    return "";
+  };
+  const primaryInvitationUrl = `${getBaseUrl()}/u/${invitationSlug}`;
+  const customGuestUrl = guestNameInput
+    ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`
+    : primaryInvitationUrl;
 
-  // Helper to render Cultural Ornaments on Preview
-  const renderOrnament = (sectionName: string) => {
-    const activeOrnamentId = data[sectionName]?.ornament;
-    if (!activeOrnamentId) return null;
-    const orn = culturalOrnaments.find(o => o.id === activeOrnamentId);
-    if (!orn) return null;
-    return (
-      <div className="w-full py-2 flex justify-center text-[#d4af37] opacity-80 z-10 pointer-events-none">
-        {orn.svg}
-      </div>
-    );
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const getWhatsAppShareLink = () => {
+    const textMessage = `Kepada Yth. ${guestNameInput || "Tamu Undangan"},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n${customGuestUrl}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`;
+    return `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-[#f5f5dc] text-[#064e3b] font-sans">
-      {/* Dynamic Font Loader */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;600;700&family=Great+Vibes&family=Inter:wght@300;400;600;700;900&family=Lato:wght@300;400;700&family=Outfit:wght@300;400;600;700;900&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
-
-      {/* Midtrans Snap Script */}
-      <Script 
-        src="https://app.sandbox.midtrans.com/snap/snap.js" 
-        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+    <div className="min-h-screen flex flex-col bg-[#fefcf6] text-[#064e3b] font-sans pb-16">
+      {/* Midtrans Snap Scripts */}
+      <Script
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || ""}
         strategy="lazyOnload"
       />
 
-      {/* 1. TOP HEADER BAR */}
-      <header className="px-6 py-3 border-b border-[#064e3b]/10 flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0 bg-[#f5f5dc]">
+      {/* TOP NAV BAR */}
+      <header className="sticky top-0 bg-[#064e3b] text-white px-6 py-4 shadow-md flex items-center justify-between z-30 border-b border-[#d4af37]/20">
         <div className="flex items-center gap-3">
-          <Link href="/templates" className="p-1.5 hover:bg-[#064e3b]/10 rounded-xl text-[#064e3b] transition-all">
+          <Link href="/templates" className="p-2 hover:bg-white/10 rounded-xl transition-all">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-black tracking-tight text-[#064e3b] leading-none">
-                {invitation.template.nama_template || "Batik Keraton Premium"}
-              </h2>
-              <span className="text-[10px] font-bold bg-[#064e3b]/10 text-[#064e3b] px-2 py-0.5 rounded-full">
+              <span className="font-black text-lg tracking-widest text-[#d4af37]">ADATARA</span>
+              <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
                 {invitation.template.kategori}
               </span>
             </div>
-            <span className="text-[10px] font-semibold text-[#064e3b]/60 block mt-1">
-              /u/{invitation.slug} • Draft saved just now
-            </span>
+            <p className="text-xs text-white/70">Mendesain: {invitation.template.nama_template}</p>
           </div>
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-3 flex-wrap">
-          {/* Status Display or Select */}
-          {invitation.status === "ACTIVE" || status === "ACTIVE" ? (
-            <div className="flex items-center gap-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl px-3 py-1.5 text-xs font-bold text-[#064e3b]">
-              <span className="opacity-60 text-[10px] uppercase tracking-wider">Status:</span>
-              <select 
-                value={status}
-                onChange={async (e) => {
-                  const newStatus = e.target.value as any;
-                  setStatus(newStatus);
-                  await saveInvitationPublic(invitation.id, data, newStatus);
-                }}
-                className="bg-transparent text-[#064e3b] border-none outline-none font-bold cursor-pointer"
-              >
-                <option value="ACTIVE" className="bg-[#f5f5dc]">PUBLISH (AKTIF)</option>
-                <option value="INACTIVE" className="bg-[#f5f5dc]">NON-AKTIF</option>
-              </select>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#d4af37]/15 border border-[#d4af37]/30 rounded-xl text-[10px] font-black text-[#d4af37] uppercase tracking-wider">
-              <span>Status: DRAF</span>
-            </div>
-          )}
-
-          {/* Checkout Activation Button for Unpaid Guests */}
-          {(invitation.status !== "ACTIVE" && status !== "ACTIVE") && (
-            <button
-              onClick={() => setShowCheckoutModal(true)}
-              className="px-4 py-2 rounded-xl text-xs font-black bg-[#d4af37] hover:bg-[#d4af37]/90 text-white border border-[#d4af37] flex items-center gap-1.5 shadow-md shadow-[#d4af37]/20 cursor-pointer transition-all animate-pulse"
-            >
-              👑 Aktifkan Undangan (Bayar)
-            </button>
-          )}
-
-          {/* Public Link Preview */}
-          <Link 
-            href={`/u/${invitation.slug}`}
+        <div className="flex items-center gap-2">
+          {/* Real-time Preview Link */}
+          <a
+            href={primaryInvitationUrl}
             target="_blank"
-            className="px-4 py-2 rounded-xl border border-[#064e3b]/20 bg-[#f5f5dc] hover:bg-[#064e3b]/10 text-[#064e3b] text-xs font-extrabold flex items-center gap-1.5 transition-all"
+            rel="noopener noreferrer"
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white rounded-xl text-xs font-bold border border-white/10 flex items-center gap-1.5 transition-all"
           >
-            <Eye className="w-4 h-4 text-[#064e3b]" />
-            Preview
-          </Link>
+            <Eye className="w-4 h-4" />
+            Lihat Hasil
+            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+          </a>
 
-          {/* Save Button */}
+          {/* Quick Save Draft */}
           <button
-            onClick={handleSave}
+            onClick={saveDraft}
             disabled={saving}
-            className={`px-5 py-2 rounded-xl text-xs font-extrabold flex items-center gap-2 cursor-pointer transition-all border border-[#064e3b]/20 ${
-              saveSuccess 
-                ? "bg-emerald-700 text-white border-emerald-800" 
-                : "bg-[#064e3b] hover:bg-[#064e3b]/90 text-white"
-            }`}
+            className="px-4 py-2 bg-[#d4af37] hover:bg-[#c49f27] text-white rounded-xl text-xs font-black border border-[#d4af37] flex items-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50"
           >
             {saving ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Menyimpan...
-              </>
-            ) : saveSuccess ? (
-              <>
-                <span>Saved!</span>
-              </>
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <>
-                <Save className="w-4 h-4" />
-                Simpan Draft
-              </>
+              <Save className="w-4 h-4" />
             )}
+            Simpan Perubahan
           </button>
         </div>
       </header>
 
-      {/* Save Error Notification */}
-      {saveError && (
-        <div className="bg-rose-500/10 border-b border-rose-900/30 text-rose-700 text-xs font-bold py-2 px-6 text-center">
-          {saveError}
-        </div>
-      )}
-
-      {/* 2. THREE-COLUMN WORKSPACE BODY */}
-      <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
-        
-        {/* COLUMN 1: LEFT SIDEBAR (Width: 320px) */}
-        <aside className="w-full lg:w-76 border-b lg:border-b-0 lg:border-r border-[#064e3b]/10 flex flex-col min-h-0 bg-[#f5f5dc] shrink-0">
-          {/* Navigation Tabs */}
-          <div className="grid grid-cols-3 border-b border-[#064e3b]/10 bg-[#f5f5dc] p-1 gap-1 shrink-0">
-            {["components", "layers", "assets"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setLeftTab(tab as any)}
-                className={`py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                  leftTab === tab
-                    ? "bg-[#064e3b] text-[#f5f5dc]"
-                    : "text-[#064e3b]/60 hover:text-[#064e3b] hover:bg-[#064e3b]/5"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {/* Left panel scrollable assets */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-none">
-            {leftTab === "components" && (
-              <>
-                {/* Layout Blocks Section */}
-                <div className="space-y-3">
-                  <span className="text-[10px] font-extrabold text-[#064e3b]/60 uppercase tracking-widest block">
-                    Layout Blocks
-                  </span>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: "cover", label: "Hero Section", icon: "🖼️" },
-                      { id: "pembuka", label: "Pembukaan", icon: "📖" },
-                      { id: "profil", label: "Love Story / Profil", icon: "❤️" },
-                      { id: "acara", label: "Acara / Jadwal", icon: "📅" },
-                      { id: "cerita", label: "Gallery / Cerita", icon: "📷" },
-                      { id: "penutup", label: "RSVP Form & Kado", icon: "🎁" }
-                    ].map((block) => (
-                      <button
-                        key={block.id}
-                        onClick={() => setActiveSection(block.id as any)}
-                        className={`p-3 rounded-xl border text-left flex flex-col justify-between h-20 transition-all cursor-pointer ${
-                          activeSection === block.id
-                            ? "bg-[#064e3b]/10 border-[#d4af37] shadow-sm shadow-[#d4af37]/20"
-                            : "bg-[#f5f5dc] border-[#064e3b]/10 hover:border-[#064e3b]/30"
-                        }`}
-                      >
-                        <span className="text-xl">{block.icon}</span>
-                        <span className="text-[10px] font-extrabold text-[#064e3b] leading-tight">
-                          {block.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-
-                {/* Form Pengisian Data (Sesuai Active Section) */}
-                <div className="p-3.5 bg-white border border-[#064e3b]/10 rounded-2xl space-y-4 shadow-sm text-left">
-                  <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37] flex items-center gap-1.5 border-b border-[#064e3b]/10 pb-2">
-                    <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" /> Data: {activeSection === "cover" ? "Hero / Cover" : activeSection.toUpperCase()}
-                  </p>
-                                <div className="space-y-5">
-                
-                {/* 1. COVER CONTENT */}
-                {activeSection === "cover" && (
-                  <div className="space-y-4">
-                    <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Cover Settings</h4>
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Nama Pasangan / Acara Utama</label>
-                      <input
-                        type="text"
-                        value={data.cover?.nama_acara || ""}
-                        onChange={(e) => updateData("cover", "nama_acara", e.target.value)}
-                        placeholder="contoh: Aditya & Tara"
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Audio Background (Musik)</label>
-                      <select
-                        value={data.cover?.music_url || ""}
-                        onChange={(e) => updateData("cover", "music_url", e.target.value)}
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] focus:border-[#d4af37] outline-none"
-                      >
-                        <option value="">Tanpa Musik Latar</option>
-                        {musicList.map((m) => (
-                          <option key={m.id} value={m.audio_url}>
-                            {m.judul} - {m.artis}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {data.cover?.music_url && (
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-extrabold uppercase opacity-75">Mulai Lagu Dari Detik Ke-</label>
-                        <input
-                          type="number"
-                          min={0}
-                          value={data.cover?.music_start_second || 0}
-                          onChange={(e) => updateData("cover", "music_start_second", parseInt(e.target.value, 10) || 0)}
-                          placeholder="Contoh: 15 (untuk mulai dari detik 15)"
-                          className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] outline-none"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* 2. PEMBUKA CONTENT */}
-                {activeSection === "pembuka" && (
-                  <div className="space-y-4">
-                    <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Pembukaan Settings</h4>
-                    
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Kalimat Pembuka</label>
-                      <textarea
-                        value={data.pembuka?.ucapan || ""}
-                        onChange={(e) => updateData("pembuka", "ucapan", e.target.value)}
-                        rows={5}
-                        placeholder="Tulis kalimat selamat datang dan doa..."
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all resize-none"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Foto Pembuka (URL)</label>
-                      <input
-                        type="text"
-                        value={data.pembuka?.foto_pembuka || ""}
-                        onChange={(e) => updateData("pembuka", "foto_pembuka", e.target.value)}
-                        placeholder="Masukkan URL foto pembuka..."
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
-                      />
-                    </div>
-
-                    {data.pembuka?.foto_pembuka && (
-                      <div className="space-y-2">
-                        <PhotoStyleWidget 
-                          bingkai={data.pembuka.foto_setting?.bingkai || "oval"} 
-                          width={data.pembuka.foto_setting?.width || "120px"}
-                          height={data.pembuka.foto_setting?.height || "120px"}
-                          overlayUrl={data.pembuka.foto_setting?.overlay_url || ""}
-                          onChange={(updates) => updateData("pembuka", "foto_setting", {
-                            ...(data.pembuka.foto_setting || {}),
-                            bingkai: updates.bingkai,
-                            width: updates.width,
-                            height: updates.height,
-                            overlay_url: updates.overlay_url,
-                          })}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* 3. PROFIL CONTENT */}
-                {activeSection === "profil" && (
-                  <div className="space-y-4">
-                    <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Daftar Tokoh/Profil</h4>
-                    
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Pengantar Profil</label>
-                      <input
-                        type="text"
-                        value={data.profil?.ucapan_profil || ""}
-                        onChange={(e) => updateData("profil", "ucapan_profil", e.target.value)}
-                        placeholder="Maha suci Allah..."
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Profil Terdaftar ({data.profil?.profils?.length || 0})</label>
-                      <div className="space-y-2">
-                        {data.profil?.profils?.map((prof: any, idx: number) => {
-                          const isEditing = activeProfileEditIdx === idx;
-                          return (
-                            <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2 overflow-hidden">
-                                  <img src={prof.foto} className="w-8 h-8 object-cover rounded-full bg-[#064e3b]/10 shrink-0" alt="" />
-                                  <div className="overflow-hidden">
-                                    <h5 className="font-bold truncate text-[#064e3b] text-left">{prof.nama}</h5>
-                                    <p className="text-[9px] text-[#064e3b]/60 truncate text-left">{prof.keterangan}</p>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-1 shrink-0">
-                                  <button
-                                    type="button"
-                                    onClick={() => setActiveProfileEditIdx(isEditing ? null : idx)}
-                                    className="px-2 py-1 bg-[#064e3b]/10 hover:bg-[#064e3b]/20 text-[#064e3b] text-[10px] font-black rounded-lg transition-all"
-                                  >
-                                    {isEditing ? "Tutup" : "Edit"}
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      removeProfile(idx);
-                                      if (isEditing) setActiveProfileEditIdx(null);
-                                    }}
-                                    className="p-1.5 text-rose-600 hover:bg-rose-500/10 rounded-lg cursor-pointer shrink-0"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
-                                </div>
-                              </div>
-
-                              {isEditing && (
-                                <div className="pt-2 border-t border-[#064e3b]/10 space-y-2 text-left">
-                                  <div>
-                                    <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Nama Lengkap</label>
-                                    <input 
-                                      type="text" 
-                                      value={prof.nama} 
-                                      onChange={e => {
-                                        const newList = [...data.profil.profils];
-                                        newList[idx] = { ...prof, nama: e.target.value };
-                                        updateData("profil", "profils", newList);
-                                      }}
-                                      className="w-full px-2.5 py-1.5 bg-white border border-[#064e3b]/20 focus:border-[#d4af37] rounded-lg text-xs font-bold outline-none" 
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Keterangan</label>
-                                    <input 
-                                      type="text" 
-                                      value={prof.keterangan} 
-                                      onChange={e => {
-                                        const newList = [...data.profil.profils];
-                                        newList[idx] = { ...prof, keterangan: e.target.value };
-                                        updateData("profil", "profils", newList);
-                                      }}
-                                      className="w-full px-2.5 py-1.5 bg-white border border-[#064e3b]/20 focus:border-[#d4af37] rounded-lg text-xs font-bold outline-none" 
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Anak Ke / Bersaudara</label>
-                                    <input 
-                                      type="text" 
-                                      value={prof.urutan_anak || ""} 
-                                      onChange={e => {
-                                        const newList = [...data.profil.profils];
-                                        newList[idx] = { ...prof, urutan_anak: e.target.value };
-                                        updateData("profil", "profils", newList);
-                                      }}
-                                      placeholder="Anak pertama dari tiga bersaudara..."
-                                      className="w-full px-2.5 py-1.5 bg-white border border-[#064e3b]/20 focus:border-[#d4af37] rounded-lg text-xs font-bold outline-none" 
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Foto URL</label>
-                                    <input 
-                                      type="text" 
-                                      value={prof.foto} 
-                                      onChange={e => {
-                                        const newList = [...data.profil.profils];
-                                        newList[idx] = { ...prof, foto: e.target.value };
-                                        updateData("profil", "profils", newList);
-                                      }}
-                                      className="w-full px-2.5 py-1.5 bg-white border border-[#064e3b]/20 focus:border-[#d4af37] rounded-lg text-xs font-bold outline-none" 
-                                    />
-                                  </div>
-                                  
-                                  <PhotoStyleWidget 
-                                    bingkai={prof.bingkai || "oval"}
-                                    width={prof.foto_width || "120px"}
-                                    height={prof.foto_height || "120px"}
-                                    overlayUrl={prof.overlay_url || ""}
-                                    onChange={updates => {
-                                      const newList = [...data.profil.profils];
-                                      newList[idx] = { 
-                                        ...prof, 
-                                        bingkai: updates.bingkai, 
-                                        foto_width: updates.width, 
-                                        foto_height: updates.height, 
-                                        overlay_url: updates.overlay_url 
-                                      };
-                                      updateData("profil", "profils", newList);
-                                    }}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Form tambah profil */}
-                    <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 p-3 rounded-xl space-y-3">
-                      <span className="font-bold text-[10px] block">Tambah Profil</span>
-                      <input
-                        type="text"
-                        value={tempProfileName}
-                        onChange={(e) => setTempProfileName(e.target.value)}
-                        placeholder="Nama Lengkap"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <input
-                        type="text"
-                        value={tempProfileDesc}
-                        onChange={(e) => setTempProfileDesc(e.target.value)}
-                        placeholder="Keterangan (e.g. Putri pertama...)"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <input
-                        type="text"
-                        value={tempProfileUrutan}
-                        onChange={(e) => setTempProfileUrutan(e.target.value)}
-                        placeholder="Anak Ke / Bersaudara"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <input
-                        type="text"
-                        value={tempProfileFoto}
-                        onChange={(e) => setTempProfileFoto(e.target.value)}
-                        placeholder="Foto URL (https://...)"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <select
-                        value={tempProfileBingkai}
-                        onChange={(e) => setTempProfileBingkai(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs text-[#064e3b]"
-                      >
-                        <option value="oval">Oval (Tradisional)</option>
-                        <option value="kotak">Kotak (Minimalis)</option>
-                        <option value="bulat">Bulat (Modern)</option>
-                      </select>
-                      <button
-                        type="button"
-                        onClick={addProfile}
-                        className="w-full py-2 rounded-lg bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
-                      >
-                        <PlusCircle className="w-3.5 h-3.5" />
-                        Tambah Tokoh
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* 4. ACARA CONTENT */}
-                {activeSection === "acara" && (
-                  <div className="space-y-4">
-                    <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Jadwal Acara</h4>
-                    
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Daftar Acara Terdaftar ({data.acara?.acaras?.length || 0})</label>
-                      <div className="space-y-2">
-                        {data.acara?.acaras?.map((evt: any, idx: number) => (
-                          <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-start justify-between">
-                            <div>
-                              <h5 className="font-bold text-[#064e3b]">{evt.nama}</h5>
-                              <p className="text-[9px] text-[#064e3b]/60 mt-0.5">{evt.tanggal} • {evt.jam}</p>
-                              <p className="text-[9px] text-[#064e3b]/50 mt-0.5 line-clamp-1">{evt.alamat}</p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeEvent(idx)}
-                              className="p-1.5 text-rose-600 hover:bg-rose-500/10 rounded-lg cursor-pointer"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Form tambah acara */}
-                    <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 p-3 rounded-xl space-y-3">
-                      <span className="font-bold text-[10px] block">Tambah Acara Baru</span>
-                      <input
-                        type="text"
-                        value={tempEventName}
-                        onChange={(e) => setTempEventName(e.target.value)}
-                        placeholder="Nama Acara (e.g. Akad Nikah)"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <input
-                        type="date"
-                        value={tempEventDate}
-                        onChange={(e) => setTempEventDate(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs text-[#064e3b]"
-                      />
-                      <input
-                        type="text"
-                        value={tempEventTime}
-                        onChange={(e) => setTempEventTime(e.target.value)}
-                        placeholder="Jam / Waktu (e.g. 09:00 - Selesai)"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <input
-                        type="text"
-                        value={tempEventAddress}
-                        onChange={(e) => setTempEventAddress(e.target.value)}
-                        placeholder="Alamat Venue"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <input
-                        type="text"
-                        value={tempEventMaps}
-                        onChange={(e) => setTempEventMaps(e.target.value)}
-                        placeholder="Link Google Maps"
-                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                      />
-                      <button
-                        type="button"
-                        onClick={addEvent}
-                        className="w-full py-2 rounded-lg bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
-                      >
-                        <PlusCircle className="w-3.5 h-3.5" />
-                        Tambah Acara
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* 5. CERITA & GALERI CONTENT */}
-                {activeSection === "cerita" && (
-                  <div className="space-y-5">
-                    
-                    {/* Story moments */}
-                    <div className="space-y-3">
-                      <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Cerita Cinta</h4>
-                      <div className="space-y-2">
-                        {data.cerita?.ceritas?.map((story: any, idx: number) => (
-                          <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-start justify-between">
-                            <div>
-                              <h5 className="font-bold text-[#064e3b]">{story.judul}</h5>
-                              <p className="text-[9px] text-[#064e3b]/60">{story.waktu}</p>
-                              <p className="text-[9px] text-[#064e3b]/50 line-clamp-2 leading-relaxed mt-0.5">{story.isi}</p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeStory(idx)}
-                              className="p-1.5 text-rose-600 hover:bg-rose-500/10 rounded-lg cursor-pointer"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Add Story moment */}
-                      <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 p-3 rounded-xl space-y-3">
-                        <span className="font-bold text-[10px] block">Tambah Kisah Momen</span>
-                        <input
-                          type="text"
-                          value={tempStoryTitle}
-                          onChange={(e) => setTempStoryTitle(e.target.value)}
-                          placeholder="Judul (e.g. Pertama Bertemu)"
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                        />
-                        <input
-                          type="text"
-                          value={tempStoryDate}
-                          onChange={(e) => setTempStoryDate(e.target.value)}
-                          placeholder="Waktu/Periode (e.g. Maret 2024)"
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                        />
-                        <textarea
-                          value={tempStoryContent}
-                          onChange={(e) => setTempStoryContent(e.target.value)}
-                          rows={3}
-                          placeholder="Ceritakan momen indah ini..."
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs resize-none"
-                        />
-                        <button
-                          type="button"
-                          onClick={addStory}
-                          className="w-full py-2 rounded-lg bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
-                        >
-                          <PlusCircle className="w-3.5 h-3.5" />
-                          Tambah Kisah
-                        </button>
-                      </div>
-                    </div>
-
-                    <hr className="border-[#064e3b]/10" />
-
-                    {/* Album Gallery images */}
-                    <div className="space-y-3">
-                      <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Galeri Foto</h4>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-extrabold uppercase opacity-75">Layout Style</label>
-                        <select
-                          value={data.cerita?.galeri_layout || "grid"}
-                          onChange={(e) => updateData("cerita", "galeri_layout", e.target.value)}
-                          className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none"
-                        >
-                          <option value="grid">Grid (Kotak-kotak)</option>
-                          <option value="masonry">Masonry (Estetik)</option>
-                          <option value="carousel">Carousel (Geser)</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-extrabold uppercase opacity-75">Foto Terdaftar ({data.cerita?.galeris?.length || 0})</label>
-                        <div className="grid grid-cols-4 gap-1.5">
-                          {data.cerita?.galeris?.map((img: string, idx: number) => (
-                            <div key={idx} className="relative group aspect-square rounded-lg overflow-hidden border border-[#064e3b]/15 bg-[#064e3b]/5">
-                              <img src={img} className="w-full h-full object-cover" alt="" />
-                              <button
-                                type="button"
-                                onClick={() => removeGalleryImage(idx)}
-                                className="absolute inset-0 bg-rose-950/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-rose-200 transition-all cursor-pointer"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Add Gallery image URL */}
-                      <div className="flex gap-2 pt-1">
-                        <input
-                          type="text"
-                          value={tempGaleriUrl}
-                          onChange={(e) => setTempGaleriUrl(e.target.value)}
-                          placeholder="Masukkan URL Foto Baru..."
-                          className="flex-1 px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs"
-                        />
-                        <button
-                          type="button"
-                          onClick={addGalleryImage}
-                          className="px-3 py-1.5 bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold rounded-lg text-xs cursor-pointer"
-                        >
-                          Tambah
-                        </button>
-                      </div>
-                    </div>
-
-                  </div>
-                )}
-
-                {/* 6. PENUTUP & KADO CONTENT */}
-                {activeSection === "penutup" && (
-                  <div className="space-y-4">
-                    <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Penutupan & RSVP</h4>
-                    
-                    {/* Toggles */}
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-center justify-between">
-                        <div>
-                          <span className="font-bold text-[9px] block">Form RSVP</span>
-                          <span className="text-[7.5px] opacity-60">Status Kehadiran</span>
-                        </div>
-                        <input
-                          type="checkbox"
-                          checked={data.penutup?.rsvp_aktif || false}
-                          onChange={(e) => updateData("penutup", "rsvp_aktif", e.target.checked)}
-                          className="w-4 h-4 accent-[#064e3b] cursor-pointer"
-                        />
-                      </div>
-
-                      <div className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-center justify-between">
-                        <div>
-                          <span className="font-bold text-[9px] block">Wall Ucapan</span>
-                          <span className="text-[7.5px] opacity-60">Komentar Tamu</span>
-                        </div>
-                        <input
-                          type="checkbox"
-                          checked={data.penutup?.ucapan_aktif || false}
-                          onChange={(e) => updateData("penutup", "ucapan_aktif", e.target.checked)}
-                          className="w-4 h-4 accent-[#064e3b] cursor-pointer"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Pesan Penutup</label>
-                      <textarea
-                        value={data.penutup?.pesan_penutup || ""}
-                        onChange={(e) => updateData("penutup", "pesan_penutup", e.target.value)}
-                        rows={3}
-                        placeholder="Merupakan kebahagiaan bagi kami..."
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] outline-none resize-none"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="space-y-1">
-                        <label className="block text-[9px] font-extrabold uppercase opacity-75">Salam Penutup</label>
-                        <input
-                          type="text"
-                          value={data.penutup?.salam || ""}
-                          onChange={(e) => updateData("penutup", "salam", e.target.value)}
-                          placeholder="Wassalamualaikum..."
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/15 rounded-lg text-xs"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="block text-[9px] font-extrabold uppercase opacity-75">Tertanda</label>
-                        <input
-                          type="text"
-                          value={data.penutup?.tertanda || ""}
-                          onChange={(e) => updateData("penutup", "tertanda", e.target.value)}
-                          placeholder="Aditya & Tara"
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/15 rounded-lg text-xs"
-                        />
-                      </div>
-                    </div>
-
-                    <hr className="border-[#064e3b]/10" />
-
-                    {/* Cashless accounts list */}
-                    <div className="space-y-3">
-                      <h5 className="font-extrabold text-[10px] uppercase opacity-75">Amplop Cashless / Rekening</h5>
-                      <div className="space-y-2">
-                        {data.penutup?.amplops?.map((gift: any, idx: number) => (
-                          <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-center justify-between">
-                            <div>
-                              <span className="font-bold text-[#064e3b] text-xs">{gift.bank} - {gift.nomor_rekening}</span>
-                              <p className="text-[9px] text-[#064e3b]/60">A/N: {gift.atas_nama}</p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeBank(idx)}
-                              className="p-1.5 text-rose-600 hover:bg-rose-500/10 rounded-lg cursor-pointer"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Add Cashless Account form */}
-                      <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 p-3 rounded-xl space-y-3">
-                        <span className="font-bold text-[9px] block">Tambah Rekening Baru</span>
-                        <input
-                          type="text"
-                          value={tempBankName}
-                          onChange={(e) => setTempBankName(e.target.value)}
-                          placeholder="Nama Bank/e-Wallet (e.g. BCA, OVO)"
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                        />
-                        <input
-                          type="text"
-                          value={tempBankAccount}
-                          onChange={(e) => setTempBankAccount(e.target.value)}
-                          placeholder="Nomor Rekening"
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                        />
-                        <input
-                          type="text"
-                          value={tempBankOwner}
-                          onChange={(e) => setTempBankOwner(e.target.value)}
-                          placeholder="Nama Pemilik Rekening"
-                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
-                        />
-                        <button
-                          type="button"
-                          onClick={addBank}
-                          className="w-full py-2 rounded-lg bg-[#064e3b] hover:bg-[#064e3b]/90 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
-                        >
-                          <PlusCircle className="w-3.5 h-3.5" />
-                          Tambah Rekening
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-                </div>
-  
-                {/* Cultural Motifs Section */}
-                <div className="space-y-3 pt-2">
-                  <span className="text-[10px] font-extrabold text-[#064e3b]/60 uppercase tracking-widest block">
-                    Indonesian Motifs
-                  </span>
-                  <div className="space-y-2">
-                    {indonesianMotifs.map((motif) => (
-                      <div
-                        key={motif.id}
-                        className="flex items-center justify-between p-2.5 rounded-xl border border-[#064e3b]/10 bg-[#f5f5dc] group hover:border-[#064e3b]/30 transition-all cursor-pointer"
-                        onClick={() => {
-                          // Allow setting default background styles based on motif
-                          if (motif.id === "mega-mendung") {
-                            updateData(activeSection, "background", { type: "solid", value: "#064e3b" });
-                          } else if (motif.id === "parang-rusak") {
-                            updateData(activeSection, "background", { type: "solid", value: "#381a04" });
-                          } else {
-                            updateData(activeSection, "background", { type: "solid", value: "#f5f5dc" });
-                          }
-                        }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-[#064e3b]/5 flex items-center justify-center shrink-0">
-                            {motif.svg}
-                          </div>
-                          <div>
-                            <h5 className="text-[11px] font-black text-[#064e3b] leading-tight">{motif.name}</h5>
-                            <span className="text-[9px] font-bold text-[#064e3b]/50 block mt-0.5">{motif.region}</span>
-                          </div>
-                        </div>
-                        <div className="text-[#064e3b]/30 group-hover:text-[#064e3b]/60 cursor-grab">
-                          <span className="text-lg">⋮⋮</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {leftTab === "layers" && (
-              <div className="text-center py-8 text-xs text-[#064e3b]/60 font-medium">
-                <p>Layers Panel is active.</p>
-                <div className="mt-4 space-y-2 text-left bg-[#064e3b]/5 p-3 rounded-lg text-[10px]">
-                  <p className="font-bold">Active Section Order:</p>
-                  <p>1. Cover (Hero)</p>
-                  <p>2. Pembuka (Intro)</p>
-                  <p>3. Profil (Tokoh)</p>
-                  <p>4. Acara (Jadwal)</p>
-                  <p>5. Cerita & Galeri (Media)</p>
-                  <p>6. Penutup & RSVP (Kado)</p>
-                </div>
-              </div>
-            )}
-
-            {leftTab === "assets" && (
-              <div className="text-center py-8 text-xs text-[#064e3b]/60 font-medium">
-                <p>Assets Library</p>
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  <div className="border border-[#064e3b]/10 p-2 rounded-lg text-center">
-                    <span className="text-2xl block mb-1">🎵</span>
-                    <span className="text-[9px] font-bold">{musicList.length} Tracks</span>
-                  </div>
-                  <div className="border border-[#064e3b]/10 p-2 rounded-lg text-center">
-                    <span className="text-2xl block mb-1">🖼️</span>
-                    <span className="text-[9px] font-bold">Default Images</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Left panel bottom info */}
-          <div className="p-3 border-t border-[#064e3b]/10 bg-[#f5f5dc] flex items-center justify-between gap-2 shrink-0">
-            <button className="p-2 bg-[#064e3b]/5 hover:bg-[#064e3b]/10 rounded-lg text-[#064e3b] transition-all cursor-pointer">
-              <HelpCircle className="w-4 h-4" />
-            </button>
-            <button className="flex-1 py-2 bg-[#d4af37] hover:bg-[#d4af37]/90 text-white font-extrabold text-[10px] rounded-lg transition-all flex items-center justify-center gap-1 shadow-sm cursor-pointer uppercase tracking-wider">
-              <Plus className="w-3.5 h-3.5" />
-              Custom Import
-            </button>
-          </div>
-        </aside>
-
-        {/* COLUMN 2: MIDDLE CANVAS (Flex-1) */}
-        <main className="flex-1 flex flex-col min-h-0 bg-[#eaeaec] relative overflow-hidden">
-          
-          {/* Top coordinate scale ruler */}
-          <div className="h-6 border-b border-[#064e3b]/10 bg-[#f5f5dc]/60 flex items-center text-[8px] font-bold text-[#064e3b]/50 select-none relative shrink-0">
-            <div className="absolute left-6 h-full w-[1px] bg-[#064e3b]/15" />
-            <div className="pl-8 flex w-full justify-between pr-8">
-              <span>0</span>
-              <span>100</span>
-              <span>200</span>
-              <span>300</span>
-              <span>400</span>
-              <span>500</span>
-              <span>600</span>
-              <span>700</span>
-              <span>800</span>
-            </div>
-          </div>
-
-          {/* Canvas Main Body (Dotted Grid background) */}
-          <div 
-            className="flex-1 flex items-center justify-center p-6 overflow-y-auto relative"
-            style={{
-              backgroundImage: "radial-gradient(#064e3b 0.6px, #f5f5dc 0.6px)",
-              backgroundSize: "16px 16px"
-            }}
-          >
-            {/* FIGMA-STYLE EDIT SELECTION CORNER NODES */}
-            <div className="relative p-2 rounded-[42px] transition-all duration-300">
-              
-              {/* Corner selection handles */}
-              <div className="absolute -top-1 -left-1 w-2.5 h-2.5 bg-white border border-[#d4af37] rounded-full z-30 shadow" />
-              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white border border-[#d4af37] rounded-full z-30 shadow" />
-              <div className="absolute -bottom-1 -left-1 w-2.5 h-2.5 bg-white border border-[#d4af37] rounded-full z-30 shadow" />
-              <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-white border border-[#d4af37] rounded-full z-30 shadow" />
-
-              {/* Viewport Frame Container */}
-              <div className={`relative rounded-[36px] border-[5px] border-[#064e3b] bg-slate-950 shadow-2xl flex flex-col overflow-hidden shrink-0 transition-all duration-300 ${
-                viewportMode === "mobile" 
-                  ? "w-[330px] h-[610px]" 
-                  : viewportMode === "tablet"
-                    ? "w-[480px] h-[640px]"
-                    : "w-[640px] h-[580px]"
-              }`}>
-                {/* Simulated content frame */}
-                <div 
-                  id="mobile-preview-container"
-                  ref={previewScrollContainerRef}
-                  className="flex-1 overflow-y-auto relative bg-[#f5f5dc] text-[#064e3b] flex flex-col font-sans select-none scrollbar-none"
-                >
-                  
-                  {/* PREVIEW: COVER SECTION */}
-                  <div 
-                    id="preview-cover"
-                    className={`min-h-full flex flex-col justify-between p-6 relative overflow-hidden text-center border-b-2 border-dashed ${
-                      activeSection === "cover" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-transparent"
-                    }`}
-                    style={{
-                      background: data.cover?.background?.type === "image"
-                        ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.55)), url(${data.cover?.background?.value}) center/cover no-repeat`
-                        : data.cover?.background?.type === "gradient"
-                          ? data.cover?.background?.value
-                          : data.cover?.background?.value || "#064e3b"
-                    }}
-                  >
-                    {/* Cover Border Frame */}
-                    {data.cover?.setting_bingkai?.enabled && (
-                      <div 
-                        className="absolute pointer-events-none z-20"
-                        style={{
-                          top: data.cover.setting_bingkai.padding || "16px",
-                          bottom: data.cover.setting_bingkai.padding || "16px",
-                          left: data.cover.setting_bingkai.padding || "16px",
-                          right: data.cover.setting_bingkai.padding || "16px",
-                          borderWidth: data.cover.setting_bingkai.width || "2px",
-                          borderStyle: data.cover.setting_bingkai.style || "solid",
-                          borderColor: data.cover.setting_bingkai.color || "#d4af37",
-                          borderRadius: data.cover.setting_bingkai.radius || "12px",
-                        }}
-                      />
-                    )}
-                    {/* Absolute positioned custom elements */}
-                    {data.cover?.setting_font?.position === "custom" && (
-                      <span 
-                        style={{
-                          fontSize: data.cover?.setting_font?.size || "20px",
-                          color: data.cover?.setting_font?.color || "#ffffff",
-                          fontFamily: data.cover?.setting_font?.family || "Inter",
-                          lineHeight: 1.2,
-                          position: "absolute",
-                          left: `${data.cover?.setting_font?.x ?? 50}%`,
-                          top: `${data.cover?.setting_font?.y ?? 35}%`,
-                          transform: "translate(-50%, -50%)",
-                          textAlign: "center",
-                          width: "90%",
-                        }}
-                        className="font-extrabold uppercase tracking-widest block z-10"
-                      >
-                        UNDANGAN {invitation.template.kategori}
-                      </span>
-                    )}
-
-                    {data.cover?.setting_nama?.position === "custom" && (
-                      <h1 
-                        style={{ 
-                          fontSize: data.cover?.setting_nama?.size || "40px", 
-                          color: data.cover?.setting_nama?.color || "#ffffff",
-                          fontFamily: data.cover?.setting_nama?.family || "Inter",
-                          lineHeight: 1.2,
-                          position: "absolute",
-                          left: `${data.cover?.setting_nama?.x ?? 50}%`,
-                          top: `${data.cover?.setting_nama?.y ?? 48}%`,
-                          transform: "translate(-50%, -50%)",
-                          textAlign: "center",
-                          width: "90%",
-                        }}
-                        className="leading-tight break-words drop-shadow-md px-2 z-10"
-                      >
-                        {data.cover?.nama_acara || "Aditya & Tara"}
-                      </h1>
-                    )}
-
-                    {data.cover?.setting_tombol?.position === "custom" && (
-                      <button 
-                        type="button"
-                        style={{
-                          fontSize: data.cover?.setting_tombol?.size || "10px",
-                          color: data.cover?.setting_tombol?.color || "#ffffff",
-                          backgroundColor: data.cover?.setting_tombol?.bg_color || "transparent",
-                          borderColor: data.cover?.setting_tombol?.border_color || "#ffffff",
-                          borderWidth: data.cover?.setting_tombol?.border_color === "transparent" ? "0px" : "2px",
-                          fontFamily: data.cover?.setting_tombol?.family || "Inter",
-                          position: "absolute",
-                          left: `${data.cover?.setting_tombol?.x ?? 50}%`,
-                          top: `${data.cover?.setting_tombol?.y ?? 65}%`,
-                          transform: "translate(-50%, -50%)",
-                        }}
-                        className="px-6 py-2.5 rounded-full font-black shadow-lg flex items-center gap-1.5 z-10 whitespace-nowrap uppercase tracking-wider"
-                      >
-                        <Heart className="w-3 h-3 fill-white text-white" />
-                        {data.cover?.setting_tombol?.text || "Buka Undangan"}
-                      </button>
-                    )}
-
-                    <div />
-                    <div className="my-auto py-10 space-y-6">
-                      {renderOrnament("cover")}
-                      
-                      {data.cover?.setting_font?.position !== "custom" && (
-                        <span className="text-[10px] font-extrabold tracking-widest text-[#d4af37] uppercase block">
-                          UNDANGAN {invitation.template.kategori}
-                        </span>
-                      )}
-                      
-                      {data.cover?.setting_nama?.position !== "custom" && (
-                        <h1 
-                          style={{ 
-                            fontSize: data.cover?.setting_nama?.size || "40px", 
-                            color: data.cover?.setting_nama?.color || "#ffffff",
-                            fontFamily: data.cover?.setting_nama?.family || "Inter"
-                          }}
-                          className="leading-tight break-words drop-shadow-md px-2"
-                        >
-                          {data.cover?.nama_acara || "Aditya & Tara"}
-                        </h1>
-                      )}
-                      
-                      <div className="space-y-1.5 pt-4 flex flex-col items-center">
-                        <span className="text-[9px] text-[#f5f5dc]/75 block font-semibold">Kepada Yth. Bpk/Ibu/Saudara/i</span>
-                        <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-[10px] font-bold text-white shadow-sm">
-                          Tamu Undangan
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pb-6">
-                      {data.cover?.setting_tombol?.position !== "custom" && (
-                        <button 
-                          type="button"
-                          style={{
-                            fontSize: data.cover?.setting_tombol?.size || "10px",
-                            color: data.cover?.setting_tombol?.color || "#ffffff",
-                            backgroundColor: data.cover?.setting_tombol?.bg_color || "transparent",
-                            borderColor: data.cover?.setting_tombol?.border_color || "#ffffff",
-                            borderWidth: data.cover?.setting_tombol?.border_color === "transparent" ? "0px" : "2px",
-                            fontFamily: data.cover?.setting_tombol?.family || "Inter",
-                          }}
-                          className="px-6 py-2.5 rounded-full font-black shadow-lg animate-bounce flex items-center gap-1.5 mx-auto uppercase tracking-wider"
-                        >
-                          <Heart className="w-3 h-3 fill-white text-white" />
-                          {data.cover?.setting_tombol?.text || "Buka Undangan"}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* PREVIEW: PEMBUKA SECTION */}
-                  <div 
-                    id="preview-pembuka"
-                    className={`p-6 text-center flex flex-col justify-center gap-6 min-h-[300px] border-b border-dashed ${
-                      activeSection === "pembuka" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
-                    }`}
-                    style={{
-                      background: data.pembuka?.background?.type === "image"
-                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.pembuka?.background?.value}) center/cover no-repeat`
-                        : data.pembuka?.background?.type === "gradient"
-                          ? data.pembuka?.background?.value
-                          : undefined
-                    }}
-                  >
-                    {(() => {
-                      const card = data.pembuka?.setting_card || {};
-                      const cardStyles: React.CSSProperties = card.enabled
-                        ? {
-                            backgroundColor: card.glassmorphism 
-                              ? "rgba(255, 255, 255, 0.1)" 
-                              : (card.bg_color || "#ffffff"),
-                            backdropFilter: card.glassmorphism ? "blur(12px)" : undefined,
-                            WebkitBackdropFilter: card.glassmorphism ? "blur(12px)" : undefined,
-                            borderColor: card.glassmorphism 
-                              ? "rgba(255, 255, 255, 0.2)" 
-                              : (card.border_color || "#d4af37"),
-                            borderWidth: (card.glassmorphism || card.border_color !== "transparent") ? "1px" : "0px",
-                            borderRadius: card.border_radius || "16px",
-                            padding: card.padding || "24px",
-                            boxShadow: card.shadow || "none",
-                            width: card.width || "90%",
-                            height: card.height || "auto",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: "1rem",
-                            textAlign: "center",
-                          }
-                        : {};
-
-                      const content = (
-                        <>
-                          {renderOrnament("pembuka")}
-                          
-                          <div 
-                            style={{ 
-                              fontSize: data.pembuka?.setting_kategori?.size || "12px", 
-                              color: data.pembuka?.setting_kategori?.color || "#064e3b",
-                              fontFamily: data.pembuka?.setting_kategori?.family || "Inter"
-                            }}
-                            className="font-bold opacity-60 text-xs mb-2"
-                          >
-                            {invitation?.template?.kategori || "Kategori Acara"}
-                          </div>
-
-                          <div 
-                            style={{ 
-                              fontSize: data.pembuka?.setting_nama?.size || "24px", 
-                              color: data.pembuka?.setting_nama?.color || "#064e3b",
-                              fontFamily: data.pembuka?.setting_nama?.family || "Inter"
-                            }}
-                            className="font-bold text-2xl mb-4"
-                          >
-                            {data.cover?.nama_acara || "Nama Pasangan"}
-                          </div>
-
-                          {data.pembuka?.foto_pembuka && (
-                            <div className="mx-auto mb-4 flex justify-center">
-                              <FramedPhoto 
-                                src={data.pembuka.foto_pembuka} 
-                                bingkai={data.pembuka.foto_setting?.bingkai || "oval"} 
-                                className="w-36 h-36" 
-                                customWidth={data.pembuka.foto_setting?.width}
-                                customHeight={data.pembuka.foto_setting?.height}
-                                overlayUrl={data.pembuka.foto_setting?.overlay_url}
-                                photoScale={data.pembuka.foto_setting?.photo_scale}
-                                photoX={data.pembuka.foto_setting?.photo_x}
-                                photoY={data.pembuka.foto_setting?.photo_y}
-                              />
-                            </div>
-                          )}
-                          
-                          <p 
-                            style={{
-                              color: data.pembuka?.setting_ucapan?.color || "#064e3b",
-                              fontFamily: data.pembuka?.setting_ucapan?.family || "Inter"
-                            }}
-                            className="text-[11px] leading-relaxed italic max-w-xs mx-auto"
-                          >
-                            {data.pembuka?.ucapan || "Kalimat pembuka..."}
-                          </p>
-                        </>
-                      );
-
-                      return card.enabled ? (
-                        <div style={cardStyles}>
-                          {content}
-                        </div>
-                      ) : (
-                        content
-                      );
-                    })()}
-                  </div>
-
-                  {/* PREVIEW: PROFIL SECTION */}
-                  <div 
-                    id="preview-profil"
-                    className={`p-6 text-center space-y-6 border-b border-dashed relative ${
-                      activeSection === "profil" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
-                    }`}
-                    style={{
-                      background: data.profil?.background?.type === "image"
-                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.profil?.background?.value}) center/cover no-repeat`
-                        : data.profil?.background?.type === "gradient"
-                          ? data.profil?.background?.value
-                          : undefined
-                    }}
-                  >
-                    {renderOrnament("profil")}
-                    <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
-                      Kami Yang Berbahagia
-                    </span>
-                    {data.profil?.setting_ucapan_profil?.position === "custom" ? (
-                      <p
-                        className="opacity-80 whitespace-pre-wrap z-10"
-                        style={{
-                          color: data.profil?.setting_ucapan_profil?.color || "#064e3b",
-                          fontFamily: data.profil?.setting_ucapan_profil?.family || "Inter",
-                          fontSize: data.profil?.setting_ucapan_profil?.size || "10px",
-                          position: "absolute",
-                          left: `${data.profil?.setting_ucapan_profil?.x ?? 50}%`,
-                          top: `${data.profil?.setting_ucapan_profil?.y ?? 15}%`,
-                          transform: "translate(-50%, -50%)",
-                          textAlign: "center",
-                          width: data.profil?.setting_ucapan_profil?.width || "90%",
-                          lineHeight: data.profil?.setting_ucapan_profil?.lineHeight || "1.5",
-                        }}
-                      >
-                        {data.profil?.ucapan_profil || "Maha suci Allah..."}
-                      </p>
-                    ) : (
-                      <p
-                        className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap z-10 mx-auto"
-                        style={{
-                          color: data.profil?.setting_ucapan_profil?.color || "#064e3b",
-                          fontFamily: data.profil?.setting_ucapan_profil?.family || "Inter",
-                          fontSize: data.profil?.setting_ucapan_profil?.size || "10px",
-                          textAlign: (data.profil?.setting_ucapan_profil?.position || "center") as any,
-                          lineHeight: data.profil?.setting_ucapan_profil?.lineHeight || "1.5",
-                        }}
-                      >
-                        {data.profil?.ucapan_profil || "Maha suci Allah..."}
-                      </p>
-                    )}
-
-                    <div className="space-y-6 pt-2">
-                      {data.profil?.profils?.map((prof: any, idx: number) => (
-                        <div key={idx} className="flex flex-col items-center">
-                          <FramedPhoto 
-                            src={prof.foto} 
-                            bingkai={prof.bingkai || "oval"} 
-                            className="w-24 h-24" 
-                            customWidth={prof.foto_width}
-                            customHeight={prof.foto_height}
-                            overlayUrl={prof.overlay_url}
-                            photoScale={prof.foto_scale}
-                            photoX={prof.foto_x}
-                            photoY={prof.foto_y}
-                          />
-                          <h4 
-                            className="font-extrabold text-xs mt-2"
-                            style={{ 
-                              fontFamily: prof.setting_nama?.family || data.profil?.setting_nama_profil?.family || "Inter",
-                              fontSize: prof.setting_nama?.size || data.profil?.setting_nama_profil?.size || "14px",
-                              color: prof.setting_nama?.color || data.profil?.setting_nama_profil?.color || data.profil?.setting_ucapan_profil?.color || "#064e3b"
-                            }}
-                          >
-                            {prof.nama}
-                          </h4>
-                          <p 
-                            className="text-[9px] mt-0.5 max-w-[180px] leading-normal"
-                            style={{ 
-                              fontFamily: prof.setting_keterangan?.family || data.profil?.setting_keterangan_profil?.family || "Inter",
-                              fontSize: prof.setting_keterangan?.size || data.profil?.setting_keterangan_profil?.size || "10px",
-                              color: prof.setting_keterangan?.color || data.profil?.setting_keterangan_profil?.color || data.profil?.setting_ucapan_profil?.color || "#064e3b"
-                            }}
-                          >
-                            {prof.keterangan}
-                          </p>
-                          {prof.urutan_anak && (
-                            <p 
-                              className="text-[8px] italic mt-0.5 max-w-[180px] leading-normal"
-                              style={{ 
-                                fontFamily: prof.setting_urutan?.family || data.profil?.setting_urutan_profil?.family || "Inter",
-                                fontSize: prof.setting_urutan?.size || data.profil?.setting_urutan_profil?.size || "9px",
-                                color: prof.setting_urutan?.color || data.profil?.setting_urutan_profil?.color || data.profil?.setting_ucapan_profil?.color || "#064e3b"
-                              }}
-                            >
-                              {prof.urutan_anak}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* PREVIEW: ACARA SECTION */}
-                  <div 
-                    id="preview-acara"
-                    className={`p-6 text-center space-y-6 border-b border-dashed ${
-                      activeSection === "acara" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
-                    }`}
-                    style={{
-                      background: data.acara?.background?.type === "image"
-                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.acara?.background?.value}) center/cover no-repeat`
-                        : data.acara?.background?.type === "gradient"
-                          ? data.acara?.background?.value
-                          : undefined
-                    }}
-                  >
-                    {renderOrnament("acara")}
-                    <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
-                      Waktu & Tempat
-                    </span>
-
-                    <div className="space-y-4 text-left">
-                      {data.acara?.acaras?.map((evt: any, idx: number) => (
-                        <div key={idx} className="p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2">
-                          <h5 
-                            className="font-extrabold text-xs border-b border-[#064e3b]/10 pb-1.5 flex items-center gap-1.5"
-                            style={{
-                              fontFamily: evt.setting_nama?.family || data.acara?.setting_nama_acara?.family || "Inter",
-                              fontSize: evt.setting_nama?.size || data.acara?.setting_nama_acara?.size || "12px",
-                              color: evt.setting_nama?.color || data.acara?.setting_nama_acara?.color || "#064e3b"
-                            }}
-                          >
-                            <Calendar className="w-3.5 h-3.5" style={{ color: evt.setting_nama?.color || data.acara?.setting_nama_acara?.color || "#d4af37" }} />
-                            {evt.nama}
-                          </h5>
-                          <div className="text-[9px] space-y-1">
-                            <p 
-                              className="font-semibold"
-                              style={{
-                                fontFamily: evt.setting_tanggal?.family || data.acara?.setting_tanggal_acara?.family || "Inter",
-                                fontSize: evt.setting_tanggal?.size || data.acara?.setting_tanggal_acara?.size || "9px",
-                                color: evt.setting_tanggal?.color || data.acara?.setting_tanggal_acara?.color || "#064e3b"
-                              }}
-                            >
-                              Tanggal: {evt.tanggal}
-                            </p>
-                            <p
-                              style={{
-                                fontFamily: evt.setting_jam?.family || data.acara?.setting_jam_acara?.family || "Inter",
-                                fontSize: evt.setting_jam?.size || data.acara?.setting_jam_acara?.size || "9px",
-                                color: evt.setting_jam?.color || data.acara?.setting_jam_acara?.color || "#064e3b"
-                              }}
-                            >
-                              Pukul: {evt.jam || (evt.jam_mulai ? `${evt.jam_mulai}${evt.jam_selesai ? ` - ${evt.jam_selesai}` : ""}` : "")}
-                            </p>
-                            <p 
-                              className="leading-normal"
-                              style={{
-                                fontFamily: evt.setting_alamat?.family || data.acara?.setting_alamat_acara?.family || data.acara?.setting_jam_acara?.family || "Inter",
-                                fontSize: evt.setting_alamat?.size || "9px",
-                                color: evt.setting_alamat?.color || data.acara?.setting_alamat_acara?.color || "#064e3b"
-                              }}
-                            >
-                              Lokasi: {evt.alamat}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* PREVIEW: CERITA & GALERI SECTION */}
-                  <div 
-                    id="preview-cerita"
-                    className={`p-6 text-center space-y-6 border-b border-dashed ${
-                      activeSection === "cerita" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
-                    }`}
-                    style={{
-                      background: data.cerita?.background?.type === "image"
-                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.cerita?.background?.value}) center/cover no-repeat`
-                        : data.cerita?.background?.type === "gradient"
-                          ? data.cerita?.background?.value
-                          : undefined
-                    }}
-                  >
-                    {renderOrnament("cerita")}
-                    {data.cerita?.ceritas?.length > 0 && (
-                      <>
-                        <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
-                          Kisah Perjalanan
-                        </span>
-
-                        <div className="space-y-4 text-left relative pl-4 border-l border-[#064e3b]/15 ml-1">
-                          {data.cerita.ceritas.map((st: any, idx: number) => (
-                            <div key={idx} className="space-y-1 relative pb-1">
-                              <div className="absolute -left-[21.5px] top-1 w-2 h-2 rounded-full bg-[#d4af37]" />
-                              <h6 className="font-bold text-xs text-[#064e3b]">{st.judul}</h6>
-                              <span className="text-[8px] text-[#064e3b]/50 block font-semibold">{st.waktu}</span>
-                              <p className="text-[9.5px] text-[#064e3b]/70 leading-normal mt-1">{st.isi}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
-
-                    {data.cerita?.galeris?.length > 0 && (
-                      <>
-                        <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block pt-3">
-                          Galeri Foto
-                        </span>
-
-                        <div className="grid grid-cols-2 gap-1.5 pt-1">
-                          {data.cerita.galeris.map((img: string, idx: number) => (
-                            <div key={idx} className="aspect-square rounded-lg overflow-hidden bg-[#064e3b]/5 border border-[#064e3b]/10">
-                              <img src={img} className="w-full h-full object-cover" alt="" />
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  {/* PREVIEW: PENUTUP SECTION */}
-                  <div 
-                    id="preview-penutup"
-                    className={`p-6 text-center space-y-6 pb-12 border-b border-dashed ${
-                      activeSection === "penutup" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-transparent"
-                    }`}
-                    style={{
-                      background: data.penutup?.background?.type === "image"
-                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.penutup?.background?.value}) center/cover no-repeat`
-                        : data.penutup?.background?.type === "gradient"
-                          ? data.penutup?.background?.value
-                          : undefined
-                    }}
-                  >
-                    {renderOrnament("penutup")}
-                    <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
-                      Ungkapan Terima Kasih
-                    </span>
-
-                    <p className="text-[10px] text-[#064e3b]/70 italic leading-relaxed px-1">
-                      {data.penutup?.pesan_penutup}
-                    </p>
-
-                    <div className="space-y-1 text-[#064e3b]/80 text-[10px]">
-                      <p>{data.penutup?.salam}</p>
-                      <p className="font-extrabold mt-3">Kami yang berbahagia,</p>
-                      <p className="font-black text-xs text-[#d4af37]">{data.penutup?.tertanda}</p>
-                    </div>
-
-                    {/* Cashless Digital Gifts Preview */}
-                    {data.penutup?.amplops?.length > 0 && (
-                      <div className="pt-4 space-y-2 border-t border-[#064e3b]/10">
-                        <span className="text-[8px] font-bold text-[#064e3b]/60 uppercase tracking-widest block">
-                          Amplop Digital / Kado
-                        </span>
-                        <div className="space-y-2">
-                          {data.penutup.amplops.map((gift: any, idx: number) => (
-                            <div key={idx} className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl text-left relative">
-                              <span className="text-[8px] font-black text-[#d4af37] block uppercase">{gift.bank}</span>
-                              <span className="text-[#064e3b] text-xs font-black block mt-0.5 tracking-wide">{gift.nomor_rekening}</span>
-                              <span className="text-[9px] text-[#064e3b]/60 block">A/N: {gift.atas_nama}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating Canvas Footer Toolbar */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[#f5f5dc] border border-[#064e3b]/20 px-5 py-2.5 rounded-full shadow-lg flex items-center gap-6 z-10">
-            <div className="flex items-center gap-1">
-              <button className="p-1.5 hover:bg-[#064e3b]/5 rounded-lg text-[#064e3b] transition-all cursor-pointer">
-                <Undo2 className="w-4 h-4" />
-              </button>
-              <button className="p-1.5 hover:bg-[#064e3b]/5 rounded-lg text-[#064e3b] transition-all cursor-pointer opacity-50">
-                <Redo2 className="w-4 h-4" />
-              </button>
-            </div>
-            
-            <div className="w-[1px] h-4 bg-[#064e3b]/20" />
-
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setViewportMode("desktop")}
-                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                  viewportMode === "desktop" ? "bg-[#064e3b] text-[#f5f5dc]" : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                }`}
-              >
-                <Monitor className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={() => setViewportMode("tablet")}
-                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                  viewportMode === "tablet" ? "bg-[#064e3b] text-[#f5f5dc]" : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                }`}
-              >
-                <Tablet className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={() => setViewportMode("mobile")}
-                className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                  viewportMode === "mobile" ? "bg-[#064e3b] text-[#f5f5dc]" : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                }`}
-              >
-                <Smartphone className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="w-[1px] h-4 bg-[#064e3b]/20" />
-
-            <button className="p-1.5 hover:bg-[#064e3b]/5 rounded-lg text-[#064e3b] transition-all cursor-pointer">
-              <Share2 className="w-4 h-4" />
-            </button>
-          </div>
-        </main>
-
-        {/* COLUMN 3: RIGHT PROPERTIES SIDEBAR (Width: 360px) */}
-        <aside className="w-full lg:w-90 border-t lg:border-t-0 lg:border-l border-[#064e3b]/10 flex flex-col min-h-0 bg-[#f5f5dc] shrink-0">
-          
-          {/* Header Title properties */}
-          <div className="px-4 py-3 border-b border-[#064e3b]/10 flex items-center justify-between shrink-0 bg-[#f5f5dc]">
-            <h3 className="text-xs font-black uppercase tracking-wider text-[#064e3b] flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-[#d4af37]" />
-              Properties
-            </h3>
-            <span className="text-[9px] font-black uppercase bg-[#064e3b]/10 text-[#064e3b] px-2 py-0.5 rounded">
-              {activeSection} selected
-            </span>
-          </div>
-
-          {/* Properties sub-tabs */}
-          <div className="grid grid-cols-4 border-b border-[#064e3b]/10 bg-[#f5f5dc]/50 p-1 shrink-0 gap-0.5">
-            {[
-              { id: "typography", icon: <Type className="w-4 h-4" />, label: "Type" },
-              { id: "appearance", icon: <Paintbrush className="w-4 h-4" />, label: "Style" },
-              { id: "ornaments", icon: <Compass className="w-4 h-4" />, label: "Ornament" },
-              { id: "animations", icon: <Activity className="w-4 h-4" />, label: "Anim" }
-            ].map((subTab) => (
-              <button
-                key={subTab.id}
-                onClick={() => setRightPanelTab(subTab.id as any)}
-                title={subTab.label}
-                className={`py-1.5 flex flex-col items-center justify-center rounded-lg transition-all cursor-pointer ${
-                  rightPanelTab === subTab.id
-                    ? "bg-[#064e3b] text-[#f5f5dc]"
-                    : "text-[#064e3b]/60 hover:text-[#064e3b] hover:bg-[#064e3b]/5"
-                }`}
-              >
-                {subTab.icon}
-                <span className="text-[7.5px] font-bold mt-0.5 uppercase tracking-tighter">{subTab.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Scrollable inputs wrapper */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6 text-xs text-[#064e3b]">
-
-
-            {/* TAB: TYPOGRAPHY CONTROLS */}
-            {rightPanelTab === "typography" && (
-              <div className="space-y-4">
-                <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Typography Properties</h4>
-                
-                {/* Element Selector if multiple options exist */}
-                {(() => {
-                  const options = getFontOptions();
-                  if (options.length <= 1) return null;
-                  return (
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-extrabold uppercase opacity-75">Elemen Teks yang Diedit</label>
-                      <select
-                        value={fontConfig.key}
-                        onChange={(e) => setSelectedFontKey(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none font-bold"
-                      >
-                        {options.map((opt) => (
-                          <option key={opt.key} value={opt.key}>{opt.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  );
-                })()}
-
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold uppercase opacity-75 font-bold">Font Family (Jenis Huruf)</label>
-                  <select
-                    value={fontConfig.data.family || "Inter"}
-                    onChange={(e) => updateFont(activeSection, fontConfig.key, "family", e.target.value)}
-                    className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none"
-                  >
-                    <option value="Playfair Display">Playfair Display (Elegant)</option>
-                    <option value="Alex Brush">Alex Brush (Calligraphy)</option>
-                    <option value="Great Vibes">Great Vibes (Romantic)</option>
-                    <option value="Sacramento">Sacramento (Sweet)</option>
-                    <option value="Pinyon Script">Pinyon Script (Classic)</option>
-                    <option value="Inter">Inter (Minimalis)</option>
-                    <option value="Outfit">Outfit (Clean)</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold uppercase opacity-75">Font Size (Ukuran: {fontConfig.data.size || "36px"})</label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      min="12"
-                      max="80"
-                      value={parseInt(fontConfig.data.size) || 36}
-                      onChange={(e) => updateFont(activeSection, fontConfig.key, "size", `${e.target.value}px`)}
-                      className="flex-1 accent-[#d4af37] h-1 bg-[#064e3b]/10 rounded-full appearance-none cursor-pointer"
-                    />
-                    <span className="font-bold shrink-0 w-10 text-right">{fontConfig.data.size || "36px"}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold uppercase opacity-75">Warna Huruf (Text Color)</label>
-                  <div className="flex gap-2">
-                    <input 
-                      type="color"
-                      value={fontConfig.data.color || "#064e3b"}
-                      onChange={(e) => updateFont(activeSection, fontConfig.key, "color", e.target.value)}
-                      className="w-8 h-8 bg-transparent border border-[#064e3b]/20 rounded-lg cursor-pointer shrink-0"
-                    />
-                    <input
-                      type="text"
-                      value={fontConfig.data.color || "#064e3b"}
-                      onChange={(e) => updateFont(activeSection, fontConfig.key, "color", e.target.value)}
-                      className="flex-1 px-3 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* TAB: APPEARANCE (STYLE) CONTROLS */}
-            {rightPanelTab === "appearance" && (
-              <div className="space-y-4">
-                <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Background Appearance</h4>
-                
-                <div className="space-y-3">
-                  <label className="block text-[10px] font-extrabold uppercase opacity-75">Tipe Latar Belakang</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {["solid", "gradient", "image"].map((type) => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => {
-                          const val = type === "solid" ? "#f5f5dc" : type === "gradient" ? "linear-gradient(to bottom, #f5f5dc, #e1dcb9)" : "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200";
-                          updateData(activeSection, "background", { type, value: val });
-                        }}
-                        className={`py-1.5 rounded-lg text-[10px] font-bold border capitalize transition-all cursor-pointer ${
-                          data[activeSection]?.background?.type === type
-                            ? "bg-[#064e3b] border-[#064e3b] text-white"
-                            : "bg-[#f5f5dc] border-[#064e3b]/15 text-[#064e3b]/60 hover:text-[#064e3b]"
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="space-y-1 pt-1">
-                    <label className="block text-[9px] font-semibold opacity-60">
-                      {data[activeSection]?.background?.type === "image" ? "Gambar URL" : "Warna Hex / CSS Gradient"}
-                    </label>
-                    <input
-                      type="text"
-                      value={data[activeSection]?.background?.value || ""}
-                      onChange={(e) => {
-                        updateData(activeSection, "background", {
-                          type: data[activeSection]?.background?.type || "solid",
-                          value: e.target.value
-                        });
-                      }}
-                      placeholder={
-                        data[activeSection]?.background?.type === "image"
-                          ? "Masukkan URL Gambar (https://...)"
-                          : "e.g. #f5f5dc / linear-gradient(...)"
-                      }
-                      className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs outline-none"
-                    />
-                  </div>
-                </div>
-
-                {activeSection === "cover" && (
-                  <div className="pt-4 mt-4 border-t border-[#064e3b]/10 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37]">Garis Bingkai Cover</h4>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={data.cover?.setting_bingkai?.enabled || false}
-                          onChange={(e) => {
-                            const current = data.cover?.setting_bingkai || {};
-                            updateData("cover", "setting_bingkai", { ...current, enabled: e.target.checked });
-                          }}
-                          className="sr-only peer"
-                        />
-                        <div className="w-7 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-[#064e3b]"></div>
-                      </label>
-                    </div>
-
-                    {data.cover?.setting_bingkai?.enabled && (
-                      <div className="grid grid-cols-2 gap-3 pt-2">
-                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold uppercase opacity-75 block">Ketebalan</label>
-                          <select 
-                            value={data.cover?.setting_bingkai?.width || "2px"} 
-                            onChange={(e) => {
-                              const current = data.cover?.setting_bingkai || {};
-                              updateData("cover", "setting_bingkai", { ...current, width: e.target.value });
-                            }}
-                            className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs outline-none"
-                          >
-                            <option value="1px">1px</option>
-                            <option value="2px">2px</option>
-                            <option value="3px">3px</option>
-                            <option value="4px">4px</option>
-                            <option value="5px">5px</option>
-                            <option value="6px">6px</option>
-                            <option value="8px">8px</option>
-                            <option value="10px">10px</option>
-                          </select>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold uppercase opacity-75 block">Gaya Garis</label>
-                          <select 
-                            value={data.cover?.setting_bingkai?.style || "solid"} 
-                            onChange={(e) => {
-                              const current = data.cover?.setting_bingkai || {};
-                              updateData("cover", "setting_bingkai", { ...current, style: e.target.value });
-                            }}
-                            className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs outline-none"
-                          >
-                            <option value="solid">Solid (Polos)</option>
-                            <option value="double">Double (Ganda)</option>
-                            <option value="dashed">Dashed (Putus-putus)</option>
-                            <option value="dotted">Dotted (Titik-titik)</option>
-                            <option value="groove">Groove (Ukiran)</option>
-                            <option value="ridge">Ridge (Timbul)</option>
-                          </select>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold uppercase opacity-75 block">Jarak dari Tepi</label>
-                          <select 
-                            value={data.cover?.setting_bingkai?.padding || "16px"} 
-                            onChange={(e) => {
-                              const current = data.cover?.setting_bingkai || {};
-                              updateData("cover", "setting_bingkai", { ...current, padding: e.target.value });
-                            }}
-                            className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs outline-none"
-                          >
-                            <option value="8px">8px</option>
-                            <option value="12px">12px</option>
-                            <option value="16px">16px</option>
-                            <option value="20px">20px</option>
-                            <option value="24px">24px</option>
-                            <option value="28px">28px</option>
-                            <option value="32px">32px</option>
-                          </select>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label className="text-[9px] font-bold uppercase opacity-75 block">Radius Sudut</label>
-                          <select 
-                            value={data.cover?.setting_bingkai?.radius || "12px"} 
-                            onChange={(e) => {
-                              const current = data.cover?.setting_bingkai || {};
-                              updateData("cover", "setting_bingkai", { ...current, radius: e.target.value });
-                            }}
-                            className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs outline-none"
-                          >
-                            <option value="0px">Tajam (0px)</option>
-                            <option value="8px">Bulat Kecil (8px)</option>
-                            <option value="12px">Bulat Sedang (12px)</option>
-                            <option value="16px">Bulat Besar (16px)</option>
-                            <option value="20px">Bulat Extra (20px)</option>
-                            <option value="24px">Sangat Bulat (24px)</option>
-                          </select>
-                        </div>
-
-                        <div className="col-span-2 space-y-1">
-                          <label className="text-[9px] font-bold uppercase opacity-75 block">Warna Garis</label>
-                          <div className="flex gap-2">
-                            <input 
-                              type="color"
-                              value={data.cover?.setting_bingkai?.color || "#d4af37"}
-                              onChange={(e) => {
-                                const current = data.cover?.setting_bingkai || {};
-                                updateData("cover", "setting_bingkai", { ...current, color: e.target.value });
-                              }}
-                              className="w-8 h-8 bg-transparent border border-[#064e3b]/20 rounded-lg cursor-pointer shrink-0"
-                            />
-                            <input
-                              type="text"
-                              value={data.cover?.setting_bingkai?.color || "#d4af37"}
-                              onChange={(e) => {
-                                const current = data.cover?.setting_bingkai || {};
-                                updateData("cover", "setting_bingkai", { ...current, color: e.target.value });
-                              }}
-                              className="flex-1 px-3 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-lg text-xs"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* TAB: CULTURAL ORNAMENTS CONTROLS */}
-            {rightPanelTab === "ornaments" && (
-              <div className="space-y-4">
-                <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Cultural Ornaments</h4>
-                <p className="text-[10px] text-[#064e3b]/60 leading-normal">Pilih motif hiasan nusantara untuk mempercantik bagian atas atau bawah section ini.</p>
-
-                <div className="grid grid-cols-2 gap-2.5 pt-1">
-                  <button
-                    onClick={() => updateData(activeSection, "ornament", null)}
-                    className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                      !data[activeSection]?.ornament
-                        ? "bg-[#064e3b]/10 border-[#d4af37] font-bold"
-                        : "bg-[#f5f5dc] border-[#064e3b]/10 hover:border-[#064e3b]/30"
-                    }`}
-                  >
-                    <div className="h-8 flex items-center justify-center text-[10px] text-[#064e3b]/40">None</div>
-                    <span className="text-[10px] block mt-1 font-extrabold">Tanpa Hiasan</span>
-                  </button>
-
-                  {culturalOrnaments.map((orn) => (
-                    <button
-                      key={orn.id}
-                      onClick={() => updateData(activeSection, "ornament", orn.id)}
-                      className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                        data[activeSection]?.ornament === orn.id
-                          ? "bg-[#064e3b]/10 border-[#d4af37] font-bold text-[#d4af37]"
-                          : "bg-[#f5f5dc] border-[#064e3b]/10 hover:border-[#064e3b]/30"
-                      }`}
-                    >
-                      <div className="h-8 flex items-center justify-center overflow-hidden">
-                        {orn.svg}
-                      </div>
-                      <span className="text-[10px] block mt-1 font-extrabold text-[#064e3b]">
-                        {orn.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* TAB: ANIMATIONS CONTROLS */}
-            {rightPanelTab === "animations" && (
-              <div className="space-y-4">
-                <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Animations (Framer Motion)</h4>
-                
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold uppercase opacity-75">Entrance Effect (Animasi Masuk)</label>
-                  <select
-                    value={data[activeSection]?.animation?.entrance || "fade-in"}
-                    onChange={(e) => {
-                      updateData(activeSection, "animation", {
-                        ...data[activeSection]?.animation,
-                        entrance: e.target.value
-                      });
-                    }}
-                    className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none"
-                  >
-                    <option value="fade-in">Fade In (Lembut)</option>
-                    <option value="slide-up">Slide Up (Mengambang)</option>
-                    <option value="zoom-in">Zoom In (Membesar)</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-extrabold uppercase opacity-75">Duration (Durasi: {data[activeSection]?.animation?.duration || "1.2s"})</label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      min="0.5"
-                      max="3.0"
-                      step="0.1"
-                      value={parseFloat(data[activeSection]?.animation?.duration) || 1.2}
-                      onChange={(e) => {
-                        updateData(activeSection, "animation", {
-                          ...data[activeSection]?.animation,
-                          duration: `${e.target.value}s`
-                        });
-                      }}
-                      className="flex-1 accent-[#d4af37] h-1 bg-[#064e3b]/10 rounded-full appearance-none cursor-pointer"
-                    />
-                    <span className="font-bold shrink-0 w-8 text-right">{data[activeSection]?.animation?.duration || "1.2s"}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-
-          {/* Reset settings button bottom */}
-          <div className="p-3 border-t border-[#064e3b]/10 bg-[#f5f5dc] shrink-0">
-            <button 
-              onClick={() => {
-                if (confirm("Apakah Anda yakin ingin mereset perubahan section ini?")) {
-                  // Reset key data models to initial DB values
-                  setData(invitation.data_undangan_json);
-                }
-              }}
-              className="w-full py-2 bg-[#064e3b]/5 hover:bg-[#064e3b]/10 border border-[#064e3b]/20 rounded-lg text-[#064e3b] font-extrabold text-[10px] uppercase tracking-wider text-center transition-all cursor-pointer"
-            >
-              Reset Settings
-            </button>
-          </div>
-        </aside>
-
-      </div>
-
-      {/* CHECKOUT MODAL */}
+      {/* GLOBAL TOAST & NOTIFICATION */}
       <AnimatePresence>
-        {showCheckoutModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => !checkoutLoading && setShowCheckoutModal(false)}
-              className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"
-            />
+        {saveSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#064e3b] text-[#f5f5dc] border border-[#d4af37] px-5 py-3 rounded-full flex items-center gap-2 shadow-2xl font-black text-xs"
+          >
+            <CheckCircle className="w-4.5 h-4.5 text-[#d4af37]" />
+            Perubahan Anda Berhasil Disimpan!
+          </motion.div>
+        )}
+        {saveError && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-red-50 border border-red-200 text-red-700 px-5 py-3 rounded-2xl flex items-center gap-2 shadow-2xl font-semibold text-xs"
+          >
+            <AlertCircle className="w-4.5 h-4.5 shrink-0" />
+            {saveError}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            {/* Modal Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-[#f5f5dc] border border-[#064e3b]/10 w-full max-w-lg rounded-3xl overflow-hidden relative shadow-2xl z-10 p-6 sm:p-8 text-left text-[#064e3b]"
-            >
-              {/* Close Button */}
-              <button
-                onClick={() => setShowCheckoutModal(false)}
-                disabled={checkoutLoading}
-                className="absolute top-4 right-4 p-2 text-[#064e3b]/40 hover:text-[#064e3b] rounded-lg disabled:opacity-50"
-              >
-                <X className="w-5 h-5" />
-              </button>
+      <div className="max-w-4xl mx-auto w-full px-4 pt-6 flex-1 flex flex-col gap-6">
 
-              {checkoutSuccess ? (
-                <div className="flex flex-col items-center justify-center text-center py-8">
-                  <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-bold">Pembayaran Berhasil!</h3>
-                  <p className="text-[#064e3b]/70 text-xs mt-2">
-                    Undangan Anda sekarang aktif dan dapat diakses publik.
-                  </p>
-                  <p className="text-xs font-bold text-[#d4af37] mt-1">
-                    Memuat ulang editor...
-                  </p>
+        {/* ACTIVE / PAID INVITATION PANEL */}
+        {status === "ACTIVE" && (
+          <div className="bg-white border-2 border-emerald-500/20 rounded-3xl p-6 shadow-xl space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center border border-emerald-200 shadow-sm">
+                  <CheckCircle className="w-6 h-6" />
                 </div>
-              ) : (
+                <div>
+                  <h2 className="text-lg font-black text-emerald-800 flex items-center gap-1.5">
+                    Undangan Anda Aktif! 🟢
+                  </h2>
+                  <p className="text-xs text-slate-500">Undangan online siap dibagikan kepada tamu undangan.</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setShowActiveEditForm(!showActiveEditForm)}
+                className="px-4 py-2 border border-[#064e3b]/20 hover:border-[#064e3b] text-[#064e3b] rounded-xl text-xs font-bold transition-all bg-white"
+              >
+                {showActiveEditForm ? "Tutup Form Editor" : "Ubah / Sunting Data Undangan"}
+              </button>
+            </div>
+
+            {/* Link Generators */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Primary Link card */}
+              <div className="bg-[#fefcf6] border border-[#064e3b]/10 rounded-2xl p-4 space-y-2">
+                <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-wider block">Link Undangan Utama</span>
+                <p className="text-xs font-black text-[#064e3b] truncate select-all">{primaryInvitationUrl}</p>
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => copyToClipboard(primaryInvitationUrl)}
+                    className="flex-1 py-2 bg-[#064e3b] hover:bg-[#064e3b]/95 text-white rounded-xl text-[10px] font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    Salin Link Utama
+                  </button>
+                  <a
+                    href={primaryInvitationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 border border-[#064e3b]/20 hover:border-[#064e3b] text-[#064e3b] rounded-xl text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all bg-white"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    Buka Undangan
+                  </a>
+                </div>
+              </div>
+
+              {/* Guest Customized Link card */}
+              <div className="bg-white border border-[#064e3b]/10 rounded-2xl p-4 space-y-3">
+                <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-wider block">Generator Undangan Tamu</span>
+                
+                <div className="relative">
+                  <UserIcon className="absolute left-3 top-2.5 w-4 h-4 text-[#064e3b]/40" />
+                  <input
+                    type="text"
+                    value={guestNameInput}
+                    onChange={(e) => setGuestNameInput(e.target.value)}
+                    placeholder="Masukkan Nama Tamu (misal: Budi & Istri)"
+                    className="w-full pl-9 pr-4 py-2 bg-[#f5f5dc]/20 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs text-[#064e3b] outline-none"
+                  />
+                </div>
+
+                <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-[10px] truncate">
+                  <span className="text-slate-400 font-semibold block">Generated Link:</span>
+                  <span className="font-mono text-slate-700">{customGuestUrl}</span>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => copyToClipboard(customGuestUrl)}
+                    className="flex-1 py-2 bg-white border border-[#064e3b]/20 hover:border-[#064e3b] text-[#064e3b] rounded-xl text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    {copiedLink ? "Tersalin!" : "Salin Link"}
+                  </button>
+                  <a
+                    href={getWhatsAppShareLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2 bg-[#25d366] hover:bg-[#20ba5a] text-white rounded-xl text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    Share WhatsApp
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* INVITATION EDIT WIZARD OR FORM (Shown if draft or if edit toggle is clicked) */}
+        {(status === "DRAFT" || showActiveEditForm) && (
+          <div className="bg-white border border-[#064e3b]/10 rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+            
+            {/* LEFT BAR STEPS LIST */}
+            <div className="w-full md:w-64 bg-[#064e3b]/5 border-r border-[#064e3b]/10 p-4 space-y-1">
+              <div className="px-3 py-2 border-b border-[#064e3b]/10 mb-2">
+                <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-widest block">Langkah Pengerjaan</span>
+                <span className="text-xs font-bold text-[#064e3b]">Lengkapi & Aktifkan</span>
+              </div>
+              {steps.map((st, idx) => {
+                const Icon = st.icon;
+                return (
+                  <button
+                    key={st.name}
+                    onClick={() => setActiveStep(idx)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-left transition-all ${
+                      activeStep === idx
+                        ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                        : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                    }`}
+                  >
+                    <Icon className={`w-4 h-4 ${activeStep === idx ? "text-[#d4af37]" : "opacity-60"}`} />
+                    <span>{st.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* RIGHT SIDE WIZARD STEP FORMS */}
+            <div className="flex-1 p-6 sm:p-8 space-y-6">
+              
+              {/* STEP 1: INFORMASI DASAR */}
+              {activeStep === 0 && (
                 <div className="space-y-4">
                   <div>
-                    <span className="text-[10px] font-extrabold text-[#d4af37] uppercase tracking-widest flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                      Premium Activation
-                    </span>
-                    <h3 className="text-xl font-black mt-1">Aktifkan Undangan</h3>
-                    <p className="text-[#064e3b]/70 text-xs">
-                      Pilih paket aktivasi premium Anda untuk menerbitkan undangan digital ini secara publik.
-                    </p>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Info className="w-5 h-5 text-[#d4af37]" />
+                      Informasi Pembuat & Tautan
+                    </h3>
+                    <p className="text-xs text-slate-500">Data pemilik undangan dan link slug kustom.</p>
                   </div>
 
-                  {checkoutError && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-xs font-semibold flex items-start gap-2">
-                      <AlertCircle className="w-4.5 h-4.5 shrink-0" />
-                      <span>{checkoutError}</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5">Nama Pembuat</label>
+                      <input
+                        type="text"
+                        value={contactName}
+                        onChange={(e) => setContactName(e.target.value)}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none"
+                      />
                     </div>
-                  )}
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5">WhatsApp Pembuat</label>
+                      <input
+                        type="text"
+                        value={contactPhone}
+                        onChange={(e) => setContactPhone(e.target.value)}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5">Alamat Email</label>
+                      <input
+                        type="email"
+                        value={contactEmail}
+                        onChange={(e) => setContactEmail(e.target.value)}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider mb-1.5">Tautan Kustom (Slug URL)</label>
+                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        <span className="opacity-50 font-semibold">adatara.id/u/</span>
+                        <input
+                          type="text"
+                          value={invitationSlug}
+                          onChange={(e) => setInvitationSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                          className="bg-transparent border-none outline-none font-bold text-[#064e3b] flex-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-                  {/* Pricing Cards */}
-                  <div className="space-y-2.5">
-                    {[
-                      { type: "SILVER", price: "Rp 49.000", features: ["Desain Standar", "Masa Aktif 3 Bulan", "Tanpa Background Musik"] },
-                      { type: "GOLD", price: "Rp 99.000", features: ["Desain Premium", "Masa Aktif 1 Tahun", "Pilihan Background Musik", "E-Gift & RSVP", "Tanpa Iklan"] },
-                      { type: "PLATINUM", price: "Rp 149.000", features: ["Semua Fitur Gold", "Masa Aktif Selamanya", "Kustom Musik Sendiri", "Prioritas Support"] },
-                    ].map((pkg) => (
-                      <button
-                        key={pkg.type}
-                        type="button"
-                        onClick={() => setSelectedPackage(pkg.type as any)}
-                        className={`w-full p-4 rounded-2xl border text-left flex items-start justify-between transition-all ${
-                          selectedPackage === pkg.type
-                            ? "bg-white border-[#d4af37] shadow-md ring-1 ring-[#d4af37]"
-                            : "bg-[#064e3b]/5 border-[#064e3b]/10 hover:bg-[#064e3b]/10"
-                        }`}
-                      >
-                        <div className="space-y-1">
-                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-black text-white ${
-                            pkg.type === "PLATINUM" ? "bg-purple-700" : pkg.type === "GOLD" ? "bg-[#d4af37]" : "bg-slate-600"
-                          }`}>
-                            {pkg.type}
+              {/* STEP 2: COVER & MUSIK */}
+              {activeStep === 1 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Music className="w-5 h-5 text-[#d4af37]" />
+                      Cover Undangan & Musik Latar
+                    </h3>
+                    <p className="text-xs text-slate-500">Unggah cover vertical 9:16 dan pilih audio background.</p>
+                  </div>
+
+                  {/* Cover Background File Upload */}
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-black uppercase tracking-wider">Foto Cover Utama (Aspek Rasio 9:16)</label>
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      {data?.cover?.background?.value ? (
+                        <div className="w-24 h-40 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 shadow-sm relative group shrink-0">
+                          <img
+                            src={data.cover.background.value}
+                            alt="Cover preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => updateNestedVal("cover", "background", { type: "image", value: "" })}
+                            className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-black transition-all cursor-pointer"
+                          >
+                            Hapus
+                          </button>
+                        </div>
+                      ) : (
+                        <label className="w-full sm:w-64 h-40 border-2 border-dashed border-[#064e3b]/20 hover:border-[#d4af37] rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer transition-all bg-[#064e3b]/5 text-center p-4">
+                          <Upload className="w-8 h-8 text-[#064e3b]/40" />
+                          <span className="text-xs font-bold text-[#064e3b]">Pilih / Seret Foto Cover (9:16)</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              if (f) {
+                                handleFileUpload(f, (url) => {
+                                  updateNestedVal("cover", "background", { type: "image", value: url });
+                                }, "cover-bg");
+                              }
+                            }}
+                          />
+                        </label>
+                      )}
+
+                      <div className="text-xs text-slate-500 space-y-1">
+                        <p className="font-bold text-[#064e3b]">Rekomendasi Foto:</p>
+                        <p>• Gunakan orientasi tegak (portrait) aspek rasio 9:16</p>
+                        <p>• Format berkas JPEG, PNG, atau WEBP maks 5MB</p>
+                        {uploadingField === "cover-bg" && (
+                          <div className="text-[#d4af37] font-black flex items-center gap-1.5 pt-2">
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Mengunggah foto cover...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                   {/* Background Music Selector */}
+                  <div className="space-y-4 pt-4 border-t border-slate-100">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider mb-1">Pilih Musik Latar</label>
+                      <p className="text-[11px] text-slate-500">Masukkan tautan video atau lagu dari YouTube sebagai musik latar undangan Anda.</p>
+                    </div>
+
+                    <div className="max-w-md">
+                      <label className="block text-[9px] font-bold text-slate-400 mb-1">Lagu YouTube (Masukkan URL)</label>
+                      <input
+                        type="text"
+                        value={data?.cover?.music_url?.includes("youtube") ? data.cover.music_url : ""}
+                        onChange={(e) => {
+                          const url = e.target.value.trim();
+                          if (url) {
+                            setData((prev: any) => ({
+                              ...prev,
+                              cover: {
+                                ...prev.cover,
+                                music_url: url,
+                                music_title: "Musik Kustom YouTube",
+                                music_artist: "YouTube Video"
+                              }
+                            }));
+                          } else {
+                            updateNestedVal("cover", "music_url", "");
+                          }
+                        }}
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#d4af37]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: PROFIL PASANGAN / TOKOH */}
+              {activeStep === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Heart className="w-5 h-5 text-[#d4af37]" />
+                      Profil Pasangan / Tokoh Utama
+                    </h3>
+                    <p className="text-xs text-slate-500">Tentukan kutipan profil, nama lengkap, foto formal 3:4, dan keterangan keluarga.</p>
+                  </div>
+
+                  {/* Dynamic Profile Fields */}
+                  <div className="space-y-6">
+                    {(data?.profil?.profils || []).map((p: any, idx: number) => {
+                      const isWedding = ["pernikahan", "lamaran & pertunangan", "resepsi pernikahan"].includes(
+                        invitation.template.kategori.toLowerCase()
+                      );
+                      const profileRoleLabel = isWedding 
+                        ? (idx === 0 ? "Pria (Mempelai Laki-laki)" : "Wanita (Mempelai Perempuan)")
+                        : "Profil Utama / Tokoh";
+
+                      return (
+                        <div key={idx} className="bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-2xl p-4 sm:p-5 space-y-4">
+                          <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-widest block">
+                            {profileRoleLabel}
                           </span>
-                          <div className="text-[10px] text-[#064e3b]/70 font-semibold space-y-0.5 pt-1">
-                            {pkg.features.map((f, i) => (
-                              <div key={i} className="flex items-center gap-1">
-                                <span className="text-emerald-600">✓</span> {f}
+
+                          <div className="flex flex-col sm:flex-row gap-4 items-start">
+                            {/* Profile Image 3:4 */}
+                            <div className="flex flex-col items-center gap-2 shrink-0">
+                              {p.foto ? (
+                                <div className="w-20 h-28 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 shadow-sm relative group">
+                                  <img
+                                    src={p.foto}
+                                    alt="Foto profil preview"
+                                    className="w-full h-full object-cover"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleProfileChange(idx, "foto", "")}
+                                    className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold cursor-pointer"
+                                  >
+                                    Hapus
+                                  </button>
+                                </div>
+                              ) : (
+                                <label className="w-20 h-28 border-2 border-dashed border-[#064e3b]/20 hover:border-[#d4af37] rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all bg-white text-center">
+                                  <Upload className="w-5 h-5 text-[#064e3b]/40" />
+                                  <span className="text-[8px] font-bold text-slate-400">Upload 3:4</span>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      const f = e.target.files?.[0];
+                                      if (f) {
+                                        handleFileUpload(f, (url) => {
+                                          handleProfileChange(idx, "foto", url);
+                                        }, `profile-${idx}`);
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              )}
+                              {uploadingField === `profile-${idx}` && (
+                                <span className="text-[9px] text-[#d4af37] font-bold animate-pulse">Uploading...</span>
+                              )}
+                            </div>
+
+                            {/* Text inputs */}
+                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                              <div>
+                                <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Nama Lengkap</label>
+                                <input
+                                  type="text"
+                                  value={p.nama || ""}
+                                  onChange={(e) => handleProfileChange(idx, "nama", e.target.value)}
+                                  className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                                />
                               </div>
-                            ))}
+                              <div>
+                                <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Nama Panggilan</label>
+                                <input
+                                  type="text"
+                                  value={p.nama_panggilan || ""}
+                                  onChange={(e) => handleProfileChange(idx, "nama_panggilan", e.target.value)}
+                                  className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Keterangan (Putra/i dari Bpk & Ibu)</label>
+                                <input
+                                  type="text"
+                                  value={p.keterangan || ""}
+                                  onChange={(e) => handleProfileChange(idx, "keterangan", e.target.value)}
+                                  className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Urutan Anak (contoh: Putra Pertama)</label>
+                                <input
+                                  type="text"
+                                  value={p.urutan_anak || ""}
+                                  onChange={(e) => handleProfileChange(idx, "urutan_anak", e.target.value)}
+                                  className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right shrink-0">
-                          <span className="text-xs font-bold block text-[#064e3b]/60">Harga</span>
-                          <span className="text-sm font-black text-[#064e3b]">{pkg.price}</span>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 4: RANGKAIAN ACARA */}
+              {activeStep === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-[#d4af37]" />
+                      Rangkaian Acara Undangan
+                    </h3>
+                    <p className="text-xs text-slate-500">Kelola detail rangkaian acara seperti Akad Nikah, Resepsi, Pemberkatan, dll.</p>
+                  </div>
+
+                  <div className="space-y-6">
+                    {(data?.acara?.acaras || []).map((a: any, idx: number) => (
+                      <div key={idx} className="border border-slate-200 rounded-2xl p-4 sm:p-5 relative bg-white space-y-4">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = [...(data?.acara?.acaras || [])];
+                            updateNestedVal("acara", "acaras", list.filter((_, i) => i !== idx));
+                          }}
+                          className="absolute top-4 right-4 p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        >
+                          <Trash2 className="w-4.5 h-4.5" />
+                        </button>
+
+                        <div className="flex items-center gap-2 border-b border-slate-100 pb-2 mb-2">
+                          <Clock className="w-4 h-4 text-[#d4af37]" />
+                          <span className="text-xs font-black uppercase text-[#064e3b]">Rangkaian Acara #{idx + 1}</span>
                         </div>
-                      </button>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="sm:col-span-3">
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Nama Acara</label>
+                            <input
+                              type="text"
+                              value={a.nama || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.acara?.acaras || [])];
+                                list[idx] = { ...list[idx], nama: e.target.value };
+                                updateNestedVal("acara", "acaras", list);
+                              }}
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Tanggal Acara</label>
+                            <input
+                              type="date"
+                              value={a.tanggal || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.acara?.acaras || [])];
+                                list[idx] = { ...list[idx], tanggal: e.target.value };
+                                updateNestedVal("acara", "acaras", list);
+                              }}
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Jam Mulai</label>
+                            <input
+                              type="time"
+                              value={a.jam_mulai || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.acara?.acaras || [])];
+                                list[idx] = { ...list[idx], jam_mulai: e.target.value };
+                                updateNestedVal("acara", "acaras", list);
+                              }}
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Jam Selesai</label>
+                            <input
+                              type="time"
+                              value={a.jam_selesai || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.acara?.acaras || [])];
+                                list[idx] = { ...list[idx], jam_selesai: e.target.value };
+                                updateNestedVal("acara", "acaras", list);
+                              }}
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+
+                          <div className="sm:col-span-3">
+                            <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Alamat Lengkap Venue</label>
+                            <textarea
+                              rows={2}
+                              value={a.alamat || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.acara?.acaras || [])];
+                                list[idx] = { ...list[idx], alamat: e.target.value };
+                                updateNestedVal("acara", "acaras", list);
+                              }}
+                              className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+
+                          <div className="sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Link Share Google Maps (Optional)</label>
+                              <input
+                                type="text"
+                                value={a.link_maps || ""}
+                                onChange={(e) => {
+                                  const list = [...(data?.acara?.acaras || [])];
+                                  list[idx] = { ...list[idx], link_maps: e.target.value };
+                                  updateNestedVal("acara", "acaras", list);
+                                }}
+                                placeholder="https://maps.google.com/..."
+                                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Embed Iframe Link Maps (Optional)</label>
+                              <input
+                                type="text"
+                                value={a.embed_maps || ""}
+                                onChange={(e) => {
+                                  const list = [...(data?.acara?.acaras || [])];
+                                  list[idx] = { ...list[idx], embed_maps: e.target.value };
+                                  updateNestedVal("acara", "acaras", list);
+                                }}
+                                placeholder="https://www.google.com/maps/embed?pb=..."
+                                className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     ))}
-                  </div>
 
-                  {/* Links info */}
-                  <div className="p-3 bg-white/50 border border-[#064e3b]/10 rounded-xl text-xs space-y-1">
-                    <span className="font-bold text-[#064e3b]/80">Catatan Setelah Pembayaran:</span>
-                    <p className="text-[10px] text-[#064e3b]/70 leading-relaxed">
-                      1. Undangan Anda akan aktif di link publik: <strong>{typeof window !== "undefined" ? window.location.origin : ""}/u/{invitation.slug}</strong>
-                      <br />
-                      2. Gunakan link editor ini untuk mengedit undangan kapan saja: <strong>{typeof window !== "undefined" ? window.location.href : ""}</strong>
-                    </p>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-3 pt-2">
                     <button
                       type="button"
-                      disabled={checkoutLoading}
-                      onClick={() => setShowCheckoutModal(false)}
-                      className="flex-1 py-3 rounded-xl border border-[#064e3b]/20 bg-white text-[#064e3b]/70 hover:bg-[#064e3b]/5 font-bold text-xs cursor-pointer transition-all"
+                      onClick={() => {
+                        const list = [...(data?.acara?.acaras || [])];
+                        list.push({
+                          nama: "Acara Tambahan", tanggal: "", jam_mulai: "19:00", jam_selesai: "21:00", alamat: "", link_maps: "", embed_maps: ""
+                        });
+                        updateNestedVal("acara", "acaras", list);
+                      }}
+                      className="w-full py-3 border-2 border-dashed border-[#064e3b]/20 hover:border-[#d4af37] text-[#064e3b] hover:text-[#d4af37] rounded-2xl text-xs font-black flex items-center justify-center gap-1.5 transition-all bg-[#064e3b]/5"
                     >
-                      Kembali
-                    </button>
-                    <button
-                      type="button"
-                      disabled={checkoutLoading}
-                      onClick={handleCheckout}
-                      className="flex-1 py-3 rounded-xl bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-[#064e3b]/10"
-                    >
-                      {checkoutLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          Memproses...
-                        </>
-                      ) : (
-                        "Bayar Sekarang"
-                      )}
+                      <Plus className="w-4 h-4" />
+                      Tambah Rangkaian Acara Baru
                     </button>
                   </div>
                 </div>
               )}
-            </motion.div>
+
+              {/* STEP 5: CERITA & GALERI */}
+              {activeStep === 4 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[#d4af37]" />
+                      Cerita Kisah Cinta & Galeri Foto
+                    </h3>
+                    <p className="text-xs text-slate-500">Menceritakan timeline kenalan/perjalanan cinta, dan membagikan foto-foto mesra.</p>
+                  </div>
+
+                  {/* Stories list */}
+                  <div className="space-y-4">
+                    <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-wider block">Timeline Cerita Kita</span>
+                    
+                    {(data?.cerita?.ceritas || []).map((c: any, idx: number) => (
+                      <div key={idx} className="p-4 border border-slate-200 rounded-xl relative space-y-3 bg-slate-50/50">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = [...(data?.cerita?.ceritas || [])];
+                            updateNestedVal("cerita", "ceritas", list.filter((_, i) => i !== idx));
+                          }}
+                          className="absolute top-3 right-3 p-1 text-red-400 hover:text-red-600 rounded-lg"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[8px] font-black uppercase text-slate-400 mb-1">Judul Cerita</label>
+                            <input
+                              type="text"
+                              value={c.judul || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.cerita?.ceritas || [])];
+                                list[idx] = { ...list[idx], judul: e.target.value };
+                                updateNestedVal("cerita", "ceritas", list);
+                              }}
+                              className="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[8px] font-black uppercase text-slate-400 mb-1">Waktu / Tanggal (contoh: Januari 2024)</label>
+                            <input
+                              type="text"
+                              value={c.waktu || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.cerita?.ceritas || [])];
+                                list[idx] = { ...list[idx], waktu: e.target.value };
+                                updateNestedVal("cerita", "ceritas", list);
+                              }}
+                              className="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label className="block text-[8px] font-black uppercase text-slate-400 mb-1">Kisah Cerita</label>
+                            <textarea
+                              rows={2}
+                              value={c.isi || ""}
+                              onChange={(e) => {
+                                const list = [...(data?.cerita?.ceritas || [])];
+                                list[idx] = { ...list[idx], isi: e.target.value };
+                                updateNestedVal("cerita", "ceritas", list);
+                              }}
+                              className="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const list = [...(data?.cerita?.ceritas || [])];
+                        list.push({ judul: "", waktu: "", isi: "" });
+                        updateNestedVal("cerita", "ceritas", list);
+                      }}
+                      className="w-full py-2 border border-dashed border-[#064e3b]/25 rounded-xl text-xs font-bold text-[#064e3b]/70 hover:border-[#d4af37] flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      Tambah Cerita Baru
+                    </button>
+                  </div>
+
+                  {/* Album Galleries */}
+                  <div className="space-y-4 pt-4 border-t border-slate-100">
+                    <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-wider block">Album Foto Undangan</span>
+                    
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {(data?.cerita?.galeris || []).map((imgUrl: string, idx: number) => (
+                        <div key={idx} className="aspect-square bg-slate-100 border border-slate-200 rounded-xl overflow-hidden relative group shadow-sm">
+                          <img
+                            src={imgUrl}
+                            alt="Galeri item"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const list = [...(data?.cerita?.galeris || [])];
+                              updateNestedVal("cerita", "galeris", list.filter((_, i) => i !== idx));
+                            }}
+                            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-xs font-black transition-all cursor-pointer"
+                          >
+                            Hapus
+                          </button>
+                        </div>
+                      ))}
+
+                      {/* Photo Uploader Box */}
+                      <label className="aspect-square border-2 border-dashed border-[#064e3b]/20 hover:border-[#d4af37] bg-[#064e3b]/5 text-[#064e3b] rounded-xl flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-all text-center p-2">
+                        <Upload className="w-6 h-6 text-[#064e3b]/40" />
+                        <span className="text-[10px] font-bold">Tambah Foto</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const f = e.target.files?.[0];
+                            if (f) {
+                              handleFileUpload(f, (url) => {
+                                const list = [...(data?.cerita?.galeris || [])];
+                                list.push(url);
+                                updateNestedVal("cerita", "galeris", list);
+                              }, "gallery-add");
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+
+                    {uploadingField === "gallery-add" && (
+                      <p className="text-xs text-[#d4af37] font-black animate-pulse flex items-center gap-1.5">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Sedang mengunggah foto ke galeri...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 6: RSVP & HADIAH */}
+              {activeStep === 5 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Gift className="w-5 h-5 text-[#d4af37]" />
+                      RSVP, Amplop Digital & Penutup
+                    </h3>
+                    <p className="text-xs text-slate-500">Konfirmasi kehadiran tamu, kado digital (amplop bank/e-wallet), dan kalimat salam penutup.</p>
+                  </div>
+
+                  {/* Switch RSVP & Ucapan */}
+                  <div className="flex flex-wrap gap-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!!data?.penutup?.rsvp_aktif}
+                        onChange={(e) => updateNestedVal("penutup", "rsvp_aktif", e.target.checked)}
+                        className="w-4.5 h-4.5 accent-[#064e3b] cursor-pointer"
+                      />
+                      <span className="text-xs font-bold">Aktifkan RSVP (Konfirmasi Kehadiran)</span>
+                    </label>
+
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={!!data?.penutup?.ucapan_aktif}
+                        onChange={(e) => updateNestedVal("penutup", "ucapan_aktif", e.target.checked)}
+                        className="w-4.5 h-4.5 accent-[#064e3b] cursor-pointer"
+                      />
+                      <span className="text-xs font-bold">Aktifkan Kolom Doa & Ucapan Tamu</span>
+                    </label>
+                  </div>
+
+                  {/* Amplop / Bank Digital */}
+                  <div className="space-y-4">
+                    <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-wider block">Special Gift (Amplop Digital)</span>
+                    
+                    {(data?.penutup?.amplops || []).map((a: any, idx: number) => (
+                      <div key={idx} className="p-3.5 border border-slate-200 rounded-xl relative bg-white grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const list = [...(data?.penutup?.amplops || [])];
+                            updateNestedVal("penutup", "amplops", list.filter((_, i) => i !== idx));
+                          }}
+                          className="absolute -top-2.5 -right-2.5 p-1 bg-red-50 hover:bg-red-100 text-red-500 rounded-full border border-red-200"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+
+                        <div>
+                          <label className="block text-[8px] font-black uppercase text-slate-400 mb-1">Nama Bank / E-Wallet</label>
+                          <input
+                            type="text"
+                            value={a.bank || ""}
+                            onChange={(e) => {
+                              const list = [...(data?.penutup?.amplops || [])];
+                              list[idx] = { ...list[idx], bank: e.target.value };
+                              updateNestedVal("penutup", "amplops", list);
+                            }}
+                            placeholder="contoh: BCA / Mandiri / GoPay"
+                            className="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[8px] font-black uppercase text-slate-400 mb-1">Nomor Rekening</label>
+                          <input
+                            type="text"
+                            value={a.nomor_rekening || ""}
+                            onChange={(e) => {
+                              const list = [...(data?.penutup?.amplops || [])];
+                              list[idx] = { ...list[idx], nomor_rekening: e.target.value };
+                              updateNestedVal("penutup", "amplops", list);
+                            }}
+                            placeholder="1234567890"
+                            className="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[8px] font-black uppercase text-slate-400 mb-1">Nama Pemilik Rekening</label>
+                          <input
+                            type="text"
+                            value={a.atas_nama || ""}
+                            onChange={(e) => {
+                              const list = [...(data?.penutup?.amplops || [])];
+                              list[idx] = { ...list[idx], atas_nama: e.target.value };
+                              updateNestedVal("penutup", "amplops", list);
+                            }}
+                            placeholder="Atas Nama"
+                            className="w-full px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
+                          />
+                        </div>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const list = [...(data?.penutup?.amplops || [])];
+                        list.push({ bank: "", nomor_rekening: "", atas_nama: "" });
+                        updateNestedVal("penutup", "amplops", list);
+                      }}
+                      className="w-full py-2 border border-dashed border-[#064e3b]/25 rounded-xl text-xs font-bold text-[#064e3b]/70 hover:border-[#d4af37] flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      Tambah Rekening Hadiah Baru
+                    </button>
+                  </div>
+
+                  {/* Closing Messages */}
+                  <div className="grid grid-cols-1 gap-3 pt-4 border-t border-slate-100">
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-[#064e3b] mb-1">Pesan Penutup</label>
+                      <textarea
+                        rows={2}
+                        value={data?.penutup?.pesan_penutup || ""}
+                        onChange={(e) => updateNestedVal("penutup", "pesan_penutup", e.target.value)}
+                        placeholder="Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila..."
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#d4af37]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-[#064e3b] mb-1">Salam Penutup</label>
+                      <input
+                        type="text"
+                        value={data?.penutup?.salam || ""}
+                        onChange={(e) => updateNestedVal("penutup", "salam", e.target.value)}
+                        placeholder="Wassalamu'alaikum Warahmatullahi Wabarakatuh"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#d4af37]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-black uppercase text-[#064e3b] mb-1">Nama Pembuat / Yang Mengundang (Tertanda)</label>
+                      <input
+                        type="text"
+                        value={data?.penutup?.tertanda || ""}
+                        onChange={(e) => updateNestedVal("penutup", "tertanda", e.target.value)}
+                        placeholder="Keluarga Besar Bpk. X & Keluarga Besar Bpk. Y"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#d4af37]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 7: AKTIVASI PEMBAYARAN */}
+              {activeStep === 6 && status === "DRAFT" && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-base font-black text-[#064e3b] flex items-center gap-2">
+                      <Lock className="w-5 h-5 text-[#d4af37]" />
+                      Aktivasi & Pembayaran Undangan
+                    </h3>
+                    <p className="text-xs text-slate-500">Selesaikan aktivasi agar undangan online Anda aktif selamanya dan bisa dikirim ke tamu.</p>
+                  </div>
+
+                  {/* Selected Package display */}
+                  <div className="p-6 bg-[#064e3b] border-2 border-[#d4af37] text-white rounded-3xl space-y-4 shadow-xl">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#d4af37] bg-white/10 px-3 py-1 rounded-full border border-white/10">
+                      Rencana Paket Template Pilihan
+                    </span>
+                    <div>
+                      <h4 className="text-2xl font-black text-[#d4af37]">
+                        Paket {selectedPackage}
+                      </h4>
+                      <p className="text-xs text-white/70 mt-1">Menggunakan template: {invitation.template.nama_template}</p>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <span className="text-[10px] opacity-75 uppercase block font-semibold">Total Biaya Aktivasi:</span>
+                        <span className="text-2xl font-black text-white">
+                          {selectedPackage === "SILVER" ? "Rp 49.000" : selectedPackage === "GOLD" ? "Rp 99.000" : "Rp 149.000"}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={handleCheckout}
+                        disabled={checkoutLoading}
+                        className="px-6 py-3 bg-[#d4af37] hover:bg-[#c49f27] text-[#064e3b] hover:text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-black/10 disabled:opacity-50"
+                      >
+                        {checkoutLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Menghubungi Payment Gateway...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-4 h-4 animate-pulse" />
+                            Bayar & Aktifkan Sekarang
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {checkoutError && (
+                      <div className="bg-red-500/20 border border-red-500/40 text-red-100 p-3.5 rounded-xl text-xs flex items-start gap-2">
+                        <AlertCircle className="w-4.5 h-4.5 shrink-0" />
+                        <span>{checkoutError}</span>
+                      </div>
+                    )}
+
+                    {checkoutSuccess && (
+                      <div className="bg-emerald-500/20 border border-emerald-500/40 text-emerald-100 p-3.5 rounded-xl text-xs flex items-start gap-2 font-black animate-pulse">
+                        <CheckCircle className="w-4.5 h-4.5 shrink-0" />
+                        <span>Pembayaran Berhasil! Mengaktifkan undangan...</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* BOTTOM NAVIGATION ACTION BAR */}
+              <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-8">
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  disabled={activeStep === 0}
+                  className="px-4 py-2 border border-[#064e3b]/20 hover:border-[#064e3b] text-[#064e3b] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all bg-white disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Sebelumnya
+                </button>
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={saveDraft}
+                    disabled={saving}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-[#064e3b] rounded-xl text-xs font-bold transition-all border border-slate-200"
+                  >
+                    Simpan Draf
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={nextStep}
+                    disabled={activeStep === steps.length - 1}
+                    className="px-5 py-2 bg-[#064e3b] hover:bg-[#064e3b]/95 text-white rounded-xl text-xs font-black flex items-center gap-1.5 transition-all shadow-md disabled:opacity-30 disabled:pointer-events-none"
+                  >
+                    Selanjutnya
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
           </div>
         )}
-      </AnimatePresence>
+
+      </div>
     </div>
   );
 }

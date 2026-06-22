@@ -2,9 +2,11 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { Edit3, Trash2, Globe, Eye, Plus, Palette, Loader2 } from "lucide-react";
+import { Edit3, Trash2, Globe, Eye, Plus, Palette, Loader2, ChevronDown } from "lucide-react";
 import { deleteTemplate, publishTemplate } from "./builder-actions";
 import { ScaledCoverPreview } from "./BuilderTabsCoverPembuka";
+import { motion, AnimatePresence } from "framer-motion";
+import { KATEGORI_OPTIONS } from "./builder-constants";
 
 type Template = {
   id: string;
@@ -25,8 +27,10 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
   const [isPending, startTransition] = useTransition();
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [paketDropdownOpen, setPaketDropdownOpen] = useState(false);
 
-  const categories = ["Semua", ...Array.from(new Set(templates.map((t) => t.kategori)))];
+  const categories = ["Semua", ...KATEGORI_OPTIONS];
 
   const filteredTemplates = templates.filter((t) => {
     const matchesCategory = selectedCategory === "Semua" || t.kategori === selectedCategory;
@@ -64,37 +68,101 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
       )}
 
       {/* Filter Row */}
-      <div className="flex flex-col gap-3">
-        {/* Category Filter Buttons */}
-        <div className="flex flex-wrap gap-2 bg-[#064e3b]/5 p-1.5 rounded-2xl border border-[#064e3b]/10 w-fit">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
-                  ? "bg-[#064e3b] text-white border border-[#d4af37] shadow-md shadow-[#064e3b]/10"
-                  : "text-[#064e3b]/70 hover:text-[#064e3b]"
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
+      <div className="flex flex-wrap items-center gap-3">
+        {/* Category Dropdown */}
+        <div className="relative min-w-[200px]">
+          <button
+            onClick={() => {
+              setCategoryDropdownOpen(!categoryDropdownOpen);
+              setPaketDropdownOpen(false);
+            }}
+            className="w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border border-[#064e3b]/15 text-xs font-bold bg-[#064e3b]/5 hover:border-[#064e3b] text-[#064e3b] transition-all cursor-pointer shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <Palette className="w-3.5 h-3.5 text-[#d4af37]" />
+              <span>Kategori: {selectedCategory}</span>
+            </div>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${categoryDropdownOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          <AnimatePresence>
+            {categoryDropdownOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setCategoryDropdownOpen(false)} />
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 mt-2 w-56 max-h-60 overflow-y-auto bg-white border border-[#064e3b]/10 rounded-xl shadow-xl z-50 p-1.5 scrollbar-thin"
+                >
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setCategoryDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
+                          ? "bg-[#064e3b] text-white"
+                          : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                        }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Paket Filter Buttons */}
-        <div className="flex flex-wrap gap-2 bg-[#064e3b]/5 p-1.5 rounded-2xl border border-[#064e3b]/10 w-fit">
-          {["Semua Paket", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
-            <button
-              key={tier}
-              onClick={() => setSelectedPaket(tier === "Semua Paket" ? "Semua" : tier)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${(tier === "Semua Paket" && selectedPaket === "Semua") || selectedPaket === tier
-                  ? "bg-[#064e3b] text-white border border-[#d4af37] shadow-md shadow-[#064e3b]/10"
-                  : "text-[#064e3b]/70 hover:text-[#064e3b]"
-                }`}
-            >
-              {tier === "Semua Paket" ? "Semua Paket" : tier}
-            </button>
-          ))}
+        {/* Paket Dropdown */}
+        <div className="relative min-w-[180px]">
+          <button
+            onClick={() => {
+              setPaketDropdownOpen(!paketDropdownOpen);
+              setCategoryDropdownOpen(false);
+            }}
+            className="w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border border-[#064e3b]/15 text-xs font-bold bg-[#064e3b]/5 hover:border-[#064e3b] text-[#064e3b] transition-all cursor-pointer shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-[#d4af37] font-black">✦</span>
+              <span>Paket: {selectedPaket === "Semua" ? "Semua Paket" : selectedPaket}</span>
+            </div>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${paketDropdownOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          <AnimatePresence>
+            {paketDropdownOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setPaketDropdownOpen(false)} />
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 mt-2 w-48 bg-white border border-[#064e3b]/10 rounded-xl shadow-xl z-50 p-1.5"
+                >
+                  {["Semua Paket", "BASIC", "PREMIUM", "SULTAN"].map((tier) => (
+                    <button
+                      key={tier}
+                      onClick={() => {
+                        setSelectedPaket(tier === "Semua Paket" ? "Semua" : tier);
+                        setPaketDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${(tier === "Semua Paket" && selectedPaket === "Semua") || selectedPaket === tier
+                          ? "bg-[#064e3b] text-white"
+                          : "hover:bg-[#064e3b]/5 text-[#064e3b]"
+                        }`}
+                    >
+                      {tier === "Semua Paket" ? "Semua Paket" : tier}
+                    </button>
+                  ))}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
