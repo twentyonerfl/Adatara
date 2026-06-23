@@ -532,11 +532,21 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
                     </div>
 
                     <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Link Google Maps"
-                        value={a.setting_link_maps || {}}
-                        onChange={(val) => updAcara(i, "setting_link_maps", val)}
-                      />
+                      <label className="text-[9px] font-extrabold uppercase tracking-wider text-[#064e3b]/60 block mb-1.5">Label Link Google Maps</label>
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={a.link_maps_label || ""}
+                          onChange={e => updAcara(i, "link_maps_label", e.target.value)}
+                          placeholder="Lihat di Maps →"
+                          className="w-full px-2.5 py-1.5 text-xs bg-white border border-[#064e3b]/20 rounded-lg outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 font-medium"
+                        />
+                        <FontSettingsWidget
+                          label="Style Teks Label"
+                          value={a.setting_link_maps || {}}
+                          onChange={(val) => updAcara(i, "setting_link_maps", val)}
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
