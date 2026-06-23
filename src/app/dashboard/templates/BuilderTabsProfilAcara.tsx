@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget } from "./BuilderWidgets";
+import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "./BuilderWidgets";
 import { Plus, Trash2 } from "lucide-react";
 
 function getMapsEmbedUrl(input?: string) {
@@ -532,21 +532,11 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
                     </div>
 
                     <div className="pt-3 border-t border-[#064e3b]/10">
-                      <label className="text-[9px] font-extrabold uppercase tracking-wider text-[#064e3b]/60 block mb-1.5">Label Link Google Maps</label>
-                      <div className="space-y-2">
-                        <input
-                          type="text"
-                          value={a.link_maps_label || ""}
-                          onChange={e => updAcara(i, "link_maps_label", e.target.value)}
-                          placeholder="Lihat di Maps →"
-                          className="w-full px-2.5 py-1.5 text-xs bg-white border border-[#064e3b]/20 rounded-lg outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 font-medium"
-                        />
-                        <FontSettingsWidget
-                          label="Style Teks Label"
-                          value={a.setting_link_maps || {}}
-                          onChange={(val) => updAcara(i, "setting_link_maps", val)}
-                        />
-                      </div>
+                      <MapsButtonStyleWidget
+                        label="Style Tombol Google Maps"
+                        value={a.setting_maps_button || {}}
+                        onChange={(val) => updAcara(i, "setting_maps_button", val)}
+                      />
                     </div>
                   </div>
                 ))}
@@ -710,16 +700,38 @@ export function AcaraPreview({ data }: { data: any }) {
                 />
               </div>
             )}
-            {a.link_maps && (
-              <div 
-                className="mt-1"
-                style={getEventElementStyle(a.setting_link_maps, data.setting_link_maps_acara || { size: "10px", color: "#d4af37", family: "Inter", position: "left" })}
-              >
-                <a href={a.link_maps} target="_blank" className="font-bold hover:underline">
-                  {a.link_maps_label || "Lihat di Maps →"}
-                </a>
-              </div>
-            )}
+            {a.link_maps && (() => {
+              const ms = a.setting_maps_button || {};
+              const display = ms.display || "button";
+              const pos = ms.position || "left";
+              const alignClass = pos === "center" ? "text-center" : pos === "right" ? "text-right" : "text-left";
+              return (
+                <div className={`mt-2 ${alignClass}`}>
+                  <a
+                    href={a.link_maps}
+                    target="_blank"
+                    style={{
+                      fontFamily: ms.family || "Inter",
+                      fontSize: ms.size || "10px",
+                      color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
+                      ...(display === "button" ? {
+                        display: "inline-block",
+                        backgroundColor: ms.bg_color || "#064e3b",
+                        border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
+                        borderRadius: ms.border_radius || "8px",
+                        padding: "4px 12px",
+                        fontWeight: 700,
+                      } : {
+                        fontWeight: 700,
+                        textDecoration: "underline",
+                      })
+                    }}
+                  >
+                    {a.link_maps_label || "Lihat di Maps →"}
+                  </a>
+                </div>
+              );
+            })()}
           </div>
         );
       })}

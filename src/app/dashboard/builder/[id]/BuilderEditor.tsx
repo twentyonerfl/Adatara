@@ -37,7 +37,7 @@ import {
   Copy,
   ChevronDown
 } from "lucide-react";
-import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget } from "../../templates/BuilderWidgets";
+import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "../../templates/BuilderWidgets";
 
 type TemplateType = {
   id: string;
@@ -1088,39 +1088,21 @@ export function BuilderEditor({
                       <label className="block text-[10px] font-extrabold uppercase opacity-75">Daftar Acara Terdaftar ({data.acara?.acaras?.length || 0})</label>
                       <div className="space-y-2">
                         {data.acara?.acaras?.map((evt: any, idx: number) => (
-                          <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2">
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <h5 className="font-bold text-[#064e3b]">{evt.nama}</h5>
-                                <p className="text-[9px] text-[#064e3b]/60 mt-0.5">
-                                  {evt.tanggal} • {evt.jam || (evt.jam_mulai ? `${evt.jam_mulai}${evt.is_selesai_custom ? ` - ${evt.jam_selesai_custom || "Selesai"}` : (evt.jam_selesai ? ` - ${evt.jam_selesai}` : "")}` : "")}
-                                </p>
-                                <p className="text-[9px] text-[#064e3b]/50 mt-0.5 line-clamp-1">{evt.alamat}</p>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => removeEvent(idx)}
-                                className="p-1.5 text-rose-600 hover:bg-rose-500/10 rounded-lg cursor-pointer shrink-0"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                          <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-start justify-between">
+                            <div>
+                              <h5 className="font-bold text-[#064e3b]">{evt.nama}</h5>
+                              <p className="text-[9px] text-[#064e3b]/60 mt-0.5">
+                                {evt.tanggal} • {evt.jam || (evt.jam_mulai ? `${evt.jam_mulai}${evt.is_selesai_custom ? ` - ${evt.jam_selesai_custom || "Selesai"}` : (evt.jam_selesai ? ` - ${evt.jam_selesai}` : "")}` : "")}
+                              </p>
+                              <p className="text-[9px] text-[#064e3b]/50 mt-0.5 line-clamp-1">{evt.alamat}</p>
                             </div>
-                            {evt.link_maps && (
-                              <div className="space-y-1 border-t border-[#064e3b]/10 pt-2">
-                                <label className="text-[9px] font-extrabold uppercase text-[#064e3b]/50 block">Label Tombol Maps</label>
-                                <input
-                                  type="text"
-                                  value={evt.link_maps_label || ""}
-                                  onChange={e => {
-                                    const newAcaras = [...(data.acara?.acaras || [])];
-                                    newAcaras[idx] = { ...evt, link_maps_label: e.target.value };
-                                    updateData("acara", "acaras", newAcaras);
-                                  }}
-                                  placeholder="Lihat di Maps →"
-                                  className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/15 rounded-lg outline-none focus:border-[#d4af37] text-[#064e3b] font-medium"
-                                />
-                              </div>
-                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeEvent(idx)}
+                              className="p-1.5 text-rose-600 hover:bg-rose-500/10 rounded-lg cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         ))}
                       </div>
@@ -2011,16 +1993,38 @@ export function BuilderEditor({
                                   />
                                 </div>
                               )}
-                              {evt.link_maps && (
-                                <div 
-                                  className="mt-1"
-                                  style={getFontStyles(data.acara?.setting_link_maps_acara || { size: "10px", color: "#d4af37", family: "Inter", position: "left" })}
-                                >
-                                  <a href={evt.link_maps} target="_blank" className="font-bold hover:underline">
-                                    {evt.link_maps_label || "Lihat di Maps →"}
-                                  </a>
-                                </div>
-                              )}
+                              {evt.link_maps && (() => {
+                                const ms = evt.setting_maps_button || {};
+                                const display = ms.display || "button";
+                                const pos = ms.position || "left";
+                                const alignClass = pos === "center" ? "text-center" : pos === "right" ? "text-right" : "text-left";
+                                return (
+                                  <div className={`mt-2 ${alignClass}`}>
+                                    <a
+                                      href={evt.link_maps}
+                                      target="_blank"
+                                      style={{
+                                        fontFamily: ms.family || "Inter",
+                                        fontSize: ms.size || "10px",
+                                        color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
+                                        ...(display === "button" ? {
+                                          display: "inline-block",
+                                          backgroundColor: ms.bg_color || "#064e3b",
+                                          border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
+                                          borderRadius: ms.border_radius || "8px",
+                                          padding: "4px 12px",
+                                          fontWeight: 700,
+                                        } : {
+                                          fontWeight: 700,
+                                          textDecoration: "underline",
+                                        })
+                                      }}
+                                    >
+                                      {evt.link_maps_label || "Lihat di Maps →"}
+                                    </a>
+                                  </div>
+                                );
+                              })()}
                             </div>
                           </div>
                         );

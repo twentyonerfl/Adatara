@@ -32,7 +32,7 @@ export const defaultTemplateJson = {
   },
   acara: {
     acaras: [
-      { nama: "Nama Acara", tanggal: "", jam_mulai: "08:00", jam_selesai: "10:00", alamat: "Alamat lengkap", link_maps: "", embed_maps: "" },
+      { nama: "Nama Acara", tanggal: "", jam_mulai: "08:00", jam_selesai: "10:00", alamat: "Alamat lengkap", link_maps: "", embed_maps: "", setting_maps_button: { family: "Inter", size: "10px", color: "#ffffff", bg_color: "#064e3b", border_color: "transparent", border_radius: "8px", position: "left", display: "button" } },
     ],
     countdown_aktif: false,
     countdown_acara_index: 0,

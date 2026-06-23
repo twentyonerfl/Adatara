@@ -1479,3 +1479,139 @@ export function CountdownSettingsWidget({
 }
 
 
+
+export function MapsButtonStyleWidget({
+  label, value, onChange,
+}: {
+  label: string;
+  value: any;
+  onChange: (v: any) => void;
+}) {
+  const safeVal = {
+    family: value?.family || "Inter",
+    size: value?.size || "10px",
+    color: value?.color || "#ffffff",
+    bg_color: value?.bg_color || "#064e3b",
+    border_color: value?.border_color || "transparent",
+    border_radius: value?.border_radius || "8px",
+    position: value?.position || "left",
+    display: value?.display || "button",  // "button" | "link"
+  };
+
+  const sizeVal = parseInt(safeVal.size) || 10;
+  const radiusVal = parseInt(safeVal.border_radius) || 8;
+
+  return (
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
+      <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] border-b border-[#064e3b]/5 pb-1 mb-1.5">{label}</p>
+
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+        {/* Jenis Tampilan */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Jenis Tampilan</label>
+          <select value={safeVal.display} onChange={e => onChange({ ...safeVal, display: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            <option value="button">Tombol (Button)</option>
+            <option value="link">Link Teks</option>
+          </select>
+        </div>
+
+        {/* Posisi */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Posisi</label>
+          <select value={safeVal.position} onChange={e => onChange({ ...safeVal, position: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            <option value="left">Kiri</option>
+            <option value="center">Tengah</option>
+            <option value="right">Kanan</option>
+          </select>
+        </div>
+
+        {/* Font */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Font</label>
+          <select value={safeVal.family} onChange={e => onChange({ ...safeVal, family: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            {FONT_FAMILIES.map(f => <option key={f}>{f}</option>)}
+          </select>
+        </div>
+
+        {/* Warna Teks */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Teks</label>
+          <input type="color" value={safeVal.color}
+            onChange={e => onChange({ ...safeVal, color: e.target.value })}
+            className="w-full h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent" />
+        </div>
+
+        {/* Ukuran Font */}
+        <div className="col-span-2">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Teks</label>
+          <div className="flex gap-1.5 items-center">
+            <input type="range" min="8" max="24" value={sizeVal}
+              onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
+            <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
+          </div>
+        </div>
+
+        {safeVal.display === "button" && (
+          <>
+            <div className="col-span-2 border-t border-[#064e3b]/5 my-0.5 pt-1.5">
+              <p className="text-[8px] font-black uppercase text-[#d4af37] tracking-wider mb-1">Gaya Tombol</p>
+            </div>
+
+            {/* Background Tombol */}
+            <div>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">BG Tombol</label>
+              <div className="flex gap-1.5 items-center">
+                <input type="color"
+                  value={safeVal.bg_color === "transparent" ? "#064e3b" : safeVal.bg_color}
+                  onChange={e => onChange({ ...safeVal, bg_color: e.target.value })}
+                  disabled={safeVal.bg_color === "transparent"}
+                  className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...safeVal, bg_color: safeVal.bg_color === "transparent" ? "#064e3b" : "transparent" })}
+                  className={`px-1 py-0.5 text-[6.5px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.bg_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                >
+                  Transpar
+                </button>
+              </div>
+            </div>
+
+            {/* Border Tombol */}
+            <div>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Border Tombol</label>
+              <div className="flex gap-1.5 items-center">
+                <input type="color"
+                  value={safeVal.border_color === "transparent" ? "#064e3b" : safeVal.border_color}
+                  onChange={e => onChange({ ...safeVal, border_color: e.target.value })}
+                  disabled={safeVal.border_color === "transparent"}
+                  className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...safeVal, border_color: safeVal.border_color === "transparent" ? "#064e3b" : "transparent" })}
+                  className={`px-1 py-0.5 text-[6.5px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.border_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                >
+                  Transpar
+                </button>
+              </div>
+            </div>
+
+            {/* Radius Sudut */}
+            <div className="col-span-2">
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Radius Sudut</label>
+              <div className="flex gap-1.5 items-center">
+                <input type="range" min="0" max="32" value={radiusVal}
+                  onChange={e => onChange({ ...safeVal, border_radius: e.target.value + "px" })}
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
+                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.border_radius}</span>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
