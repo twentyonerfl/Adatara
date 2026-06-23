@@ -606,7 +606,7 @@ export function AcaraPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const acaras: any[] = data.acaras || [];
   return (
-    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-4" style={bg}>
+    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-3" style={bg}>
       {data.countdown_aktif && (() => {
         const idx = data.countdown_acara_index ?? 0;
         const targetEvent = acaras[idx];
@@ -639,15 +639,18 @@ export function AcaraPreview({ data }: { data: any }) {
 
       {acaras.map((a, i) => {
         const cardStyle = a.setting_card?.type || "glass";
-        let cardClass = "relative space-y-1.5 min-h-[140px] ";
+        let cardClass = "relative space-y-1.5 ";
         if (cardStyle === "none") {
-          cardClass += "p-0 bg-transparent border-none";
-        } else if (cardStyle === "outline") {
-          cardClass += "p-4 bg-transparent border border-[#064e3b]/20 rounded-xl";
-        } else if (cardStyle === "solid") {
-          cardClass += "p-4 bg-white border border-slate-100 rounded-xl shadow-sm";
+          cardClass += "p-0 bg-transparent border-none min-h-0";
         } else {
-          cardClass += "p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/80";
+          cardClass += "min-h-[140px] ";
+          if (cardStyle === "outline") {
+            cardClass += "p-4 bg-transparent border border-[#064e3b]/20 rounded-xl";
+          } else if (cardStyle === "solid") {
+            cardClass += "p-4 bg-white border border-slate-100 rounded-xl shadow-sm";
+          } else {
+            cardClass += "p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/80";
+          }
         }
 
         return (

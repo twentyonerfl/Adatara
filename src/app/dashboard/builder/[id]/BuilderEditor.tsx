@@ -1887,7 +1887,7 @@ export function BuilderEditor({
                   >
                     {renderOrnament("acara")}
 
-                    <div className="space-y-4 text-left">
+                    <div className="space-y-3 text-left">
                       {data.acara?.countdown_aktif && (() => {
                         const idx = data.acara.countdown_acara_index ?? 0;
                         const targetEvent = data.acara.acaras?.[idx];
@@ -1944,15 +1944,18 @@ export function BuilderEditor({
                         }
 
                         const cardStyle = evt.setting_card?.type || "glass";
-                        let cardClass = "relative space-y-2 min-h-[140px] ";
+                        let cardClass = "relative space-y-2 ";
                         if (cardStyle === "none") {
-                          cardClass += "p-0 bg-transparent border-none";
-                        } else if (cardStyle === "outline") {
-                          cardClass += "p-3.5 bg-transparent border border-[#064e3b]/20 rounded-xl";
-                        } else if (cardStyle === "solid") {
-                          cardClass += "p-3.5 bg-white border border-slate-100 rounded-xl shadow-sm";
+                          cardClass += "p-0 bg-transparent border-none min-h-0";
                         } else {
-                          cardClass += "p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl";
+                          cardClass += "min-h-[140px] ";
+                          if (cardStyle === "outline") {
+                            cardClass += "p-3.5 bg-transparent border border-[#064e3b]/20 rounded-xl";
+                          } else if (cardStyle === "solid") {
+                            cardClass += "p-3.5 bg-white border border-slate-100 rounded-xl shadow-sm";
+                          } else {
+                            cardClass += "p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl";
+                          }
                         }
 
                         return (
