@@ -212,6 +212,22 @@ function getMapsEmbedUrl(input?: string) {
   return input;
 }
 
+function applyMapType(url: string, mapType: "roadmap" | "satellite"): string {
+  if (!url) return url;
+  const typeCode = mapType === "satellite" ? "1" : "0";
+  if (/!5e\d/.test(url)) {
+    return url.replace(/!5e\d/, `!5e${typeCode}`);
+  }
+  if (url.includes("maps/embed/v1")) {
+    const base = url.split("&maptype=")[0];
+    return mapType === "satellite" ? `${base}&maptype=satellite` : base;
+  }
+  if (mapType === "satellite") {
+    return url.includes("?") ? `${url}&maptype=satellite` : `${url}?maptype=satellite`;
+  }
+  return url;
+}
+
 function Countdown({ targetDateStr, settings }: { targetDateStr: string; settings?: any }) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -365,6 +381,7 @@ export function BuilderEditor({
   const [tempEventMaps, setTempEventMaps] = useState("");
   const [tempEventEmbedMaps, setTempEventEmbedMaps] = useState("");
   const [tempEventEmbedMapsHeight, setTempEventEmbedMapsHeight] = useState(112);
+  const [tempEventMapType, setTempEventMapType] = useState<"roadmap" | "satellite">("roadmap");
   const [tempEventLinkMapsLabel, setTempEventLinkMapsLabel] = useState("");
   const [tempEventCardType, setTempEventCardType] = useState("glass");
 
@@ -495,6 +512,7 @@ export function BuilderEditor({
         link_maps: tempEventMaps,
         embed_maps: tempEventEmbedMaps,
         embed_maps_height: tempEventEmbedMapsHeight,
+        map_type: tempEventMapType,
         link_maps_label: tempEventLinkMapsLabel,
         setting_card: { type: tempEventCardType }
       }
@@ -509,6 +527,7 @@ export function BuilderEditor({
     setTempEventMaps("");
     setTempEventEmbedMaps("");
     setTempEventEmbedMapsHeight(112);
+    setTempEventMapType("roadmap");
     setTempEventLinkMapsLabel("");
     setTempEventCardType("glass");
   };
@@ -1202,6 +1221,25 @@ export function BuilderEditor({
                             onChange={(e) => setTempEventEmbedMapsHeight(parseInt(e.target.value))}
                             className="w-full accent-[#d4af37] h-1"
                           />
+                          <div className="pt-1">
+                            <label className="text-[9px] font-extrabold uppercase opacity-60 block mb-1">Tampilan Peta</label>
+                            <div className="flex gap-1.5">
+                              {(["roadmap", "satellite"] as const).map((type) => (
+                                <button
+                                  key={type}
+                                  type="button"
+                                  onClick={() => setTempEventMapType(type)}
+                                  className={`flex-1 py-1 text-[9px] font-black uppercase rounded-lg border transition-all ${
+                                    tempEventMapType === type
+                                      ? "bg-[#064e3b] text-white border-[#064e3b]"
+                                      : "bg-[#f5f5dc] text-[#064e3b]/60 border-[#064e3b]/20 hover:border-[#d4af37]"
+                                  }`}
+                                >
+                                  {type === "roadmap" ? "🗺 Peta" : "🛰 Satelit"}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       )}
                       <div className="space-y-1">
@@ -1984,7 +2022,7 @@ export function BuilderEditor({
                                   style={{ height: evt.embed_maps_height ? `${evt.embed_maps_height}px` : "112px" }}
                                 >
                                   <iframe
-                                    src={getMapsEmbedUrl(evt.embed_maps)}
+                                    src={applyMapType(getMapsEmbedUrl(evt.embed_maps), evt.map_type || "roadmap")}
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
