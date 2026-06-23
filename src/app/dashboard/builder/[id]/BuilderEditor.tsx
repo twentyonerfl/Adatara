@@ -1767,9 +1767,6 @@ export function BuilderEditor({
                     }}
                   >
                     {renderOrnament("acara")}
-                    <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
-                      Waktu & Tempat
-                    </span>
 
                     <div className="space-y-4 text-left">
                       {data.acara?.countdown_aktif && (() => {
@@ -1786,6 +1783,12 @@ export function BuilderEditor({
                           </div>
                         );
                       })()}
+
+                      <div className="text-center">
+                        <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block mb-2">
+                          Waktu & Tempat
+                        </span>
+                      </div>
 
                       {data.acara?.acaras?.map((evt: any, idx: number) => {
                         const endJam = evt.is_selesai_custom ? (evt.jam_selesai_custom || "Selesai") : evt.jam_selesai;

@@ -515,11 +515,6 @@ export function AcaraPreview({ data }: { data: any }) {
   const acaras: any[] = data.acaras || [];
   return (
     <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-4" style={bg}>
-      <div className="text-center mb-4">
-        <div className="text-xs font-black uppercase tracking-wider opacity-60 text-[#064e3b]">Jadwal & Lokasi</div>
-        <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
-      </div>
-
       {data.countdown_aktif && (() => {
         const idx = data.countdown_acara_index ?? 0;
         const targetEvent = acaras[idx];
@@ -542,6 +537,11 @@ export function AcaraPreview({ data }: { data: any }) {
           </div>
         );
       })()}
+
+      <div className="text-center mb-4">
+        <div className="text-xs font-black uppercase tracking-wider opacity-60 text-[#064e3b]">Jadwal & Lokasi</div>
+        <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
+      </div>
 
       {acaras.map((a, i) => (
         <div key={i} className="relative bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/80 space-y-1.5 min-h-[140px]">
