@@ -27,7 +27,7 @@ export default async function PublicBuilderPage({
   });
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden bg-[#f5f5dc]">
+    <div className="min-h-screen w-full flex flex-col bg-[#f5f5dc]">
       <BuilderEditor 
         invitation={invitation} 
         musicList={musicList} 
