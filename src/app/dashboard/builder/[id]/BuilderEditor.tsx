@@ -1997,30 +1997,32 @@ export function BuilderEditor({
                                 const ms = evt.setting_maps_button || {};
                                 const display = ms.display || "button";
                                 const pos = ms.position || "left";
-                                const alignClass = pos === "center" ? "text-center" : pos === "right" ? "text-right" : "text-left";
+                                const justifyStyle: React.CSSProperties = {
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: pos === "center" ? "center" : pos === "right" ? "flex-end" : "flex-start",
+                                  marginTop: "6px",
+                                };
+                                const linkStyle: React.CSSProperties = {
+                                  fontFamily: ms.family || "Inter",
+                                  fontSize: ms.size || "10px",
+                                  color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
+                                  ...(display === "button" ? {
+                                    display: "inline-block",
+                                    backgroundColor: ms.bg_color || "#064e3b",
+                                    border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
+                                    borderRadius: ms.border_radius || "8px",
+                                    padding: "4px 12px",
+                                    fontWeight: 700,
+                                  } : {
+                                    fontWeight: 700,
+                                    textDecoration: "underline",
+                                  }),
+                                };
                                 return (
-                                  <div className={`mt-2 ${alignClass}`}>
-                                    <a
-                                      href={evt.link_maps}
-                                      target="_blank"
-                                      style={{
-                                        fontFamily: ms.family || "Inter",
-                                        fontSize: ms.size || "10px",
-                                        color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
-                                        ...(display === "button" ? {
-                                          display: "inline-block",
-                                          backgroundColor: ms.bg_color || "#064e3b",
-                                          border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
-                                          borderRadius: ms.border_radius || "8px",
-                                          padding: "4px 12px",
-                                          fontWeight: 700,
-                                        } : {
-                                          fontWeight: 700,
-                                          textDecoration: "underline",
-                                        })
-                                      }}
-                                    >
-                                      {evt.link_maps_label || "Lihat di Maps →"}
+                                  <div style={justifyStyle}>
+                                    <a href={evt.link_maps} target="_blank" style={linkStyle}>
+                                      {evt.link_maps_label || "Lihat di Maps \u2192"}
                                     </a>
                                   </div>
                                 );
