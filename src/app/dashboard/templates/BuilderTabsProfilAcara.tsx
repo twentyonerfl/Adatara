@@ -15,30 +15,6 @@ function getMapsEmbedUrl(input?: string) {
   return input.trim();
 }
 
-/**
- * Applies map type (roadmap / satellite) to a Google Maps embed URL.
- * Google uses `!5e0` for roadmap and `!5e1` for satellite within the pb parameter.
- * Falls back to appending &maptype= for Embed API URLs.
- */
-function applyMapType(url: string, mapType: "roadmap" | "satellite"): string {
-  if (!url) return url;
-  const typeCode = mapType === "satellite" ? "1" : "0";
-  // Replace existing !5eX pattern
-  if (/!5e\d/.test(url)) {
-    return url.replace(/!5e\d/, `!5e${typeCode}`);
-  }
-  // For Embed API style URLs
-  if (url.includes("maps/embed/v1")) {
-    const base = url.split("&maptype=")[0];
-    return mapType === "satellite" ? `${base}&maptype=satellite` : base;
-  }
-  // For standard embed URLs without !5e, try appending maptype hint
-  if (mapType === "satellite") {
-    return url.includes("?") ? `${url}&maptype=satellite` : `${url}?maptype=satellite`;
-  }
-  return url;
-}
-
 // ─── PROFIL TAB ───────────────────────────────────────────────────────────────
 
 export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: any) => void; mode?: "data" | "settings" }) {
@@ -440,25 +416,6 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
                           className="flex-1 accent-[#d4af37] h-1" />
                         <span className="text-[9px] font-bold text-[#064e3b]">{a.embed_maps_height ?? 112}px</span>
                       </div>
-                      <div className="pt-1 border-t border-[#064e3b]/10">
-                        <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Tampilan Peta</label>
-                        <div className="flex gap-1.5">
-                          {(["roadmap", "satellite"] as const).map((type) => (
-                            <button
-                              key={type}
-                              type="button"
-                              onClick={() => updAcara(i, "map_type", type)}
-                              className={`flex-1 py-1 text-[9px] font-black uppercase rounded-lg border transition-all ${
-                                (a.map_type || "roadmap") === type
-                                  ? "bg-[#064e3b] text-white border-[#064e3b]"
-                                  : "bg-white text-[#064e3b]/60 border-[#064e3b]/20 hover:border-[#d4af37]"
-                              }`}
-                            >
-                              {type === "roadmap" ? "🗺 Peta" : "🛰 Satelit"}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
                     </div>
                   )}
                 </div>
@@ -729,15 +686,14 @@ export function AcaraPreview({ data }: { data: any }) {
               </div>
             )}
             {a.embed_maps && (
-              <div 
+              <div
                 className="w-full rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10"
-                style={{ height: a.embed_maps_height ? `${a.embed_maps_height}px` : "112px" }}
+                style={{ height: a.embed_maps_height ? `${a.embed_maps_height}px` : "112px", position: "relative" }}
               >
                 <iframe
-                  src={applyMapType(getMapsEmbedUrl(a.embed_maps), a.map_type || "roadmap")}
+                  src={getMapsEmbedUrl(a.embed_maps)}
                   width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
+                  style={{ border: 0, position: "absolute", top: 0, left: 0, width: "100%", height: "calc(100% + 30px)" }}
                   allowFullScreen={false}
                   loading="lazy"
                 />
