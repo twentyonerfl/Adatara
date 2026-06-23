@@ -203,6 +203,15 @@ function getTargetDateTime(tanggal: string, jamStr?: string) {
   return `${tanggal}T${timeStr}`;
 }
 
+function getMapsEmbedUrl(input?: string) {
+  if (!input) return "";
+  if (input.includes("iframe")) {
+    const match = input.match(/src="([^"]+)"/);
+    return match ? match[1] : "";
+  }
+  return input;
+}
+
 function Countdown({ targetDateStr }: { targetDateStr: string }) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -308,6 +317,10 @@ export function BuilderEditor({
   const [tempEventTimeEndCustom, setTempEventTimeEndCustom] = useState("Selesai");
   const [tempEventAddress, setTempEventAddress] = useState("");
   const [tempEventMaps, setTempEventMaps] = useState("");
+  const [tempEventEmbedMaps, setTempEventEmbedMaps] = useState("");
+  const [tempEventEmbedMapsHeight, setTempEventEmbedMapsHeight] = useState(112);
+  const [tempEventLinkMapsLabel, setTempEventLinkMapsLabel] = useState("");
+  const [tempEventCardType, setTempEventCardType] = useState("glass");
 
   const [tempStoryTitle, setTempStoryTitle] = useState("");
   const [tempStoryDate, setTempStoryDate] = useState("");
@@ -433,7 +446,11 @@ export function BuilderEditor({
         is_selesai_custom: tempEventIsSelesaiCustom,
         jam_selesai_custom: tempEventTimeEndCustom,
         alamat: tempEventAddress,
-        link_maps: tempEventMaps
+        link_maps: tempEventMaps,
+        embed_maps: tempEventEmbedMaps,
+        embed_maps_height: tempEventEmbedMapsHeight,
+        link_maps_label: tempEventLinkMapsLabel,
+        setting_card: { type: tempEventCardType }
       }
     ]);
     setTempEventName("");
@@ -444,6 +461,10 @@ export function BuilderEditor({
     setTempEventTimeEndCustom("Selesai");
     setTempEventAddress("");
     setTempEventMaps("");
+    setTempEventEmbedMaps("");
+    setTempEventEmbedMapsHeight(112);
+    setTempEventLinkMapsLabel("");
+    setTempEventCardType("glass");
   };
 
   const removeEvent = (idx: number) => {
@@ -532,7 +553,9 @@ export function BuilderEditor({
         return [
           { key: "setting_nama_acara", label: "Nama Acara" },
           { key: "setting_tanggal_acara", label: "Tanggal Acara" },
-          { key: "setting_jam_acara", label: "Waktu/Jam Acara" }
+          { key: "setting_jam_acara", label: "Waktu/Jam Acara" },
+          { key: "setting_alamat_acara", label: "Alamat Acara" },
+          { key: "setting_link_maps_acara", label: "Link Maps Acara" }
         ];
       case "cerita":
         return [
@@ -1108,6 +1131,46 @@ export function BuilderEditor({
                         placeholder="Link Google Maps"
                         className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
                       />
+                      {tempEventMaps && (
+                        <input
+                          type="text"
+                          value={tempEventLinkMapsLabel}
+                          onChange={(e) => setTempEventLinkMapsLabel(e.target.value)}
+                          placeholder="Label Link Maps (e.g. Lihat di Maps →)"
+                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
+                        />
+                      )}
+                      <input
+                        type="text"
+                        value={tempEventEmbedMaps}
+                        onChange={(e) => setTempEventEmbedMaps(e.target.value)}
+                        placeholder="Embed Maps URL (Optional iframe src)"
+                        className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
+                      />
+                      {tempEventEmbedMaps && (
+                        <div className="space-y-1">
+                          <label className="text-[9px] font-extrabold uppercase opacity-60">Tinggi Maps Embed: {tempEventEmbedMapsHeight}px</label>
+                          <input
+                            type="range" min="80" max="400" step="10"
+                            value={tempEventEmbedMapsHeight}
+                            onChange={(e) => setTempEventEmbedMapsHeight(parseInt(e.target.value))}
+                            className="w-full accent-[#d4af37] h-1"
+                          />
+                        </div>
+                      )}
+                      <div className="space-y-1">
+                        <label className="text-[9px] font-extrabold uppercase opacity-60">Style Card Acara</label>
+                        <select
+                          value={tempEventCardType}
+                          onChange={(e) => setTempEventCardType(e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs text-[#064e3b] font-bold"
+                        >
+                          <option value="glass">Kaca (Glassmorphism)</option>
+                          <option value="outline">Garis (Outline)</option>
+                          <option value="solid">Solid (Putih)</option>
+                          <option value="none">Tanpa Card (Polos)</option>
+                        </select>
+                      </div>
                       <button
                         type="button"
                         onClick={addEvent}
@@ -1822,8 +1885,20 @@ export function BuilderEditor({
                           }
                         }
 
+                        const cardStyle = evt.setting_card?.type || "glass";
+                        let cardClass = "relative space-y-2 min-h-[140px] ";
+                        if (cardStyle === "none") {
+                          cardClass += "p-0 bg-transparent border-none";
+                        } else if (cardStyle === "outline") {
+                          cardClass += "p-3.5 bg-transparent border border-[#064e3b]/20 rounded-xl";
+                        } else if (cardStyle === "solid") {
+                          cardClass += "p-3.5 bg-white border border-slate-100 rounded-xl shadow-sm";
+                        } else {
+                          cardClass += "p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl";
+                        }
+
                         return (
-                          <div key={idx} className="relative p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2 min-h-[140px]">
+                          <div key={idx} className={cardClass}>
                             <h5 style={getFontStyles(data.acara?.setting_nama_acara || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-extrabold pb-1.5 flex items-center gap-1.5 border-b border-[#064e3b]/10">
                               <Calendar className="w-3.5 h-3.5 text-[#d4af37]" />
                               {evt.nama}
@@ -1839,9 +1914,34 @@ export function BuilderEditor({
                                   Pukul: {timeDisplay}
                                 </p>
                               )}
-                              <p className="leading-normal text-[9px] text-[#064e3b]/70 mt-1">
+                              <p style={getFontStyles(data.acara?.setting_alamat_acara || { size: "9px", color: "#064e3b", family: "Inter", position: "left" })} className="leading-normal mt-1">
                                 Lokasi: {evt.alamat}
                               </p>
+                              {evt.embed_maps && (
+                                <div 
+                                  className="w-full rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10"
+                                  style={{ height: evt.embed_maps_height ? `${evt.embed_maps_height}px` : "112px" }}
+                                >
+                                  <iframe
+                                    src={getMapsEmbedUrl(evt.embed_maps)}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen={false}
+                                    loading="lazy"
+                                  />
+                                </div>
+                              )}
+                              {evt.link_maps && (
+                                <div 
+                                  className="mt-1"
+                                  style={getFontStyles(data.acara?.setting_link_maps_acara || { size: "10px", color: "#d4af37", family: "Inter", position: "left" })}
+                                >
+                                  <a href={evt.link_maps} target="_blank" className="font-bold hover:underline">
+                                    {evt.link_maps_label || "Lihat di Maps →"}
+                                  </a>
+                                </div>
+                              )}
                             </div>
                           </div>
                         );

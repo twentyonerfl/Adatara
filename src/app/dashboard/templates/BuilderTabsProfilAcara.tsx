@@ -357,7 +357,21 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
                   </div>
                   <InputField label="Alamat Lengkap" value={a.alamat} onChange={v => updAcara(i, "alamat", v)} placeholder="Jl. ..." textarea />
                   <InputField label="Link Google Maps" value={a.link_maps} onChange={v => updAcara(i, "link_maps", v)} placeholder="https://maps.google.com/..." />
+                  {a.link_maps && (
+                    <InputField label="Label Link Maps" value={a.link_maps_label} onChange={v => updAcara(i, "link_maps_label", v)} placeholder="Lihat di Maps →" />
+                  )}
                   <InputField label="Embed Maps URL (Opsional)" value={a.embed_maps} onChange={v => updAcara(i, "embed_maps", v)} placeholder="https://www.google.com/maps/embed?..." />
+                  {a.embed_maps && (
+                    <div className="space-y-1 mt-1 p-2 bg-[#064e3b]/5 rounded-lg border border-[#064e3b]/10">
+                      <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Tinggi Maps Embed: {a.embed_maps_height ?? 112}px</label>
+                      <div className="flex items-center gap-2">
+                        <input type="range" min="80" max="400" step="10" value={a.embed_maps_height ?? 112}
+                          onChange={e => updAcara(i, "embed_maps_height", parseInt(e.target.value))}
+                          className="flex-1 accent-[#d4af37] h-1" />
+                        <span className="text-[9px] font-bold text-[#064e3b]">{a.embed_maps_height ?? 112}px</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -444,6 +458,28 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
                         label="Style Alamat Lengkap"
                         value={a.setting_alamat || {}}
                         onChange={(val) => updAcara(i, "setting_alamat", val)}
+                      />
+                    </div>
+
+                    <div className="pt-3 border-t border-[#064e3b]/10">
+                      <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Style Card Acara</label>
+                      <select
+                        value={a.setting_card?.type || "glass"}
+                        onChange={e => updAcara(i, "setting_card", { ...a.setting_card, type: e.target.value })}
+                        className="w-full px-2 py-1.5 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none font-bold cursor-pointer text-[#064e3b]"
+                      >
+                        <option value="glass">Kaca (Glassmorphism)</option>
+                        <option value="outline">Garis (Outline)</option>
+                        <option value="solid">Solid (Putih)</option>
+                        <option value="none">Tanpa Card (Polos)</option>
+                      </select>
+                    </div>
+
+                    <div className="pt-3 border-t border-[#064e3b]/10">
+                      <FontSettingsWidget
+                        label="Style Link Google Maps"
+                        value={a.setting_link_maps || {}}
+                        onChange={(val) => updAcara(i, "setting_link_maps", val)}
                       />
                     </div>
                   </div>
@@ -543,61 +579,79 @@ export function AcaraPreview({ data }: { data: any }) {
         <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
       </div>
 
-      {acaras.map((a, i) => (
-        <div key={i} className="relative bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/80 space-y-1.5 min-h-[140px]">
-          <div 
-            className="text-sm font-black" 
-            style={getEventElementStyle(a.setting_nama, data.setting_nama_acara || { size: "14px", color: "#064e3b", family: "Inter", position: "left" })}
-          >
-            {a.nama || "Nama Acara"}
-          </div>
-          {a.tanggal && (
+      {acaras.map((a, i) => {
+        const cardStyle = a.setting_card?.type || "glass";
+        let cardClass = "relative space-y-1.5 min-h-[140px] ";
+        if (cardStyle === "none") {
+          cardClass += "p-0 bg-transparent border-none";
+        } else if (cardStyle === "outline") {
+          cardClass += "p-4 bg-transparent border border-[#064e3b]/20 rounded-xl";
+        } else if (cardStyle === "solid") {
+          cardClass += "p-4 bg-white border border-slate-100 rounded-xl shadow-sm";
+        } else {
+          cardClass += "p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-white/80";
+        }
+
+        return (
+          <div key={i} className={cardClass}>
             <div 
-              className="text-xs font-semibold"
-              style={getEventElementStyle(a.setting_tanggal, data.setting_tanggal_acara || { size: "12px", color: "#064e3b", family: "Inter", position: "left" })}
+              className="text-sm font-black" 
+              style={getEventElementStyle(a.setting_nama, data.setting_nama_acara || { size: "14px", color: "#064e3b", family: "Inter", position: "left" })}
             >
-              {formatIndonesianDate(a.tanggal)}
+              {a.nama || "Nama Acara"}
             </div>
-          )}
-          {(a.jam_mulai || a.jam_selesai) && (
-            <div 
-              className="text-xs"
-              style={getEventElementStyle(a.setting_jam, data.setting_jam_acara || { size: "11px", color: "#064e3b", family: "Inter", position: "left" })}
-            >
-              {formatEventTime(a.jam_mulai, a.jam_selesai)}
-            </div>
-          )}
-          {a.alamat && (
-            <div 
-              className="text-[10px] leading-relaxed"
-              style={getEventElementStyle(a.setting_alamat, data.setting_alamat_acara || data.setting_jam_acara || { size: "10px", color: "#064e3b", family: "Inter", position: "left" })}
-            >
-              {a.alamat}
-            </div>
-          )}
-          {a.embed_maps && (
-            <div className="w-full h-28 rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10">
-              <iframe
-                src={getMapsEmbedUrl(a.embed_maps)}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={false}
-                loading="lazy"
-              />
-            </div>
-          )}
-          {a.link_maps && (() => {
-            const pos = a.setting_alamat?.position || data.setting_alamat_acara?.position || data.setting_jam_acara?.position || "left";
-            const alignment = pos === "custom" ? "center" : pos;
-            return (
-              <div style={{ textAlign: alignment as any }}>
-                <a href={a.link_maps} target="_blank" className="text-[10px] text-[#d4af37] font-bold hover:underline">Lihat di Maps →</a>
+            {a.tanggal && (
+              <div 
+                className="text-xs font-semibold"
+                style={getEventElementStyle(a.setting_tanggal, data.setting_tanggal_acara || { size: "12px", color: "#064e3b", family: "Inter", position: "left" })}
+              >
+                {formatIndonesianDate(a.tanggal)}
               </div>
-            );
-          })()}
-        </div>
-      ))}
+            )}
+            {(a.jam_mulai || a.jam_selesai) && (
+              <div 
+                className="text-xs"
+                style={getEventElementStyle(a.setting_jam, data.setting_jam_acara || { size: "11px", color: "#064e3b", family: "Inter", position: "left" })}
+              >
+                {formatEventTime(a.jam_mulai, a.jam_selesai)}
+              </div>
+            )}
+            {a.alamat && (
+              <div 
+                className="text-[10px] leading-relaxed"
+                style={getEventElementStyle(a.setting_alamat, data.setting_alamat_acara || data.setting_jam_acara || { size: "10px", color: "#064e3b", family: "Inter", position: "left" })}
+              >
+                {a.alamat}
+              </div>
+            )}
+            {a.embed_maps && (
+              <div 
+                className="w-full rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10"
+                style={{ height: a.embed_maps_height ? `${a.embed_maps_height}px` : "112px" }}
+              >
+                <iframe
+                  src={getMapsEmbedUrl(a.embed_maps)}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                />
+              </div>
+            )}
+            {a.link_maps && (
+              <div 
+                className="mt-1"
+                style={getEventElementStyle(a.setting_link_maps, data.setting_link_maps_acara || { size: "10px", color: "#d4af37", family: "Inter", position: "left" })}
+              >
+                <a href={a.link_maps} target="_blank" className="font-bold hover:underline">
+                  {a.link_maps_label || "Lihat di Maps →"}
+                </a>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
