@@ -459,6 +459,57 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
   );
 }
 
+function getEventElementStyle(settingItem: any, defaultStyle: { size: string, color: string, family: string, position?: string }) {
+  const family = settingItem?.family || defaultStyle.family;
+  const size = settingItem?.size || defaultStyle.size;
+  const color = settingItem?.color || defaultStyle.color;
+  
+  const styles: React.CSSProperties = {
+    fontFamily: family,
+    fontSize: size,
+    color: color,
+  };
+  
+  const pos = settingItem?.position || defaultStyle.position || "left";
+  if (pos === "custom") {
+    styles.position = "absolute";
+    styles.left = `${settingItem?.x ?? 50}%`;
+    styles.top = `${settingItem?.y ?? 50}%`;
+    styles.transform = "translate(-50%, -50%)";
+    styles.whiteSpace = "nowrap";
+  } else {
+    styles.textAlign = pos as any;
+  }
+  return styles;
+}
+
+function formatIndonesianDate(dateStr?: string) {
+  try {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    return date.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  } catch (e) {
+    return dateStr || "";
+  }
+}
+
+function formatEventTime(jamMulai?: string, jamSelesai?: string) {
+  if (!jamMulai && !jamSelesai) return "";
+  const start = jamMulai || "";
+  const end = jamSelesai || "";
+  
+  if (end.toLowerCase() === "selesai") {
+    return `${start} WIB – Selesai`;
+  }
+  
+  if (start && end) {
+    return `${start} – ${end} WIB`;
+  }
+  
+  return `${start || end} WIB`;
+}
+
 export function AcaraPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const acaras: any[] = data.acaras || [];
@@ -493,53 +544,33 @@ export function AcaraPreview({ data }: { data: any }) {
       })()}
 
       {acaras.map((a, i) => (
-        <div key={i} className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/80 space-y-1.5">
+        <div key={i} className="relative bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/80 space-y-1.5 min-h-[140px]">
           <div 
             className="text-sm font-black" 
-            style={{
-              fontFamily: a.setting_nama?.family || data.setting_nama_acara?.family || "Inter",
-              fontSize: a.setting_nama?.size || data.setting_nama_acara?.size || "14px",
-              color: a.setting_nama?.color || data.setting_nama_acara?.color || "#064e3b",
-              textAlign: (a.setting_nama?.position || data.setting_nama_acara?.position || "left") as any
-            }}
+            style={getEventElementStyle(a.setting_nama, data.setting_nama_acara || { size: "14px", color: "#064e3b", family: "Inter", position: "left" })}
           >
             {a.nama || "Nama Acara"}
           </div>
           {a.tanggal && (
             <div 
               className="text-xs font-semibold"
-              style={{
-                fontFamily: a.setting_tanggal?.family || data.setting_tanggal_acara?.family || "Inter",
-                fontSize: a.setting_tanggal?.size || data.setting_tanggal_acara?.size || "12px",
-                color: a.setting_tanggal?.color || data.setting_tanggal_acara?.color || "#064e3b",
-                textAlign: (a.setting_tanggal?.position || data.setting_tanggal_acara?.position || "left") as any
-              }}
+              style={getEventElementStyle(a.setting_tanggal, data.setting_tanggal_acara || { size: "12px", color: "#064e3b", family: "Inter", position: "left" })}
             >
-              {new Date(a.tanggal).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
+              {formatIndonesianDate(a.tanggal)}
             </div>
           )}
           {(a.jam_mulai || a.jam_selesai) && (
             <div 
               className="text-xs"
-              style={{
-                fontFamily: a.setting_jam?.family || data.setting_jam_acara?.family || "Inter",
-                fontSize: a.setting_jam?.size || data.setting_jam_acara?.size || "11px",
-                color: a.setting_jam?.color || data.setting_jam_acara?.color || "#064e3b",
-                textAlign: (a.setting_jam?.position || data.setting_jam_acara?.position || "left") as any
-              }}
+              style={getEventElementStyle(a.setting_jam, data.setting_jam_acara || { size: "11px", color: "#064e3b", family: "Inter", position: "left" })}
             >
-              {a.jam_mulai} – {a.jam_selesai} WIB
+              {formatEventTime(a.jam_mulai, a.jam_selesai)}
             </div>
           )}
           {a.alamat && (
             <div 
               className="text-[10px] leading-relaxed"
-              style={{
-                fontFamily: a.setting_alamat?.family || data.setting_alamat_acara?.family || data.setting_jam_acara?.family || "Inter",
-                fontSize: a.setting_alamat?.size || data.setting_alamat_acara?.size || "10px",
-                color: a.setting_alamat?.color || data.setting_alamat_acara?.color || data.setting_jam_acara?.color || "#064e3b",
-                textAlign: (a.setting_alamat?.position || data.setting_alamat_acara?.position || data.setting_jam_acara?.position || "left") as any
-              }}
+              style={getEventElementStyle(a.setting_alamat, data.setting_alamat_acara || data.setting_jam_acara || { size: "10px", color: "#064e3b", family: "Inter", position: "left" })}
             >
               {a.alamat}
             </div>
@@ -556,11 +587,15 @@ export function AcaraPreview({ data }: { data: any }) {
               />
             </div>
           )}
-          {a.link_maps && (
-            <div style={{ textAlign: (a.setting_alamat?.position || data.setting_alamat_acara?.position || data.setting_jam_acara?.position || "left") as any }}>
-              <a href={a.link_maps} target="_blank" className="text-[10px] text-[#d4af37] font-bold hover:underline">Lihat di Maps →</a>
-            </div>
-          )}
+          {a.link_maps && (() => {
+            const pos = a.setting_alamat?.position || data.setting_alamat_acara?.position || data.setting_jam_acara?.position || "left";
+            const alignment = pos === "custom" ? "center" : pos;
+            return (
+              <div style={{ textAlign: alignment as any }}>
+                <a href={a.link_maps} target="_blank" className="text-[10px] text-[#d4af37] font-bold hover:underline">Lihat di Maps →</a>
+              </div>
+            );
+          })()}
         </div>
       ))}
     </div>

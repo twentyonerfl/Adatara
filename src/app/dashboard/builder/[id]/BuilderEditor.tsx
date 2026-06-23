@@ -1789,17 +1789,48 @@ export function BuilderEditor({
 
                       {data.acara?.acaras?.map((evt: any, idx: number) => {
                         const endJam = evt.is_selesai_custom ? (evt.jam_selesai_custom || "Selesai") : evt.jam_selesai;
-                        const timeDisplay = evt.jam || (evt.jam_mulai ? `${evt.jam_mulai}${endJam ? ` – ${endJam}` : ""}` : "");
+                        
+                        let timeDisplay = "";
+                        if (evt.jam) {
+                          timeDisplay = evt.jam;
+                        } else if (evt.jam_mulai || endJam) {
+                          const start = evt.jam_mulai || "";
+                          const end = endJam || "";
+                          if (end.toLowerCase() === "selesai") {
+                            timeDisplay = `${start} WIB – Selesai`;
+                          } else if (start && end) {
+                            timeDisplay = `${start} – ${end} WIB`;
+                          } else {
+                            timeDisplay = `${start || end} WIB`;
+                          }
+                        }
+
+                        let formattedDate = "";
+                        if (evt.tanggal) {
+                          try {
+                            const date = new Date(evt.tanggal);
+                            if (!isNaN(date.getTime())) {
+                              formattedDate = date.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+                            } else {
+                              formattedDate = evt.tanggal;
+                            }
+                          } catch (e) {
+                            formattedDate = evt.tanggal;
+                          }
+                        }
+
                         return (
-                          <div key={idx} className="p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2">
+                          <div key={idx} className="relative p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2 min-h-[140px]">
                             <h5 style={getFontStyles(data.acara?.setting_nama_acara || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-extrabold pb-1.5 flex items-center gap-1.5 border-b border-[#064e3b]/10">
                               <Calendar className="w-3.5 h-3.5 text-[#d4af37]" />
                               {evt.nama}
                             </h5>
                             <div className="space-y-1 mt-1">
-                              <p style={getFontStyles(data.acara?.setting_tanggal_acara || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="font-semibold">
-                                Tanggal: {evt.tanggal}
-                              </p>
+                              {formattedDate && (
+                                <p style={getFontStyles(data.acara?.setting_tanggal_acara || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="font-semibold">
+                                  Tanggal: {formattedDate}
+                                </p>
+                              )}
                               {timeDisplay && (
                                 <p style={getFontStyles(data.acara?.setting_jam_acara || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })}>
                                   Pukul: {timeDisplay}
