@@ -566,7 +566,7 @@ export function AcaraPreview({ data }: { data: any }) {
         const targetDateTime = `${targetEvent.tanggal}T${timePart}`;
         return (
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/80 space-y-1.5 text-center">
-            <div className="text-[10px] font-black uppercase tracking-wider opacity-60 text-[#064e3b]">
+            <div className="text-[10px] font-black uppercase tracking-wider opacity-60 text-white">
               Hitung Mundur Acara
             </div>
             <Countdown targetDateStr={targetDateTime} />
@@ -575,7 +575,7 @@ export function AcaraPreview({ data }: { data: any }) {
       })()}
 
       <div className="text-center mb-4">
-        <div className="text-xs font-black uppercase tracking-wider opacity-60 text-[#064e3b]">Jadwal & Lokasi</div>
+        <div className="text-xs font-black uppercase tracking-wider opacity-60 text-white">Jadwal & Lokasi</div>
         <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
       </div>
 

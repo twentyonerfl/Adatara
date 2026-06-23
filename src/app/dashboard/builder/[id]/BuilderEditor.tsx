@@ -1839,7 +1839,7 @@ export function BuilderEditor({
                         const targetDateTime = getTargetDateTime(targetEvent.tanggal, targetEvent.jam || targetEvent.jam_mulai);
                         return (
                           <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl p-3.5 space-y-1.5 text-center">
-                            <div className="text-[9px] font-black uppercase tracking-wider opacity-60 text-[#064e3b]">
+                            <div className="text-[9px] font-black uppercase tracking-wider opacity-60 text-white">
                               Hitung Mundur Acara
                             </div>
                             <Countdown targetDateStr={targetDateTime} />
@@ -1848,7 +1848,7 @@ export function BuilderEditor({
                       })()}
 
                       <div className="text-center">
-                        <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block mb-2">
+                        <span className="text-[9px] font-extrabold text-white uppercase tracking-widest block mb-2">
                           Waktu & Tempat
                         </span>
                       </div>
