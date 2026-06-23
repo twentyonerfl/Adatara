@@ -212,7 +212,17 @@ function getMapsEmbedUrl(input?: string) {
   return input;
 }
 
-function Countdown({ targetDateStr }: { targetDateStr: string }) {
+function Countdown({ 
+  targetDateStr, 
+  numberStyle = {}, 
+  labelStyle = {},
+  cardStyle = {}
+}: { 
+  targetDateStr: string; 
+  numberStyle?: any; 
+  labelStyle?: any;
+  cardStyle?: any;
+}) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -243,13 +253,35 @@ function Countdown({ targetDateStr }: { targetDateStr: string }) {
     return () => clearInterval(timer);
   }, [targetDateStr, isMounted]);
 
+  const itemBoxStyle: React.CSSProperties = {
+    backgroundColor: cardStyle.glassmorphism 
+      ? "rgba(255, 255, 255, 0.2)" 
+      : (cardStyle.bg_color && cardStyle.bg_color !== "transparent" ? `${cardStyle.bg_color}30` : "rgba(255, 255, 255, 0.8)"),
+    borderColor: cardStyle.border_color && cardStyle.border_color !== "transparent" 
+      ? cardStyle.border_color 
+      : "rgba(6, 78, 59, 0.1)",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: cardStyle.border_radius || "12px",
+  };
+
+  const labelMap: Record<string, string> = {
+    days: "Hari",
+    hours: "Jam",
+    minutes: "Menit",
+    seconds: "Detik"
+  };
+
+  const numStyles = { ...getFontStyles({ size: "14px", color: "#064e3b", family: "Inter", position: "center" }), ...getFontStyles(numberStyle) };
+  const lblStyles = { ...getFontStyles({ size: "7px", color: "#d4af37", family: "Inter", position: "center" }), ...getFontStyles(labelStyle) };
+
   if (!isMounted || !timeLeft) {
     return (
-      <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
-        {["Hari", "Jam", "Menit", "Detik"].map((label) => (
-          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
-            <div className="text-sm font-black text-[#064e3b]">00</div>
-            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{label}</div>
+      <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2 w-full">
+        {["days", "hours", "minutes", "seconds"].map((label) => (
+          <div key={label} style={itemBoxStyle} className="p-1.5 flex flex-col justify-center items-center">
+            <div className="text-sm font-black" style={numStyles}>00</div>
+            <div className="text-[7px] font-bold uppercase tracking-wider" style={lblStyles}>{labelMap[label]}</div>
           </div>
         ))}
       </div>
@@ -257,19 +289,13 @@ function Countdown({ targetDateStr }: { targetDateStr: string }) {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
+    <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2 w-full">
       {Object.entries(timeLeft).map(([label, value]) => {
-        const labelMap: Record<string, string> = {
-          days: "Hari",
-          hours: "Jam",
-          minutes: "Menit",
-          seconds: "Detik"
-        };
         const padValue = String(value).padStart(2, "0");
         return (
-          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
-            <div className="text-sm font-black text-[#064e3b]">{padValue}</div>
-            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{labelMap[label]}</div>
+          <div key={label} style={itemBoxStyle} className="p-1.5 flex flex-col justify-center items-center">
+            <div className="text-sm font-black" style={numStyles}>{padValue}</div>
+            <div className="text-[7px] font-bold uppercase tracking-wider" style={lblStyles}>{labelMap[label]}</div>
           </div>
         );
       })}
@@ -555,7 +581,10 @@ export function BuilderEditor({
           { key: "setting_tanggal_acara", label: "Tanggal Acara" },
           { key: "setting_jam_acara", label: "Waktu/Jam Acara" },
           { key: "setting_alamat_acara", label: "Alamat Acara" },
-          { key: "setting_link_maps_acara", label: "Link Maps Acara" }
+          { key: "setting_link_maps_acara", label: "Link Maps Acara" },
+          { key: "setting_countdown_title", label: "Judul Hitung Mundur" },
+          { key: "setting_countdown_number", label: "Angka Hitung Mundur" },
+          { key: "setting_countdown_label", label: "Label Waktu Hitung Mundur" }
         ];
       case "cerita":
         return [
@@ -1819,7 +1848,7 @@ export function BuilderEditor({
                   {/* PREVIEW: ACARA SECTION */}
                   <div
                     id="preview-acara"
-                    className={`p-6 text-center space-y-6 border-b border-dashed ${activeSection === "acara" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
+                    className={`p-6 text-center space-y-6 border-b border-dashed relative ${activeSection === "acara" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
                       }`}
                     style={{
                       background: data.acara?.background?.type === "image"
@@ -1837,12 +1866,73 @@ export function BuilderEditor({
                         const targetEvent = data.acara.acaras?.[idx];
                         if (!targetEvent || !targetEvent.tanggal) return null;
                         const targetDateTime = getTargetDateTime(targetEvent.tanggal, targetEvent.jam || targetEvent.jam_mulai);
+                        
+                        const safeTitle = data.acara?.setting_countdown_title || { size: "10px", color: "#ffffff", family: "Inter", position: "center" };
+                        const safeNumber = data.acara?.setting_countdown_number || { size: "14px", color: "#064e3b", family: "Inter", position: "center" };
+                        const safeLabel = data.acara?.setting_countdown_label || { size: "7px", color: "#d4af37", family: "Inter", position: "center" };
+                        const safeCard = data.acara?.setting_countdown_card || { enabled: true, glassmorphism: true, bg_color: "rgba(255, 255, 255, 0.6)", border_color: "rgba(255, 255, 255, 0.8)", border_radius: "12px", padding: "16px", shadow: "none" };
+
+                        const isCardEnabled = safeCard.enabled !== false;
+                        
+                        const cardStyles: React.CSSProperties = isCardEnabled
+                          ? {
+                              backgroundColor: safeCard.glassmorphism
+                                ? "rgba(255, 255, 255, 0.15)"
+                                : (safeCard.bg_color || "rgba(255, 255, 255, 0.6)"),
+                              backdropFilter: safeCard.glassmorphism ? "blur(12px)" : undefined,
+                              WebkitBackdropFilter: safeCard.glassmorphism ? "blur(12px)" : undefined,
+                              borderColor: safeCard.glassmorphism
+                                ? "rgba(255, 255, 255, 0.25)"
+                                : (safeCard.border_color || "rgba(255, 255, 255, 0.8)"),
+                              borderWidth: (safeCard.glassmorphism || safeCard.border_color !== "transparent") ? "1px" : "0px",
+                              borderRadius: safeCard.border_radius || "12px",
+                              padding: safeCard.padding || "16px",
+                              boxShadow: safeCard.shadow || "none",
+                              width: safeCard.width || "100%",
+                              minHeight: safeCard.height || "auto",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              gap: "0.375rem",
+                              textAlign: "center",
+                            }
+                          : {
+                              backgroundColor: "transparent",
+                              borderWidth: "0px",
+                              padding: "8px",
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              gap: "0.375rem",
+                              textAlign: "center",
+                            };
+
+                        const positionStyles: React.CSSProperties = {};
+                        if (safeTitle.position === "custom") {
+                          positionStyles.position = "absolute";
+                          positionStyles.left = `${safeTitle.x ?? 50}%`;
+                          positionStyles.top = `${safeTitle.y ?? 50}%`;
+                          positionStyles.transform = "translate(-50%, -50%)";
+                          positionStyles.zIndex = 10;
+                        }
+
+                        const combinedStyles = { ...cardStyles, ...positionStyles };
+
                         return (
-                          <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl p-3.5 space-y-1.5 text-center">
-                            <div className="text-[9px] font-black uppercase tracking-wider opacity-60 text-white">
+                          <div style={combinedStyles}>
+                            <div 
+                              style={getFontStyles(safeTitle)}
+                              className="text-[10px] font-black uppercase tracking-wider"
+                            >
                               Hitung Mundur Acara
                             </div>
-                            <Countdown targetDateStr={targetDateTime} />
+                            <Countdown 
+                              targetDateStr={targetDateTime} 
+                              numberStyle={safeNumber} 
+                              labelStyle={safeLabel} 
+                              cardStyle={safeCard} 
+                            />
                           </div>
                         );
                       })()}

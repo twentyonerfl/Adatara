@@ -39,6 +39,10 @@ export const defaultTemplateJson = {
     setting_nama_acara: { size: "16px", color: "#ffffff", family: "Inter", position: "center", animation: "none" },
     setting_tanggal_acara: { size: "12px", color: "#ffffff", family: "Inter", position: "center", animation: "none" },
     setting_jam_acara: { size: "11px", color: "#ffffff", family: "Inter", position: "center", animation: "none" },
+    setting_countdown_title: { size: "10px", color: "#ffffff", family: "Inter", position: "center" },
+    setting_countdown_number: { size: "14px", color: "#064e3b", family: "Inter", position: "center" },
+    setting_countdown_label: { size: "7px", color: "#d4af37", family: "Inter", position: "center" },
+    setting_countdown_card: { enabled: true, glassmorphism: true, bg_color: "rgba(255, 255, 255, 0.6)", border_color: "rgba(255, 255, 255, 0.8)", border_radius: "12px", padding: "16px", shadow: "none" },
     background: { type: "solid", value: "#000000", gradient_to: "#000000", direction: "to bottom" },
   },
   cerita: {
