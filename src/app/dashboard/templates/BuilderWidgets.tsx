@@ -47,35 +47,35 @@ export function FontSettingsWidget({
   const sizeVal = parseInt(safeVal.size) || 12;
 
   return (
-    <div className="space-y-2 p-3 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10">
-      <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37]">{label}</p>
-      <div className="grid grid-cols-2 gap-2">
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10">
+      <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] border-b border-[#064e3b]/5 pb-1 mb-1.5">{label}</p>
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2">
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Ukuran</label>
-          <div className="flex gap-1 items-center">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran</label>
+          <div className="flex gap-1.5 items-center">
             <input type="range" min="10" max="120" value={sizeVal}
               onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
-              className="flex-1 accent-[#d4af37] h-1" />
-            <span className="text-[9px] font-bold w-8 text-right">{safeVal.size}</span>
+              className="flex-1 accent-[#d4af37] h-0.5 cursor-pointer" />
+            <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.size}</span>
           </div>
         </div>
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Warna</label>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna</label>
           <input type="color" value={safeVal.color}
             onChange={e => onChange({ ...safeVal, color: e.target.value })}
-            className="w-full h-7 rounded cursor-pointer border border-[#064e3b]/20" />
+            className="w-full h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent" />
         </div>
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Font</label>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Font</label>
           <select value={safeVal.family} onChange={e => onChange({ ...safeVal, family: e.target.value })}
-            className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
             {FONT_FAMILIES.map(f => <option key={f}>{f}</option>)}
           </select>
         </div>
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Posisi</label>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Posisi</label>
           <select value={safeVal.position} onChange={e => onChange({ ...safeVal, position: e.target.value, x: safeVal.x, y: safeVal.y })}
-            className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
             <option value="left">Kiri</option>
             <option value="center">Tengah</option>
             <option value="right">Kanan</option>
@@ -84,32 +84,32 @@ export function FontSettingsWidget({
         </div>
 
         {safeVal.position === "custom" && (
-          <div className="col-span-2 grid grid-cols-2 gap-3 mt-1.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10">
+          <div className="col-span-2 grid grid-cols-2 gap-2 mt-1 p-2 bg-[#064e3b]/5 rounded-lg border border-[#064e3b]/10">
             <div>
-              <label className="text-[8px] font-black uppercase text-[#064e3b]/50 block mb-0.5">Posisi X (%)</label>
+              <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi X (%)</label>
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.x}
                   onChange={e => onChange({ ...safeVal, x: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-1" />
-                <span className="text-[9px] font-bold w-6 text-right text-[#064e3b]">{safeVal.x}%</span>
+                  className="flex-1 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.x}%</span>
               </div>
             </div>
             <div>
-              <label className="text-[8px] font-black uppercase text-[#064e3b]/50 block mb-0.5">Posisi Y (%)</label>
+              <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi Y (%)</label>
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.y}
                   onChange={e => onChange({ ...safeVal, y: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-1" />
-                <span className="text-[9px] font-bold w-6 text-right text-[#064e3b]">{safeVal.y}%</span>
+                  className="flex-1 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.y}%</span>
               </div>
             </div>
           </div>
         )}
         {showAnimation && (
           <div className="col-span-2">
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Animasi</label>
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Animasi</label>
             <select value={safeVal.animation} onChange={e => onChange({ ...safeVal, animation: e.target.value })}
-              className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+              className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
               {ANIMATION_OPTIONS.map(a => <option key={a}>{a}</option>)}
             </select>
           </div>
@@ -117,22 +117,22 @@ export function FontSettingsWidget({
         {showSpacing && (
           <>
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Lebar Text</label>
-              <div className="flex gap-1 items-center">
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Lebar Text</label>
+              <div className="flex gap-1.5 items-center">
                 <input 
                   type="range" 
                   min="40" 
                   max="100" 
                   value={parseInt(safeVal.width) || 100}
                   onChange={e => onChange({ ...safeVal, width: e.target.value + "%" })}
-                  className="flex-1 accent-[#d4af37] h-1" 
+                  className="flex-1 accent-[#d4af37] h-0.5" 
                 />
-                <span className="text-[9px] font-bold w-8 text-right">{safeVal.width}</span>
+                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.width}</span>
               </div>
             </div>
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Jarak Baris</label>
-              <div className="flex gap-1 items-center">
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Jarak Baris</label>
+              <div className="flex gap-1.5 items-center">
                 <input 
                   type="range" 
                   min="0.8" 
@@ -140,9 +140,9 @@ export function FontSettingsWidget({
                   step="0.1" 
                   value={parseFloat(safeVal.lineHeight) || 1.5}
                   onChange={e => onChange({ ...safeVal, lineHeight: e.target.value })}
-                  className="flex-1 accent-[#d4af37] h-1" 
+                  className="flex-1 accent-[#d4af37] h-0.5" 
                 />
-                <span className="text-[9px] font-bold w-8 text-right">{safeVal.lineHeight}</span>
+                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.lineHeight}</span>
               </div>
             </div>
           </>
@@ -160,13 +160,13 @@ export function BackgroundWidget({
   onChange: (v: BgSettings) => void;
 }) {
   return (
-    <div className="space-y-2 p-3 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10">
-      <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37]">{label}</p>
+    <div className="space-y-2 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10">
+      <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] border-b border-[#064e3b]/5 pb-1 mb-1.5">{label}</p>
       <div className="flex gap-1 flex-wrap">
         {["solid", "gradient", "image", "video"].map(type => (
           <button key={type} type="button"
             onClick={() => onChange({ ...value, type })}
-            className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase border transition-all ${
+            className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase border transition-all ${
               value.type === type ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"
             }`}>
             {type}
@@ -177,21 +177,21 @@ export function BackgroundWidget({
         <div className="flex items-center gap-2">
           <input type="color" value={value.value}
             onChange={e => onChange({ ...value, value: e.target.value })}
-            className="w-10 h-8 rounded cursor-pointer border border-[#064e3b]/20" />
-          <span className="text-[10px] font-bold text-[#064e3b]/60">{value.value}</span>
+            className="w-8 h-5 rounded cursor-pointer border border-[#064e3b]/10 bg-transparent p-0" />
+          <span className="text-[9px] font-bold text-[#064e3b]/60">{value.value}</span>
         </div>
       )}
       {value.type === "gradient" && (
         <div className="space-y-2">
           <div className="flex gap-2 items-center">
             <input type="color" value={value.value} onChange={e => onChange({ ...value, value: e.target.value })}
-              className="w-10 h-7 rounded cursor-pointer border border-[#064e3b]/20" />
-            <span className="text-[9px] font-bold">→</span>
+              className="w-8 h-5 rounded cursor-pointer border border-[#064e3b]/10 bg-transparent p-0" />
+            <span className="text-[8px] font-bold">→</span>
             <input type="color" value={value.gradient_to || "#ffffff"} onChange={e => onChange({ ...value, gradient_to: e.target.value })}
-              className="w-10 h-7 rounded cursor-pointer border border-[#064e3b]/20" />
+              className="w-8 h-5 rounded cursor-pointer border border-[#064e3b]/10 bg-transparent p-0" />
           </div>
           <select value={value.direction || "to bottom"} onChange={e => onChange({ ...value, direction: e.target.value })}
-            className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
             <option value="to bottom">Atas ke Bawah</option>
             <option value="to right">Kiri ke Kanan</option>
             <option value="to bottom right">Diagonal</option>
@@ -741,58 +741,58 @@ export function ButtonSettingsWidget({
   };
 
   return (
-    <div className="space-y-3 p-3 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
-      <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37]">{label}</p>
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
+      <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] border-b border-[#064e3b]/5 pb-1 mb-1.5">{label}</p>
       
       <div className="space-y-2">
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Teks Tombol</label>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Teks Tombol</label>
           <input
             type="text"
             value={safeVal.text}
             onChange={e => onChange({ ...safeVal, text: e.target.value })}
             placeholder="Buka Undangan"
-            className="w-full px-2.5 py-1.5 text-[11px] font-bold bg-white border border-[#064e3b]/20 rounded-lg outline-none focus:border-[#d4af37]"
+            className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none focus:border-[#d4af37] h-6"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2">
           <div>
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Ukuran Font</label>
-            <div className="flex gap-1 items-center">
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Font</label>
+            <div className="flex gap-1.5 items-center">
               <input type="range" min="8" max="40" value={parseInt(safeVal.size)}
                 onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
-                className="flex-1 accent-[#d4af37] h-1" />
-              <span className="text-[9px] font-bold w-8 text-right text-[#064e3b]">{safeVal.size}</span>
+                className="flex-1 accent-[#d4af37] h-0.5" />
+              <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.size}</span>
             </div>
           </div>
 
           <div>
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Font Family</label>
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Font Family</label>
             <select value={safeVal.family} onChange={e => onChange({ ...safeVal, family: e.target.value })}
-              className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+              className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
               {FONT_FAMILIES.map(f => <option key={f}>{f}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Warna Teks</label>
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Teks</label>
             <input type="color" value={safeVal.color}
               onChange={e => onChange({ ...safeVal, color: e.target.value })}
-              className="w-full h-7 rounded cursor-pointer border border-[#064e3b]/20" />
+              className="w-full h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent" />
           </div>
 
           <div>
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Background</label>
-            <div className="flex gap-1 items-center">
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Background</label>
+            <div className="flex gap-1.5 items-center">
               <input type="color" value={safeVal.bg_color === "transparent" ? "#064e3b" : safeVal.bg_color}
                 onChange={e => onChange({ ...safeVal, bg_color: e.target.value })}
                 disabled={safeVal.bg_color === "transparent"}
-                className="flex-1 h-7 rounded cursor-pointer border border-[#064e3b]/20 disabled:opacity-40" />
+                className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
               <button
                 type="button"
                 onClick={() => onChange({ ...safeVal, bg_color: safeVal.bg_color === "transparent" ? "#064e3b" : "transparent" })}
-                className={`px-2 py-1 text-[8px] font-black border rounded-lg uppercase whitespace-nowrap ${safeVal.bg_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                className={`px-1.5 py-0.5 text-[7px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.bg_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
               >
                 Transparan
               </button>
@@ -800,16 +800,16 @@ export function ButtonSettingsWidget({
           </div>
 
           <div>
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Warna Border</label>
-            <div className="flex gap-1 items-center">
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Border</label>
+            <div className="flex gap-1.5 items-center">
               <input type="color" value={safeVal.border_color === "transparent" ? "#ffffff" : safeVal.border_color}
                 onChange={e => onChange({ ...safeVal, border_color: e.target.value })}
                 disabled={safeVal.border_color === "transparent"}
-                className="flex-1 h-7 rounded cursor-pointer border border-[#064e3b]/20 disabled:opacity-40" />
+                className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
               <button
                 type="button"
                 onClick={() => onChange({ ...safeVal, border_color: safeVal.border_color === "transparent" ? "#ffffff" : "transparent" })}
-                className={`px-2 py-1 text-[8px] font-black border rounded-lg uppercase whitespace-nowrap ${safeVal.border_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                className={`px-1.5 py-0.5 text-[7px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.border_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
               >
                 Transparan
               </button>
@@ -817,9 +817,9 @@ export function ButtonSettingsWidget({
           </div>
 
           <div>
-            <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Posisi</label>
+            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Posisi</label>
             <select value={safeVal.position} onChange={e => onChange({ ...safeVal, position: e.target.value })}
-              className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+              className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
               <option value="left">Kiri</option>
               <option value="center">Tengah</option>
               <option value="right">Kanan</option>
@@ -829,23 +829,23 @@ export function ButtonSettingsWidget({
         </div>
 
         {safeVal.position === "custom" && (
-          <div className="grid grid-cols-2 gap-3 p-2 bg-[#064e3b]/5 rounded-lg border border-[#064e3b]/10">
+          <div className="grid grid-cols-2 gap-2 p-2 bg-[#064e3b]/5 rounded-lg border border-[#064e3b]/10">
             <div>
-              <label className="text-[8px] font-black uppercase text-[#064e3b]/50 block mb-0.5">Posisi X (%)</label>
+              <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi X (%)</label>
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.x}
                   onChange={e => onChange({ ...safeVal, x: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-1" />
-                <span className="text-[9px] font-bold w-6 text-right text-[#064e3b]">{safeVal.x}%</span>
+                  className="flex-1 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.x}%</span>
               </div>
             </div>
             <div>
-              <label className="text-[8px] font-black uppercase text-[#064e3b]/50 block mb-0.5">Posisi Y (%)</label>
+              <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi Y (%)</label>
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.y}
                   onChange={e => onChange({ ...safeVal, y: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-1" />
-                <span className="text-[9px] font-bold w-6 text-right text-[#064e3b]">{safeVal.y}%</span>
+                  className="flex-1 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.y}%</span>
               </div>
             </div>
           </div>
@@ -887,9 +887,9 @@ export function CardSettingsWidget({
   };
 
   return (
-    <div className="space-y-3 p-3 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
-      <div className="flex items-center justify-between">
-        <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37]">{label}</p>
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
+      <div className="flex items-center justify-between border-b border-[#064e3b]/5 pb-1 mb-1.5">
+        <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37]">{label}</p>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
@@ -902,8 +902,8 @@ export function CardSettingsWidget({
       </div>
 
       {safeVal.enabled && (
-        <div className="space-y-2 pt-2 border-t border-[#064e3b]/10">
-          <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-2.5">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2">
             <div className="col-span-2 flex items-center gap-2 pb-1 border-b border-[#064e3b]/5">
               <input
                 type="checkbox"
@@ -912,7 +912,7 @@ export function CardSettingsWidget({
                 onChange={e => onChange({ ...safeVal, glassmorphism: e.target.checked })}
                 className="rounded text-[#064e3b] focus:ring-[#d4af37] border-gray-300 accent-[#d4af37]"
               />
-              <label htmlFor="glassmorphism-checkbox" className="text-[9px] font-black uppercase text-[#064e3b]/80 cursor-pointer">
+              <label htmlFor="glassmorphism-checkbox" className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/60 cursor-pointer">
                 Aktifkan Glassmorphism (Efek Kaca Transparan & Blur)
               </label>
             </div>
@@ -920,16 +920,16 @@ export function CardSettingsWidget({
             {!safeVal.glassmorphism && (
               <>
                 <div>
-                  <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Background Card</label>
-                  <div className="flex gap-1 items-center">
+                  <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Background Card</label>
+                  <div className="flex gap-1.5 items-center">
                     <input type="color" value={safeVal.bg_color === "transparent" ? "#ffffff" : safeVal.bg_color}
                       onChange={e => onChange({ ...safeVal, bg_color: e.target.value })}
                       disabled={safeVal.bg_color === "transparent"}
-                      className="flex-1 h-7 rounded cursor-pointer border border-[#064e3b]/20 disabled:opacity-40" />
+                      className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
                     <button
                       type="button"
                       onClick={() => onChange({ ...safeVal, bg_color: safeVal.bg_color === "transparent" ? "#ffffff" : "transparent" })}
-                      className={`px-2 py-1 text-[8px] font-black border rounded-lg uppercase whitespace-nowrap ${safeVal.bg_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                      className={`px-1.5 py-0.5 text-[7px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.bg_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
                     >
                       Transparan
                     </button>
@@ -937,16 +937,16 @@ export function CardSettingsWidget({
                 </div>
 
                 <div>
-                  <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Warna Border</label>
-                  <div className="flex gap-1 items-center">
+                  <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Border</label>
+                  <div className="flex gap-1.5 items-center">
                     <input type="color" value={safeVal.border_color === "transparent" ? "#d4af37" : safeVal.border_color}
                       onChange={e => onChange({ ...safeVal, border_color: e.target.value })}
                       disabled={safeVal.border_color === "transparent"}
-                      className="flex-1 h-7 rounded cursor-pointer border border-[#064e3b]/20 disabled:opacity-40" />
+                      className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
                     <button
                       type="button"
                       onClick={() => onChange({ ...safeVal, border_color: safeVal.border_color === "transparent" ? "#d4af37" : "transparent" })}
-                      className={`px-2 py-1 text-[8px] font-black border rounded-lg uppercase whitespace-nowrap ${safeVal.border_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                      className={`px-1.5 py-0.5 text-[7px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.border_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
                     >
                       Transparan
                     </button>
@@ -956,61 +956,61 @@ export function CardSettingsWidget({
             )}
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Lebar Card (Width)</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Lebar Card (Width)</label>
               <select value={safeVal.width.endsWith("%") || safeVal.width === "auto" ? safeVal.width : "custom"} onChange={e => {
                 const val = e.target.value;
                 onChange({ ...safeVal, width: val === "custom" ? "320px" : val });
               }}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none mb-1.5">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5 mb-1">
                 <option value="auto">Auto (Sesuai Konten)</option>
                 <option value="100%">Penuh (100%)</option>
                 <option value="90%">Default (90%)</option>
                 <option value="custom">Kustom (px)</option>
               </select>
               {safeVal.width !== "auto" && safeVal.width !== "100%" && safeVal.width !== "90%" && (
-                <div className="flex gap-1 items-center">
+                <div className="flex gap-1.5 items-center">
                   <input 
                     type="range" 
                     min="100" 
                     max="450" 
                     value={parseInt(safeVal.width) || 320}
                     onChange={e => onChange({ ...safeVal, width: e.target.value + "px" })}
-                    className="flex-1 accent-[#d4af37] h-1" 
+                    className="flex-1 accent-[#d4af37] h-0.5" 
                   />
-                  <span className="text-[9px] font-bold w-10 text-right">{safeVal.width}</span>
+                  <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeVal.width}</span>
                 </div>
               )}
             </div>
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Tinggi Card (Height)</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Tinggi Card (Height)</label>
               <select value={safeVal.height === "auto" ? "auto" : "custom"} onChange={e => {
                 const val = e.target.value;
                 onChange({ ...safeVal, height: val === "custom" ? "300px" : val });
               }}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none mb-1.5">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5 mb-1">
                 <option value="auto">Auto (Sesuai Konten)</option>
                 <option value="custom">Kustom (px)</option>
               </select>
               {safeVal.height !== "auto" && (
-                <div className="flex gap-1 items-center">
+                <div className="flex gap-1.5 items-center">
                   <input 
                     type="range" 
                     min="50" 
                     max="600" 
                     value={parseInt(safeVal.height) || 300}
                     onChange={e => onChange({ ...safeVal, height: e.target.value + "px" })}
-                    className="flex-1 accent-[#d4af37] h-1" 
+                    className="flex-1 accent-[#d4af37] h-0.5" 
                   />
-                  <span className="text-[9px] font-bold w-10 text-right">{safeVal.height}</span>
+                  <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeVal.height}</span>
                 </div>
               )}
             </div>
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Radius Sudut (Border Radius)</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Radius Sudut</label>
               <select value={safeVal.border_radius} onChange={e => onChange({ ...safeVal, border_radius: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="0px">Tajam (0px)</option>
                 <option value="8px">Rounded Kecil (8px)</option>
                 <option value="16px">Rounded Sedang (16px)</option>
@@ -1020,9 +1020,9 @@ export function CardSettingsWidget({
             </div>
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Padding Dalam</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Padding Dalam</label>
               <select value={safeVal.padding} onChange={e => onChange({ ...safeVal, padding: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="12px">Sempit (12px)</option>
                 <option value="20px">Sedang (20px)</option>
                 <option value="32px">Lebar (32px)</option>
@@ -1031,9 +1031,9 @@ export function CardSettingsWidget({
             </div>
 
             <div className="col-span-2">
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Shadow (Bayangan)</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Shadow (Bayangan)</label>
               <select value={safeVal.shadow} onChange={e => onChange({ ...safeVal, shadow: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="none">Tanpa Bayangan</option>
                 <option value="0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)">Halus</option>
                 <option value="0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)">Sedang</option>
@@ -1073,9 +1073,9 @@ export function BingkaiCoverWidget({
   };
 
   return (
-    <div className="space-y-3 p-3 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
-      <div className="flex items-center justify-between">
-        <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37]">{label}</p>
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
+      <div className="flex items-center justify-between border-b border-[#064e3b]/5 pb-1 mb-1.5">
+        <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37]">{label}</p>
         <label className="relative inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
@@ -1088,12 +1088,12 @@ export function BingkaiCoverWidget({
       </div>
 
       {safeVal.enabled && (
-        <div className="space-y-2 pt-2 border-t border-[#064e3b]/10">
-          <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-2.5">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2">
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Ketebalan</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ketebalan</label>
               <select value={safeVal.width} onChange={e => onChange({ ...safeVal, width: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="1px">1px</option>
                 <option value="2px">2px</option>
                 <option value="3px">3px</option>
@@ -1106,9 +1106,9 @@ export function BingkaiCoverWidget({
             </div>
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Gaya Garis</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Gaya Garis</label>
               <select value={safeVal.style} onChange={e => onChange({ ...safeVal, style: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="solid">Solid (Polos)</option>
                 <option value="double">Double (Ganda)</option>
                 <option value="dashed">Dashed (Putus-putus)</option>
@@ -1119,9 +1119,9 @@ export function BingkaiCoverWidget({
             </div>
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Jarak dari Tepi (Padding)</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Jarak Tepi (Padding)</label>
               <select value={safeVal.padding} onChange={e => onChange({ ...safeVal, padding: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="8px">8px</option>
                 <option value="12px">12px</option>
                 <option value="16px">16px</option>
@@ -1133,9 +1133,9 @@ export function BingkaiCoverWidget({
             </div>
 
             <div>
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Radius Sudut (Border Radius)</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Radius Sudut</label>
               <select value={safeVal.radius} onChange={e => onChange({ ...safeVal, radius: e.target.value })}
-                className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none">
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
                 <option value="0px">Tajam (0px)</option>
                 <option value="8px">Bulat Kecil (8px)</option>
                 <option value="12px">Bulat Sedang (12px)</option>
@@ -1146,10 +1146,10 @@ export function BingkaiCoverWidget({
             </div>
 
             <div className="col-span-2">
-              <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Warna Garis</label>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Garis</label>
               <input type="color" value={safeVal.color}
                 onChange={e => onChange({ ...safeVal, color: e.target.value })}
-                className="w-full h-8 rounded cursor-pointer border border-[#064e3b]/20" />
+                className="w-full h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent" />
             </div>
           </div>
         </div>
@@ -1188,10 +1188,10 @@ export function PhotoStyleWidget({
   const isCustomOverlay = safeBingkai === "custom";
 
   return (
-    <div className="space-y-3 p-3 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
-      <div>
-        <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Bentuk / Bingkai Foto</label>
-        <div className="flex gap-1 flex-wrap mb-2">
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
+      <div className="border-b border-[#064e3b]/5 pb-1 mb-1.5">
+        <label className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] block">Bentuk / Bingkai Foto</label>
+        <div className="flex gap-1 flex-wrap mt-1.5">
           {BINGKAI_OPTIONS.map(b => (
             <button key={b} type="button" onClick={() => onChange({ bingkai: b, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
               className={`px-1.5 py-0.5 rounded text-[8px] font-black border transition-all ${safeBingkai === b ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}>
@@ -1202,8 +1202,8 @@ export function PhotoStyleWidget({
       </div>
 
       {isCustomOverlay && (
-        <div className="space-y-2">
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Bingkai PNG Kustom (Upload/URL)</label>
+        <div className="space-y-2 border-b border-[#064e3b]/5 pb-2">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Bingkai PNG Kustom (Upload/URL)</label>
           <FileUploader 
             value={safeOverlayUrl}
             onChange={(url) => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: url, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
@@ -1214,88 +1214,88 @@ export function PhotoStyleWidget({
             value={safeOverlayUrl}
             onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: e.target.value, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
             placeholder="Atau tempel URL gambar kustom di sini..."
-            className="w-full px-2.5 py-1.5 text-[10px] font-bold bg-white border border-[#064e3b]/20 rounded-lg outline-none focus:border-[#d4af37]"
+            className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none focus:border-[#d4af37] h-6"
           />
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2">
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Lebar Bingkai (Width)</label>
-          <div className="flex gap-1 items-center">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Lebar Bingkai</label>
+          <div className="flex gap-1.5 items-center">
             <input 
               type="range" 
               min="50" 
               max="300" 
               value={parseInt(safeWidth) || 120}
               onChange={e => onChange({ bingkai: safeBingkai, width: e.target.value + "px", height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-1" 
+              className="flex-1 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[9px] font-bold w-10 text-right">{safeWidth}</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeWidth}</span>
           </div>
         </div>
 
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Tinggi Bingkai (Height)</label>
-          <div className="flex gap-1 items-center">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Tinggi Bingkai</label>
+          <div className="flex gap-1.5 items-center">
             <input 
               type="range" 
               min="50" 
               max="300" 
               value={parseInt(safeHeight) || 120}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: e.target.value + "px", overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-1" 
+              className="flex-1 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[9px] font-bold w-10 text-right">{safeHeight}</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeHeight}</span>
           </div>
         </div>
 
-        <div className="col-span-2 border-t border-[#064e3b]/10 pt-2 mt-1">
-          <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Pengaturan Foto di Dalam Bingkai</label>
+        <div className="col-span-2 border-t border-[#064e3b]/10 pt-1.5 mt-0.5">
+          <label className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] block">Pengaturan Foto di Dalam Bingkai</label>
         </div>
 
         <div className="col-span-2">
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Skala Foto ({safePhotoScale}%)</label>
-          <div className="flex gap-1 items-center">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Skala Foto ({safePhotoScale}%)</label>
+          <div className="flex gap-1.5 items-center">
             <input 
               type="range" 
               min="10" 
               max="200" 
               value={safePhotoScale}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: parseInt(e.target.value), photo_x: safePhotoX, photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-1" 
+              className="flex-1 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[9px] font-bold w-10 text-right">{safePhotoScale}%</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safePhotoScale}%</span>
           </div>
         </div>
 
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Geser Foto X ({safePhotoX}px)</label>
-          <div className="flex gap-1 items-center">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Geser Foto X</label>
+          <div className="flex gap-1.5 items-center">
             <input 
               type="range" 
               min="-100" 
               max="100" 
               value={safePhotoX}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: parseInt(e.target.value), photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-1" 
+              className="flex-1 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[9px] font-bold w-10 text-right">{safePhotoX}px</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safePhotoX}px</span>
           </div>
         </div>
 
         <div>
-          <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Geser Foto Y ({safePhotoY}px)</label>
-          <div className="flex gap-1 items-center">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Geser Foto Y</label>
+          <div className="flex gap-1.5 items-center">
             <input 
               type="range" 
               min="-100" 
               max="100" 
               value={safePhotoY}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: parseInt(e.target.value) })}
-              className="flex-1 accent-[#d4af37] h-1" 
+              className="flex-1 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[9px] font-bold w-10 text-right">{safePhotoY}px</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safePhotoY}px</span>
           </div>
         </div>
       </div>
