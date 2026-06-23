@@ -400,47 +400,52 @@ export function BuilderEditor({
       />
 
       {/* TOP NAV BAR */}
-      <header className="sticky top-0 bg-[#064e3b] text-white px-6 py-4 shadow-md flex items-center justify-between z-30 border-b border-[#d4af37]/20">
-        <div className="flex items-center gap-3">
-          <Link href="/templates" className="p-2 hover:bg-white/10 rounded-xl transition-all">
+      <header className="sticky top-0 bg-[#064e3b] text-white px-4 py-3 sm:px-6 sm:py-4 shadow-md flex items-center justify-between z-30 border-b border-[#d4af37]/20">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <Link href="/templates" className="p-2 hover:bg-white/10 rounded-xl transition-all shrink-0">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-lg tracking-widest text-[#d4af37]">ADATARA</span>
-              <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-full bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-black text-sm sm:text-lg tracking-widest text-[#d4af37] shrink-0">ADATARA</span>
+              <span className="text-[8px] sm:text-[10px] uppercase font-black px-1.5 py-0.5 rounded-full bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/30 hidden min-[480px]:inline-block">
                 {invitation.template.kategori}
               </span>
             </div>
-            <p className="text-xs text-white/70">Mendesain: {invitation.template.nama_template}</p>
+            <p className="text-[10px] sm:text-xs text-white/70 truncate max-w-[150px] sm:max-w-none">
+              Mendesain: {invitation.template.nama_template}
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Real-time Preview Link */}
           <a
             href={primaryInvitationUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white rounded-xl text-xs font-bold border border-white/10 flex items-center gap-1.5 transition-all"
+            className="px-2.5 py-2 sm:px-4 sm:py-2 bg-white/10 hover:bg-white/15 text-white rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center gap-1.5 transition-all"
+            title="Lihat Hasil"
           >
-            <Eye className="w-4 h-4" />
-            Lihat Hasil
-            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+            <Eye className="w-4 h-4 shrink-0" />
+            <span className="hidden sm:inline">Lihat Hasil</span>
+            <ExternalLink className="w-3.5 h-3.5 opacity-60 hidden sm:inline shrink-0" />
           </a>
 
           {/* Quick Save Draft */}
           <button
             onClick={saveDraft}
             disabled={saving}
-            className="px-4 py-2 bg-[#d4af37] hover:bg-[#c49f27] text-white rounded-xl text-xs font-black border border-[#d4af37] flex items-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50"
+            className="px-2.5 py-2 sm:px-4 sm:py-2 bg-[#d4af37] hover:bg-[#c49f27] text-white rounded-xl text-xs font-black border border-[#d4af37] flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 disabled:opacity-50"
+            title="Simpan Perubahan"
           >
             {saving ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" />
             ) : (
-              <Save className="w-4 h-4" />
+              <Save className="w-4 h-4 shrink-0" />
             )}
-            Simpan Perubahan
+            <span className="hidden sm:inline">Simpan Perubahan</span>
+            <span className="sm:hidden">{saving ? "Menyimpan" : "Simpan"}</span>
           </button>
         </div>
       </header>
