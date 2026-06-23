@@ -931,7 +931,7 @@ export function BuilderEditor({
                           <div>
                             <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Jam Mulai</label>
                             <input
-                              type="time"
+                              type="text" placeholder="Contoh: 08:00"
                               value={a.jam_mulai || ""}
                               onChange={(e) => {
                                 const list = [...(data?.acara?.acaras || [])];
@@ -945,7 +945,7 @@ export function BuilderEditor({
                           <div>
                             <label className="block text-[9px] font-black uppercase text-slate-400 mb-1">Jam Selesai</label>
                             <input
-                              type="time"
+                              type="text" placeholder="Contoh: 10:00 atau Selesai"
                               value={a.jam_selesai || ""}
                               onChange={(e) => {
                                 const list = [...(data?.acara?.acaras || [])];
@@ -954,6 +954,17 @@ export function BuilderEditor({
                               }}
                               className="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-[#d4af37]"
                             />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const list = [...(data?.acara?.acaras || [])];
+                                list[idx] = { ...list[idx], jam_selesai: "Selesai" };
+                                updateNestedVal("acara", "acaras", list);
+                              }}
+                              className="mt-1 text-[10px] font-bold text-[#d4af37] hover:underline block text-left"
+                            >
+                              Atur sebagai 'Selesai'
+                            </button>
                           </div>
 
                           <div className="sm:col-span-3">

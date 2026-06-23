@@ -70,52 +70,87 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5dc] text-[#064e3b] flex flex-col justify-center relative overflow-hidden font-sans py-12 px-6">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#064e3b]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+    <div className="min-h-screen bg-gradient-to-b from-[#f5f5dc] via-[#fdfdfb] to-[#f5f5dc] text-[#064e3b] flex flex-col justify-center relative overflow-hidden font-sans py-12 px-6">
+      {/* Autofill override styles */}
+      <style>{`
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+          -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+          -webkit-text-fill-color: #064e3b !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+      `}</style>
 
-      {/* Back button */}
-      <div className="absolute top-6 left-6">
+      {/* Layered ambient glows */}
+      <div className="absolute top-[-10%] right-[-10%] w-[450px] h-[450px] bg-[#d4af37]/8 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse" style={{ animationDuration: '6s' }} />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#064e3b]/6 blur-[150px] rounded-full pointer-events-none -z-10 animate-pulse" style={{ animationDuration: '8s' }} />
+
+      {/* Elegant Back button */}
+      <div className="absolute top-6 left-6 z-10">
         <Link 
           href="/" 
-          className="inline-flex items-center gap-2 text-sm text-[#064e3b]/70 hover:text-[#064e3b] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold bg-white/70 backdrop-blur-md border border-[#064e3b]/10 shadow-sm px-4 py-2 rounded-full text-[#064e3b] hover:bg-white hover:border-[#d4af37] hover:shadow-md transition-all"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" />
           Kembali ke Beranda
         </Link>
       </div>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center items-center gap-2 font-bold text-3xl tracking-wide text-[#064e3b] mb-6">
-          <Sparkles className="w-8 h-8 text-[#d4af37]" />
-          Adatara
-        </div>
-        <h2 className="text-center text-3xl font-extrabold text-[#064e3b] tracking-tight">
-          Buat Akun Adatara Anda
-        </h2>
-        <p className="mt-2 text-center text-sm text-[#064e3b]/70">
-          Mulai desain undangan premium Anda hari ini.
-        </p>
+      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+        {/* Brand Logo */}
+        <motion.div
+          initial={{ opacity: 0, y: -25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex justify-center mb-4"
+        >
+          <Link href="/" className="transition-transform duration-300 hover:scale-105">
+            <img
+              src="/logo.png"
+              alt="Adatara Logo"
+              className="h-16 md:h-20 w-auto object-contain"
+            />
+          </Link>
+        </motion.div>
+        
+        {/* Page Title */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="text-center"
+        >
+          <h2 className="text-3xl font-bold font-serif text-[#064e3b] tracking-tight">
+            Buat Akun Adatara Anda
+          </h2>
+          <p className="mt-2 text-sm text-[#064e3b]/70 font-medium">
+            Mulai desain undangan premium Anda hari ini.
+          </p>
+        </motion.div>
       </div>
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
+        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10"
       >
-        <div className="bg-white border border-[#064e3b]/10 py-8 px-10 shadow-2xl rounded-3xl sm:px-10">
+        <div className="bg-white/80 backdrop-blur-lg border border-[#064e3b]/10 py-10 px-10 shadow-[0_20px_50px_rgba(6,78,59,0.08)] rounded-[2.25rem] sm:px-10 relative overflow-hidden">
+          {/* Subtle gold line ornament at the top of the card */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37]/60 to-transparent" />
+
           {success ? (
             <motion.div 
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               className="flex flex-col items-center justify-center text-center py-8"
             >
-              <div className="w-16 h-16 bg-[#064e3b]/10 border border-[#064e3b] text-[#064e3b] rounded-full flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-[#064e3b]/10 border border-[#064e3b]/20 text-[#064e3b] rounded-full flex items-center justify-center mb-4 shadow-inner">
                 <Check className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-[#064e3b]">Registrasi Berhasil!</h3>
-              <p className="text-[#064e3b]/70 text-sm mt-2">
+              <h3 className="text-xl font-bold text-[#064e3b] font-serif">Registrasi Berhasil!</h3>
+              <p className="text-[#064e3b]/70 text-sm mt-2 font-medium">
                 Akun Anda telah terdaftar. Mengalihkan ke dashboard...
               </p>
             </motion.div>
@@ -123,103 +158,107 @@ export default function Register() {
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {/* Alert error */}
               {errorMessage && (
-                <div className="bg-red-55 border border-red-200 text-red-700 p-4 rounded-xl text-sm font-medium">
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-55 border border-red-200 text-red-700 p-4 rounded-xl text-sm font-medium"
+                >
                   {errorMessage}
-                </div>
+                </motion.div>
               )}
 
               {/* Name */}
-              <div>
-                <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-2">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
                   Nama Lengkap
                 </label>
-                <div className="relative">
-                  <User className="absolute left-4 top-3.5 w-5 h-5 text-[#064e3b]/40" />
+                <div className="relative group">
+                  <User className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
                   <input
                     {...register("name")}
                     type="text"
                     placeholder="Aditya Pratama"
-                    className="w-full pl-12 pr-4 py-3 bg-[#f5f5dc]/10 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
                   />
                 </div>
                 {errors.name && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium">{errors.name.message}</p>
+                  <p className="text-xs text-red-600 mt-1 font-medium">{errors.name.message}</p>
                 )}
               </div>
 
               {/* Email */}
-              <div>
-                <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-2">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
                   Alamat Email
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-3.5 w-5 h-5 text-[#064e3b]/40" />
+                <div className="relative group">
+                  <Mail className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
                   <input
                     {...register("email")}
                     type="email"
                     placeholder="aditya@example.com"
-                    className="w-full pl-12 pr-4 py-3 bg-[#f5f5dc]/10 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium">{errors.email.message}</p>
+                  <p className="text-xs text-red-600 mt-1 font-medium">{errors.email.message}</p>
                 )}
               </div>
 
               {/* Phone Number */}
-              <div>
-                <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-2">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
                   Nomor Handphone (WhatsApp)
                 </label>
-                <div className="relative">
-                  <Phone className="absolute left-4 top-3.5 w-5 h-5 text-[#064e3b]/40" />
+                <div className="relative group">
+                  <Phone className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
                   <input
                     {...register("nomor_hp")}
                     type="tel"
                     placeholder="081234567890"
-                    className="w-full pl-12 pr-4 py-3 bg-[#f5f5dc]/10 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
                   />
                 </div>
                 {errors.nomor_hp && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium">{errors.nomor_hp.message}</p>
+                  <p className="text-xs text-red-600 mt-1 font-medium">{errors.nomor_hp.message}</p>
                 )}
               </div>
 
               {/* Password */}
-              <div>
-                <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-2">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 w-5 h-5 text-[#064e3b]/40" />
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
                   <input
                     {...register("password")}
                     type="password"
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3 bg-[#f5f5dc]/10 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
                   />
                 </div>
                 {errors.password && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium">{errors.password.message}</p>
+                  <p className="text-xs text-red-600 mt-1 font-medium">{errors.password.message}</p>
                 )}
               </div>
 
               {/* Confirm Password */}
-              <div>
-                <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-2">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
                   Konfirmasi Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-3.5 w-5 h-5 text-[#064e3b]/40" />
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
                   <input
                     {...register("confirmPassword")}
                     type="password"
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3 bg-[#f5f5dc]/10 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
                   />
                 </div>
                 {errors.confirmPassword && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium">{errors.confirmPassword.message}</p>
+                  <p className="text-xs text-red-600 mt-1 font-medium">{errors.confirmPassword.message}</p>
                 )}
               </div>
 
@@ -228,7 +267,7 @@ export default function Register() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 rounded-xl text-sm font-bold bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white shadow-lg shadow-[#064e3b]/10 hover:shadow-[#064e3b]/20 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 rounded-xl text-sm font-bold bg-[#064e3b] hover:bg-[#043427] border border-[#d4af37]/40 hover:border-[#d4af37] text-[#f5f5dc] shadow-lg shadow-[#064e3b]/10 hover:shadow-[#064e3b]/20 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 hover:-translate-y-[1px]"
                 >
                   {loading ? (
                     <>
@@ -243,9 +282,9 @@ export default function Register() {
             </form>
           )}
 
-          <div className="mt-6 text-center text-sm text-[#064e3b]/70">
+          <div className="mt-8 pt-6 border-t border-[#064e3b]/5 text-center text-sm text-[#064e3b]/70 font-medium">
             Sudah memiliki akun?{" "}
-            <Link href="/login" className="text-[#064e3b] hover:text-[#d4af37] font-semibold transition-colors">
+            <Link href="/login" className="text-[#064e3b] hover:text-[#d4af37] font-bold transition-colors">
               Masuk di sini
             </Link>
           </div>

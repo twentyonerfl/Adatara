@@ -343,8 +343,17 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
                   <InputField label="Nama Acara" value={a.nama} onChange={v => updAcara(i, "nama", v)} placeholder="Akad Nikah..." />
                   <InputField label="Tanggal" value={a.tanggal} onChange={v => updAcara(i, "tanggal", v)} type="date" />
                   <div className="grid grid-cols-2 gap-2">
-                    <InputField label="Jam Mulai" value={a.jam_mulai} onChange={v => updAcara(i, "jam_mulai", v)} type="time" />
-                    <InputField label="Jam Selesai" value={a.jam_selesai} onChange={v => updAcara(i, "jam_selesai", v)} type="time" />
+                    <InputField label="Jam Mulai" value={a.jam_mulai} onChange={v => updAcara(i, "jam_mulai", v)} placeholder="Contoh: 08:00" />
+                    <div>
+                      <InputField label="Jam Selesai" value={a.jam_selesai} onChange={v => updAcara(i, "jam_selesai", v)} placeholder="Contoh: 10:00 atau Selesai" />
+                      <button
+                        type="button"
+                        onClick={() => updAcara(i, "jam_selesai", "Selesai")}
+                        className="mt-1 text-[10px] font-bold text-[#d4af37] hover:underline"
+                      >
+                        Atur sebagai 'Selesai'
+                      </button>
+                    </div>
                   </div>
                   <InputField label="Alamat Lengkap" value={a.alamat} onChange={v => updAcara(i, "alamat", v)} placeholder="Jl. ..." textarea />
                   <InputField label="Link Google Maps" value={a.link_maps} onChange={v => updAcara(i, "link_maps", v)} placeholder="https://maps.google.com/..." />
@@ -464,9 +473,15 @@ export function AcaraPreview({ data }: { data: any }) {
         const idx = data.countdown_acara_index ?? 0;
         const targetEvent = acaras[idx];
         if (!targetEvent || !targetEvent.tanggal) return null;
-        const targetDateTime = targetEvent.jam_mulai
-          ? `${targetEvent.tanggal}T${targetEvent.jam_mulai}`
-          : `${targetEvent.tanggal}T00:00`;
+        
+        let timePart = "00:00";
+        if (targetEvent.jam_mulai) {
+          const match = targetEvent.jam_mulai.match(/([0-1]?[0-9]|2[0-3]):[0-5][0-9]/);
+          if (match) {
+            timePart = match[0];
+          }
+        }
+        const targetDateTime = `${targetEvent.tanggal}T${timePart}`;
         return (
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/80 space-y-1.5 text-center">
             <div className="text-[10px] font-black uppercase tracking-wider opacity-60 text-[#064e3b]">
@@ -484,7 +499,8 @@ export function AcaraPreview({ data }: { data: any }) {
             style={{
               fontFamily: a.setting_nama?.family || data.setting_nama_acara?.family || "Inter",
               fontSize: a.setting_nama?.size || data.setting_nama_acara?.size || "14px",
-              color: a.setting_nama?.color || data.setting_nama_acara?.color || "#064e3b"
+              color: a.setting_nama?.color || data.setting_nama_acara?.color || "#064e3b",
+              textAlign: (a.setting_nama?.position || data.setting_nama_acara?.position || "left") as any
             }}
           >
             {a.nama || "Nama Acara"}
@@ -495,7 +511,8 @@ export function AcaraPreview({ data }: { data: any }) {
               style={{
                 fontFamily: a.setting_tanggal?.family || data.setting_tanggal_acara?.family || "Inter",
                 fontSize: a.setting_tanggal?.size || data.setting_tanggal_acara?.size || "12px",
-                color: a.setting_tanggal?.color || data.setting_tanggal_acara?.color || "#064e3b"
+                color: a.setting_tanggal?.color || data.setting_tanggal_acara?.color || "#064e3b",
+                textAlign: (a.setting_tanggal?.position || data.setting_tanggal_acara?.position || "left") as any
               }}
             >
               {new Date(a.tanggal).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
@@ -507,7 +524,8 @@ export function AcaraPreview({ data }: { data: any }) {
               style={{
                 fontFamily: a.setting_jam?.family || data.setting_jam_acara?.family || "Inter",
                 fontSize: a.setting_jam?.size || data.setting_jam_acara?.size || "11px",
-                color: a.setting_jam?.color || data.setting_jam_acara?.color || "#064e3b"
+                color: a.setting_jam?.color || data.setting_jam_acara?.color || "#064e3b",
+                textAlign: (a.setting_jam?.position || data.setting_jam_acara?.position || "left") as any
               }}
             >
               {a.jam_mulai} – {a.jam_selesai} WIB
@@ -519,7 +537,8 @@ export function AcaraPreview({ data }: { data: any }) {
               style={{
                 fontFamily: a.setting_alamat?.family || data.setting_alamat_acara?.family || data.setting_jam_acara?.family || "Inter",
                 fontSize: a.setting_alamat?.size || data.setting_alamat_acara?.size || "10px",
-                color: a.setting_alamat?.color || data.setting_alamat_acara?.color || data.setting_jam_acara?.color || "#064e3b"
+                color: a.setting_alamat?.color || data.setting_alamat_acara?.color || data.setting_jam_acara?.color || "#064e3b",
+                textAlign: (a.setting_alamat?.position || data.setting_alamat_acara?.position || data.setting_jam_acara?.position || "left") as any
               }}
             >
               {a.alamat}
@@ -537,7 +556,11 @@ export function AcaraPreview({ data }: { data: any }) {
               />
             </div>
           )}
-          {a.link_maps && <a href={a.link_maps} target="_blank" className="text-[10px] text-[#d4af37] font-bold hover:underline">Lihat di Maps →</a>}
+          {a.link_maps && (
+            <div style={{ textAlign: (a.setting_alamat?.position || data.setting_alamat_acara?.position || data.setting_jam_acara?.position || "left") as any }}>
+              <a href={a.link_maps} target="_blank" className="text-[10px] text-[#d4af37] font-bold hover:underline">Lihat di Maps →</a>
+            </div>
+          )}
         </div>
       ))}
     </div>

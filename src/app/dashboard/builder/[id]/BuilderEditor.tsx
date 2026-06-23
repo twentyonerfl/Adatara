@@ -1059,7 +1059,7 @@ export function BuilderEditor({
                         <div className="space-y-1">
                           <label className="text-[9px] font-extrabold uppercase opacity-60">Jam Mulai</label>
                           <input
-                            type="time"
+                            type="text" placeholder="Contoh: 08:00"
                             value={tempEventTime}
                             onChange={(e) => setTempEventTime(e.target.value)}
                             className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
@@ -1069,7 +1069,7 @@ export function BuilderEditor({
                           <label className="text-[9px] font-extrabold uppercase opacity-60">Jam Selesai</label>
                           {!tempEventIsSelesaiCustom ? (
                             <input
-                              type="time"
+                              type="text" placeholder="Contoh: 10:00"
                               value={tempEventTimeEnd}
                               onChange={(e) => setTempEventTimeEnd(e.target.value)}
                               className="w-full px-2.5 py-1.5 bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg text-xs"
