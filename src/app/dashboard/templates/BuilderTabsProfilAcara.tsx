@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget } from "./BuilderWidgets";
+import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget } from "./BuilderWidgets";
 import { Plus, Trash2 } from "lucide-react";
 
 function getMapsEmbedUrl(input?: string) {
@@ -243,7 +243,7 @@ export function ProfilPreview({ data }: { data: any }) {
 
 // ─── ACARA TAB ────────────────────────────────────────────────────────────────
 
-function Countdown({ targetDateStr }: { targetDateStr: string }) {
+function Countdown({ targetDateStr, settings }: { targetDateStr: string; settings?: any }) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -274,21 +274,55 @@ function Countdown({ targetDateStr }: { targetDateStr: string }) {
     return () => clearInterval(timer);
   }, [targetDateStr, isMounted]);
 
+  const styleType = settings?.type || "grid";
+  const numFamily = settings?.family || "Inter";
+  const numSize = settings?.size || "14px";
+  const numColor = settings?.color || "#064e3b";
+  const lblFamily = settings?.label_family || "Inter";
+  const lblSize = settings?.label_size || "7px";
+  const lblColor = settings?.label_color || "#d4af37";
+  const boxBg = settings?.bg_color || "rgba(255, 255, 255, 0.8)";
+  const boxBorder = settings?.border_color || "rgba(6, 78, 59, 0.1)";
+  const boxRadius = styleType === "bulat" ? "9999px" : (settings?.border_radius || "12px");
+  const pos = settings?.position || "center";
+
+  const containerClass = `flex gap-2 mt-2 w-full max-w-xs mx-auto ${
+    pos === "left" ? "justify-start" : pos === "right" ? "justify-end" : "justify-center"
+  }`;
+
+  const renderPlaceholder = () => {
+    return ["Hari", "Jam", "Menit", "Detik"].map((label) => {
+      const boxStyle: React.CSSProperties = styleType !== "minimalis" ? {
+        backgroundColor: boxBg,
+        borderColor: boxBorder,
+        borderWidth: "1px",
+        borderRadius: boxRadius,
+      } : {};
+      
+      return (
+        <div key={label} 
+          className={`flex-1 flex flex-col items-center justify-center p-1.5 min-w-[50px] aspect-square ${
+            styleType !== "minimalis" ? "shadow-sm border" : ""
+          }`}
+          style={boxStyle}
+        >
+          <div className="font-black leading-none" style={{ fontFamily: numFamily, fontSize: numSize, color: numColor }}>00</div>
+          <div className="font-bold uppercase tracking-wider mt-1 leading-none" style={{ fontFamily: lblFamily, fontSize: lblSize, color: lblColor }}>{label}</div>
+        </div>
+      );
+    });
+  };
+
   if (!isMounted || !timeLeft) {
     return (
-      <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
-        {["Hari", "Jam", "Menit", "Detik"].map((label) => (
-          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
-            <div className="text-sm font-black text-[#064e3b]">00</div>
-            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{label}</div>
-          </div>
-        ))}
+      <div className={containerClass}>
+        {renderPlaceholder()}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
+    <div className={containerClass}>
       {Object.entries(timeLeft).map(([label, value]) => {
         const labelMap: Record<string, string> = {
           days: "Hari",
@@ -297,10 +331,22 @@ function Countdown({ targetDateStr }: { targetDateStr: string }) {
           seconds: "Detik"
         };
         const padValue = String(value).padStart(2, "0");
+        const boxStyle: React.CSSProperties = styleType !== "minimalis" ? {
+          backgroundColor: boxBg,
+          borderColor: boxBorder,
+          borderWidth: "1px",
+          borderRadius: boxRadius,
+        } : {};
+
         return (
-          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
-            <div className="text-sm font-black text-[#064e3b]">{padValue}</div>
-            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{labelMap[label]}</div>
+          <div key={label} 
+            className={`flex-1 flex flex-col items-center justify-center p-1.5 min-w-[50px] aspect-square ${
+              styleType !== "minimalis" ? "shadow-sm border" : ""
+            }`}
+            style={boxStyle}
+          >
+            <div className="font-black leading-none" style={{ fontFamily: numFamily, fontSize: numSize, color: numColor }}>{padValue}</div>
+            <div className="font-bold uppercase tracking-wider mt-1 leading-none" style={{ fontFamily: lblFamily, fontSize: lblSize, color: lblColor }}>{labelMap[label]}</div>
           </div>
         );
       })}
@@ -422,6 +468,16 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
       {/* ── SETTINGS SECTION ── */}
       {(!mode || mode === "settings") && (
         <>
+          {data.countdown_aktif && (
+            <SectionInput label="Setting Style Hitung Mundur">
+              <CountdownSettingsWidget
+                label="Style Countdown"
+                value={data.setting_countdown || {}}
+                onChange={(val) => upd("setting_countdown", val)}
+              />
+            </SectionInput>
+          )}
+
           {acaras.length > 0 && (
             <SectionInput label="Setting Style Acara">
               <div className="space-y-4">
@@ -564,12 +620,14 @@ export function AcaraPreview({ data }: { data: any }) {
           }
         }
         const targetDateTime = `${targetEvent.tanggal}T${timePart}`;
+        const pos = data.setting_countdown?.position || "center";
+        const alignClass = pos === "left" ? "text-left" : pos === "right" ? "text-right" : "text-center";
         return (
-          <div className="space-y-1.5 text-center py-2">
+          <div className={`space-y-1.5 py-2 ${alignClass}`}>
             <div className="text-[10px] font-black uppercase tracking-wider opacity-60 text-white">
               Hitung Mundur Acara
             </div>
-            <Countdown targetDateStr={targetDateTime} />
+            <Countdown targetDateStr={targetDateTime} settings={data.setting_countdown} />
           </div>
         );
       })()}

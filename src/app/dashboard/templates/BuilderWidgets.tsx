@@ -1303,4 +1303,179 @@ export function PhotoStyleWidget({
   );
 }
 
+export function CountdownSettingsWidget({
+  label, value, onChange,
+}: {
+  label: string;
+  value: any;
+  onChange: (v: any) => void;
+}) {
+  const safeVal = {
+    type: value?.type || "grid",
+    family: value?.family || "Inter",
+    size: value?.size || "14px",
+    color: value?.color || "#064e3b",
+    label_family: value?.label_family || "Inter",
+    label_size: value?.label_size || "7px",
+    label_color: value?.label_color || "#d4af37",
+    bg_color: value?.bg_color || "rgba(255,255,255,0.8)",
+    border_color: value?.border_color || "rgba(6,78,59,0.1)",
+    border_radius: value?.border_radius || "12px",
+    position: value?.position || "center",
+  };
+
+  const sizeVal = parseInt(safeVal.size) || 14;
+  const labelSizeVal = parseInt(safeVal.label_size) || 7;
+
+  return (
+    <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
+      <p className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] border-b border-[#064e3b]/5 pb-1 mb-1.5">{label}</p>
+      
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+        {/* Jenis Tampilan */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Jenis Tampilan</label>
+          <select value={safeVal.type} onChange={e => onChange({ ...safeVal, type: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            <option value="grid">Kotak / Grid</option>
+            <option value="bulat">Bulat / Lingkaran</option>
+            <option value="minimalis">Minimalis (Tanpa Kotak)</option>
+          </select>
+        </div>
+
+        {/* Posisi */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Posisi</label>
+          <select value={safeVal.position} onChange={e => onChange({ ...safeVal, position: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            <option value="left">Kiri</option>
+            <option value="center">Tengah</option>
+            <option value="right">Kanan</option>
+          </select>
+        </div>
+
+        <div className="col-span-2 border-t border-[#064e3b]/5 my-0.5 pt-1.5">
+          <p className="text-[8px] font-black uppercase text-[#d4af37] tracking-wider mb-1">Pengaturan Angka</p>
+        </div>
+
+        {/* Font Angka */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Font Angka</label>
+          <select value={safeVal.family} onChange={e => onChange({ ...safeVal, family: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            {FONT_FAMILIES.map(f => <option key={f}>{f}</option>)}
+          </select>
+        </div>
+
+        {/* Warna Angka */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Angka</label>
+          <input type="color" value={safeVal.color}
+            onChange={e => onChange({ ...safeVal, color: e.target.value })}
+            className="w-full h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent" />
+        </div>
+
+        {/* Ukuran Angka */}
+        <div className="col-span-2">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Angka</label>
+          <div className="flex gap-1.5 items-center">
+            <input type="range" min="8" max="64" value={sizeVal}
+              onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
+            <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
+          </div>
+        </div>
+
+        <div className="col-span-2 border-t border-[#064e3b]/5 my-0.5 pt-1.5">
+          <p className="text-[8px] font-black uppercase text-[#d4af37] tracking-wider mb-1">Pengaturan Label</p>
+        </div>
+
+        {/* Font Label */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Font Label</label>
+          <select value={safeVal.label_family} onChange={e => onChange({ ...safeVal, label_family: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            {FONT_FAMILIES.map(f => <option key={f}>{f}</option>)}
+          </select>
+        </div>
+
+        {/* Warna Label */}
+        <div>
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Warna Label</label>
+          <input type="color" value={safeVal.label_color}
+            onChange={e => onChange({ ...safeVal, label_color: e.target.value })}
+            className="w-full h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent" />
+        </div>
+
+        {/* Ukuran Label */}
+        <div className="col-span-2">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Label</label>
+          <div className="flex gap-1.5 items-center">
+            <input type="range" min="6" max="24" value={labelSizeVal}
+              onChange={e => onChange({ ...safeVal, label_size: e.target.value + "px" })}
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
+            <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.label_size}</span>
+          </div>
+        </div>
+
+        {safeVal.type !== "minimalis" && (
+          <>
+            <div className="col-span-2 border-t border-[#064e3b]/5 my-0.5 pt-1.5">
+              <p className="text-[8px] font-black uppercase text-[#d4af37] tracking-wider mb-1">Pengaturan Kotak (Card)</p>
+            </div>
+
+            {/* Background Kotak */}
+            <div>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">BG Kotak</label>
+              <div className="flex gap-1.5 items-center">
+                <input type="color" value={safeVal.bg_color.startsWith("rgba") || safeVal.bg_color === "transparent" ? "#ffffff" : safeVal.bg_color}
+                  onChange={e => onChange({ ...safeVal, bg_color: e.target.value })}
+                  disabled={safeVal.bg_color === "transparent"}
+                  className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...safeVal, bg_color: safeVal.bg_color === "transparent" ? "rgba(255,255,255,0.8)" : "transparent" })}
+                  className={`px-1 py-0.5 text-[6.5px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.bg_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                >
+                  Transpar
+                </button>
+              </div>
+            </div>
+
+            {/* Border Kotak */}
+            <div>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Border Kotak</label>
+              <div className="flex gap-1.5 items-center">
+                <input type="color" value={safeVal.border_color.startsWith("rgba") || safeVal.border_color === "transparent" ? "#064e3b" : safeVal.border_color}
+                  onChange={e => onChange({ ...safeVal, border_color: e.target.value })}
+                  disabled={safeVal.border_color === "transparent"}
+                  className="flex-1 h-5 rounded cursor-pointer border border-[#064e3b]/10 p-0 bg-transparent disabled:opacity-40" />
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...safeVal, border_color: safeVal.border_color === "transparent" ? "rgba(6,78,59,0.1)" : "transparent" })}
+                  className={`px-1 py-0.5 text-[6.5px] font-black border rounded-md uppercase whitespace-nowrap h-5 flex items-center justify-center ${safeVal.border_color === "transparent" ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}
+                >
+                  Transpar
+                </button>
+              </div>
+            </div>
+
+            {safeVal.type === "grid" && (
+              <div className="col-span-2">
+                <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Radius Sudut Kotak</label>
+                <div className="flex gap-1.5 items-center">
+                  <input type="range" min="0" max="32" value={parseInt(safeVal.border_radius) || 0}
+                    onChange={e => onChange({ ...safeVal, border_radius: e.target.value + "px" })}
+                    className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
+                  <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.border_radius}</span>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 

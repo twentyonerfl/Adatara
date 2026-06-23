@@ -37,7 +37,7 @@ import {
   Copy,
   ChevronDown
 } from "lucide-react";
-import { FramedPhoto, PhotoStyleWidget } from "../../templates/BuilderWidgets";
+import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget } from "../../templates/BuilderWidgets";
 
 type TemplateType = {
   id: string;
@@ -212,7 +212,7 @@ function getMapsEmbedUrl(input?: string) {
   return input;
 }
 
-function Countdown({ targetDateStr }: { targetDateStr: string }) {
+function Countdown({ targetDateStr, settings }: { targetDateStr: string; settings?: any }) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -243,21 +243,55 @@ function Countdown({ targetDateStr }: { targetDateStr: string }) {
     return () => clearInterval(timer);
   }, [targetDateStr, isMounted]);
 
+  const styleType = settings?.type || "grid";
+  const numFamily = settings?.family || "Inter";
+  const numSize = settings?.size || "14px";
+  const numColor = settings?.color || "#064e3b";
+  const lblFamily = settings?.label_family || "Inter";
+  const lblSize = settings?.label_size || "7px";
+  const lblColor = settings?.label_color || "#d4af37";
+  const boxBg = settings?.bg_color || "rgba(255, 255, 255, 0.8)";
+  const boxBorder = settings?.border_color || "rgba(6, 78, 59, 0.1)";
+  const boxRadius = styleType === "bulat" ? "9999px" : (settings?.border_radius || "12px");
+  const pos = settings?.position || "center";
+
+  const containerClass = `flex gap-2 mt-2 w-full max-w-xs mx-auto ${
+    pos === "left" ? "justify-start" : pos === "right" ? "justify-end" : "justify-center"
+  }`;
+
+  const renderPlaceholder = () => {
+    return ["Hari", "Jam", "Menit", "Detik"].map((label) => {
+      const boxStyle: React.CSSProperties = styleType !== "minimalis" ? {
+        backgroundColor: boxBg,
+        borderColor: boxBorder,
+        borderWidth: "1px",
+        borderRadius: boxRadius,
+      } : {};
+      
+      return (
+        <div key={label} 
+          className={`flex-1 flex flex-col items-center justify-center p-1.5 min-w-[50px] aspect-square ${
+            styleType !== "minimalis" ? "shadow-sm border" : ""
+          }`}
+          style={boxStyle}
+        >
+          <div className="font-black leading-none" style={{ fontFamily: numFamily, fontSize: numSize, color: numColor }}>00</div>
+          <div className="font-bold uppercase tracking-wider mt-1 leading-none" style={{ fontFamily: lblFamily, fontSize: lblSize, color: lblColor }}>{label}</div>
+        </div>
+      );
+    });
+  };
+
   if (!isMounted || !timeLeft) {
     return (
-      <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
-        {["Hari", "Jam", "Menit", "Detik"].map((label) => (
-          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
-            <div className="text-sm font-black text-[#064e3b]">00</div>
-            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{label}</div>
-          </div>
-        ))}
+      <div className={containerClass}>
+        {renderPlaceholder()}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
+    <div className={containerClass}>
       {Object.entries(timeLeft).map(([label, value]) => {
         const labelMap: Record<string, string> = {
           days: "Hari",
@@ -266,10 +300,22 @@ function Countdown({ targetDateStr }: { targetDateStr: string }) {
           seconds: "Detik"
         };
         const padValue = String(value).padStart(2, "0");
+        const boxStyle: React.CSSProperties = styleType !== "minimalis" ? {
+          backgroundColor: boxBg,
+          borderColor: boxBorder,
+          borderWidth: "1px",
+          borderRadius: boxRadius,
+        } : {};
+
         return (
-          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
-            <div className="text-sm font-black text-[#064e3b]">{padValue}</div>
-            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{labelMap[label]}</div>
+          <div key={label} 
+            className={`flex-1 flex flex-col items-center justify-center p-1.5 min-w-[50px] aspect-square ${
+              styleType !== "minimalis" ? "shadow-sm border" : ""
+            }`}
+            style={boxStyle}
+          >
+            <div className="font-black leading-none" style={{ fontFamily: numFamily, fontSize: numSize, color: numColor }}>{padValue}</div>
+            <div className="font-bold uppercase tracking-wider mt-1 leading-none" style={{ fontFamily: lblFamily, fontSize: lblSize, color: lblColor }}>{labelMap[label]}</div>
           </div>
         );
       })}
@@ -1196,25 +1242,35 @@ export function BuilderEditor({
                       </label>
 
                       {data.acara?.countdown_aktif && (
-                        <div className="space-y-1.5">
-                          <label className="text-[9px] font-extrabold uppercase tracking-wider text-[#064e3b]/60 block">
-                            Pilih Acara Sebagai Target
-                          </label>
-                          <select
-                            value={data.acara?.countdown_acara_index ?? 0}
-                            onChange={e => updateData("acara", "countdown_acara_index", parseInt(e.target.value))}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg outline-none focus:border-[#d4af37] text-[#064e3b] cursor-pointer font-bold"
-                          >
-                            {(data.acara?.acaras || []).map((a: any, i: number) => (
-                              <option key={i} value={i}>
-                                Acara #{i + 1}: {a.nama || "Tanpa Nama"} ({a.tanggal || "Tanpa Tanggal"})
-                              </option>
-                            ))}
-                            {(data.acara?.acaras || []).length === 0 && (
-                              <option value={0}>Belum ada acara ditambahkan</option>
-                            )}
-                          </select>
-                        </div>
+                        <>
+                          <div className="space-y-1.5">
+                            <label className="text-[9px] font-extrabold uppercase tracking-wider text-[#064e3b]/60 block">
+                              Pilih Acara Sebagai Target
+                            </label>
+                            <select
+                              value={data.acara?.countdown_acara_index ?? 0}
+                              onChange={e => updateData("acara", "countdown_acara_index", parseInt(e.target.value))}
+                              className="w-full px-2.5 py-1.5 text-xs bg-[#f5f5dc] border border-[#064e3b]/10 rounded-lg outline-none focus:border-[#d4af37] text-[#064e3b] cursor-pointer font-bold"
+                            >
+                              {(data.acara?.acaras || []).map((a: any, i: number) => (
+                                <option key={i} value={i}>
+                                  Acara #{i + 1}: {a.nama || "Tanpa Nama"} ({a.tanggal || "Tanpa Tanggal"})
+                                </option>
+                              ))}
+                              {(data.acara?.acaras || []).length === 0 && (
+                                <option value={0}>Belum ada acara ditambahkan</option>
+                              )}
+                            </select>
+                          </div>
+
+                          <div className="pt-2 border-t border-[#064e3b]/10">
+                            <CountdownSettingsWidget
+                              label="Style Hitung Mundur"
+                              value={data.acara?.setting_countdown || {}}
+                              onChange={(val) => updateData("acara", "setting_countdown", val)}
+                            />
+                          </div>
+                        </>
                       )}
                     </div>
                   </div>
@@ -1837,12 +1893,14 @@ export function BuilderEditor({
                         const targetEvent = data.acara.acaras?.[idx];
                         if (!targetEvent || !targetEvent.tanggal) return null;
                         const targetDateTime = getTargetDateTime(targetEvent.tanggal, targetEvent.jam || targetEvent.jam_mulai);
+                        const pos = data.acara?.setting_countdown?.position || "center";
+                        const alignClass = pos === "left" ? "text-left" : pos === "right" ? "text-right" : "text-center";
                         return (
-                          <div className="space-y-1.5 text-center py-2">
+                          <div className={`space-y-1.5 py-2 ${alignClass}`}>
                             <div className="text-[9px] font-black uppercase tracking-wider opacity-60 text-white">
                               Hitung Mundur Acara
                             </div>
-                            <Countdown targetDateStr={targetDateTime} />
+                            <Countdown targetDateStr={targetDateTime} settings={data.acara?.setting_countdown} />
                           </div>
                         );
                       })()}
