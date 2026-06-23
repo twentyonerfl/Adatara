@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CardSettingsWidget } from "./BuilderWidgets";
+import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget } from "./BuilderWidgets";
 import { Plus, Trash2 } from "lucide-react";
 
 function getMapsEmbedUrl(input?: string) {
@@ -243,17 +243,7 @@ export function ProfilPreview({ data }: { data: any }) {
 
 // ─── ACARA TAB ────────────────────────────────────────────────────────────────
 
-function Countdown({ 
-  targetDateStr, 
-  numberStyle = {}, 
-  labelStyle = {},
-  cardStyle = {}
-}: { 
-  targetDateStr: string; 
-  numberStyle?: any; 
-  labelStyle?: any;
-  cardStyle?: any;
-}) {
+function Countdown({ targetDateStr }: { targetDateStr: string }) {
   const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -284,42 +274,13 @@ function Countdown({
     return () => clearInterval(timer);
   }, [targetDateStr, isMounted]);
 
-  const itemBoxStyle: React.CSSProperties = {
-    backgroundColor: cardStyle.glassmorphism 
-      ? "rgba(255, 255, 255, 0.2)" 
-      : (cardStyle.bg_color && cardStyle.bg_color !== "transparent" ? `${cardStyle.bg_color}30` : "rgba(255, 255, 255, 0.8)"),
-    borderColor: cardStyle.border_color && cardStyle.border_color !== "transparent" 
-      ? cardStyle.border_color 
-      : "rgba(6, 78, 59, 0.1)",
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderRadius: cardStyle.border_radius || "12px",
-  };
-
-  const labelMap: Record<string, string> = {
-    days: "Hari",
-    hours: "Jam",
-    minutes: "Menit",
-    seconds: "Detik"
-  };
-
   if (!isMounted || !timeLeft) {
     return (
-      <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2 w-full">
-        {["days", "hours", "minutes", "seconds"].map((label) => (
-          <div key={label} style={itemBoxStyle} className="p-1.5 flex flex-col justify-center items-center">
-            <div 
-              className="text-sm font-black" 
-              style={getEventElementStyle(numberStyle, { size: "14px", color: "#064e3b", family: "Inter", position: "center" })}
-            >
-              00
-            </div>
-            <div 
-              className="text-[7px] font-bold uppercase tracking-wider"
-              style={getEventElementStyle(labelStyle, { size: "7px", color: "#d4af37", family: "Inter", position: "center" })}
-            >
-              {labelMap[label]}
-            </div>
+      <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
+        {["Hari", "Jam", "Menit", "Detik"].map((label) => (
+          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
+            <div className="text-sm font-black text-[#064e3b]">00</div>
+            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{label}</div>
           </div>
         ))}
       </div>
@@ -327,23 +288,19 @@ function Countdown({
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2 w-full">
+    <div className="grid grid-cols-4 gap-2 text-center max-w-xs mx-auto mt-2">
       {Object.entries(timeLeft).map(([label, value]) => {
+        const labelMap: Record<string, string> = {
+          days: "Hari",
+          hours: "Jam",
+          minutes: "Menit",
+          seconds: "Detik"
+        };
         const padValue = String(value).padStart(2, "0");
         return (
-          <div key={label} style={itemBoxStyle} className="p-1.5 flex flex-col justify-center items-center">
-            <div 
-              className="text-sm font-black" 
-              style={getEventElementStyle(numberStyle, { size: "14px", color: "#064e3b", family: "Inter", position: "center" })}
-            >
-              {padValue}
-            </div>
-            <div 
-              className="text-[7px] font-bold uppercase tracking-wider"
-              style={getEventElementStyle(labelStyle, { size: "7px", color: "#d4af37", family: "Inter", position: "center" })}
-            >
-              {labelMap[label]}
-            </div>
+          <div key={label} className="bg-white/80 backdrop-blur-sm rounded-xl p-1.5 border border-[#064e3b]/10">
+            <div className="text-sm font-black text-[#064e3b]">{padValue}</div>
+            <div className="text-[7px] font-bold uppercase tracking-wider text-[#d4af37]">{labelMap[label]}</div>
           </div>
         );
       })}
@@ -531,39 +488,6 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
             </SectionInput>
           )}
 
-          {data.countdown_aktif && (
-            <SectionInput label="Setting Style Hitung Mundur (Countdown)">
-              <div className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-3">
-                <FontSettingsWidget
-                  label="Style Judul Hitung Mundur"
-                  value={data.setting_countdown_title || {}}
-                  onChange={(val) => upd("setting_countdown_title", val)}
-                />
-                <div className="pt-3 border-t border-[#064e3b]/10">
-                  <FontSettingsWidget
-                    label="Style Angka Hitung Mundur"
-                    value={data.setting_countdown_number || {}}
-                    onChange={(val) => upd("setting_countdown_number", val)}
-                  />
-                </div>
-                <div className="pt-3 border-t border-[#064e3b]/10">
-                  <FontSettingsWidget
-                    label="Style Label Waktu"
-                    value={data.setting_countdown_label || {}}
-                    onChange={(val) => upd("setting_countdown_label", val)}
-                  />
-                </div>
-                <div className="pt-3 border-t border-[#064e3b]/10">
-                  <CardSettingsWidget
-                    label="Setting Style Card Hitung Mundur"
-                    value={data.setting_countdown_card || {}}
-                    onChange={(val) => upd("setting_countdown_card", val)}
-                  />
-                </div>
-              </div>
-            </SectionInput>
-          )}
-
           <BackgroundWidget value={data.background || { type: "solid", value: "#f5f5dc" }} onChange={v => upd("background", v)} />
         </>
       )}
@@ -626,7 +550,7 @@ export function AcaraPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const acaras: any[] = data.acaras || [];
   return (
-    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-4 relative" style={bg}>
+    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-4" style={bg}>
       {data.countdown_aktif && (() => {
         const idx = data.countdown_acara_index ?? 0;
         const targetEvent = acaras[idx];
@@ -640,73 +564,12 @@ export function AcaraPreview({ data }: { data: any }) {
           }
         }
         const targetDateTime = `${targetEvent.tanggal}T${timePart}`;
-
-        const safeTitle = data.setting_countdown_title || { size: "10px", color: "#ffffff", family: "Inter", position: "center" };
-        const safeNumber = data.setting_countdown_number || { size: "14px", color: "#064e3b", family: "Inter", position: "center" };
-        const safeLabel = data.setting_countdown_label || { size: "7px", color: "#d4af37", family: "Inter", position: "center" };
-        const safeCard = data.setting_countdown_card || { enabled: true, glassmorphism: true, bg_color: "rgba(255, 255, 255, 0.6)", border_color: "rgba(255, 255, 255, 0.8)", border_radius: "12px", padding: "16px", shadow: "none" };
-
-        const isCardEnabled = safeCard.enabled !== false;
-        
-        const cardStyles: React.CSSProperties = isCardEnabled
-          ? {
-              backgroundColor: safeCard.glassmorphism
-                ? "rgba(255, 255, 255, 0.15)"
-                : (safeCard.bg_color || "rgba(255, 255, 255, 0.6)"),
-              backdropFilter: safeCard.glassmorphism ? "blur(12px)" : undefined,
-              WebkitBackdropFilter: safeCard.glassmorphism ? "blur(12px)" : undefined,
-              borderColor: safeCard.glassmorphism
-                ? "rgba(255, 255, 255, 0.25)"
-                : (safeCard.border_color || "rgba(255, 255, 255, 0.8)"),
-              borderWidth: (safeCard.glassmorphism || safeCard.border_color !== "transparent") ? "1px" : "0px",
-              borderRadius: safeCard.border_radius || "12px",
-              padding: safeCard.padding || "16px",
-              boxShadow: safeCard.shadow || "none",
-              width: safeCard.width || "100%",
-              minHeight: safeCard.height || "auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "0.375rem",
-              textAlign: "center",
-            }
-          : {
-              backgroundColor: "transparent",
-              borderWidth: "0px",
-              padding: "8px",
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "0.375rem",
-              textAlign: "center",
-            };
-
-        const positionStyles: React.CSSProperties = {};
-        if (safeTitle.position === "custom") {
-          positionStyles.position = "absolute";
-          positionStyles.left = `${safeTitle.x ?? 50}%`;
-          positionStyles.top = `${safeTitle.y ?? 50}%`;
-          positionStyles.transform = "translate(-50%, -50%)";
-          positionStyles.zIndex = 10;
-        }
-
-        const combinedStyles = { ...cardStyles, ...positionStyles };
-
         return (
-          <div style={combinedStyles}>
-            <div 
-              style={getEventElementStyle(safeTitle, { size: "10px", color: "#ffffff", family: "Inter", position: "center" })}
-              className="text-[10px] font-black uppercase tracking-wider"
-            >
+          <div className="space-y-1.5 text-center py-2">
+            <div className="text-[10px] font-black uppercase tracking-wider opacity-60 text-white">
               Hitung Mundur Acara
             </div>
-            <Countdown 
-              targetDateStr={targetDateTime} 
-              numberStyle={safeNumber} 
-              labelStyle={safeLabel} 
-              cardStyle={safeCard} 
-            />
+            <Countdown targetDateStr={targetDateTime} />
           </div>
         );
       })()}
