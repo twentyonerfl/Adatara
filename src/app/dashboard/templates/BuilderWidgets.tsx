@@ -55,8 +55,8 @@ export function FontSettingsWidget({
           <div className="flex gap-1.5 items-center">
             <input type="range" min="10" max="120" value={sizeVal}
               onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
-              className="flex-1 accent-[#d4af37] h-0.5 cursor-pointer" />
-            <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.size}</span>
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
+            <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
           </div>
         </div>
         <div>
@@ -90,8 +90,8 @@ export function FontSettingsWidget({
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.x}
                   onChange={e => onChange({ ...safeVal, x: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-0.5" />
-                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.x}%</span>
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safeVal.x}%</span>
               </div>
             </div>
             <div>
@@ -99,8 +99,8 @@ export function FontSettingsWidget({
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.y}
                   onChange={e => onChange({ ...safeVal, y: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-0.5" />
-                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.y}%</span>
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safeVal.y}%</span>
               </div>
             </div>
           </div>
@@ -125,9 +125,9 @@ export function FontSettingsWidget({
                   max="100" 
                   value={parseInt(safeVal.width) || 100}
                   onChange={e => onChange({ ...safeVal, width: e.target.value + "%" })}
-                  className="flex-1 accent-[#d4af37] h-0.5" 
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
                 />
-                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.width}</span>
+                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.width}</span>
               </div>
             </div>
             <div>
@@ -140,9 +140,9 @@ export function FontSettingsWidget({
                   step="0.1" 
                   value={parseFloat(safeVal.lineHeight) || 1.5}
                   onChange={e => onChange({ ...safeVal, lineHeight: e.target.value })}
-                  className="flex-1 accent-[#d4af37] h-0.5" 
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
                 />
-                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.lineHeight}</span>
+                <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.lineHeight}</span>
               </div>
             </div>
           </>
@@ -762,8 +762,8 @@ export function ButtonSettingsWidget({
             <div className="flex gap-1.5 items-center">
               <input type="range" min="8" max="40" value={parseInt(safeVal.size)}
                 onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
-                className="flex-1 accent-[#d4af37] h-0.5" />
-              <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80">{safeVal.size}</span>
+                className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+              <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
             </div>
           </div>
 
@@ -835,8 +835,8 @@ export function ButtonSettingsWidget({
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.x}
                   onChange={e => onChange({ ...safeVal, x: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-0.5" />
-                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.x}%</span>
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safeVal.x}%</span>
               </div>
             </div>
             <div>
@@ -844,8 +844,8 @@ export function ButtonSettingsWidget({
               <div className="flex items-center gap-1.5">
                 <input type="range" min="0" max="100" value={safeVal.y}
                   onChange={e => onChange({ ...safeVal, y: parseInt(e.target.value) })}
-                  className="flex-1 accent-[#d4af37] h-0.5" />
-                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80">{safeVal.y}%</span>
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safeVal.y}%</span>
               </div>
             </div>
           </div>
@@ -975,9 +975,9 @@ export function CardSettingsWidget({
                     max="450" 
                     value={parseInt(safeVal.width) || 320}
                     onChange={e => onChange({ ...safeVal, width: e.target.value + "px" })}
-                    className="flex-1 accent-[#d4af37] h-0.5" 
+                    className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
                   />
-                  <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeVal.width}</span>
+                  <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safeVal.width}</span>
                 </div>
               )}
             </div>
@@ -1000,9 +1000,9 @@ export function CardSettingsWidget({
                     max="600" 
                     value={parseInt(safeVal.height) || 300}
                     onChange={e => onChange({ ...safeVal, height: e.target.value + "px" })}
-                    className="flex-1 accent-[#d4af37] h-0.5" 
+                    className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
                   />
-                  <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeVal.height}</span>
+                  <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safeVal.height}</span>
                 </div>
               )}
             </div>
@@ -1229,9 +1229,9 @@ export function PhotoStyleWidget({
               max="300" 
               value={parseInt(safeWidth) || 120}
               onChange={e => onChange({ bingkai: safeBingkai, width: e.target.value + "px", height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-0.5" 
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeWidth}</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safeWidth}</span>
           </div>
         </div>
 
@@ -1244,9 +1244,9 @@ export function PhotoStyleWidget({
               max="300" 
               value={parseInt(safeHeight) || 120}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: e.target.value + "px", overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-0.5" 
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safeHeight}</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safeHeight}</span>
           </div>
         </div>
 
@@ -1263,9 +1263,9 @@ export function PhotoStyleWidget({
               max="200" 
               value={safePhotoScale}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: parseInt(e.target.value), photo_x: safePhotoX, photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-0.5" 
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safePhotoScale}%</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safePhotoScale}%</span>
           </div>
         </div>
 
@@ -1278,9 +1278,9 @@ export function PhotoStyleWidget({
               max="100" 
               value={safePhotoX}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: parseInt(e.target.value), photo_y: safePhotoY })}
-              className="flex-1 accent-[#d4af37] h-0.5" 
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safePhotoX}px</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safePhotoX}px</span>
           </div>
         </div>
 
@@ -1293,9 +1293,9 @@ export function PhotoStyleWidget({
               max="100" 
               value={safePhotoY}
               onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: parseInt(e.target.value) })}
-              className="flex-1 accent-[#d4af37] h-0.5" 
+              className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
-            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80">{safePhotoY}px</span>
+            <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safePhotoY}px</span>
           </div>
         </div>
       </div>
