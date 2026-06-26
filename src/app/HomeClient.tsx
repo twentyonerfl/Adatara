@@ -1301,7 +1301,7 @@ export default function HomeClient({
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6 items-stretch"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-8 sm:gap-4 md:gap-6 items-stretch"
           >
             {Object.keys(activePackages).map((key) => {
               const pkg = activePackages[key];
@@ -1329,7 +1329,7 @@ export default function HomeClient({
                   key={key}
                   variants={itemVariants}
                   whileHover={{ y: -8 }}
-                  className="border rounded-xl sm:rounded-3xl p-2 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 backdrop-blur-md bg-emerald-950/15 border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+                  className="border rounded-xl sm:rounded-3xl p-3.5 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 backdrop-blur-md bg-emerald-950/15 border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
                 >
                   {badgeText && (
                     <div className={`absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest shadow-sm ${badgeColorClass}`}>
