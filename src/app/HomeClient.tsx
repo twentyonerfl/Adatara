@@ -1001,7 +1001,7 @@ export default function HomeClient({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3 }}
                   key={template.id}
-                  className="group bg-white border custom-border-color hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="group bg-white border custom-border-color sm:hover:border-[#d4af37]/45 sm:hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
                 >
                   {/* Badges Header Bar */}
                   <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
@@ -1032,12 +1032,12 @@ export default function HomeClient({
                       <img
                         src={getSafeThumbnail(template.image)}
                         alt=""
-                        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out group-hover:scale-105"
+                        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out sm:group-hover:scale-105"
                       />
                     )}
 
                     {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
-                    <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04] z-10">
+                    <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10">
                       {(() => {
                         const parsedJson = typeof template.template_json === "string"
                           ? JSON.parse(template.template_json)
