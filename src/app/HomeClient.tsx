@@ -817,7 +817,7 @@ export default function HomeClient({
               </div>
               <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Pilih Template</h3>
               <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
-                Temukan desain undangan digital terindah dan favorit Anda dari katalog lengkap kami.
+                Pilih desain undangan digital terbaik dan favorit Anda dari katalog kami.
               </p>
             </motion.div>
 
@@ -832,7 +832,7 @@ export default function HomeClient({
               </div>
               <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Isi Data</h3>
               <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
-                Lengkapi seluruh informasi detail acara, profil mempelai, cerita cinta, dan galeri foto terbaik Anda.
+                Lengkapi detail acara, profil mempelai, cerita cinta, dan foto terbaik Anda.
               </p>
             </motion.div>
 
@@ -847,7 +847,7 @@ export default function HomeClient({
               </div>
               <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Payment</h3>
               <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
-                Lakukan pembayaran aman dan instan untuk mengaktifkan seluruh fitur premium undangan Anda.
+                Lakukan pembayaran instan untuk mengaktifkan semua fitur premium.
               </p>
             </motion.div>
 
@@ -862,7 +862,7 @@ export default function HomeClient({
               </div>
               <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Selesai</h3>
               <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
-                Undangan siap digunakan dan dibagikan secara instan kepada seluruh keluarga dan kerabat terdekat!
+                Undangan siap dibagikan secara instan kepada keluarga dan kerabat.
               </p>
             </motion.div>
           </div>
@@ -1151,7 +1151,7 @@ export default function HomeClient({
               </div>
               <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Real-Time Template Builder</h4>
               <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
-                Pilih dari 6 modul visual utama (Cover, Pembuka, Profil, Acara, Cerita/Galeri, RSVP). Edit teks, tata letak, warna, dan font secara instan.
+                Pilih & edit modul visual (Cover, Pembuka, Profil, Acara, Galeri, RSVP), teks, tata letak, warna, dan font secara instan.
               </p>
             </motion.div>
 
@@ -1174,7 +1174,7 @@ export default function HomeClient({
               </div>
               <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Audio Latar & Galeri Media</h4>
               <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
-                Tambahkan musik romantis dari library kami atau unggah file MP3 Anda sendiri. Dukungan galeri foto berformat Grid, Masonry, Carousel, hingga Pinterest style.
+                Gunakan musik latar pilihan (atau MP3 sendiri) dan galeri foto premium dengan berbagai pilihan gaya tampilan modern.
               </p>
             </motion.div>
 
@@ -1197,7 +1197,7 @@ export default function HomeClient({
               </div>
               <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">RSVP & Ucapan Real-Time</h4>
               <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
-                Tamu dapat melakukan konfirmasi kehadiran secara instan. Anda mendapatkan daftar rekapitulasi kehadiran (RSVP) langsung dari dashboard.
+                Terima konfirmasi kehadiran tamu secara langsung dan pantau daftar rekapitulasi RSVP dari dashboard Anda.
               </p>
             </motion.div>
 
@@ -1220,7 +1220,7 @@ export default function HomeClient({
               </div>
               <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Kado & Amplop Digital</h4>
               <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
-                Sediakan nomor rekening bank, e-wallet, atau barcode QRIS di dalam undangan untuk memudahkan tamu mengirimkan kado/amplop secara cashless.
+                Sediakan nomor rekening bank, e-wallet, atau QRIS untuk memudahkan tamu mengirimkan hadiah secara nontunai (cashless).
               </p>
             </motion.div>
 
@@ -1243,7 +1243,7 @@ export default function HomeClient({
               </div>
               <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Petunjuk Lokasi & Kalender</h4>
               <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
-                Tamu Anda tidak akan tersesat berkat peta interaktif Google Maps. Dilengkapi fitur pencatatan otomatis di Google Calendar.
+                Peta Google Maps interaktif dan navigasi rute lengkap untuk memastikan tamu Anda tidak salah lokasi.
               </p>
             </motion.div>
 
@@ -1266,7 +1266,7 @@ export default function HomeClient({
               </div>
               <h4 className="text-[10px] sm:text-base md:text-xl font-black mb-1.5 md:mb-3 custom-text-color tracking-tight custom-feature-title leading-snug">Countdown Hitung Mundur</h4>
               <p className="opacity-75 text-[9px] sm:text-xs md:text-sm leading-relaxed custom-text-color font-medium">
-                Tampilkan penghitung waktu mundur otomatis yang presisi hingga detik dimulainya acara utama untuk membangkitkan antusiasme tamu.
+                Penghitung waktu mundur otomatis hingga hari bahagia untuk membangkitkan antusiasme para undangan.
               </p>
             </motion.div>
           </motion.div>
