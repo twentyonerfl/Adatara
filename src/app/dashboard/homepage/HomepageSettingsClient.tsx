@@ -4,19 +4,19 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateHomepageSettings } from "./homepage-actions";
 import { motion } from "framer-motion";
-import { 
-  Sparkles, 
-  Save, 
-  Plus, 
-  Trash2, 
-  ArrowUp, 
-  ArrowDown, 
-  Image as ImageIcon, 
-  Smartphone, 
-  Layout, 
-  Paintbrush, 
-  Upload, 
-  Check, 
+import {
+  Sparkles,
+  Save,
+  Plus,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  Image as ImageIcon,
+  Smartphone,
+  Layout,
+  Paintbrush,
+  Upload,
+  Check,
   Loader2,
   ArrowRight,
   HelpCircle,
@@ -309,11 +309,10 @@ export default function HomepageSettingsClient({
 
       {/* Alert message */}
       {message && (
-        <div className={`p-4 rounded-xl border text-sm font-bold flex items-center gap-3 ${
-          message.type === "success" 
-            ? "bg-emerald-50 border-emerald-200 text-emerald-800" 
-            : "bg-red-50 border-red-200 text-red-800"
-        }`}>
+        <div className={`p-4 rounded-xl border text-sm font-bold flex items-center gap-3 ${message.type === "success"
+          ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+          : "bg-red-50 border-red-200 text-red-800"
+          }`}>
           <div className={`w-2 h-2 rounded-full ${message.type === "success" ? "bg-emerald-500" : "bg-red-500"}`} />
           {message.text}
         </div>
@@ -323,33 +322,30 @@ export default function HomepageSettingsClient({
       <div className="flex border-b border-[#064e3b]/10 gap-1 overflow-x-auto pb-px">
         <button
           onClick={() => setActiveTab("hero")}
-          className={`flex items-center gap-2 px-5 py-3 text-xs font-black tracking-wider uppercase border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === "hero"
-              ? "border-[#d4af37] text-[#064e3b] bg-white/40"
-              : "border-transparent text-[#064e3b]/60 hover:text-[#064e3b]"
-          }`}
+          className={`flex items-center gap-2 px-5 py-3 text-xs font-black tracking-wider uppercase border-b-2 transition-all cursor-pointer whitespace-nowrap ${activeTab === "hero"
+            ? "border-[#d4af37] text-[#064e3b] bg-white/40"
+            : "border-transparent text-[#064e3b]/60 hover:text-[#064e3b]"
+            }`}
         >
           <Sparkles className="w-4 h-4 text-[#d4af37]" />
           1. Hero & Tombol
         </button>
         <button
           onClick={() => setActiveTab("background")}
-          className={`flex items-center gap-2 px-5 py-3 text-xs font-black tracking-wider uppercase border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === "background"
-              ? "border-[#d4af37] text-[#064e3b] bg-white/40"
-              : "border-transparent text-[#064e3b]/60 hover:text-[#064e3b]"
-          }`}
+          className={`flex items-center gap-2 px-5 py-3 text-xs font-black tracking-wider uppercase border-b-2 transition-all cursor-pointer whitespace-nowrap ${activeTab === "background"
+            ? "border-[#d4af37] text-[#064e3b] bg-white/40"
+            : "border-transparent text-[#064e3b]/60 hover:text-[#064e3b]"
+            }`}
         >
           <Paintbrush className="w-4 h-4 text-[#d4af37]" />
           2. Warna & Latar Belakang
         </button>
         <button
           onClick={() => setActiveTab("emulator")}
-          className={`flex items-center gap-2 px-5 py-3 text-xs font-black tracking-wider uppercase border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-            activeTab === "emulator"
-              ? "border-[#d4af37] text-[#064e3b] bg-white/40"
-              : "border-transparent text-[#064e3b]/60 hover:text-[#064e3b]"
-          }`}
+          className={`flex items-center gap-2 px-5 py-3 text-xs font-black tracking-wider uppercase border-b-2 transition-all cursor-pointer whitespace-nowrap ${activeTab === "emulator"
+            ? "border-[#d4af37] text-[#064e3b] bg-white/40"
+            : "border-transparent text-[#064e3b]/60 hover:text-[#064e3b]"
+            }`}
         >
           <Smartphone className="w-4 h-4 text-[#d4af37]" />
           3. Emulator Slider ({covers.length})
@@ -359,12 +355,12 @@ export default function HomepageSettingsClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Forms Area (Left 7 Cols) */}
         <div className="lg:col-span-7 bg-white border border-[#064e3b]/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
-          
+
           {/* TAB 1: HERO SETTINGS */}
           {activeTab === "hero" && (
             <div className="space-y-5">
               <h3 className="text-base font-black border-b border-[#064e3b]/10 pb-2">Kustom Konten Hero Utama</h3>
-              
+
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase text-[#064e3b]/60">Judul Utama (Heading)</label>
                 <textarea
@@ -433,11 +429,10 @@ export default function HomepageSettingsClient({
                           key={align}
                           type="button"
                           onClick={() => setHeroTitleAlign(align)}
-                          className={`py-1 text-[10px] font-black uppercase rounded transition-all cursor-pointer ${
-                            heroTitleAlign === align
-                              ? "bg-white text-[#064e3b] shadow-sm"
-                              : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                          }`}
+                          className={`py-1 text-[10px] font-black uppercase rounded transition-all cursor-pointer ${heroTitleAlign === align
+                            ? "bg-white text-[#064e3b] shadow-sm"
+                            : "text-[#064e3b]/60 hover:text-[#064e3b]"
+                            }`}
                         >
                           {align === "left" ? "Kiri" : align === "center" ? "Tengah" : "Kanan"}
                         </button>
@@ -524,11 +519,10 @@ export default function HomepageSettingsClient({
                           key={align}
                           type="button"
                           onClick={() => setHeroSubtitleAlign(align)}
-                          className={`py-1 text-[10px] font-black uppercase rounded transition-all cursor-pointer ${
-                            heroSubtitleAlign === align
-                              ? "bg-white text-[#064e3b] shadow-sm"
-                              : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                          }`}
+                          className={`py-1 text-[10px] font-black uppercase rounded transition-all cursor-pointer ${heroSubtitleAlign === align
+                            ? "bg-white text-[#064e3b] shadow-sm"
+                            : "text-[#064e3b]/60 hover:text-[#064e3b]"
+                            }`}
                         >
                           {align === "left" ? "Kiri" : align === "center" ? "Tengah" : "Kanan"}
                         </button>
@@ -622,10 +616,10 @@ export default function HomepageSettingsClient({
               <div className="border-t border-[#064e3b]/10 pt-5 space-y-4">
                 <h4 className="text-xs font-black uppercase tracking-wider text-[#064e3b]/80 flex items-center gap-1.5">
                   <HelpCircle className="w-4 h-4 text-[#d4af37]" />
-                  Tombol WhatsApp Mengambang (Floating Chat)
+                  Tombol WhatsApp
                 </h4>
                 <div className="space-y-2">
-                  <label className="text-xs font-black uppercase text-[#064e3b]/60">Nomor WhatsApp Penerima</label>
+                  <label className="text-xs font-black uppercase text-[#064e3b]/60">Nomor WhatsApp Admin</label>
                   <input
                     type="text"
                     value={whatsappNumber}
@@ -643,7 +637,7 @@ export default function HomepageSettingsClient({
           {activeTab === "background" && (
             <div className="space-y-5">
               <h3 className="text-base font-black border-b border-[#064e3b]/10 pb-2">Kustom Warna & Latar Belakang</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* 1. Page Background */}
                 <div className="space-y-2">
@@ -651,7 +645,7 @@ export default function HomepageSettingsClient({
                     Background Hero
                   </label>
                   <div className="flex items-center gap-3">
-                    <div 
+                    <div
                       className="w-10 h-10 rounded-xl border border-[#064e3b]/15 shadow-sm relative overflow-hidden transition-all hover:scale-105 hover:shadow-md cursor-pointer shrink-0"
                       style={{ backgroundColor: bgColor }}
                     >
@@ -677,7 +671,7 @@ export default function HomepageSettingsClient({
                     Warna Accent / Emas
                   </label>
                   <div className="flex items-center gap-3">
-                    <div 
+                    <div
                       className="w-10 h-10 rounded-xl border border-[#064e3b]/15 shadow-sm relative overflow-hidden transition-all hover:scale-105 hover:shadow-md cursor-pointer shrink-0"
                       style={{ backgroundColor: accentColor }}
                     >
@@ -703,7 +697,7 @@ export default function HomepageSettingsClient({
                     Background Statistik
                   </label>
                   <div className="flex items-center gap-3">
-                    <div 
+                    <div
                       className="w-10 h-10 rounded-xl border border-[#064e3b]/15 shadow-sm relative overflow-hidden transition-all hover:scale-105 hover:shadow-md cursor-pointer shrink-0"
                       style={{ backgroundColor: statsBgColor }}
                     >
@@ -770,7 +764,7 @@ export default function HomepageSettingsClient({
               {bgImage && (
                 <div className="space-y-4 border-t border-[#064e3b]/5 pt-4">
                   <h4 className="text-xs font-black uppercase text-[#064e3b]/80">Efek Layer & Pola (Custom)</h4>
-                  
+
                   {/* Pattern Opacity Slider */}
                   <div className="space-y-1">
                     <div className="flex justify-between items-center text-xs font-bold">
@@ -859,11 +853,10 @@ export default function HomepageSettingsClient({
                 {covers.map((slide, idx) => (
                   <div
                     key={idx}
-                    className={`border rounded-2xl p-4 sm:p-5 transition-all space-y-4 ${
-                      activeSlidePreviewIdx === idx
-                        ? "bg-[#064e3b]/5 border-[#d4af37]"
-                        : "bg-white border-[#064e3b]/10 hover:border-[#064e3b]/20"
-                    }`}
+                    className={`border rounded-2xl p-4 sm:p-5 transition-all space-y-4 ${activeSlidePreviewIdx === idx
+                      ? "bg-[#064e3b]/5 border-[#d4af37]"
+                      : "bg-white border-[#064e3b]/10 hover:border-[#064e3b]/20"
+                      }`}
                   >
                     {/* Slide Header */}
                     <div className="flex items-center justify-between gap-3">
@@ -1011,7 +1004,7 @@ export default function HomepageSettingsClient({
             </h3>
 
             {/* LIVE DYNAMIC BACKGROUND CANVAS PREVIEW */}
-            <div 
+            <div
               className="w-full rounded-2xl border p-5 relative overflow-hidden transition-all shadow-inner min-h-[480px] flex flex-col justify-between"
               style={{
                 backgroundColor: bgColor,
@@ -1021,7 +1014,7 @@ export default function HomepageSettingsClient({
             >
               {/* 1. Dynamic Background Pattern Layer */}
               {bgImage && (
-                <div 
+                <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
                     backgroundImage: `url(${bgImage})`,
@@ -1036,7 +1029,7 @@ export default function HomepageSettingsClient({
               )}
 
               {/* 2. Dynamic Gradient Blend Layer */}
-              <div 
+              <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   background: `linear-gradient(to bottom, 
@@ -1049,12 +1042,12 @@ export default function HomepageSettingsClient({
               {/* 3. Dynamic Glow Spheres */}
               {bgGradient && (
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
-                  <div 
-                    className="absolute -top-10 -left-10 w-44 h-44 blur-2xl rounded-full opacity-30" 
+                  <div
+                    className="absolute -top-10 -left-10 w-44 h-44 blur-2xl rounded-full opacity-30"
                     style={{ backgroundColor: accentColor }}
                   />
-                  <div 
-                    className="absolute top-1/4 -right-10 w-48 h-48 blur-2xl rounded-full opacity-20" 
+                  <div
+                    className="absolute top-1/4 -right-10 w-48 h-48 blur-2xl rounded-full opacity-20"
                     style={{ backgroundColor: accentColor }}
                   />
                 </div>
@@ -1063,29 +1056,28 @@ export default function HomepageSettingsClient({
               {/* Contents Area (Above background layers) */}
               <div className="relative space-y-4 text-center flex flex-col items-center justify-between h-full" style={{ zIndex: 10 }}>
                 {/* Simulated Heading & Texts */}
-                <div className={`space-y-1.5 max-w-[280px] w-full flex flex-col ${
-                  heroTitleAlign === "center" 
-                    ? "items-center text-center" 
-                    : heroTitleAlign === "right" 
-                    ? "items-end text-right" 
+                <div className={`space-y-1.5 max-w-[280px] w-full flex flex-col ${heroTitleAlign === "center"
+                  ? "items-center text-center"
+                  : heroTitleAlign === "right"
+                    ? "items-end text-right"
                     : "items-start text-left"
-                }`}>
-                  <h4 
+                  }`}>
+                  <h4
                     className="font-bold tracking-tight leading-tight"
-                    style={{ 
+                    style={{
                       color: heroTitleColor,
                       fontFamily: heroTitleFont,
                       fontSize: `${Math.max(12, Math.round(heroTitleSize / 3))}px`,
                       textAlign: heroTitleAlign as any,
                       textShadow: "0 1px 2px rgba(0,0,0,0.06)"
                     }}
-                    dangerouslySetInnerHTML={{ 
-                      __html: heroTitle.replace(/text-accent/g, "font-black").replace(/class="text-\[#d4af37\]"/g, `style="color: ${accentColor}"`) 
+                    dangerouslySetInnerHTML={{
+                      __html: heroTitle.replace(/text-accent/g, "font-black").replace(/class="text-\[#d4af37\]"/g, `style="color: ${accentColor}"`)
                     }}
                   />
-                  <p 
+                  <p
                     className="opacity-75 font-medium line-clamp-2 leading-relaxed"
-                    style={{ 
+                    style={{
                       color: heroSubtitleColor,
                       fontFamily: heroSubtitleFont,
                       fontSize: `${Math.max(8, Math.round(heroSubtitleSize / 1.8))}px`,
@@ -1095,25 +1087,25 @@ export default function HomepageSettingsClient({
                   >
                     {heroSubtitle}
                   </p>
-                  
+
                   {/* Mock CTA buttons in preview */}
                   <div className="flex gap-2 justify-center pt-1">
-                    <span 
+                    <span
                       className="px-3 py-1 rounded-md text-[8px] font-black tracking-wider uppercase border"
-                      style={{ 
-                        backgroundColor: "#064e3b", 
-                        color: bgColor, 
-                        borderColor: accentColor + "80" 
+                      style={{
+                        backgroundColor: "#064e3b",
+                        color: bgColor,
+                        borderColor: accentColor + "80"
                       }}
                     >
                       {heroCtaText}
                     </span>
-                    <span 
+                    <span
                       className="px-3 py-1 rounded-md text-[8px] font-black tracking-wider uppercase border"
-                      style={{ 
-                        backgroundColor: "transparent", 
-                        color: "#064e3b", 
-                        borderColor: "#064e3b33" 
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "#064e3b",
+                        borderColor: "#064e3b33"
                       }}
                     >
                       {heroDemoText}
@@ -1122,7 +1114,7 @@ export default function HomepageSettingsClient({
                 </div>
 
                 {/* Smartphone Emulator Shell with subtle float animation */}
-                <motion.div 
+                <motion.div
                   animate={{ y: [0, -4, 0] }}
                   transition={{
                     duration: 5,
@@ -1131,7 +1123,7 @@ export default function HomepageSettingsClient({
                   }}
                   className="relative w-[185px] aspect-[9/18.5] bg-[#0c1322] rounded-[28px] p-1 shadow-2xl border-[2px] border-[#222f46] flex flex-col justify-between mt-3"
                 >
-                  
+
                   {/* Notch */}
                   <div className="absolute top-1 left-1/2 -translate-x-1/2 w-16 h-2.5 bg-[#0c1322] rounded-full z-30 flex items-center justify-between px-2">
                     <div className="w-0.5 h-0.5 rounded-full bg-slate-900" />
@@ -1153,7 +1145,7 @@ export default function HomepageSettingsClient({
                         {/* Decorative border */}
                         <div className="absolute top-1.5 left-1.5 w-8 h-8 border-t border-l pointer-events-none" style={{ borderColor: accentColor + "33" }} />
                         <div className="absolute bottom-1.5 right-1.5 w-8 h-8 border-b border-r pointer-events-none" style={{ borderColor: accentColor + "33" }} />
-                        
+
                         <div className="space-y-1.5 max-w-[130px] my-auto relative z-10 text-white">
                           {covers[activeSlidePreviewIdx].badge && (
                             <div className="inline-block px-1.5 py-0.25 rounded text-[5px] font-bold tracking-widest uppercase"
@@ -1188,11 +1180,10 @@ export default function HomepageSettingsClient({
                         <span
                           key={i}
                           onClick={() => setActiveSlidePreviewIdx(i)}
-                          className={`w-1 h-1 rounded-full cursor-pointer transition-all ${
-                            activeSlidePreviewIdx === i 
-                              ? "w-2.5 bg-white" 
-                              : "bg-white/40 hover:bg-white/60"
-                          }`}
+                          className={`w-1 h-1 rounded-full cursor-pointer transition-all ${activeSlidePreviewIdx === i
+                            ? "w-2.5 bg-white"
+                            : "bg-white/40 hover:bg-white/60"
+                            }`}
                         />
                       ))}
                     </div>
