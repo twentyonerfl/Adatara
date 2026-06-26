@@ -802,15 +802,14 @@ export default function HomeClient({
           </div>
 
           {/* Steps Grid */}
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-6 md:gap-8 relative">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 md:gap-8 relative">
             {/* Connecting line for desktop/tablet */}
             <div className="hidden sm:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-emerald-100 via-[#d4af37]/35 to-emerald-100 -translate-y-10 z-0" />
 
             {/* Step 1 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
               <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 01
@@ -824,8 +823,7 @@ export default function HomeClient({
             {/* Step 2 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
               <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 02
@@ -839,8 +837,7 @@ export default function HomeClient({
             {/* Step 3 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
               <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 03
@@ -854,8 +851,7 @@ export default function HomeClient({
             {/* Step 4 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -8 }}
-              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-1.5 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 transition-all duration-300 shadow-sm hover:shadow-md"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
               <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 04
@@ -1135,8 +1131,7 @@ export default function HomeClient({
             {/* Feature Card 1 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1158,8 +1153,7 @@ export default function HomeClient({
             {/* Feature Card 2 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1181,8 +1175,7 @@ export default function HomeClient({
             {/* Feature Card 3 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1204,8 +1197,7 @@ export default function HomeClient({
             {/* Feature Card 4 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1227,8 +1219,7 @@ export default function HomeClient({
             {/* Feature Card 5 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1250,8 +1241,7 @@ export default function HomeClient({
             {/* Feature Card 6 */}
             <motion.div
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1329,8 +1319,7 @@ export default function HomeClient({
                 <motion.div
                   key={key}
                   variants={itemVariants}
-                  whileHover={{ y: -8 }}
-                  className="border rounded-xl sm:rounded-3xl p-3.5 sm:p-5 md:p-8 flex flex-col relative shadow-xl transition-all duration-500 backdrop-blur-md bg-emerald-950/15 border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
+                  className="border rounded-xl sm:rounded-3xl p-3.5 sm:p-5 md:p-8 flex flex-col relative shadow-xl hover:-translate-y-1.5 transition-all duration-500 backdrop-blur-md bg-emerald-950/15 border-emerald-900/50 hover:border-emerald-700 hover:shadow-emerald-950/10"
                 >
                   {badgeText && (
                     <div className={`absolute top-0 right-3 sm:right-8 -translate-y-1/2 text-[6px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-3 sm:py-1 rounded-full uppercase tracking-widest shadow-sm ${badgeColorClass}`}>
