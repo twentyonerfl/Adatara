@@ -875,7 +875,7 @@ export default function HomeClient({
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col mb-8 text-left items-start">
-            <span className="text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10 w-max">
+            <span className="text-[10px] font-extrabold custom-text-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10 w-max">
               Galeri Desain
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
@@ -1115,7 +1115,7 @@ export default function HomeClient({
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-16 relative z-10"
           >
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-text-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
               Fitur Unggulan
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
@@ -1401,7 +1401,7 @@ export default function HomeClient({
             transition={{ duration: 0.6 }}
             className="text-center mb-8 sm:mb-16 max-w-3xl mx-auto"
           >
-            <span className="inline-flex items-center gap-1.5 text-[9px] sm:text-[10px] font-extrabold custom-accent-color uppercase tracking-widest bg-[#064e3b]/5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-[#064e3b]/10">
+            <span className="inline-flex items-center gap-1.5 text-[9px] sm:text-[10px] font-extrabold custom-text-color uppercase tracking-widest bg-[#064e3b]/5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-[#064e3b]/10">
               <HelpCircle className="w-3.5 h-3.5" /> Tanya Jawab
             </span>
             <h2 className="text-lg sm:text-4xl font-extrabold mt-3 sm:mt-4 custom-text-color tracking-tight leading-tight">
