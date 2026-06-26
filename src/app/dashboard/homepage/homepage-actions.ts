@@ -58,7 +58,8 @@ export async function getHomepageSettings() {
           hero_subtitle_size: 16,
           hero_subtitle_align: "left",
           stats_bg_color: "#064e3b",
-          emulator_covers: JSON.stringify(defaultCovers)
+          emulator_covers: JSON.stringify(defaultCovers),
+          whatsapp_number: "082262278182"
         }
       });
     }
@@ -94,6 +95,7 @@ interface UpdateSettingsData {
   hero_subtitle_align: string;
   stats_bg_color: string;
   emulator_covers: string; // JSON string
+  whatsapp_number: string;
 }
 
 export async function updateHomepageSettings(data: UpdateSettingsData) {
@@ -128,7 +130,8 @@ export async function updateHomepageSettings(data: UpdateSettingsData) {
           hero_subtitle_size: data.hero_subtitle_size,
           hero_subtitle_align: data.hero_subtitle_align,
           stats_bg_color: data.stats_bg_color,
-          emulator_covers: data.emulator_covers
+          emulator_covers: data.emulator_covers,
+          whatsapp_number: data.whatsapp_number
         }
       });
     } else {
@@ -158,7 +161,8 @@ export async function updateHomepageSettings(data: UpdateSettingsData) {
           hero_subtitle_size: data.hero_subtitle_size,
           hero_subtitle_align: data.hero_subtitle_align,
           stats_bg_color: data.stats_bg_color,
-          emulator_covers: data.emulator_covers
+          emulator_covers: data.emulator_covers,
+          whatsapp_number: data.whatsapp_number
         }
       });
     }

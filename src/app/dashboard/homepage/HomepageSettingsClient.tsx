@@ -57,6 +57,7 @@ interface HomepageSettings {
   hero_subtitle_align?: string | null;
   stats_bg_color?: string | null;
   emulator_covers: string; // JSON string
+  whatsapp_number?: string | null;
 }
 
 function hexToRgba(hex: string, alpha: number) {
@@ -84,6 +85,7 @@ export default function HomepageSettingsClient({
   const [heroCtaUrl, setHeroCtaUrl] = useState(initialSettings.hero_cta_url);
   const [heroDemoText, setHeroDemoText] = useState(initialSettings.hero_demo_text);
   const [heroDemoUrl, setHeroDemoUrl] = useState(initialSettings.hero_demo_url);
+  const [whatsappNumber, setWhatsappNumber] = useState(initialSettings.whatsapp_number || "082262278182");
 
   const [bgColor, setBgColor] = useState(initialSettings.bg_color);
   const [textColor, setTextColor] = useState(initialSettings.text_color);
@@ -264,7 +266,8 @@ export default function HomepageSettingsClient({
         hero_subtitle_color: heroSubtitleColor,
         hero_subtitle_size: heroSubtitleSize,
         hero_subtitle_align: heroSubtitleAlign,
-        emulator_covers: JSON.stringify(covers)
+        emulator_covers: JSON.stringify(covers),
+        whatsapp_number: whatsappNumber
       });
 
       if (result.error) {
@@ -612,6 +615,25 @@ export default function HomepageSettingsClient({
                     onChange={(e) => setHeroDemoUrl(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-[#064e3b]/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] outline-none text-sm font-semibold bg-[#f5f5dc]/10 text-[#064e3b]"
                   />
+                </div>
+              </div>
+
+              {/* FLOATING WHATSAPP BUTTON SETTING */}
+              <div className="border-t border-[#064e3b]/10 pt-5 space-y-4">
+                <h4 className="text-xs font-black uppercase tracking-wider text-[#064e3b]/80 flex items-center gap-1.5">
+                  <HelpCircle className="w-4 h-4 text-[#d4af37]" />
+                  Tombol WhatsApp Mengambang (Floating Chat)
+                </h4>
+                <div className="space-y-2">
+                  <label className="text-xs font-black uppercase text-[#064e3b]/60">Nomor WhatsApp Penerima</label>
+                  <input
+                    type="text"
+                    value={whatsappNumber}
+                    onChange={(e) => setWhatsappNumber(e.target.value)}
+                    placeholder="Contoh: 082262278182"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#064e3b]/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] outline-none text-sm font-bold bg-[#f5f5dc]/10 text-[#064e3b]"
+                  />
+                  <p className="text-[10px] text-[#064e3b]/40">Masukkan nomor WhatsApp aktif Anda (awalan 0 atau 62). Sistem otomatis memformatnya ketika dihubungi.</p>
                 </div>
               </div>
             </div>
