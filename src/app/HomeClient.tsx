@@ -1618,6 +1618,28 @@ export default function HomeClient({
           </div>
         </div>
       </footer>
+
+      {/* FLOATING WHATSAPP BUTTON */}
+      <a
+        href="https://wa.me/6282262278182?text=Halo%20Adatara,%20saya%20ingin%20tanya-tanya%20tentang%20undangan%20digital."
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] hover:bg-[#20ba56] text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
+        aria-label="Hubungi kami melalui WhatsApp"
+      >
+        {/* Pulsing Outer Halo */}
+        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-40 animate-ping group-hover:animate-none pointer-events-none" />
+        
+        {/* Official WhatsApp Logo SVG */}
+        <svg viewBox="0 0 24 24" className="w-6 h-6 sm:w-7 sm:h-7 fill-current z-10" xmlns="http://www.w3.org/2000/svg">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.731-1.464L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.858.002-2.634-1.02-5.11-2.881-6.974-1.86-1.865-4.343-2.89-6.984-2.895-5.45 0-9.88 4.425-9.885 9.868-.001 1.777.467 3.51 1.358 5.052l-.993 3.63 3.713-.974zm11.005-7.391c-.279-.14-1.647-.812-1.902-.903-.255-.092-.44-.137-.626.141-.186.279-.722.903-.885 1.089-.163.186-.325.21-.604.07-.279-.14-1.18-.435-2.246-1.385-.83-.741-1.39-1.655-1.553-1.934-.163-.28-.018-.431.122-.571.125-.125.279-.325.419-.489.14-.163.186-.279.279-.465.093-.186.046-.349-.023-.489-.069-.14-.626-1.508-.857-2.063-.224-.54-.471-.466-.647-.475-.168-.008-.36-.01-.552-.01-.192 0-.505.072-.769.36-.264.288-1.007.985-1.007 2.4 0 1.416 1.031 2.784 1.176 2.98.145.195 2.03 3.099 4.916 4.34.687.296 1.224.473 1.643.606.69.219 1.319.189 1.815.115.553-.083 1.647-.673 1.88-1.32.233-.647.233-1.202.163-1.32-.07-.117-.255-.186-.534-.326z"/>
+        </svg>
+
+        {/* Hover Tooltip/Label */}
+        <span className="absolute right-14 sm:right-16 top-1/2 -translate-y-1/2 bg-white text-[#064e3b] text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-full shadow-lg border border-[#064e3b]/10 whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 pointer-events-none hidden md:block">
+          Hubungi Kami
+        </span>
+      </a>
     </div>
   );
 }
