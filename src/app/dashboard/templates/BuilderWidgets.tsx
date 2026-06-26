@@ -519,7 +519,7 @@ export function getBgStyle(bg: BgSettings): React.CSSProperties {
   if (!bg) return { backgroundColor: "#f5f5dc" };
   if (bg.type === "solid") return { backgroundColor: bg.value };
   if (bg.type === "gradient") return { background: `linear-gradient(${bg.direction || "to bottom"}, ${bg.value}, ${bg.gradient_to || "#fff"})` };
-  if (bg.type === "image") return { backgroundImage: `url(${bg.value})`, backgroundSize: "cover", backgroundPosition: "center" };
+  if (bg.type === "image") return { backgroundImage: `url(${bg.value})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" };
   return { backgroundColor: "#f5f5dc" };
 }
 

@@ -231,7 +231,7 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
                 </div>
 
                 {/* Thumbnail / Live Cover Preview */}
-                <div className="relative w-full aspect-square bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
+                <div className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
                   {/* Background Image of the catalog card container */}
                   {t.thumbnail && (
                     <img

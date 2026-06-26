@@ -165,7 +165,7 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                 </div>
 
                 {/* Thumbnail / Live Cover Preview */}
-                <div className="w-full aspect-square overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
+                <div className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
                    {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                     {hasCoverData ? (

@@ -286,7 +286,7 @@ export function TemplateListPublic({
                 </div>
 
                 {/* Thumbnail / Live Cover Preview Container */}
-                <div className="w-full aspect-square overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
+                <div className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
                   {/* Background Image of the catalog card container */}
                   {template.thumbnail && (
                     <img

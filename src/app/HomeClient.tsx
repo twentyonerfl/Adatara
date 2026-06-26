@@ -1024,7 +1024,7 @@ export default function HomeClient({
                   </div>
 
                   <div
-                    className="w-full aspect-square overflow-hidden relative flex items-center justify-center p-2.5"
+                    className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative flex items-center justify-center p-2.5"
                     style={{ backgroundColor: `${settings.text_color}08` }}
                   >
                     {/* Background Image of the catalog card container */}
