@@ -1122,7 +1122,7 @@ export default function HomeClient({
               Semua yang Anda Butuhkan untuk Undangan Sempurna
             </h2>
             <p className="text-[#064e3b]/70 text-xs sm:text-sm mt-3 font-medium">
-              Adatara dirancang dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan momen kebahagiaan Anda.
+              Dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan kebahagiaan Anda.
             </p>
           </motion.div>          <motion.div
             variants={containerVariants}
@@ -1306,7 +1306,7 @@ export default function HomeClient({
             {Object.keys(activePackages).map((key) => {
               const pkg = activePackages[key];
               if (!pkg) return null;
-              
+
               const isPopular = pkg.badgeStyle === "emerald";
               const isBasic = pkg.badgeStyle === "slate";
               const isSultan = pkg.badgeStyle === "amber";
@@ -1338,12 +1338,11 @@ export default function HomeClient({
                   )}
 
                   <div>
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider shadow-sm ${
-                      isBasic ? "bg-slate-800/60 text-slate-300 border border-slate-700/40" :
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-black uppercase tracking-wider shadow-sm ${isBasic ? "bg-slate-800/60 text-slate-300 border border-slate-700/40" :
                       isPopular ? "bg-emerald-900/50 text-emerald-300 border border-emerald-800/40" :
-                      isSultan ? "bg-[#451a03]/80 text-[#fef08a] border border-[#78350f]/40" :
-                      "bg-[#500010] text-[#ffe4e6] border border-[#700018]/50"
-                    }`}>
+                        isSultan ? "bg-[#451a03]/80 text-[#fef08a] border border-[#78350f]/40" :
+                          "bg-[#500010] text-[#ffe4e6] border border-[#700018]/50"
+                      }`}>
                       {pkg.name}
                     </span>
                     <h4 className="text-base sm:text-2xl md:text-4xl font-extrabold mt-2 md:mt-4 text-emerald-400">
@@ -1373,12 +1372,11 @@ export default function HomeClient({
 
                   <Link
                     href={`/register?plan=${key.toLowerCase()}`}
-                    className={`mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border ${
-                      isBasic ? "border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200" :
+                    className={`mt-4 md:mt-8 w-full py-2 sm:py-3 text-center rounded-lg md:rounded-xl text-[10px] sm:text-sm md:text-base font-bold transition-all border ${isBasic ? "border-emerald-700 bg-emerald-900/20 text-emerald-400 hover:bg-emerald-800/35 hover:text-emerald-200" :
                       isPopular ? "border-emerald-600 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-600/30 hover:text-emerald-200" :
-                      isSultan ? "border-[#78350f] bg-[#451a03]/20 text-[#d97706] hover:bg-[#78350f]/40 hover:text-white" :
-                      "border-[#700018] bg-[#500010]/20 text-[#ffe4e6] hover:bg-[#700018] hover:text-white"
-                    }`}
+                        isSultan ? "border-[#78350f] bg-[#451a03]/20 text-[#d97706] hover:bg-[#78350f]/40 hover:text-white" :
+                          "border-[#700018] bg-[#500010]/20 text-[#ffe4e6] hover:bg-[#700018] hover:text-white"
+                      }`}
                   >
                     {pkg.buttonText || (isBasic ? "Mulai Gratis" : "Pilih Paket")}
                   </Link>
