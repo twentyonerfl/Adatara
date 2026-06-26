@@ -1433,7 +1433,7 @@ export default function HomeClient({
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
-                    className="w-full px-6 py-5 flex items-center justify-between text-left font-bold custom-text-color transition-colors cursor-pointer group"
+                    className="w-full px-4 py-3.5 sm:px-6 sm:py-5 flex items-center justify-between text-left font-bold custom-text-color transition-colors cursor-pointer group"
                   >
                     <span className="flex items-center gap-3 pr-4">
                       <span className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isOpen
@@ -1442,7 +1442,7 @@ export default function HomeClient({
                         }`}>
                         <HelpCircle className="w-4 h-4" />
                       </span>
-                      <span className="text-base sm:text-lg font-black tracking-tight">{faq.tanya}</span>
+                      <span className="text-xs sm:text-lg font-black tracking-tight">{faq.tanya}</span>
                     </span>
                     <span className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-[#064e3b]/10" : "bg-transparent"
                       }`}>
@@ -1464,7 +1464,7 @@ export default function HomeClient({
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <div className="px-6 pb-6 pt-1 text-sm text-[#064e3b]/85 leading-relaxed font-medium pl-[52px]">
+                        <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-[#064e3b]/85 leading-relaxed font-medium pl-11 sm:pl-[52px]">
                           {faq.jawab}
                         </div>
                       </motion.div>
