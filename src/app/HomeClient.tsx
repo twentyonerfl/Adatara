@@ -1289,10 +1289,10 @@ export default function HomeClient({
               Paket Harga
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 text-white tracking-tight leading-tight">
-              Investasi Kecil untuk Momen Terindah
+              Pilihan Terbaik untuk Hari Bahagia Anda
             </h2>
             <p className="text-[#f5f5dc]/70 text-xs sm:text-sm mt-3 font-medium">
-              Tersedia paket langganan fleksibel tanpa biaya tersembunyi.
+              Temukan paket undangan digital yang tepat dengan harga transparan dan tanpa biaya tambahan.
             </p>
           </motion.div>
 
