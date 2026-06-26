@@ -232,8 +232,8 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
 
                 {/* Thumbnail / Live Cover Preview */}
                 <div className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
-                  {/* Background Image of the catalog card container */}
-                  {t.thumbnail && (
+                  {/* Background Image of the catalog card container (only fallback if no live preview data) */}
+                  {!hasCoverData && t.thumbnail && (
                     <img
                       src={getSafeThumbnail(t.thumbnail)}
                       alt=""

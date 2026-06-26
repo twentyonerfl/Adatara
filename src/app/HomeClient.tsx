@@ -995,55 +995,55 @@ export default function HomeClient({
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {filteredTemplates.map((template) => (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  key={template.id}
-                  className="group bg-white border custom-border-color sm:hover:border-[#d4af37]/45 sm:hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
-                >
-                  {/* Badges Header Bar */}
-                  <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
-                    {/* Package Tier Badge */}
-                    <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
-                      ? "bg-[#800020] text-white border-[#6a001a]"
-                      : template.paket === "SULTAN"
-                        ? "bg-[#78350f] text-[#fef08a] border-[#b45309]/40"
-                        : template.paket === "PREMIUM"
-                          ? "bg-emerald-600 text-white border-emerald-700"
-                          : "bg-slate-400 text-white border-slate-500"
-                      }`}>
-                      {template.paket || "BASIC"}
-                    </span>
-
-                    {/* Category Badge */}
-                    <span className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
-                      {template.kategori || "—"}
-                    </span>
-                  </div>
-
-                  <div
-                    className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative flex items-center justify-center p-2.5"
-                    style={{ backgroundColor: `${settings.text_color}08` }}
+              {filteredTemplates.map((template) => {
+                const parsedJson = typeof template.template_json === "string"
+                  ? JSON.parse(template.template_json)
+                  : template.template_json;
+                const coverData = parsedJson?.cover;
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    key={template.id}
+                    className="group bg-white border custom-border-color sm:hover:border-[#d4af37]/45 sm:hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md"
                   >
-                    {/* Background Image of the catalog card container */}
-                    {template.image && (
-                      <img
-                        src={getSafeThumbnail(template.image)}
-                        alt=""
-                        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out sm:group-hover:scale-105"
-                      />
-                    )}
+                    {/* Badges Header Bar */}
+                    <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
+                      {/* Package Tier Badge */}
+                      <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
+                        ? "bg-[#800020] text-white border-[#6a001a]"
+                        : template.paket === "SULTAN"
+                          ? "bg-[#78350f] text-[#fef08a] border-[#b45309]/40"
+                          : template.paket === "PREMIUM"
+                            ? "bg-emerald-600 text-white border-emerald-700"
+                            : "bg-slate-400 text-white border-slate-500"
+                        }`}>
+                        {template.paket || "BASIC"}
+                      </span>
 
-                    {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
-                    <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10">
-                      {(() => {
-                        const parsedJson = typeof template.template_json === "string"
-                          ? JSON.parse(template.template_json)
-                          : template.template_json;
-                        const coverData = parsedJson?.cover;
-                        return coverData ? (
+                      {/* Category Badge */}
+                      <span className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
+                        {template.kategori || "—"}
+                      </span>
+                    </div>
+
+                    <div
+                      className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative flex items-center justify-center p-2.5"
+                      style={{ backgroundColor: `${settings.text_color}08` }}
+                    >
+                      {/* Background Image of the catalog card container (only fallback if no live preview data) */}
+                      {!coverData && template.image && (
+                        <img
+                          src={getSafeThumbnail(template.image)}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out sm:group-hover:scale-105"
+                        />
+                      )}
+
+                      {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
+                      <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10">
+                        {coverData ? (
                           <ScaledCoverPreview
                             coverData={coverData}
                             meta={{ kategori: template.kategori, bahasa: "id" }}
@@ -1072,27 +1072,27 @@ export default function HomeClient({
                               </div>
                             </div>
                           </div>
-                        );
-                      })()}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-2 flex flex-col justify-between bg-white border-t custom-border-color">
-                    {/* Title */}
-                    <h4 className="text-[10px] font-extrabold custom-text-color tracking-wide group-hover:custom-accent-color transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
-                      {template.nama}
-                    </h4>
+                    <div className="p-2 flex flex-col justify-between bg-white border-t custom-border-color">
+                      {/* Title */}
+                      <h4 className="text-[10px] font-extrabold custom-text-color tracking-wide group-hover:custom-accent-color transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
+                        {template.nama}
+                      </h4>
 
-                    {/* Button */}
-                    <Link
-                      href={`/demo/${template.id}`}
-                      className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase custom-card-btn"
-                    >
-                      Live Demo
-                      <ArrowRight className="w-2.5 h-2.5" />
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+                      {/* Button */}
+                      <Link
+                        href={`/demo/${template.id}`}
+                        className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase custom-card-btn"
+                      >
+                        Live Demo
+                        <ArrowRight className="w-2.5 h-2.5" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           )}
         </div>
