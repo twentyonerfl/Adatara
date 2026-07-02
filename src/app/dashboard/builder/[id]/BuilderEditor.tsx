@@ -2114,6 +2114,32 @@ export function BuilderEditor({
                             );
                           }
 
+                          if (timelineStyle === "right") {
+                            return (
+                              <div className="space-y-2.5 text-right relative pr-5 border-r border-[#d4af37]/35 mr-1">
+                                {data.cerita.ceritas.map((st: any, idx: number) => (
+                                  <div key={idx} className="relative pb-1">
+                                    {/* Elegant 4-pointed Star Node */}
+                                    <div className="absolute -right-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
+                                      <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                                      </svg>
+                                    </div>
+                                    
+                                    {/* Card Container */}
+                                    <div className={cardClass}>
+                                      <div className="flex items-baseline justify-between gap-2 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                        <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">{st.judul}</h6>
+                                        <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">{st.waktu}</span>
+                                      </div>
+                                      <p style={getFontStyles(data.cerita?.setting_isi_cerita || { size: "9.5px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">{st.isi}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+
                           // Left/standard style
                           return (
                             <div className="space-y-2.5 text-left relative pl-5 border-l border-[#d4af37]/35 ml-1">
