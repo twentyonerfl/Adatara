@@ -348,145 +348,190 @@ export function PenutupPreview({
   };
 
   return (
-    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-5" style={bgPenutup}>
+    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6" style={bgPenutup}>
       {data.rsvp_aktif && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 text-center space-y-3 shadow-md relative">
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase">
+        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 text-center space-y-4 shadow-xl relative">
+          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-wider">
             <div>Konfirmasi Kehadiran</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
           </div>
           {onRsvpSubmit ? (
             formSuccess ? (
-              <div className="text-center py-4 space-y-2">
-                <div className="text-emerald-400 font-bold text-xs">Terima Kasih!</div>
-                <div className="text-[10px] text-white/80">Konfirmasi kehadiran Anda telah disimpan.</div>
+              <div className="text-center py-6 space-y-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
+                  <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-white font-extrabold text-[12px] tracking-wider uppercase">Konfirmasi Terkirim!</div>
+                  <div className="text-[9.5px] text-white/70 max-w-[200px] mx-auto leading-relaxed">Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
+                </div>
               </div>
             ) : (
-              <form onSubmit={onRsvpSubmit} className="space-y-2.5 pt-1 text-left">
+              <form onSubmit={onRsvpSubmit} className="space-y-3.5 pt-1.5 text-left">
                 {formError && (
-                  <div className="bg-rose-950/20 border border-rose-900/50 text-rose-400 p-2 rounded-lg text-[9px] font-semibold">
+                  <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 rounded-xl text-[9px] font-semibold">
                     {formError}
                   </div>
                 )}
                 <div>
-                  <label className="block text-[8px] font-black uppercase text-white/70 mb-1">Nama</label>
+                  <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Nama Tamu</label>
                   <input
                     type="text"
                     required
                     value={namaTamu}
                     onChange={(e) => setNamaTamu?.(e.target.value)}
-                    placeholder="Nama Anda..."
-                    className="w-full px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] text-white outline-none focus:border-white/30"
+                    placeholder="Masukkan nama lengkap Anda..."
+                    className="w-full px-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[8px] font-black uppercase text-white/70 mb-1">Kehadiran</label>
-                    <select
-                      value={kehadiran}
-                      onChange={(e) => setKehadiran?.(e.target.value as any)}
-                      className="w-full px-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] text-white outline-none focus:border-white/30"
-                    >
-                      <option value="HADIR" className="text-slate-800 bg-white">Hadir</option>
-                      <option value="TIDAK_HADIR" className="text-slate-800 bg-white">Tidak Hadir</option>
-                      <option value="RAGU_RAGU" className="text-slate-800 bg-white">Ragu-ragu</option>
-                    </select>
+                    <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Kehadiran</label>
+                    <div className="relative">
+                      <select
+                        value={kehadiran}
+                        onChange={(e) => setKehadiran?.(e.target.value as any)}
+                        className="w-full px-3 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white outline-none transition-all duration-300 cursor-pointer appearance-none"
+                      >
+                        <option value="HADIR" className="text-slate-800 bg-white">Hadir</option>
+                        <option value="TIDAK_HADIR" className="text-slate-800 bg-white">Tidak Hadir</option>
+                        <option value="RAGU_RAGU" className="text-slate-800 bg-white">Ragu-ragu</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-white/40">
+                        <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-[8px] font-black uppercase text-white/70 mb-1">Jumlah</label>
+                    <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Jumlah Tamu</label>
                     <input
                       type="number"
                       min={1}
                       max={10}
                       value={jumlahTamu}
                       onChange={(e) => setJumlahTamu?.(parseInt(e.target.value) || 1)}
-                      className="w-full px-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] text-white outline-none focus:border-white/30"
+                      className="w-full px-3 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white outline-none transition-all duration-300"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[8px] font-black uppercase text-white/70 mb-1">Ucapan / Doa</label>
+                  <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Ucapan & Doa Restu</label>
                   <textarea
                     value={ucapan}
                     onChange={(e) => setUcapan?.(e.target.value)}
-                    rows={2}
-                    placeholder="Ucapan..."
-                    className="w-full px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] text-white outline-none resize-none focus:border-white/30"
+                    rows={2.5}
+                    placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
+                    className="w-full px-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-2 bg-[#d4af37] hover:bg-[#c49f27] text-white font-bold text-[10px] rounded-lg cursor-pointer transition-all"
+                  className="w-full py-2.5 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-black uppercase text-[10px] tracking-widest rounded-xl transition-all duration-300 shadow-lg shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
-                  {submitting ? "Mengirim..." : "Kirim Konfirmasi"}
+                  {submitting ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-2 border-[#064e3b] border-t-transparent rounded-full animate-spin" />
+                      <span>Mengirim...</span>
+                    </>
+                  ) : (
+                    <span>Kirim Konfirmasi</span>
+                  )}
                 </button>
               </form>
             )
           ) : (
-            <div className="flex gap-2 justify-center pt-1.5">
-              <div className="px-5 py-2.5 bg-[#d4af37] text-white text-xs font-black rounded-xl shadow-sm hover:scale-102 transition-transform cursor-pointer">Hadir</div>
-              <div className="px-5 py-2.5 border border-white/20 text-white/90 text-xs font-black rounded-xl hover:bg-white/5 transition-colors cursor-pointer">Tidak Hadir</div>
+            <div className="flex gap-3 justify-center pt-2">
+              <div className="px-6 py-2.5 bg-gradient-to-br from-[#d4af37] to-[#b48f17] text-white text-xs font-black rounded-xl shadow-md hover:scale-102 transition-transform cursor-pointer tracking-wider">Hadir</div>
+              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-xs font-black rounded-xl hover:bg-white/5 transition-colors cursor-pointer tracking-wider">Tidak Hadir</div>
             </div>
           )}
         </div>
       )}
+
       {amplops.length > 0 && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 space-y-3 shadow-md relative">
-          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase">
+        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 space-y-4 shadow-xl relative">
+          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-wider">
             <div>Special Gift</div>
             <div className={getDividerClass(data.setting_head_gift?.position)} />
           </div>
-          <div className="space-y-2 pt-1.5">
+          <div className="space-y-3 pt-1.5">
             {amplops.map((a, i) => (
-              <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/10 flex justify-between items-center transition-all hover:bg-white/10">
+              <div key={i} className="bg-white/[0.02] backdrop-blur-md rounded-2xl p-3.5 border border-white/10 border-l-2 border-l-[#d4af37] flex justify-between items-center transition-all duration-300 hover:bg-white/[0.05] shadow-sm">
                 <div className="space-y-0.5 text-left">
-                  <div className="text-xs font-black text-white">{a.bank || "Bank"}</div>
-                  <div className="text-[10px] text-white/70 font-mono tracking-wider">{a.nomor_rekening || "No. Rekening"}</div>
-                  <div className="text-[10px] font-semibold text-[#d4af37]">{a.atas_nama || "Atas Nama"}</div>
+                  <div className="text-[9px] font-bold text-white/50 uppercase tracking-widest">{a.bank || "Bank / E-Wallet"}</div>
+                  <div className="text-xs font-mono font-bold text-white tracking-wider my-0.5">{a.nomor_rekening || "No. Rekening"}</div>
+                  <div className="text-[9.5px] font-medium text-[#d4af37]/90">a.n. {a.atas_nama || "Atas Nama"}</div>
                 </div>
                 <button
                   type="button"
                   onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className="px-3 py-1.5 bg-white/10 hover:bg-[#d4af37] border border-white/10 hover:border-transparent rounded-lg text-[9px] font-black text-white transition-all cursor-pointer"
+                  className={`px-3.5 py-1.5 border rounded-lg text-[8.5px] font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${
+                    copiedIndex === i
+                      ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
+                      : "bg-white/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-white/15 hover:border-[#d4af37]"
+                  }`}
                 >
-                  {copiedIndex === i ? "Tersalin!" : "Salin"}
+                  {copiedIndex === i ? "Tersalin" : "Salin"}
                 </button>
               </div>
             ))}
           </div>
         </div>
       )}
+
       {data.ucapan_aktif && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 text-center space-y-3 shadow-md relative text-left">
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase text-center">
+        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 space-y-4 shadow-xl relative text-left">
+          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase text-center tracking-wider">
             <div>Doa & Ucapan</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
           </div>
           {wishes ? (
             wishes.length > 0 ? (
-              <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1 pt-1">
+              <div 
+                className="space-y-3 max-h-[220px] overflow-y-auto pr-1.5 pt-1 scrollbar-thin"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(255,255,255,0.15) transparent",
+                }}
+              >
                 {wishes.map((w, idx) => (
-                  <div key={w.id || idx} className="bg-white/5 rounded-lg p-2.5 border border-white/5 space-y-1">
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-[10px] font-black text-white">{w.nama_tamu}</span>
-                      <span className="text-[8px] opacity-60 text-white">
-                        {w.kehadiran === "HADIR" ? "Hadir" : w.kehadiran === "TIDAK_HADIR" ? "Tidak Hadir" : "Ragu"}
-                      </span>
+                  <div key={w.id || idx} className="bg-white/5 rounded-2xl p-3 border border-white/10 flex gap-3 items-start transition-all hover:bg-white/10 shadow-sm">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/45 border border-[#d4af37]/40 flex items-center justify-center text-[10px] font-black text-white shrink-0 shadow-inner">
+                      {w.nama_tamu ? w.nama_tamu.charAt(0).toUpperCase() : "?"}
                     </div>
-                    <p className="text-[9px] text-white/80 leading-normal">{w.ucapan}</p>
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-extrabold text-white truncate block">{w.nama_tamu}</span>
+                        <span className={`px-1.5 py-0.5 rounded-full text-[6.5px] font-black uppercase tracking-wider ${
+                          w.kehadiran === "HADIR"
+                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                            : w.kehadiran === "TIDAK_HADIR"
+                              ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                              : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                        }`}>
+                          {w.kehadiran === "HADIR" ? "Hadir" : w.kehadiran === "TIDAK_HADIR" ? "Absen" : "Ragu"}
+                        </span>
+                      </div>
+                      <p className="text-[9.5px] text-white/90 leading-relaxed font-normal whitespace-pre-wrap break-words">{w.ucapan}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center text-[9px] text-white/40 py-4">Belum ada ucapan.</div>
+              <div className="text-center text-[9.5px] text-white/40 py-6">Belum ada doa atau ucapan terkirim.</div>
             )
           ) : (
-            <div className="mt-1 w-full h-16 bg-white/5 border border-white/10 rounded-xl text-[10px] flex items-center justify-center text-white/40 italic">Kolom ucapan tamu...</div>
+            <div className="mt-1 w-full h-16 bg-white/5 border border-white/10 rounded-2xl text-[10px] flex items-center justify-center text-white/40 italic">Kolom ucapan tamu akan muncul di sini...</div>
           )}
         </div>
       )}
-      <div className="text-center space-y-2 pt-4 border-t border-white/10">
+
+      <div className="text-center space-y-2.5 pt-5 border-t border-white/15">
         <p style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
         <p style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-bold">{data.salam || ""}</p>
         <p style={getFontStyles(data.setting_pesan_penutup || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-black mt-2">{data.tertanda || "Nama & Nama"}</p>
