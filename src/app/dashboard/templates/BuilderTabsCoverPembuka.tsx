@@ -196,11 +196,21 @@ export function CoverForm({ data, onChange, musicLibrary, mode }: { data: any; o
       {/* ── SETTINGS SECTION ── */}
       {(!mode || mode === "settings") && (
         <>
-          <FontSettingsWidget label="Setting Font Judul Acara" value={data.setting_font || {}} onChange={v => upd("setting_font", v)} />
-          <FontSettingsWidget label="Setting Font Nama Acara/Pasangan" value={data.setting_nama || {}} onChange={v => upd("setting_nama", v)} />
-          <ButtonSettingsWidget label="Setting Tombol Buka Undangan" value={data.setting_tombol || {}} onChange={v => upd("setting_tombol", v)} />
-          <BackgroundWidget value={data.background || { type: "solid", value: "#f5f5dc" }} onChange={v => upd("background", v)} />
-          <BingkaiCoverWidget label="Bingkai Garis Cover" value={data.setting_bingkai || { enabled: false }} onChange={v => upd("setting_bingkai", v)} />
+          <SectionInput label="Setting Font Judul Acara">
+            <FontSettingsWidget label="Setting Font Judul" value={data.setting_font || {}} onChange={v => upd("setting_font", v)} />
+          </SectionInput>
+          <SectionInput label="Setting Font Nama Acara/Pasangan">
+            <FontSettingsWidget label="Setting Font Nama" value={data.setting_nama || {}} onChange={v => upd("setting_nama", v)} />
+          </SectionInput>
+          <SectionInput label="Setting Tombol Buka Undangan">
+            <ButtonSettingsWidget label="Setting Tombol" value={data.setting_tombol || {}} onChange={v => upd("setting_tombol", v)} />
+          </SectionInput>
+          <SectionInput label="Background Cover">
+            <BackgroundWidget value={data.background || { type: "solid", value: "#f5f5dc" }} onChange={v => upd("background", v)} />
+          </SectionInput>
+          <SectionInput label="Bingkai Garis Cover">
+            <BingkaiCoverWidget label="Bingkai Garis Cover" value={data.setting_bingkai || { enabled: false }} onChange={v => upd("setting_bingkai", v)} />
+          </SectionInput>
         </>
       )}
 
@@ -491,8 +501,12 @@ export function PembukaForm({ data, onChange, mode }: { data: any; onChange: (d:
               </div>
             </SectionInput>
           )}
-          <CardSettingsWidget label="Setting Style Card / Bingkai Pembuka" value={data.setting_card || {}} onChange={v => upd("setting_card", v)} />
-          <BackgroundWidget value={data.background || { type: "solid", value: "#ffffff" }} onChange={v => upd("background", v)} />
+          <SectionInput label="Style Card / Bingkai Pembuka">
+            <CardSettingsWidget label="Setting Style Card" value={data.setting_card || {}} onChange={v => upd("setting_card", v)} />
+          </SectionInput>
+          <SectionInput label="Background Pembuka">
+            <BackgroundWidget value={data.background || { type: "solid", value: "#ffffff" }} onChange={v => upd("background", v)} />
+          </SectionInput>
         </>
       )}
     </div>

@@ -491,10 +491,44 @@ export function FileUploader({
 }
 
 export function SectionInput({ label, className = "", children }: { label: string; className?: string; children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className={`space-y-3 ${className}`}>
-      <h4 className="text-xs font-black uppercase tracking-wider text-[#064e3b]/70 border-b border-[#064e3b]/10 pb-2">{label}</h4>
-      {children}
+    <div className={`border border-[#064e3b]/10 rounded-2xl overflow-hidden bg-white/40 backdrop-blur-md transition-all duration-300 ${isOpen ? "shadow-sm border-[#064e3b]/15 bg-white/60" : ""} ${className}`}>
+      {/* Accordion Header Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-[#064e3b]/5 hover:bg-[#064e3b]/8 text-left transition-colors duration-200"
+      >
+        <span className="text-xs font-black uppercase tracking-wider text-[#064e3b]/80">
+          {label}
+        </span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`w-3.5 h-3.5 text-[#064e3b]/60 transition-transform duration-300 ${
+            isOpen ? "rotate-180 text-[#d4af37]" : ""
+          }`}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {/* Accordion Content Wrapper */}
+      <div
+        className={`transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-[1400px] opacity-100 p-4 border-t border-[#064e3b]/5" : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+        }`}
+      >
+        <div className="space-y-4">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

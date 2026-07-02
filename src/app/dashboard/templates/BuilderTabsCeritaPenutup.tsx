@@ -149,7 +149,9 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
             </div>
           </SectionInput>
 
-          <BackgroundWidget label="Background Cerita" value={data.background_cerita || { type: "solid", value: "#fefcf6" }} onChange={v => upd("background_cerita", v)} />
+          <SectionInput label="Background Cerita">
+            <BackgroundWidget value={data.background_cerita || { type: "solid", value: "#fefcf6" }} onChange={v => upd("background_cerita", v)} />
+          </SectionInput>
 
           <SectionInput label="Gaya & Struktur Cerita">
             <div className="space-y-3.5">
@@ -237,7 +239,9 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
             />
           </SectionInput>
 
-          <BackgroundWidget label="Background Galeri" value={data.background_galeri || { type: "solid", value: "#ffffff" }} onChange={v => upd("background_galeri", v)} />
+          <SectionInput label="Background Galeri">
+            <BackgroundWidget value={data.background_galeri || { type: "solid", value: "#ffffff" }} onChange={v => upd("background_galeri", v)} />
+          </SectionInput>
         </>
       )}
     </div>
@@ -540,7 +544,9 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
               />
             </div>
           </SectionInput>
-          <BackgroundWidget value={data.background || { type: "solid", value: "#064e3b" }} onChange={v => upd("background", v)} />
+          <SectionInput label="Background Penutup">
+            <BackgroundWidget value={data.background || { type: "solid", value: "#064e3b" }} onChange={v => upd("background", v)} />
+          </SectionInput>
         </>
       )}
     </div>

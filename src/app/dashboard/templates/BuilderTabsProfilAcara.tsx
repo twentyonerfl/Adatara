@@ -140,7 +140,9 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
             </SectionInput>
           )}
 
-          <BackgroundWidget value={data.background || { type: "solid", value: "#fefcf6" }} onChange={v => upd("background", v)} />
+          <SectionInput label="Background Profil">
+            <BackgroundWidget value={data.background || { type: "solid", value: "#fefcf6" }} onChange={v => upd("background", v)} />
+          </SectionInput>
         </>
       )}
     </div>
@@ -544,7 +546,9 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
             </SectionInput>
           )}
 
-          <BackgroundWidget value={data.background || { type: "solid", value: "#f5f5dc" }} onChange={v => upd("background", v)} />
+          <SectionInput label="Background Jadwal Acara">
+            <BackgroundWidget value={data.background || { type: "solid", value: "#f5f5dc" }} onChange={v => upd("background", v)} />
+          </SectionInput>
         </>
       )}
     </div>
