@@ -53,7 +53,7 @@ export function FontSettingsWidget({
         <div>
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran</label>
           <div className="flex gap-1.5 items-center">
-            <input type="range" min="10" max="120" value={sizeVal}
+            <input type="range" min="5" max="120" value={sizeVal}
               onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
             <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
@@ -760,7 +760,7 @@ export function ButtonSettingsWidget({
           <div>
             <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Font</label>
             <div className="flex gap-1.5 items-center">
-              <input type="range" min="8" max="40" value={parseInt(safeVal.size)}
+              <input type="range" min="5" max="40" value={parseInt(safeVal.size)}
                 onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
                 className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
               <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
@@ -1379,7 +1379,7 @@ export function CountdownSettingsWidget({
         <div className="col-span-2">
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Angka</label>
           <div className="flex gap-1.5 items-center">
-            <input type="range" min="8" max="64" value={sizeVal}
+            <input type="range" min="5" max="64" value={sizeVal}
               onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
             <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
@@ -1411,7 +1411,7 @@ export function CountdownSettingsWidget({
         <div className="col-span-2">
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Label</label>
           <div className="flex gap-1.5 items-center">
-            <input type="range" min="6" max="24" value={labelSizeVal}
+            <input type="range" min="5" max="24" value={labelSizeVal}
               onChange={e => onChange({ ...safeVal, label_size: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
             <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.label_size}</span>
@@ -1548,7 +1548,7 @@ export function MapsButtonStyleWidget({
         <div className="col-span-2">
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran Teks</label>
           <div className="flex gap-1.5 items-center">
-            <input type="range" min="8" max="24" value={sizeVal}
+            <input type="range" min="5" max="24" value={sizeVal}
               onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
             <span className="text-[8px] font-bold w-7 text-right text-[#064e3b]/80 shrink-0">{safeVal.size}</span>
