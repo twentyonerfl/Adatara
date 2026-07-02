@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget } from "./BuilderWidgets";
 import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
-import { Plus, Trash2, User, Users, Check, X, HelpCircle, Send, MessageSquare, Clipboard, CheckCircle2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 function getFontStyles(val?: any) {
   if (!val) return {};
@@ -626,30 +625,6 @@ export function PenutupPreview({
   onCopyClick?: (text: string, index: number) => void;
   copiedIndex?: number | null;
 }) {
-  // Local states for editor/admin preview if props are not provided
-  const [localNama, setLocalNama] = useState("");
-  const [localKehadiran, setLocalKehadiran] = useState<"HADIR" | "TIDAK_HADIR" | "RAGU_RAGU">("HADIR");
-  const [localJumlah, setLocalJumlah] = useState(1);
-  const [localUcapan, setLocalUcapan] = useState("");
-
-  const activeNama = namaTamu !== undefined ? namaTamu : localNama;
-  const onChangeNama = setNamaTamu || setLocalNama;
-
-  const activeKehadiran = kehadiran !== undefined ? kehadiran : localKehadiran;
-  const onChangeKehadiran = setKehadiran || setLocalKehadiran;
-
-  const activeJumlah = jumlahTamu !== undefined ? jumlahTamu : localJumlah;
-  const onChangeJumlah = setJumlahTamu || setLocalJumlah;
-
-  const activeUcapan = ucapan !== undefined ? ucapan : localUcapan;
-  const onChangeUcapan = setUcapan || setLocalUcapan;
-
-  const dummySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert("Pratinjau: Konfirmasi Kehadiran berhasil disimulasikan!");
-  };
-
-  const activeSubmit = onRsvpSubmit || dummySubmit;
   const bgPenutup = getBgStyle(data.background);
   const amplops: any[] = data.amplops || [];
 
@@ -667,135 +642,124 @@ export function PenutupPreview({
             <div>Konfirmasi Kehadiran</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
           </div>
-          {formSuccess ? (
-            <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
-                <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="space-y-1">
-                <div className="text-white font-extrabold text-[12px] tracking-wider uppercase">Konfirmasi Terkirim!</div>
-                <div className="text-[9.5px] text-white/70 max-w-[200px] mx-auto leading-relaxed">Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={activeSubmit} className="space-y-3.5 pt-1.5 text-left">
-              {formError && (
-                <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 rounded-xl text-[9px] font-semibold">
-                  {formError}
+          {onRsvpSubmit ? (
+            formSuccess ? (
+              <div className="text-center py-6 space-y-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
+                  <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-              )}
-              <div>
-                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Nama Tamu</label>
-                <div className="relative flex items-center">
-                  <User className="absolute left-3 w-3.5 h-3.5 text-white/40 pointer-events-none" />
+                <div className="space-y-1">
+                  <div className="text-white font-extrabold text-[12px] tracking-wider uppercase">Konfirmasi Terkirim!</div>
+                  <div className="text-[9.5px] text-white/70 max-w-[200px] mx-auto leading-relaxed">Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={onRsvpSubmit} className="space-y-4 pt-1 text-left">
+                {formError && (
+                  <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 text-[9px] font-semibold" style={{ borderRadius: "6%" }}>
+                    {formError}
+                  </div>
+                )}
+                <div className="space-y-1.5">
+                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Nama Tamu</label>
                   <input
                     type="text"
                     required
-                    value={activeNama}
-                    onChange={(e) => onChangeNama?.(e.target.value)}
+                    value={namaTamu}
+                    onChange={(e) => setNamaTamu?.(e.target.value)}
                     placeholder="Masukkan nama lengkap Anda..."
-                    className="w-full pl-9 pr-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300 focus:bg-white/10"
+                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
                     style={{ borderRadius: "6%" }}
                   />
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Konfirmasi Kehadiran</label>
+                
+                <div className="space-y-1.5">
+                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Kehadiran</label>
                   <div className="grid grid-cols-3 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onChangeKehadiran?.("HADIR")}
-                      className={`py-2 px-1 text-[9px] font-black uppercase tracking-wider transition-all duration-300 flex flex-col items-center justify-center gap-1 border cursor-pointer ${
-                        activeKehadiran === "HADIR"
-                          ? "bg-gradient-to-br from-[#d4af37] to-[#b48f17] border-[#d4af37] text-[#064e3b] shadow-md scale-[1.02]"
-                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
-                      }`}
-                      style={{ borderRadius: "6%" }}
-                    >
-                      <Check className="w-3.5 h-3.5" />
-                      <span>Hadir</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onChangeKehadiran?.("TIDAK_HADIR")}
-                      className={`py-2 px-1 text-[9px] font-black uppercase tracking-wider transition-all duration-300 flex flex-col items-center justify-center gap-1 border cursor-pointer ${
-                        activeKehadiran === "TIDAK_HADIR"
-                          ? "bg-gradient-to-br from-[#d4af37] to-[#b48f17] border-[#d4af37] text-[#064e3b] shadow-md scale-[1.02]"
-                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
-                      }`}
-                      style={{ borderRadius: "6%" }}
-                    >
-                      <X className="w-3.5 h-3.5" />
-                      <span>Absen</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onChangeKehadiran?.("RAGU_RAGU")}
-                      className={`py-2 px-1 text-[9px] font-black uppercase tracking-wider transition-all duration-300 flex flex-col items-center justify-center gap-1 border cursor-pointer ${
-                        activeKehadiran === "RAGU_RAGU"
-                          ? "bg-gradient-to-br from-[#d4af37] to-[#b48f17] border-[#d4af37] text-[#064e3b] shadow-md scale-[1.02]"
-                          : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10"
-                      }`}
-                      style={{ borderRadius: "6%" }}
-                    >
-                      <HelpCircle className="w-3.5 h-3.5" />
-                      <span>Ragu</span>
-                    </button>
+                    {[
+                      { value: "HADIR", label: "Hadir" },
+                      { value: "TIDAK_HADIR", label: "Absen" },
+                      { value: "RAGU_RAGU", label: "Ragu" }
+                    ].map((opt) => {
+                      const isSelected = (kehadiran || "HADIR") === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setKehadiran?.(opt.value as any)}
+                          className={`py-2 text-[9.5px] font-black uppercase tracking-wider border transition-all duration-300 cursor-pointer text-center ${
+                            isSelected
+                              ? "bg-[#d4af37] border-[#d4af37] text-[#064e3b] shadow-md shadow-[#d4af37]/10"
+                              : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+                          }`}
+                          style={{ borderRadius: "6%" }}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-                <div>
-                  <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Jumlah Tamu</label>
-                  <div className="relative flex items-center">
-                    <Users className="absolute left-3 w-3.5 h-3.5 text-white/40 pointer-events-none" />
-                    <input
-                      type="number"
-                      min={1}
-                      max={10}
-                      value={activeJumlah}
-                      onChange={(e) => onChangeJumlah?.(parseInt(e.target.value) || 1)}
-                      className="w-full pl-9 pr-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white outline-none transition-all duration-300 focus:bg-white/10"
-                      style={{ borderRadius: "6%" }}
-                    />
+
+                {(kehadiran || "HADIR") === "HADIR" && (
+                  <div className="space-y-1.5 transition-all duration-300">
+                    <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Jumlah Tamu</label>
+                    <div className="flex items-center bg-white/5 border border-white/10 overflow-hidden max-w-[120px]" style={{ borderRadius: "6%" }}>
+                      <button
+                        type="button"
+                        onClick={() => setJumlahTamu?.(Math.max(1, (jumlahTamu || 1) - 1))}
+                        className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
+                      >
+                        -
+                      </button>
+                      <span className="flex-1 text-center text-[10px] text-white font-black">{jumlahTamu || 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => setJumlahTamu?.(Math.min(10, (jumlahTamu || 1) + 1))}
+                        className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div>
-                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/60 mb-1.5">Ucapan & Doa Restu</label>
-                <div className="relative">
-                  <MessageSquare className="absolute left-3 top-3 w-3.5 h-3.5 text-white/40 pointer-events-none" />
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Ucapan & Doa Restu</label>
                   <textarea
-                    value={activeUcapan}
-                    onChange={(e) => onChangeUcapan?.(e.target.value)}
+                    value={ucapan}
+                    onChange={(e) => setUcapan?.(e.target.value)}
                     rows={2.5}
                     placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                    className="w-full pl-9 pr-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300 focus:bg-white/10"
+                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
                     style={{ borderRadius: "6%" }}
                   />
                 </div>
-              </div>
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-2.5 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-black uppercase text-[10px] tracking-widest transition-all duration-300 shadow-lg shadow-[#d4af37]/15 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 hover:shadow-[#d4af37]/35"
-                style={{ borderRadius: "6%" }}
-              >
-                {submitting ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-2 border-[#064e3b] border-t-transparent rounded-full animate-spin" />
-                    <span>Mengirim...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-3.5 h-3.5" />
+                
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full py-2.5 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-black uppercase text-[10px] tracking-widest transition-all duration-300 shadow-lg shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  style={{ borderRadius: "6%" }}
+                >
+                  {submitting ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-2 border-[#064e3b] border-t-transparent rounded-full animate-spin" />
+                      <span>Mengirim...</span>
+                    </>
+                  ) : (
                     <span>Kirim Konfirmasi</span>
-                  </>
-                )}
-              </button>
-            </form>
+                  )}
+                </button>
+              </form>
+            )
+          ) : (
+            <div className="flex gap-3 justify-center pt-2">
+              <div className="px-6 py-2.5 bg-[#d4af37] text-[#064e3b] text-[10px] font-black uppercase tracking-widest shadow-md hover:scale-102 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Hadir</div>
+              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
+            </div>
           )}
         </div>
       )}
