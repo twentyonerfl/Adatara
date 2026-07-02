@@ -1042,7 +1042,7 @@ export default function HomeClient({
                       )}
 
                       {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
-                      <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10">
+                      <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-xl border-[3px] border-slate-950 rounded-[14px] transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10 ring-1 ring-white/10">
                         {coverData ? (
                           <ScaledCoverPreview
                             coverData={coverData}
