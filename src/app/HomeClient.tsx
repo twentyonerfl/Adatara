@@ -1043,7 +1043,13 @@ export default function HomeClient({
 
                       {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
                       <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10">
-                        {coverData ? (
+                        {template.image ? (
+                          <img
+                            src={getSafeThumbnail(template.image)}
+                            alt={template.nama}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : coverData ? (
                           <ScaledCoverPreview
                             coverData={coverData}
                             meta={{ kategori: template.kategori, bahasa: "id" }}

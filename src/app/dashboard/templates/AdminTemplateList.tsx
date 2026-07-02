@@ -243,10 +243,10 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
 
                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04] z-10">
-                    {hasCoverData ? (
-                      <ScaledCoverPreview coverData={coverData} meta={meta} />
-                    ) : t.thumbnail ? (
+                    {t.thumbnail ? (
                       <img src={getSafeThumbnail(t.thumbnail)} alt={t.nama_template} className="w-full h-full object-cover" />
+                    ) : hasCoverData ? (
+                      <ScaledCoverPreview coverData={coverData} meta={meta} />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                     )}

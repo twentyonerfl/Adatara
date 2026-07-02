@@ -168,14 +168,14 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                 <div className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
                    {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04]">
-                    {hasCoverData ? (
-                      <ScaledCoverPreview coverData={coverData} meta={meta} />
-                    ) : template.thumbnail ? (
+                    {template.thumbnail ? (
                       <img
                         src={template.thumbnail}
                         alt={template.nama_template}
                         className="w-full h-full object-cover"
                       />
+                    ) : hasCoverData ? (
+                      <ScaledCoverPreview coverData={coverData} meta={meta} />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                     )}
