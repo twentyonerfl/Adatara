@@ -2056,7 +2056,7 @@ export function BuilderEditor({
                           Kisah Perjalanan
                         </span>
 
-                        <div className="space-y-3.5 text-left relative pl-5 border-l border-[#d4af37]/35 ml-1">
+                        <div className="space-y-2.5 text-left relative pl-5 border-l border-[#d4af37]/35 ml-1">
                           {data.cerita.ceritas.map((st: any, idx: number) => (
                             <div key={idx} className="relative pb-1">
                               {/* Elegant 4-pointed Star Node */}
@@ -2066,7 +2066,7 @@ export function BuilderEditor({
                                 </svg>
                               </div>
                               {/* Thin Glassmorphic Card Container */}
-                              <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-[12px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35">
+                              <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-[8px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35">
                                 <div className="flex items-baseline justify-between gap-2 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
                                   <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">{st.judul}</h6>
                                   <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">{st.waktu}</span>

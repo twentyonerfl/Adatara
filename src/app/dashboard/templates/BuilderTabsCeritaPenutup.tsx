@@ -214,7 +214,7 @@ export function CeritaPreview({ data }: { data: any }) {
           <div>Cerita Kita</div>
           <div className={getDividerClass(data.setting_head_cerita?.position)} />
         </div>
-        <div className="relative pl-6 border-l border-[#d4af37]/35 space-y-3.5">
+        <div className="relative pl-6 border-l border-[#d4af37]/35 space-y-2.5">
           {ceritas.map((c, i) => (
             <div key={i} className="relative">
               {/* Elegant 4-pointed Star Node */}
@@ -225,7 +225,7 @@ export function CeritaPreview({ data }: { data: any }) {
               </div>
               
               {/* Thin Glassmorphic Card Container */}
-              <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-[12px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35 hover:shadow-[0_12px_40px_rgba(6,78,59,0.05)]">
+              <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-[8px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35 hover:shadow-[0_12px_40px_rgba(6,78,59,0.05)]">
                 {/* Card Header */}
                 <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
                   <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
