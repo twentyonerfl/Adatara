@@ -2292,7 +2292,7 @@ export function BuilderEditor({
                         </span>
                         <div className="space-y-2">
                           {data.penutup.amplops.map((gift: any, idx: number) => (
-                            <div key={idx} className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl text-left relative">
+                            <div key={idx} className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 text-left relative" style={{ borderRadius: "6%" }}>
                               <span className="text-[8px] font-black text-[#d4af37] block uppercase">{gift.bank}</span>
                               <span className="text-[#064e3b] text-xs font-black block mt-0.5 tracking-wide">{gift.nomor_rekening}</span>
                               <span className="text-[9px] text-[#064e3b]/60 block">A/N: {gift.atas_nama}</span>

@@ -637,7 +637,7 @@ export function PenutupPreview({
   return (
     <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6" style={bgPenutup}>
       {data.rsvp_aktif && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 text-center space-y-4 shadow-xl relative">
+        <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 text-center space-y-4 shadow-xl relative" style={{ borderRadius: "6%" }}>
           <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-wider">
             <div>Konfirmasi Kehadiran</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
@@ -670,7 +670,8 @@ export function PenutupPreview({
                     value={namaTamu}
                     onChange={(e) => setNamaTamu?.(e.target.value)}
                     placeholder="Masukkan nama lengkap Anda..."
-                    className="w-full px-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
+                    className="w-full px-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
+                    style={{ borderRadius: "6%" }}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -680,7 +681,8 @@ export function PenutupPreview({
                       <select
                         value={kehadiran}
                         onChange={(e) => setKehadiran?.(e.target.value as any)}
-                        className="w-full px-3 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white outline-none transition-all duration-300 cursor-pointer appearance-none"
+                        className="w-full px-3 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white outline-none transition-all duration-300 cursor-pointer appearance-none"
+                        style={{ borderRadius: "6%" }}
                       >
                         <option value="HADIR" className="text-slate-800 bg-white">Hadir</option>
                         <option value="TIDAK_HADIR" className="text-slate-800 bg-white">Tidak Hadir</option>
@@ -701,7 +703,8 @@ export function PenutupPreview({
                       max={10}
                       value={jumlahTamu}
                       onChange={(e) => setJumlahTamu?.(parseInt(e.target.value) || 1)}
-                      className="w-full px-3 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white outline-none transition-all duration-300"
+                      className="w-full px-3 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white outline-none transition-all duration-300"
+                      style={{ borderRadius: "6%" }}
                     />
                   </div>
                 </div>
@@ -712,13 +715,15 @@ export function PenutupPreview({
                     onChange={(e) => setUcapan?.(e.target.value)}
                     rows={2.5}
                     placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                    className="w-full px-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 rounded-xl text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
+                    className="w-full px-3.5 py-2 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
+                    style={{ borderRadius: "6%" }}
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-2.5 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-black uppercase text-[10px] tracking-widest rounded-xl transition-all duration-300 shadow-lg shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="w-full py-2.5 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-black uppercase text-[10px] tracking-widest transition-all duration-300 shadow-lg shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  style={{ borderRadius: "6%" }}
                 >
                   {submitting ? (
                     <>
@@ -733,22 +738,22 @@ export function PenutupPreview({
             )
           ) : (
             <div className="flex gap-3 justify-center pt-2">
-              <div className="px-6 py-2.5 bg-gradient-to-br from-[#d4af37] to-[#b48f17] text-white text-xs font-black rounded-xl shadow-md hover:scale-102 transition-transform cursor-pointer tracking-wider">Hadir</div>
-              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-xs font-black rounded-xl hover:bg-white/5 transition-colors cursor-pointer tracking-wider">Tidak Hadir</div>
+              <div className="px-6 py-2.5 bg-gradient-to-br from-[#d4af37] to-[#b48f17] text-white text-xs font-black shadow-md hover:scale-102 transition-transform cursor-pointer tracking-wider" style={{ borderRadius: "6%" }}>Hadir</div>
+              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-xs font-black hover:bg-white/5 transition-colors cursor-pointer tracking-wider" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
             </div>
           )}
         </div>
       )}
 
       {amplops.length > 0 && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 space-y-4 shadow-xl relative">
+        <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl relative" style={{ borderRadius: "6%" }}>
           <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-wider">
             <div>Special Gift</div>
             <div className={getDividerClass(data.setting_head_gift?.position)} />
           </div>
           <div className="space-y-3 pt-1.5">
             {amplops.map((a, i) => (
-              <div key={i} className="bg-white/[0.02] backdrop-blur-md rounded-2xl p-3.5 border border-white/10 border-l-2 border-l-[#d4af37] flex justify-between items-center transition-all duration-300 hover:bg-white/[0.05] shadow-sm">
+              <div key={i} className="bg-white/[0.02] backdrop-blur-md p-3.5 border border-white/10 border-l-2 border-l-[#d4af37] flex justify-between items-center transition-all duration-300 hover:bg-white/[0.05] shadow-sm" style={{ borderRadius: "6%" }}>
                 <div className="space-y-0.5 text-left">
                   <div className="text-[9px] font-bold text-white/50 uppercase tracking-widest">{a.bank || "Bank / E-Wallet"}</div>
                   <div className="text-xs font-mono font-bold text-white tracking-wider my-0.5">{a.nomor_rekening || "No. Rekening"}</div>
@@ -757,11 +762,12 @@ export function PenutupPreview({
                 <button
                   type="button"
                   onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className={`px-3.5 py-1.5 border rounded-lg text-[8.5px] font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${
+                  className={`px-3.5 py-1.5 border text-[8.5px] font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${
                     copiedIndex === i
                       ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
                       : "bg-white/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-white/15 hover:border-[#d4af37]"
                   }`}
+                  style={{ borderRadius: "6%" }}
                 >
                   {copiedIndex === i ? "Tersalin" : "Salin"}
                 </button>
@@ -772,7 +778,7 @@ export function PenutupPreview({
       )}
 
       {data.ucapan_aktif && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 space-y-4 shadow-xl relative text-left">
+        <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl relative text-left" style={{ borderRadius: "6%" }}>
           <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase text-center tracking-wider">
             <div>Doa & Ucapan</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
@@ -787,20 +793,20 @@ export function PenutupPreview({
                 }}
               >
                 {wishes.map((w, idx) => (
-                  <div key={w.id || idx} className="bg-white/5 rounded-2xl p-3 border border-white/10 flex gap-3 items-start transition-all hover:bg-white/10 shadow-sm">
+                  <div key={w.id || idx} className="bg-white/5 p-3 border border-white/10 flex gap-3 items-start transition-all hover:bg-white/10 shadow-sm" style={{ borderRadius: "6%" }}>
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/45 border border-[#d4af37]/40 flex items-center justify-center text-[10px] font-black text-white shrink-0 shadow-inner">
                       {w.nama_tamu ? w.nama_tamu.charAt(0).toUpperCase() : "?"}
                     </div>
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10px] font-extrabold text-white truncate block">{w.nama_tamu}</span>
-                        <span className={`px-1.5 py-0.5 rounded-full text-[6.5px] font-black uppercase tracking-wider ${
+                        <span className={`px-1.5 py-0.5 text-[6.5px] font-black uppercase tracking-wider ${
                           w.kehadiran === "HADIR"
                             ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
                             : w.kehadiran === "TIDAK_HADIR"
                               ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
                               : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                        }`}>
+                        }`} style={{ borderRadius: "6%" }}>
                           {w.kehadiran === "HADIR" ? "Hadir" : w.kehadiran === "TIDAK_HADIR" ? "Absen" : "Ragu"}
                         </span>
                       </div>
@@ -813,7 +819,7 @@ export function PenutupPreview({
               <div className="text-center text-[9.5px] text-white/40 py-6">Belum ada doa atau ucapan terkirim.</div>
             )
           ) : (
-            <div className="mt-1 w-full h-16 bg-white/5 border border-white/10 rounded-2xl text-[10px] flex items-center justify-center text-white/40 italic">Kolom ucapan tamu akan muncul di sini...</div>
+            <div className="mt-1 w-full h-16 bg-white/5 border border-white/10 text-[10px] flex items-center justify-center text-white/40 italic" style={{ borderRadius: "6%" }}>Kolom ucapan tamu akan muncul di sini...</div>
           )}
         </div>
       )}
