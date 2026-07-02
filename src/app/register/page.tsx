@@ -70,7 +70,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f5f5dc] via-[#fdfdfb] to-[#f5f5dc] text-[#064e3b] flex flex-col justify-center relative overflow-hidden font-sans py-12 px-6">
+    <div className="min-h-screen bg-[#fdfdfb] text-[#064e3b] flex flex-col lg:grid lg:grid-cols-12 font-sans relative overflow-hidden">
       {/* Autofill override styles */}
       <style>{`
         input:-webkit-autofill,
@@ -82,103 +82,155 @@ export default function Register() {
         }
       `}</style>
 
-      {/* Layered ambient glows */}
-      <div className="absolute top-[-10%] right-[-10%] w-[450px] h-[450px] bg-[#d4af37]/8 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse" style={{ animationDuration: '6s' }} />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#064e3b]/6 blur-[150px] rounded-full pointer-events-none -z-10 animate-pulse" style={{ animationDuration: '8s' }} />
+      {/* Left Column (Desktop Only Editorial Cover) */}
+      <div className="hidden lg:flex lg:col-span-5 relative flex-col justify-between p-12 text-[#f5f5dc] overflow-hidden bg-[#053c2e]">
+        {/* Background Image with botanical artwork */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay"
+          style={{ backgroundImage: `url('/login-bg.png')` }}
+        />
+        
+        {/* Modern subtle overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#032018] via-[#053c2e]/80 to-transparent pointer-events-none" />
+        
+        {/* Floating glowing orbs inside left panel for magic premium feel */}
+        <div className="absolute top-1/4 right-[-10%] w-[300px] h-[300px] bg-[#d4af37]/15 blur-[80px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-10 left-[-10%] w-[250px] h-[250px] bg-white/5 blur-[90px] rounded-full pointer-events-none" />
 
-      {/* Elegant Back button */}
-      <div className="absolute top-6 left-6 z-10">
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-xs font-semibold bg-white/70 backdrop-blur-md border border-[#064e3b]/10 shadow-sm px-4 py-2 rounded-full text-[#064e3b] hover:bg-white hover:border-[#d4af37] hover:shadow-md transition-all"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Kembali ke Beranda
-        </Link>
-      </div>
-
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        {/* Brand Logo */}
-        <motion.div
-          initial={{ opacity: 0, y: -25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex justify-center mb-4"
-        >
-          <Link href="/" className="transition-transform duration-300 hover:scale-105">
+        {/* Brand Logo in Cover */}
+        <div className="relative z-10">
+          <Link href="/" className="inline-block transition-transform duration-300 hover:scale-105">
             <img
-              src="/logo.png"
+              src="/logo-white.png"
               alt="Adatara Logo"
-              className="h-16 md:h-20 w-auto object-contain"
+              className="h-10 w-auto object-contain"
             />
           </Link>
-        </motion.div>
-        
-        {/* Page Title */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-center"
-        >
-          <h2 className="text-3xl font-bold font-serif text-[#064e3b] tracking-tight">
-            Buat Akun Adatara Anda
-          </h2>
-          <p className="mt-2 text-sm text-[#064e3b]/70 font-medium">
-            Mulai desain undangan premium Anda hari ini.
-          </p>
-        </motion.div>
+        </div>
+
+        {/* Elegant typography & quote */}
+        <div className="relative z-10 space-y-6 max-w-sm my-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#d4af37] block mb-3">Premium Digital Invitation</span>
+            <h1 className="text-3xl xl:text-4xl font-serif font-semibold leading-tight tracking-tight text-white">
+              Mulailah Perjalanan Membuat Undangan Impian Anda.
+            </h1>
+            <div className="h-[2px] w-12 bg-gradient-to-r from-[#d4af37] to-transparent mt-6" />
+          </motion.div>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-[#f5f5dc]/70 text-sm font-light leading-relaxed font-sans"
+          >
+            Setiap detail didesain dengan keanggunan khas nusantara. Selamat datang di Adatara.
+          </motion.p>
+        </div>
+
+        {/* Footer info in Cover */}
+        <div className="relative z-10 text-xs text-[#f5f5dc]/40 font-light tracking-wider">
+          © 2026 Adatara. All rights reserved.
+        </div>
       </div>
 
-      <motion.div 
-        initial={{ opacity: 0, y: 30, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10"
-      >
-        <div className="bg-white/80 backdrop-blur-lg border border-[#064e3b]/10 py-10 px-10 shadow-[0_20px_50px_rgba(6,78,59,0.08)] rounded-[2.25rem] sm:px-10 relative overflow-hidden">
-          {/* Subtle gold line ornament at the top of the card */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37]/60 to-transparent" />
+      {/* Right Column (Form Container) */}
+      <div className="col-span-1 lg:col-span-7 flex flex-col min-h-screen justify-center px-6 py-16 sm:px-16 md:px-24 xl:px-32 bg-gradient-to-b from-[#fdfdfb] to-[#f5f5dc] lg:from-transparent lg:to-transparent relative">
+        
+        {/* Floating glows for mobile view (where left panel is hidden) */}
+        <div className="lg:hidden absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-[#d4af37]/8 blur-[100px] rounded-full pointer-events-none -z-10" />
+        <div className="lg:hidden absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-[#064e3b]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
+        {/* Elegant Back button at top right */}
+        <div className="absolute top-6 right-6 z-10">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-1.5 text-xs font-semibold bg-white/80 backdrop-blur-md border border-[#064e3b]/10 shadow-sm px-4 py-2 rounded-full text-[#064e3b] hover:bg-white hover:border-[#d4af37]/45 hover:shadow-md transition-all duration-300"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Kembali ke Beranda
+          </Link>
+        </div>
+
+        {/* Centered / clean max-width form container */}
+        <div className="w-full max-w-md mx-auto relative z-10">
+          {/* Mobile-only logo */}
+          <div className="lg:hidden mb-8">
+            <Link href="/" className="inline-block">
+              <img
+                src="/logo.png"
+                alt="Adatara Logo"
+                className="h-10 w-auto object-contain"
+              />
+            </Link>
+          </div>
+
+          {/* Header */}
+          <div className="mb-8 text-left">
+            <motion.h2 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl font-serif font-bold text-[#064e3b] tracking-tight"
+            >
+              Buat Akun Adatara Anda
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-2 text-sm text-[#064e3b]/70 font-medium"
+            >
+              Mulai desain undangan premium Anda hari ini.
+            </motion.p>
+          </div>
+
+          {/* Success State / Form */}
           {success ? (
             <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="flex flex-col items-center justify-center text-center py-8"
+              className="flex flex-col items-start py-8 space-y-4"
             >
-              <div className="w-16 h-16 bg-[#064e3b]/10 border border-[#064e3b]/20 text-[#064e3b] rounded-full flex items-center justify-center mb-4 shadow-inner">
-                <Check className="w-8 h-8" />
+              <div className="w-12 h-12 bg-[#064e3b]/10 border border-[#064e3b]/20 text-[#064e3b] rounded-full flex items-center justify-center shadow-inner">
+                <Check className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-[#064e3b] font-serif">Registrasi Berhasil!</h3>
-              <p className="text-[#064e3b]/70 text-sm mt-2 font-medium">
-                Akun Anda telah terdaftar. Mengalihkan ke dashboard...
-              </p>
+              <div className="space-y-1">
+                <h3 className="text-xl font-bold text-[#064e3b] font-serif">Registrasi Berhasil!</h3>
+                <p className="text-[#064e3b]/70 text-sm font-medium">
+                  Akun Anda telah terdaftar. Mengalihkan ke dashboard...
+                </p>
+              </div>
             </motion.div>
           ) : (
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               {/* Alert error */}
               {errorMessage && (
                 <motion.div 
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-55 border border-red-200 text-red-700 p-4 rounded-xl text-sm font-medium"
+                  className="bg-red-50/50 border border-red-200/60 text-red-800 p-4 rounded-xl text-sm font-medium backdrop-blur-md"
                 >
                   {errorMessage}
                 </motion.div>
               )}
 
               {/* Name */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold text-[#064e3b]/70 uppercase tracking-widest">
                   Nama Lengkap
                 </label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
+                  <User className="absolute left-4 top-[14px] w-4.5 h-4.5 text-[#064e3b]/30 group-focus-within:text-[#d4af37] transition-colors" />
                   <input
                     {...register("name")}
                     type="text"
                     placeholder="Aditya Pratama"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
+                    className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#064e3b]/10 focus:border-[#d4af37]/80 focus:ring-2 focus:ring-[#d4af37]/10 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all duration-300 shadow-sm"
                   />
                 </div>
                 {errors.name && (
@@ -187,17 +239,17 @@ export default function Register() {
               </div>
 
               {/* Email */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold text-[#064e3b]/70 uppercase tracking-widest">
                   Alamat Email
                 </label>
                 <div className="relative group">
-                  <Mail className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
+                  <Mail className="absolute left-4 top-[14px] w-4.5 h-4.5 text-[#064e3b]/30 group-focus-within:text-[#d4af37] transition-colors" />
                   <input
                     {...register("email")}
                     type="email"
-                    placeholder="aditya@example.com"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
+                    placeholder="nama@email.com"
+                    className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#064e3b]/10 focus:border-[#d4af37]/80 focus:ring-2 focus:ring-[#d4af37]/10 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all duration-300 shadow-sm"
                   />
                 </div>
                 {errors.email && (
@@ -206,17 +258,17 @@ export default function Register() {
               </div>
 
               {/* Phone Number */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold text-[#064e3b]/70 uppercase tracking-widest">
                   Nomor Handphone (WhatsApp)
                 </label>
                 <div className="relative group">
-                  <Phone className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
+                  <Phone className="absolute left-4 top-[14px] w-4.5 h-4.5 text-[#064e3b]/30 group-focus-within:text-[#d4af37] transition-colors" />
                   <input
                     {...register("nomor_hp")}
                     type="tel"
                     placeholder="081234567890"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
+                    className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#064e3b]/10 focus:border-[#d4af37]/80 focus:ring-2 focus:ring-[#d4af37]/10 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all duration-300 shadow-sm"
                   />
                 </div>
                 {errors.nomor_hp && (
@@ -225,17 +277,17 @@ export default function Register() {
               </div>
 
               {/* Password */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold text-[#064e3b]/70 uppercase tracking-widest">
                   Password
                 </label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
+                  <Lock className="absolute left-4 top-[14px] w-4.5 h-4.5 text-[#064e3b]/30 group-focus-within:text-[#d4af37] transition-colors" />
                   <input
                     {...register("password")}
                     type="password"
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
+                    className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#064e3b]/10 focus:border-[#d4af37]/80 focus:ring-2 focus:ring-[#d4af37]/10 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all duration-300 shadow-sm"
                   />
                 </div>
                 {errors.password && (
@@ -244,17 +296,17 @@ export default function Register() {
               </div>
 
               {/* Confirm Password */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-[#064e3b]/80 uppercase tracking-widest">
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold text-[#064e3b]/70 uppercase tracking-widest">
                   Konfirmasi Password
                 </label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-[15px] w-5 h-5 text-[#064e3b]/40 group-focus-within:text-[#064e3b] transition-colors" />
+                  <Lock className="absolute left-4 top-[14px] w-4.5 h-4.5 text-[#064e3b]/30 group-focus-within:text-[#d4af37] transition-colors" />
                   <input
                     {...register("confirmPassword")}
                     type="password"
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-[#064e3b]/15 focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/35 outline-none transition-all shadow-sm focus:shadow-md"
+                    className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#064e3b]/10 focus:border-[#d4af37]/80 focus:ring-2 focus:ring-[#d4af37]/10 rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all duration-300 shadow-sm"
                   />
                 </div>
                 {errors.confirmPassword && (
@@ -263,11 +315,11 @@ export default function Register() {
               </div>
 
               {/* Submit Button */}
-              <div>
+              <div className="pt-2">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 rounded-xl text-sm font-bold bg-[#064e3b] hover:bg-[#043427] border border-[#d4af37]/40 hover:border-[#d4af37] text-[#f5f5dc] shadow-lg shadow-[#064e3b]/10 hover:shadow-[#064e3b]/20 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 hover:-translate-y-[1px]"
+                  className="w-full py-3.5 rounded-xl text-sm font-bold bg-[#064e3b] hover:bg-[#053c2e] border border-[#d4af37]/20 hover:border-[#d4af37] text-white shadow-md shadow-[#064e3b]/5 hover:shadow-lg hover:shadow-[#064e3b]/15 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 hover:-translate-y-[1px]"
                 >
                   {loading ? (
                     <>
@@ -282,14 +334,16 @@ export default function Register() {
             </form>
           )}
 
-          <div className="mt-8 pt-6 border-t border-[#064e3b]/5 text-center text-sm text-[#064e3b]/70 font-medium">
+          {/* Login redirect */}
+          <div className="mt-6 pt-5 border-t border-[#064e3b]/5 text-left text-sm text-[#064e3b]/60 font-medium font-sans">
             Sudah memiliki akun?{" "}
             <Link href="/login" className="text-[#064e3b] hover:text-[#d4af37] font-bold transition-colors">
               Masuk di sini
             </Link>
           </div>
+
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
