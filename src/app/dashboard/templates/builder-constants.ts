@@ -108,4 +108,4 @@ export const KATEGORI_EN_MAP: Record<string, string> = {
 
 export const ANIMATION_OPTIONS = ["none", "fade-in", "slide-up", "zoom-in", "bounce"];
 export const BINGKAI_OPTIONS = ["none", "bulat", "oval", "kubah", "hexagon", "daun", "perisai", "kotak-rounded", "kotak", "overlay-1", "overlay-2", "overlay-3", "custom"];
-export const GALERI_LAYOUT_OPTIONS = ["grid", "masonry", "carousel"];
+export const GALERI_LAYOUT_OPTIONS = ["grid-2", "grid-3", "masonry", "carousel", "collage", "polaroid"];

@@ -1346,13 +1346,16 @@ export function BuilderEditor({
                       <div className="space-y-2">
                         <label className="block text-[10px] font-extrabold uppercase opacity-75">Layout Style</label>
                         <select
-                          value={data.cerita?.galeri_layout || "grid"}
+                          value={data.cerita?.galeri_layout || "grid-2"}
                           onChange={(e) => updateData("cerita", "galeri_layout", e.target.value)}
-                          className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none"
+                          className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none font-bold"
                         >
-                          <option value="grid">Grid (Kotak-kotak)</option>
+                          <option value="grid-2">Grid 2 Kolom</option>
+                          <option value="grid-3">Grid 3 Kolom</option>
                           <option value="masonry">Masonry (Estetik)</option>
                           <option value="carousel">Carousel (Geser)</option>
+                          <option value="collage">Collage Editorial</option>
+                          <option value="polaroid">Polaroid Stack</option>
                         </select>
                       </div>
 
@@ -2076,13 +2079,84 @@ export function BuilderEditor({
                           Galeri Foto
                         </span>
 
-                        <div className="grid grid-cols-2 gap-1.5 pt-1">
-                          {data.cerita.galeris.map((img: string, idx: number) => (
-                            <div key={idx} className="aspect-square rounded-lg overflow-hidden bg-[#064e3b]/5 border border-[#064e3b]/10">
-                              <img src={img} className="w-full h-full object-cover" alt="" />
-                            </div>
-                          ))}
-                        </div>
+                        {(() => {
+                          const layout = data.cerita?.galeri_layout || "grid-2";
+                          if (layout === "grid" || layout === "grid-2") {
+                            return (
+                              <div className="grid grid-cols-2 gap-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
+                                    <img src={img} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "grid-3") {
+                            return (
+                              <div className="grid grid-cols-3 gap-1.5 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
+                                    <img src={img} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "masonry") {
+                            return (
+                              <div className="columns-2 gap-2 space-y-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="break-inside-avoid">
+                                    <img src={img} className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "carousel") {
+                            return (
+                              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="w-[160px] shrink-0 snap-center">
+                                    <img src={img} className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "collage") {
+                            return (
+                              <div className="grid grid-cols-6 gap-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const colSpan = (idx % 4 === 0 || idx % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
+                                  return (
+                                    <div key={idx} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "polaroid") {
+                            return (
+                              <div className="grid grid-cols-2 gap-3.5 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
+                                  const rot = rotations[idx % rotations.length];
+                                  return (
+                                    <div key={idx} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
+                                      <img src={img} className="w-full aspect-square object-cover" alt="" />
+                                      <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{idx + 1}</div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          return null;
+                        })()}
                       </>
                     )}
                   </div>

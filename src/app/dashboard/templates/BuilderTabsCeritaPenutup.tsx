@@ -153,14 +153,27 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
 
           <SectionInput label="Gaya Layout Galeri">
             <div>
-              <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">Gaya Layout</label>
-              <div className="flex gap-1">
-                {GALERI_LAYOUT_OPTIONS.map(l => (
-                  <button key={l} type="button" onClick={() => upd("galeri_layout", l)}
-                    className={`px-3 py-1 rounded-lg text-[9px] font-black border ${data.galeri_layout === l ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}>
-                    {l}
-                  </button>
-                ))}
+              <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1.5">Pilih Desain Layout</label>
+              <div className="flex gap-1.5 flex-wrap">
+                {GALERI_LAYOUT_OPTIONS.map(l => {
+                  const label = l === "grid-2" ? "Grid 2 Kolom" :
+                                l === "grid-3" ? "Grid 3 Kolom" :
+                                l === "masonry" ? "Masonry (Estetik)" :
+                                l === "carousel" ? "Carousel (Geser)" :
+                                l === "collage" ? "Collage Editorial" :
+                                l === "polaroid" ? "Polaroid Stack" : l;
+                  const isActive = data.galeri_layout === l || (l === "grid-2" && data.galeri_layout === "grid") || (!data.galeri_layout && l === "grid-2");
+                  return (
+                    <button key={l} type="button" onClick={() => upd("galeri_layout", l)}
+                      className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${
+                        isActive 
+                          ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15" 
+                          : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5 hover:text-[#064e3b]"
+                      }`}>
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </SectionInput>
@@ -237,11 +250,84 @@ export function CeritaPreview({ data }: { data: any }) {
           <div className={getDividerClass(data.setting_head_galeri?.position)} />
         </div>
         {galeris.length > 0 ? (
-          <div className={`grid gap-2 ${data.galeri_layout === "grid" ? "grid-cols-2" : "grid-cols-3"}`}>
-            {galeris.map((g, i) => (
-              <img key={i} src={g} alt={`Galeri ${i + 1}`} className="w-full aspect-square object-cover rounded-xl" />
-            ))}
-          </div>
+          (() => {
+            const layout = data.galeri_layout || "grid-2";
+            if (layout === "grid" || layout === "grid-2") {
+              return (
+                <div className="grid grid-cols-2 gap-2">
+                  {galeris.map((g, i) => (
+                    <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
+                      <img src={g} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+            if (layout === "grid-3") {
+              return (
+                <div className="grid grid-cols-3 gap-1.5">
+                  {galeris.map((g, i) => (
+                    <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
+                      <img src={g} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+            if (layout === "masonry") {
+              return (
+                <div className="columns-2 gap-2 space-y-2">
+                  {galeris.map((g, i) => (
+                    <div key={i} className="break-inside-avoid">
+                      <img src={g} alt="" className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" />
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+            if (layout === "carousel") {
+              return (
+                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
+                  {galeris.map((g, i) => (
+                    <div key={i} className="w-[160px] shrink-0 snap-center">
+                      <img src={g} alt="" className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" />
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+            if (layout === "collage") {
+              return (
+                <div className="grid grid-cols-6 gap-2">
+                  {galeris.map((g, i) => {
+                    const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
+                    return (
+                      <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                        <img src={g} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }
+            if (layout === "polaroid") {
+              return (
+                <div className="grid grid-cols-2 gap-3.5 pt-1">
+                  {galeris.map((g, i) => {
+                    const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
+                    const rot = rotations[i % rotations.length];
+                    return (
+                      <div key={i} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
+                        <img src={g} alt="" className="w-full aspect-square object-cover" />
+                        <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{i + 1}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }
+            return null;
+          })()
         ) : (
           <div className="text-center text-xs text-[#064e3b]/40 py-6">Belum ada foto galeri.</div>
         )}
