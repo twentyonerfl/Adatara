@@ -2060,8 +2060,8 @@ export function BuilderEditor({
                           {data.cerita.ceritas.map((st: any, idx: number) => (
                             <div key={idx} className="relative pb-1">
                               {/* Elegant 4-pointed Star Node */}
-                              <div className="absolute -left-[31px] top-[14px] w-3.5 h-3.5 flex items-center justify-center bg-transparent">
-                                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#d4af37] drop-shadow-[0_0_3px_rgba(212,175,55,0.6)]" fill="currentColor">
+                              <div className="absolute -left-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
+                                <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
                                   <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
                                 </svg>
                               </div>
