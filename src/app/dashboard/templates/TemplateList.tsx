@@ -169,14 +169,20 @@ export function TemplateList({ templates }: { templates: TemplateType[] }) {
                   {/* Background Image of the catalog card container */}
                   {template.thumbnail && (
                     <img
+                      ref={(el) => {
+                        if (el && el.complete && el.naturalWidth === 0) {
+                          el.style.display = 'none';
+                        }
+                      }}
                       src={template.thumbnail}
                       alt=""
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-transform duration-700 ease-out sm:group-hover:scale-105"
                     />
                   )}
 
                    {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
-                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-xl border-[3px] border-slate-950 rounded-[14px] transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10 ring-1 ring-white/10">
+                  <div className="h-full aspect-[9/16] relative overflow-hidden bg-slate-950 shadow-xl border-[3px] border-slate-950 rounded-[14px] transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10 ring-1 ring-white/10">
                     {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
                     ) : template.thumbnail ? (

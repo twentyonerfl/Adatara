@@ -1007,7 +1007,7 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
 
         const scaleX = width / 288;
         const scaleY = height / 512;
-        const newScale = Math.min(scaleX, scaleY);
+        const newScale = Math.max(scaleX, scaleY);
 
         setScale((prevScale) => {
           // Only update state if scale changed significantly to avoid subpixel/resize jitter
