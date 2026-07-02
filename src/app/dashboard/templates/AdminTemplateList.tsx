@@ -232,8 +232,8 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
 
                 {/* Thumbnail / Live Cover Preview */}
                 <div className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-[#064e3b]/5 overflow-hidden flex items-center justify-center p-2.5">
-                  {/* Background Image of the catalog card container (only fallback if no live preview data) */}
-                  {!hasCoverData && t.thumbnail && (
+                  {/* Background Image of the catalog card container */}
+                  {t.thumbnail && (
                     <img
                       src={getSafeThumbnail(t.thumbnail)}
                       alt=""
@@ -243,10 +243,10 @@ export default function AdminTemplateList({ templates: initial }: { templates: T
 
                   {/* Cover Zoom Wrapper in 9:16 aspect ratio */}
                   <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out group-hover:scale-[1.04] z-10">
-                    {t.thumbnail ? (
-                      <img src={getSafeThumbnail(t.thumbnail)} alt={t.nama_template} className="w-full h-full object-cover" />
-                    ) : hasCoverData ? (
+                    {hasCoverData ? (
                       <ScaledCoverPreview coverData={coverData} meta={meta} />
+                    ) : t.thumbnail ? (
+                      <img src={getSafeThumbnail(t.thumbnail)} alt={t.nama_template} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                     )}

@@ -1032,8 +1032,8 @@ export default function HomeClient({
                       className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative flex items-center justify-center p-2.5"
                       style={{ backgroundColor: `${settings.text_color}08` }}
                     >
-                      {/* Background Image of the catalog card container (only fallback if no live preview data) */}
-                      {!coverData && template.image && (
+                      {/* Background Image of the catalog card container */}
+                      {template.image && (
                         <img
                           src={getSafeThumbnail(template.image)}
                           alt=""
@@ -1043,13 +1043,7 @@ export default function HomeClient({
 
                       {/* Cover Preview Zoom Wrapper in 9:16 aspect ratio */}
                       <div className="h-full aspect-[9/16] relative overflow-hidden bg-white shadow-sm border border-[#064e3b]/10 rounded-lg transition-transform duration-700 ease-out sm:group-hover:scale-[1.04] z-10">
-                        {template.image ? (
-                          <img
-                            src={getSafeThumbnail(template.image)}
-                            alt={template.nama}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : coverData ? (
+                        {coverData ? (
                           <ScaledCoverPreview
                             coverData={coverData}
                             meta={{ kategori: template.kategori, bahasa: "id" }}
