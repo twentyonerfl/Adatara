@@ -217,8 +217,12 @@ export function CeritaPreview({ data }: { data: any }) {
         <div className="relative pl-6 border-l border-[#d4af37]/35 space-y-6">
           {ceritas.map((c, i) => (
             <div key={i} className="relative">
-              {/* Luxury Glowing Timeline Dot Node */}
-              <div className="absolute -left-[30px] top-[15px] w-2 h-2 rounded-full bg-[#d4af37] ring-[5px] ring-[#d4af37]/20 border border-white" />
+              {/* Elegant 4-pointed Star Node */}
+              <div className="absolute -left-[32px] top-[16px] w-4 h-4 flex items-center justify-center bg-transparent">
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#d4af37] drop-shadow-[0_0_3px_rgba(212,175,55,0.6)]" fill="currentColor">
+                  <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                </svg>
+              </div>
               
               {/* Thin Glassmorphic Card Container */}
               <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-2xl p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35 hover:shadow-[0_12px_40px_rgba(6,78,59,0.05)]">

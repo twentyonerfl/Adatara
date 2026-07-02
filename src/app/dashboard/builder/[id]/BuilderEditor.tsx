@@ -2056,16 +2056,22 @@ export function BuilderEditor({
                           Kisah Perjalanan
                         </span>
 
-                        <div className="space-y-4 text-left relative pl-5 border-l border-dashed border-[#d4af37]/50 ml-1">
+                        <div className="space-y-4 text-left relative pl-5 border-l border-[#d4af37]/35 ml-1">
                           {data.cerita.ceritas.map((st: any, idx: number) => (
                             <div key={idx} className="relative pb-1">
-                              <div className="absolute -left-[25.5px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#d4af37] ring-4 ring-[#d4af37]/15 border border-white" />
-                              <div className="bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl p-2.5 space-y-1 relative">
-                                <div className="flex items-baseline justify-between gap-2 border-b border-[#064e3b]/5 pb-1 mb-1">
-                                  <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold">{st.judul}</h6>
-                                  <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-semibold shrink-0 text-[8px] opacity-75">{st.waktu}</span>
+                              {/* Elegant 4-pointed Star Node */}
+                              <div className="absolute -left-[31px] top-[14px] w-3.5 h-3.5 flex items-center justify-center bg-transparent">
+                                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#d4af37] drop-shadow-[0_0_3px_rgba(212,175,55,0.6)]" fill="currentColor">
+                                  <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                                </svg>
+                              </div>
+                              {/* Thin Glassmorphic Card Container */}
+                              <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-2xl p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35">
+                                <div className="flex items-baseline justify-between gap-2 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                  <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">{st.judul}</h6>
+                                  <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">{st.waktu}</span>
                                 </div>
-                                <p style={getFontStyles(data.cerita?.setting_isi_cerita || { size: "9.5px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-normal">{st.isi}</p>
+                                <p style={getFontStyles(data.cerita?.setting_isi_cerita || { size: "9.5px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">{st.isi}</p>
                               </div>
                             </div>
                           ))}
