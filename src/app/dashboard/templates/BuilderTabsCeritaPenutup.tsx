@@ -44,21 +44,50 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
       {(!mode || mode === "data") && (
         <>
           <SectionInput label="Timeline Cerita">
-            <div className="space-y-3">
+            <div className="space-y-4">
               {ceritas.map((c, i) => (
-                <div key={i} className="p-3 bg-white border border-[#064e3b]/10 rounded-xl space-y-2 relative">
-                  <button type="button" onClick={() => removeCerita(i)} className="absolute top-2 right-2 p-1 text-red-400 hover:text-red-600 rounded-lg">
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                  <p className="text-[9px] font-black uppercase text-[#d4af37]">Cerita #{i + 1}</p>
-                  <InputField label="Judul" value={c.judul} onChange={v => updCerita(i, "judul", v)} placeholder="Awal Pertemuan..." />
-                  <InputField label="Waktu / Tanggal" value={c.waktu} onChange={v => updCerita(i, "waktu", v)} placeholder="Januari 2024" />
-                  <InputField label="Isi Cerita" value={c.isi} onChange={v => updCerita(i, "isi", v)} placeholder="Ceritakan momen ini..." textarea />
+                <div key={i} className="p-4 bg-white/45 backdrop-blur-md border border-white/75 border-l-[3px] border-l-[#d4af37]/80 rounded-2xl space-y-3 relative shadow-[0_8px_30px_-5px_rgba(6,78,59,0.03)] hover:bg-white/60 hover:shadow-[0_12px_30px_-5px_rgba(6,78,59,0.06)] transition-all duration-300">
+                  <div className="flex justify-between items-center border-b border-[#064e3b]/5 pb-2 mb-0.5">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] bg-[#064e3b]/5 px-2 py-0.5 rounded-md">Cerita #{i + 1}</span>
+                    <button type="button" onClick={() => removeCerita(i)} className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50/50 rounded-lg transition-colors">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <div>
+                    <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Judul Cerita</label>
+                    <input 
+                      type="text" 
+                      value={c.judul} 
+                      onChange={e => updCerita(i, "judul", e.target.value)} 
+                      placeholder="Awal Pertemuan..." 
+                      className="w-full px-3 py-2 text-xs bg-white/60 border border-[#064e3b]/15 rounded-xl outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 transition-all duration-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Waktu / Tanggal</label>
+                    <input 
+                      type="text" 
+                      value={c.waktu} 
+                      onChange={e => updCerita(i, "waktu", e.target.value)} 
+                      placeholder="Januari 2024" 
+                      className="w-full px-3 py-2 text-xs bg-white/60 border border-[#064e3b]/15 rounded-xl outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 transition-all duration-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Isi Cerita</label>
+                    <textarea 
+                      value={c.isi} 
+                      onChange={e => updCerita(i, "isi", e.target.value)} 
+                      placeholder="Ceritakan momen ini..." 
+                      rows={3} 
+                      className="w-full px-3 py-2 text-xs bg-white/60 border border-[#064e3b]/15 rounded-xl outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 resize-none transition-all duration-300"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
             <button type="button" onClick={addCerita}
-              className="w-full py-2 border-2 border-dashed border-[#064e3b]/20 rounded-xl text-xs font-bold text-[#064e3b]/50 hover:border-[#d4af37] hover:text-[#d4af37] flex items-center justify-center gap-2 transition-all">
+              className="w-full py-2 border-2 border-dashed border-[#064e3b]/15 rounded-xl text-xs font-bold text-[#064e3b]/50 hover:border-[#d4af37] hover:text-[#d4af37] flex items-center justify-center gap-2 transition-all duration-300 bg-white/20 hover:bg-white/40">
               <Plus className="w-4 h-4" /> Tambah Cerita
             </button>
           </SectionInput>
@@ -172,20 +201,26 @@ export function CeritaPreview({ data }: { data: any }) {
           <div>Cerita Kita</div>
           <div className={getDividerClass(data.setting_head_cerita?.position)} />
         </div>
-        <div className="relative pl-6 border-l border-dashed border-[#d4af37]/60 space-y-6">
+        <div className="relative pl-6 border-l border-[#d4af37]/35 space-y-6">
           {ceritas.map((c, i) => (
             <div key={i} className="relative">
-              <div className="absolute -left-[25px] top-1.5 w-3 h-3 rounded-full bg-[#d4af37] ring-4 ring-[#d4af37]/20 border-2 border-white" />
-              <div className="bg-white/70 backdrop-blur-md border border-white/30 rounded-2xl p-3.5 shadow-sm relative space-y-1.5 transition-all hover:bg-white/80">
-                <div className="flex items-baseline justify-between gap-3 border-b border-[#064e3b]/5 pb-1 mb-1">
-                  <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold">
+              {/* Luxury Glowing Timeline Dot Node */}
+              <div className="absolute -left-[30px] top-[15px] w-2 h-2 rounded-full bg-[#d4af37] ring-[5px] ring-[#d4af37]/20 border border-white" />
+              
+              {/* Thin Glassmorphic Card Container */}
+              <div className="bg-white/12 backdrop-blur-lg border border-white/20 rounded-2xl p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35 hover:shadow-[0_12px_40px_rgba(6,78,59,0.05)]">
+                {/* Card Header */}
+                <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                  <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
                     {c.judul || "Judul"}
                   </div>
-                  <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-wider text-[9px] opacity-75 shrink-0">
+                  <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
                     {c.waktu || "Waktu"}
                   </div>
                 </div>
-                <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed">
+                
+                {/* Card Content */}
+                <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
                   {c.isi || "Isi cerita..."}
                 </div>
               </div>
