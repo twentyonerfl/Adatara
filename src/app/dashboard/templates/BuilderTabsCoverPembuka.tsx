@@ -999,12 +999,27 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
     if (!containerRef.current) return;
     const updateScale = () => {
       if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const scaleX = rect.width / 288;
-        const scaleY = rect.height / 512;
-        // Fit cover exactly within container bounds (contain fit)
-        setScale(Math.min(scaleX, scaleY));
-        setHasMeasured(true);
+        const width = containerRef.current.offsetWidth;
+        const height = containerRef.current.offsetHeight;
+
+        // Skip layout calculations if element is hidden/offscreen (0 height/width)
+        if (width === 0 || height === 0) return;
+
+        const scaleX = width / 288;
+        const scaleY = height / 512;
+        const newScale = Math.min(scaleX, scaleY);
+
+        setScale((prevScale) => {
+          // Only update state if scale changed significantly to avoid subpixel/resize jitter
+          if (Math.abs(prevScale - newScale) > 0.005) {
+            return newScale;
+          }
+          return prevScale;
+        });
+        setHasMeasured((prev) => {
+          if (!prev) return true;
+          return prev;
+        });
       }
     };
 

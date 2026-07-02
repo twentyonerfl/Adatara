@@ -41,7 +41,14 @@ function ScaledSection({ children, scale }: { children: React.ReactNode; scale: 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
       if (entry) {
-        setHeight(entry.contentRect.height);
+        const newHeight = entry.contentRect.height;
+        if (newHeight === 0) return;
+        setHeight((prev) => {
+          if (Math.abs(prev - newHeight) > 1) {
+            return newHeight;
+          }
+          return prev;
+        });
       }
     });
     observer.observe(containerRef.current);
