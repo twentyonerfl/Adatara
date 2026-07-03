@@ -816,53 +816,6 @@ export function PenutupPreview({
         </div>
       )}
 
-      {data.ucapan_aktif && (
-        <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl relative text-left" style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold text-center tracking-wider">
-            <div>Doa & Ucapan</div>
-            <div className={getDividerClass(data.setting_head_rsvp?.position)} />
-          </div>
-          {wishes ? (
-            wishes.length > 0 ? (
-              <div 
-                className="space-y-3 max-h-[220px] overflow-y-auto pr-1.5 pt-1 scrollbar-thin"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(255,255,255,0.15) transparent",
-                }}
-              >
-                {wishes.map((w, idx) => (
-                  <div key={w.id || idx} className="bg-white/5 p-3 border border-white/10 flex gap-3 items-start transition-all hover:bg-white/10 shadow-sm" style={{ borderRadius: "6%" }}>
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#d4af37]/20 to-[#d4af37]/45 border border-[#d4af37]/40 flex items-center justify-center text-[10px] font-black text-white shrink-0 shadow-inner">
-                      {w.nama_tamu ? w.nama_tamu.charAt(0).toUpperCase() : "?"}
-                    </div>
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-extrabold text-white truncate block">{w.nama_tamu}</span>
-                        <span className={`px-1.5 py-0.5 text-[6.5px] font-black tracking-wider ${
-                          w.kehadiran === "HADIR"
-                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                            : w.kehadiran === "TIDAK_HADIR"
-                              ? "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                              : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                        }`} style={{ borderRadius: "6%" }}>
-                          {w.kehadiran === "HADIR" ? "Hadir" : w.kehadiran === "TIDAK_HADIR" ? "Absen" : "Ragu"}
-                        </span>
-                      </div>
-                      <p className="text-[9.5px] text-white/90 leading-relaxed font-normal whitespace-pre-wrap break-words">{w.ucapan}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-[9.5px] text-white/40 py-6">Belum ada doa atau ucapan terkirim.</div>
-            )
-          ) : (
-            <div className="mt-1 w-full h-16 bg-white/5 border border-white/10 text-[10px] flex items-center justify-center text-white/40 italic" style={{ borderRadius: "6%" }}>Kolom ucapan tamu akan muncul di sini...</div>
-          )}
-        </div>
-      )}
-
       <div className="text-center space-y-2.5 pt-5 border-t border-white/15">
         <p style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
         <p style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-bold">{data.salam || ""}</p>
