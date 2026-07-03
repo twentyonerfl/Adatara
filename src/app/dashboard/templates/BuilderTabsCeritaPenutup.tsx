@@ -700,7 +700,7 @@ export function PenutupPreview({
                   onChange={(e) => handleNamaChange(e.target.value)}
                   placeholder="Masukkan nama lengkap Anda..."
                   className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/10 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
-                  style={{ borderRadius: "6%" }}
+                  style={{ borderRadius: "10%" }}
                 />
               </div>
 
@@ -713,7 +713,7 @@ export function PenutupPreview({
                   rows={2.5}
                   placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
                   className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/10 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
-                  style={{ borderRadius: "6%" }}
+                  style={{ borderRadius: "10%" }}
                 />
               </div>
 
@@ -768,7 +768,7 @@ export function PenutupPreview({
                 type="submit"
                 disabled={submitting}
                 className="w-full py-2 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-extrabold text-[9.5px] tracking-wider transition-all duration-300 shadow-md shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                style={{ borderRadius: "6%" }}
+                style={{ borderRadius: "10%" }}
               >
                 {submitting ? (
                   <>
