@@ -41,12 +41,10 @@ const getSafeThumbnail = (url?: string) => {
 
 export function TemplateListPublic({
   templates,
-  categories = ["Semua"],
-  settings
+  categories = ["Semua"]
 }: {
   templates: TemplateType[];
   categories?: string[];
-  settings?: any;
 }) {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("Semua");
@@ -135,52 +133,26 @@ export function TemplateListPublic({
     }
   };
 
-  const textCol = settings?.text_color || "#064e3b";
-  const bgCol = settings?.bg_color || "#f5f5dc";
-  const accentCol = settings?.accent_color || "#d4af37";
-
   return (
-    <div className="space-y-6" style={{ color: textCol }}>
-      <style>{`
-        .custom-text-color {
-          color: ${textCol} !important;
-        }
-        .custom-border-color {
-          border-color: ${textCol}26 !important;
-        }
-        .custom-hover-bg:hover {
-          background-color: ${textCol}0d !important;
-        }
-        .custom-btn-primary {
-          background-color: ${textCol} !important;
-          color: ${bgCol} !important;
-          border-color: ${accentCol}80 !important;
-        }
-        .custom-btn-primary:hover {
-          background-color: ${textCol}e6 !important;
-          border-color: ${accentCol} !important;
-          opacity: 0.95;
-        }
-      `}</style>
-
+    <div className="space-y-6 text-[#064e3b]">
       {/* Search and Category Filter Section */}
       <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         {/* Search Input */}
         <div className="relative flex-1 max-w-lg">
           <span className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none opacity-50">
-            <Search className="w-5 h-5 custom-text-color" />
+            <Search className="w-5 h-5 text-[#064e3b]" />
           </span>
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari desain undangan..."
-            className="w-full pl-11 pr-4 py-3 rounded-full border text-sm font-semibold transition-all outline-none bg-white/60 backdrop-blur-md focus:border-[#d4af37] focus:bg-white custom-text-color custom-border-color shadow-sm"
+            className="w-full pl-11 pr-4 py-3 rounded-full border text-sm font-semibold transition-all outline-none bg-white/60 backdrop-blur-md border-[#064e3b]/15 focus:border-[#d4af37] focus:bg-white text-[#064e3b] shadow-sm"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-bold opacity-60 hover:opacity-100 transition-opacity custom-text-color"
+              className="absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-bold opacity-60 hover:opacity-100 transition-opacity text-[#064e3b]"
             >
               Batal
             </button>
@@ -193,7 +165,7 @@ export function TemplateListPublic({
           <div className="relative min-w-[170px] flex-1 md:flex-none dropdown-container">
             <button
               onClick={() => { setCategoryDropdownOpen(!categoryDropdownOpen); setPaketDropdownOpen(false); }}
-              className="w-full flex items-center justify-between gap-3 px-6 py-3 rounded-full border text-sm font-bold bg-white/60 backdrop-blur-md hover:border-[#d4af37] custom-text-color custom-border-color cursor-pointer shadow-sm transition-all"
+              className="w-full flex items-center justify-between gap-3 px-6 py-3 rounded-full border text-sm font-bold bg-white/60 backdrop-blur-md border-[#064e3b]/15 hover:border-[#d4af37] text-[#064e3b] cursor-pointer shadow-sm transition-all"
             >
               <span>{selectedCategory === "Semua" ? "Semua Kategori" : selectedCategory}</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${categoryDropdownOpen ? "rotate-180" : ""}`} />
@@ -206,7 +178,7 @@ export function TemplateListPublic({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border rounded-2xl shadow-xl z-50 p-2 scrollbar-thin custom-border-color"
+                  className="absolute right-0 mt-2 w-full md:w-64 max-h-72 overflow-y-auto bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2 scrollbar-thin"
                 >
                   {categories.map((cat) => (
                     <button
@@ -216,8 +188,8 @@ export function TemplateListPublic({
                         setCategoryDropdownOpen(false);
                       }}
                       className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
-                          ? "custom-btn-primary"
-                          : "custom-hover-bg custom-text-color"
+                          ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                          : "hover:bg-[#064e3b]/5 text-[#064e3b]"
                         }`}
                     >
                       {cat}
@@ -232,7 +204,7 @@ export function TemplateListPublic({
           <div className="relative min-w-[150px] flex-1 md:flex-none dropdown-container">
             <button
               onClick={() => { setPaketDropdownOpen(!paketDropdownOpen); setCategoryDropdownOpen(false); }}
-              className="w-full flex items-center justify-between gap-3 px-6 py-3 rounded-full border text-sm font-bold bg-white/60 backdrop-blur-md hover:border-[#d4af37] custom-text-color custom-border-color cursor-pointer shadow-sm transition-all"
+              className="w-full flex items-center justify-between gap-3 px-6 py-3 rounded-full border text-sm font-bold bg-white/60 backdrop-blur-md border-[#064e3b]/15 hover:border-[#d4af37] text-[#064e3b] cursor-pointer shadow-sm transition-all"
             >
               <span>{selectedPaket === "Semua" ? "Semua Paket" : selectedPaket}</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${paketDropdownOpen ? "rotate-180" : ""}`} />
@@ -245,7 +217,7 @@ export function TemplateListPublic({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-full md:w-48 bg-white border rounded-2xl shadow-xl z-50 p-2 custom-border-color"
+                  className="absolute right-0 mt-2 w-full md:w-48 bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl z-50 p-2"
                 >
                   {["Semua", "BASIC", "PREMIUM", "SULTAN", "EXCLUSIVE"].map((tier) => (
                     <button
@@ -255,8 +227,8 @@ export function TemplateListPublic({
                         setPaketDropdownOpen(false);
                       }}
                       className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
-                          ? "custom-btn-primary"
-                          : "custom-hover-bg custom-text-color"
+                          ? "bg-[#064e3b] text-[#f5f5dc] border-[#d4af37]"
+                          : "hover:bg-[#064e3b]/5 text-[#064e3b]"
                         }`}
                     >
                       {tier === "Semua" ? "Semua Paket" : tier}
@@ -271,16 +243,10 @@ export function TemplateListPublic({
 
       {/* Templates Grid */}
       {filteredTemplates.length === 0 ? (
-        <div
-          className="text-center py-16 border rounded-3xl"
-          style={{
-            backgroundColor: `${textCol}08`,
-            borderColor: `${textCol}1a`
-          }}
-        >
-          <Palette className="w-10 h-10 mx-auto mb-4 opacity-40 custom-text-color" />
-          <h4 className="font-bold custom-text-color">Tidak Ada Template</h4>
-          <p className="text-xs mt-1 opacity-50 custom-text-color">Belum ada template yang terdaftar dalam kategori ini.</p>
+        <div className="text-center py-16 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-3xl">
+          <Palette className="w-10 h-10 text-[#064e3b]/40 mx-auto mb-4" />
+          <h4 className="text-[#064e3b] font-bold">Tidak Ada Template</h4>
+          <p className="text-[#064e3b]/50 text-xs mt-1">Belum ada template yang terdaftar dalam kategori ini.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
@@ -297,16 +263,10 @@ export function TemplateListPublic({
                 exit={{ opacity: 0, y: 12 }}
                 transition={{ duration: 0.4 }}
                 key={template.id}
-                className="group bg-white border rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer custom-border-color custom-card-hover hover:-translate-y-1"
+                className="group bg-white border border-[#064e3b]/10 hover:border-[#d4af37]/45 hover:-translate-y-1 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer"
               >
                 {/* Badges Header Bar */}
-                <div
-                  className="px-2 py-1.5 flex items-center justify-between border-b"
-                  style={{
-                    borderColor: `${textCol}0d`,
-                    backgroundColor: `${textCol}05`
-                  }}
-                >
+                <div className="px-2 py-1.5 flex items-center justify-between border-b border-[#064e3b]/5 bg-[#064e3b]/[0.02]">
                   {/* Package Tier Badge */}
                   <span className={`px-1.5 py-0.5 rounded-md text-[5.5px] font-extrabold uppercase tracking-wider border shadow-sm ${template.paket === "EXCLUSIVE"
                       ? "bg-[#800020] text-white border-[#6a001a]"
@@ -320,22 +280,13 @@ export function TemplateListPublic({
                   </span>
 
                   {/* Category Badge */}
-                  <span
-                    className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white shadow-sm border"
-                    style={{
-                      color: textCol,
-                      borderColor: `${textCol}1a`
-                    }}
-                  >
+                  <span className="px-1.5 py-0.5 rounded-md text-[5.5px] font-black uppercase tracking-wider bg-white text-[#064e3b] border border-[#064e3b]/10 shadow-sm">
                     {template.kategori || "—"}
                   </span>
                 </div>
 
                 {/* Thumbnail / Live Cover Preview Container */}
-                <div
-                  className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative flex items-center justify-center p-2.5"
-                  style={{ backgroundColor: `${textCol}08` }}
-                >
+                <div className="w-full h-44 sm:h-52 md:h-60 lg:h-64 overflow-hidden relative bg-[#064e3b]/5 flex items-center justify-center p-2.5">
                   {/* Background Image of the catalog card container */}
                   {template.thumbnail && (
                     <img
@@ -362,19 +313,16 @@ export function TemplateListPublic({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center opacity-25" style={{ color: textCol }}><Palette className="w-10 h-10" /></div>
+                      <div className="w-full h-full flex items-center justify-center text-[#064e3b]/20"><Palette className="w-10 h-10" /></div>
                     )}
                   </div>
                 </div>
 
                 {/* Body */}
-                <div
-                  className="p-2 flex flex-col justify-between bg-white border-t"
-                  style={{ borderColor: `${textCol}0d` }}
-                >
+                <div className="p-2 flex flex-col justify-between bg-white border-t border-[#064e3b]/5">
                   {/* Title */}
                   <div className="w-full text-center">
-                    <h4 className="text-[10px] font-extrabold custom-text-color custom-text-hover transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
+                    <h4 className="text-[10px] font-extrabold text-[#064e3b] group-hover:text-[#d4af37] transition-colors duration-300 leading-tight break-words w-full text-center py-0.5">
                       {template.nama_template}
                     </h4>
                   </div>
@@ -382,7 +330,7 @@ export function TemplateListPublic({
                   {/* Action */}
                   <button
                     onClick={() => handleOpenModal(template)}
-                    className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border bg-transparent flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase custom-btn-outline"
+                    className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border border-[#064e3b]/15 hover:border-[#064e3b] bg-transparent text-[#064e3b] hover:bg-[#064e3b] hover:text-white flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase"
                   >
                     Buat Undangan
                     <ArrowRight className="w-2.5 h-2.5 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -412,13 +360,13 @@ export function TemplateListPublic({
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white border w-full max-w-lg rounded-3xl overflow-hidden relative shadow-2xl z-10 p-6 sm:p-8 text-left max-h-[90vh] overflow-y-auto custom-border-color"
+              className="bg-white border border-[#064e3b]/10 w-full max-w-lg rounded-3xl overflow-hidden relative shadow-2xl z-10 p-6 sm:p-8 text-left max-h-[90vh] overflow-y-auto"
             >
               {/* Close Button */}
               <button
                 onClick={handleCloseModal}
                 disabled={loading}
-                className="absolute top-4 right-4 p-2 opacity-50 hover:opacity-100 rounded-lg disabled:opacity-50 custom-text-color"
+                className="absolute top-4 right-4 p-2 text-[#064e3b]/40 hover:text-[#064e3b] rounded-lg disabled:opacity-50"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -429,11 +377,11 @@ export function TemplateListPublic({
                   <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-full flex items-center justify-center mb-4">
                     <CheckCircle className="w-8 h-8" />
                   </div>
-                  <h3 className="text-xl font-bold custom-text-color">Template Dipilih!</h3>
-                  <p className="custom-text-color opacity-70 text-sm mt-2">
+                  <h3 className="text-xl font-bold text-[#064e3b]">Template Dipilih!</h3>
+                  <p className="text-[#064e3b]/70 text-sm mt-2">
                     Menyiapkan ruang editor untuk kustomisasi undangan Anda...
                   </p>
-                  <div className="mt-4 flex items-center gap-2 text-xs font-bold custom-text-color">
+                  <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#064e3b]">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     Membuka Template Builder
                   </div>
@@ -442,17 +390,14 @@ export function TemplateListPublic({
                 /* Form state */
                 <form onSubmit={handleCreate} className="space-y-4">
                   <div>
-                    <span
-                      className="text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1"
-                      style={{ color: accentCol }}
-                    >
+                    <span className="text-[10px] font-extrabold text-[#d4af37] uppercase tracking-widest flex items-center gap-1">
                       <Sparkles className="w-3.5 h-3.5" />
                       Konfirmasi Pembuatan
                     </span>
-                    <h3 className="text-xl font-extrabold custom-text-color mt-1">
+                    <h3 className="text-xl font-extrabold text-[#064e3b] mt-1">
                       Buat Undangan Baru
                     </h3>
-                    <p className="custom-text-color opacity-70 text-xs">
+                    <p className="text-[#064e3b]/70 text-xs">
                       Lengkapi data berikut untuk mulai mendesain <strong>{selectedTemplate.nama_template}</strong>.
                     </p>
                   </div>
@@ -467,93 +412,83 @@ export function TemplateListPublic({
 
                   {/* Full Name */}
                   <div>
-                    <label className="block text-xs font-bold custom-text-color opacity-80 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-1.5">
                       Nama Lengkap Anda
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-3.5 w-4 h-4 custom-text-color opacity-40" />
+                      <User className="absolute left-4 top-3.5 w-4 h-4 text-[#064e3b]/40" />
                       <input
                         type="text"
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Nama Lengkap Pembuat"
-                        className="w-full pl-12 pr-4 py-2.5 border rounded-xl text-sm outline-none transition-all custom-text-color custom-border-color focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37]"
-                        style={{ backgroundColor: `${bgCol}26` }}
+                        className="w-full pl-12 pr-4 py-2.5 bg-[#f5f5dc]/15 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   {/* WhatsApp */}
                   <div>
-                    <label className="block text-xs font-bold custom-text-color opacity-80 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-1.5">
                       Nomor WhatsApp (Aktif)
                     </label>
                     <div className="relative">
-                      <Phone className="absolute left-4 top-3.5 w-4 h-4 custom-text-color opacity-40" />
+                      <Phone className="absolute left-4 top-3.5 w-4 h-4 text-[#064e3b]/40" />
                       <input
                         type="tel"
                         required
                         value={nomorHp}
                         onChange={(e) => setNomorHp(e.target.value.replace(/[^0-9]/g, ""))}
                         placeholder="contoh: 081234567890"
-                        className="w-full pl-12 pr-4 py-2.5 border rounded-xl text-sm outline-none transition-all custom-text-color custom-border-color focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37]"
-                        style={{ backgroundColor: `${bgCol}26` }}
+                        className="w-full pl-12 pr-4 py-2.5 bg-[#f5f5dc]/15 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-xs font-bold custom-text-color opacity-80 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-1.5">
                       Alamat Email
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-3.5 w-4 h-4 custom-text-color opacity-40" />
+                      <Mail className="absolute left-4 top-3.5 w-4 h-4 text-[#064e3b]/40" />
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="email@example.com"
-                        className="w-full pl-12 pr-4 py-2.5 border rounded-xl text-sm outline-none transition-all custom-text-color custom-border-color focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37]"
-                        style={{ backgroundColor: `${bgCol}26` }}
+                        className="w-full pl-12 pr-4 py-2.5 bg-[#f5f5dc]/15 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   {/* Slug Input */}
                   <div>
-                    <label className="block text-xs font-bold custom-text-color opacity-80 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-[#064e3b]/85 uppercase tracking-wider mb-1.5">
                       Tentukan Tautan (Link) Undangan
                     </label>
                     <div className="relative">
-                      <LinkIcon className="absolute left-4 top-3.5 w-4 h-4 custom-text-color opacity-40" />
+                      <LinkIcon className="absolute left-4 top-3.5 w-4 h-4 text-[#064e3b]/40" />
                       <input
                         type="text"
                         required
                         value={slug}
                         onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
                         placeholder="contoh: aditya-tara"
-                        className="w-full pl-12 pr-4 py-2.5 border rounded-xl text-sm outline-none transition-all custom-text-color custom-border-color focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37]"
-                        style={{ backgroundColor: `${bgCol}26` }}
+                        className="w-full pl-12 pr-4 py-2.5 bg-[#f5f5dc]/15 border border-[#064e3b]/20 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-sm text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all"
                       />
                     </div>
-                    <p className="text-[10px] custom-text-color opacity-50 mt-1">
+                    <p className="text-[10px] text-[#064e3b]/50 mt-1">
                       Hanya boleh huruf kecil, angka, dan tanda hubung (-).
                     </p>
                   </div>
 
                   {/* Link Preview */}
-                  <div
-                    className="p-3 rounded-xl border text-xs"
-                    style={{
-                      backgroundColor: `${textCol}0d`,
-                      borderColor: `${textCol}1a`
-                    }}
-                  >
-                    <span className="custom-text-color opacity-60 block font-semibold">Tampilan Link Undangan Anda:</span>
-                    <span className="custom-text-color font-bold break-all mt-0.5 block">
+                  <div className="p-3 rounded-xl bg-[#064e3b]/5 border border-[#064e3b]/10 text-xs">
+                    <span className="text-[#064e3b]/60 block font-semibold">Tampilan Link Undangan Anda:</span>
+                    <span className="text-[#064e3b] font-bold break-all mt-0.5 block">
                       {typeof window !== "undefined" ? window.location.origin : ""}/{slug || "..."}
                     </span>
                   </div>
@@ -564,17 +499,14 @@ export function TemplateListPublic({
                       type="button"
                       onClick={handleCloseModal}
                       disabled={loading}
-                      className="flex-1 py-3 rounded-xl border custom-btn-outline font-bold text-xs cursor-pointer transition-all disabled:opacity-50"
+                      className="flex-1 py-3 rounded-xl border border-[#064e3b]/20 bg-white text-[#064e3b]/70 hover:bg-[#064e3b]/5 font-bold text-xs cursor-pointer transition-all disabled:opacity-50"
                     >
                       Batal
                     </button>
                     <button
                       type="submit"
                       disabled={loading || !slug || !name || !email || !nomorHp}
-                      className="flex-1 py-3 rounded-xl custom-btn-primary font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg disabled:opacity-50"
-                      style={{
-                        boxShadow: `0 10px 15px -3px ${textCol}26`
-                      }}
+                      className="flex-1 py-3 rounded-xl bg-[#064e3b] hover:bg-[#064e3b]/95 border border-[#d4af37] text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-[#064e3b]/10 disabled:opacity-50"
                     >
                       {loading ? (
                         <>

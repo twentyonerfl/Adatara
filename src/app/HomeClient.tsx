@@ -339,10 +339,9 @@ export default function HomeClient({
 
   return (
     <div
-      className="flex flex-col min-h-screen overflow-x-hidden font-sans relative"
+      className="flex flex-col min-h-screen overflow-x-hidden font-sans relative bg-[#f5f5dc]"
       style={{
-        backgroundColor: settings.bg_color || "#f5f5dc",
-        color: settings.text_color || "#064e3b"
+        color: "#064e3b"
       }}
     >
       {/* Dynamic CSS styles injection */}
@@ -351,16 +350,10 @@ export default function HomeClient({
           color: ${settings.accent_color} !important;
         }
         .custom-text-color {
-          color: ${settings.text_color || "#064e3b"} !important;
-        }
-        .custom-text-color-hover {
-          color: ${settings.text_color || "#064e3b"} !important;
-          opacity: 0.8;
-          transition: color 0.2s ease, opacity 0.2s ease !important;
+          color: #064e3b !important;
         }
         .custom-text-color-hover:hover {
-          color: ${settings.accent_color || "#d4af37"} !important;
-          opacity: 1 !important;
+          color: ${settings.accent_color} !important;
         }
         .custom-bg-color {
           background-color: ${settings.bg_color} !important;
@@ -372,64 +365,32 @@ export default function HomeClient({
           background-color: ${settings.accent_color} !important;
         }
         .custom-border-color {
-          border-color: ${settings.text_color || "#064e3b"}1a !important;
+          border-color: #064e3b1a !important;
         }
         .custom-btn-primary {
-          background-color: ${settings.text_color || "#064e3b"} !important;
-          color: ${settings.bg_color || "#f5f5dc"} !important;
-          border-color: ${settings.accent_color || "#d4af37"}80 !important;
+          background-color: #064e3b !important;
+          color: #f5f5dc !important;
+          border-color: ${settings.accent_color}80 !important;
         }
         .custom-btn-primary:hover {
-          background-color: ${settings.text_color || "#064e3b"}e6 !important;
-          border-color: ${settings.accent_color || "#d4af37"} !important;
+          background-color: #064e3be6 !important;
+          border-color: ${settings.accent_color} !important;
           opacity: 0.95;
         }
         .custom-btn-secondary {
           background-color: rgba(255, 255, 255, 0.4) !important;
           backdrop-filter: blur(12px) !important;
           -webkit-backdrop-filter: blur(12px) !important;
-          color: ${settings.text_color || "#064e3b"} !important;
-          border-color: ${settings.text_color || "#064e3b"}26 !important;
-          box-shadow: 0 8px 32px 0 ${settings.text_color || "#064e3b"}0a !important;
+          color: #064e3b !important;
+          border-color: rgba(6, 78, 59, 0.15) !important;
+          box-shadow: 0 8px 32px 0 rgba(6, 78, 59, 0.04) !important;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
         .custom-btn-secondary:hover {
           background-color: rgba(255, 255, 255, 0.6) !important;
-          border-color: ${settings.text_color || "#064e3b"}4d !important;
-          box-shadow: 0 8px 32px 0 ${settings.text_color || "#064e3b"}14 !important;
+          border-color: rgba(6, 78, 59, 0.3) !important;
+          box-shadow: 0 8px 32px 0 rgba(6, 78, 59, 0.08) !important;
           transform: translateY(-2px) !important;
-        }
-        .custom-pill-badge {
-          color: ${settings.text_color || "#064e3b"} !important;
-          background-color: ${settings.text_color || "#064e3b"}0d !important;
-          border-color: ${settings.text_color || "#064e3b"}1a !important;
-        }
-        .custom-step-badge {
-          background-color: ${settings.text_color || "#064e3b"} !important;
-          box-shadow: 0 4px 6px -1px ${settings.text_color || "#064e3b"}26 !important;
-        }
-        .custom-hover-bg:hover {
-          background-color: ${settings.text_color || "#064e3b"}0d !important;
-        }
-        .custom-feature-card {
-          border: 1px solid ${settings.text_color || "#064e3b"}40 !important;
-        }
-        .custom-feature-card:hover {
-          border-color: ${settings.text_color || "#064e3b"}99 !important;
-          box-shadow: 0 25px 50px -12px ${settings.text_color || "#064e3b"}0d !important;
-        }
-        .custom-faq-card {
-          border: 1px solid ${settings.text_color || "#064e3b"}1a !important;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-        }
-        .custom-faq-card:hover {
-          border-color: ${settings.text_color || "#064e3b"}40 !important;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-        }
-        .custom-faq-card-open {
-          border-color: ${settings.text_color || "#064e3b"}59 !important;
-          box-shadow: 0 4px 12px ${settings.text_color || "#064e3b"}0d !important;
-          background: linear-gradient(to right, ${settings.text_color || "#064e3b"}05, transparent) !important;
         }
         .custom-card-btn-basic {
           background-color: transparent !important;
@@ -861,23 +822,20 @@ export default function HomeClient({
       {/* CARA ORDER SECTION */}
       <section
         id="cara-order"
-        className="py-12 sm:py-24 px-4 sm:px-6 relative overflow-hidden scroll-mt-24"
-        style={{
-          background: `linear-gradient(to bottom, ${settings.bg_color || "#f5f5dc"} 0%, ${hexToRgba(settings.bg_color || "#f5f5dc", 0.6)} 50%, ${settings.bg_color || "#f5f5dc"} 100%)`
-        }}
+        className="py-12 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-[#f5f5dc] via-[#fcfcf7] to-[#f5f5dc] relative overflow-hidden scroll-mt-24"
       >
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#d4af37]/[0.02] blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full border custom-pill-badge">
+            <span className="text-[10px] font-extrabold text-[#064e3b] uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
               Langkah Pembuatan
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 text-[#064e3b] tracking-tight leading-tight">
               Hanya 4 Langkah Mudah
             </h2>
-            <p className="custom-text-color opacity-70 text-xs sm:text-sm mt-3 font-medium">
+            <p className="text-[#064e3b]/70 text-xs sm:text-sm mt-3 font-medium">
               Buat undangan digital premium Anda sendiri dalam hitungan menit tanpa ribet dengan 4 langkah mudah.
             </p>
           </div>
@@ -885,23 +843,18 @@ export default function HomeClient({
           {/* Steps Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 md:gap-8 relative">
             {/* Connecting line for desktop/tablet */}
-            <div
-              className="hidden sm:block absolute top-1/2 left-[12%] right-[12%] h-0.5 -translate-y-10 z-0"
-              style={{
-                background: `linear-gradient(to right, ${settings.accent_color || "#d4af37"}1a, ${settings.accent_color || "#d4af37"}66, ${settings.accent_color || "#d4af37"}1a)`
-              }}
-            />
+            <div className="hidden sm:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-emerald-100 via-[#d4af37]/35 to-emerald-100 -translate-y-10 z-0" />
 
             {/* Step 1 */}
             <motion.div
               variants={itemVariants}
-              className="bg-white/40 backdrop-blur-md border rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md custom-border-color"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md mb-2 sm:mb-4 custom-step-badge">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 01
               </div>
-              <h3 className="text-[10px] sm:text-lg font-bold custom-text-color mb-1 sm:mb-2">Pilih Template</h3>
-              <p className="text-[8px] sm:text-xs custom-text-color opacity-70 font-medium leading-normal sm:leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Pilih Template</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Pilih desain undangan digital terbaik dan favorit Anda dari katalog kami.
               </p>
             </motion.div>
@@ -909,13 +862,13 @@ export default function HomeClient({
             {/* Step 2 */}
             <motion.div
               variants={itemVariants}
-              className="bg-white/40 backdrop-blur-md border rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md custom-border-color"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md mb-2 sm:mb-4 custom-step-badge">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 02
               </div>
-              <h3 className="text-[10px] sm:text-lg font-bold custom-text-color mb-1 sm:mb-2">Isi Data</h3>
-              <p className="text-[8px] sm:text-xs custom-text-color opacity-70 font-medium leading-normal sm:leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Isi Data</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Lengkapi detail acara, profil mempelai, cerita cinta, dan foto terbaik Anda.
               </p>
             </motion.div>
@@ -923,13 +876,13 @@ export default function HomeClient({
             {/* Step 3 */}
             <motion.div
               variants={itemVariants}
-              className="bg-white/40 backdrop-blur-md border rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md custom-border-color"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md mb-2 sm:mb-4 custom-step-badge">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 03
               </div>
-              <h3 className="text-[10px] sm:text-lg font-bold custom-text-color mb-1 sm:mb-2">Payment</h3>
-              <p className="text-[8px] sm:text-xs custom-text-color opacity-70 font-medium leading-normal sm:leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Payment</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Lakukan pembayaran instan untuk mengaktifkan semua fitur premium.
               </p>
             </motion.div>
@@ -937,13 +890,13 @@ export default function HomeClient({
             {/* Step 4 */}
             <motion.div
               variants={itemVariants}
-              className="bg-white/40 backdrop-blur-md border rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md custom-border-color"
+              className="bg-white/40 backdrop-blur-md border border-[#064e3b]/10 rounded-xl sm:rounded-3xl p-3 sm:p-8 flex flex-col items-center text-center relative z-10 hover:bg-white/70 hover:border-[#d4af37]/50 hover:-translate-y-1.5 transition-all duration-300 shadow-sm hover:shadow-md"
             >
-              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md mb-2 sm:mb-4 custom-step-badge">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#064e3b] flex items-center justify-center text-white font-black text-xs sm:text-base shadow-md shadow-[#064e3b]/10 mb-2 sm:mb-4">
                 04
               </div>
-              <h3 className="text-[10px] sm:text-lg font-bold custom-text-color mb-1 sm:mb-2">Selesai</h3>
-              <p className="text-[8px] sm:text-xs custom-text-color opacity-70 font-medium leading-normal sm:leading-relaxed">
+              <h3 className="text-[10px] sm:text-lg font-bold text-[#064e3b] mb-1 sm:mb-2">Selesai</h3>
+              <p className="text-[8px] sm:text-xs text-[#064e3b]/70 font-medium leading-normal sm:leading-relaxed">
                 Undangan siap dibagikan secara instan kepada keluarga dan kerabat.
               </p>
             </motion.div>
@@ -958,7 +911,7 @@ export default function HomeClient({
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col mb-8 text-left items-start">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full border w-max custom-pill-badge">
+            <span className="text-[10px] font-extrabold custom-text-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10 w-max">
               Galeri Desain
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
@@ -1020,7 +973,7 @@ export default function HomeClient({
                           }}
                           className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === cat
                             ? "custom-btn-primary"
-                            : "custom-hover-bg custom-text-color"
+                            : "hover:bg-[#064e3b]/5 custom-text-color"
                             }`}
                         >
                           {cat}
@@ -1059,7 +1012,7 @@ export default function HomeClient({
                           }}
                           className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedPaket === tier
                             ? "custom-btn-primary"
-                            : "custom-hover-bg custom-text-color"
+                            : "hover:bg-[#064e3b]/5 custom-text-color"
                             }`}
                         >
                           {tier === "Semua" ? "Semua Paket" : tier}
@@ -1199,21 +1152,10 @@ export default function HomeClient({
       </section>
 
       {/* FEATURES SECTION */}
-      <div
-        className="relative overflow-hidden border-t border-b custom-border-color"
-        style={{
-          background: `linear-gradient(to top right, ${settings.text_color || "#064e3b"}08, transparent 50%, ${settings.accent_color || "#d4af37"}0a)`
-        }}
-      >
+      <div className="relative overflow-hidden border-t border-b custom-border-color bg-gradient-to-tr from-[#064e3b]/[0.03] via-transparent to-[#d4af37]/[0.04]">
         {/* Ambient Decorative Light Glows */}
-        <div
-          className="absolute top-1/4 left-1/10 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-20"
-          style={{ backgroundColor: settings.text_color || "#064e3b" }}
-        />
-        <div
-          className="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-20"
-          style={{ backgroundColor: settings.accent_color || "#d4af37" }}
-        />
+        <div className="absolute top-1/4 left-1/10 w-96 h-96 rounded-full bg-[#064e3b]/[0.03] blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/10 w-96 h-96 rounded-full bg-[#d4af37]/[0.04] blur-3xl pointer-events-none" />
 
         <section id="fitur" className="py-12 sm:py-24 px-4 sm:px-6 max-w-7xl mx-auto scroll-mt-24">
           <motion.div
@@ -1223,13 +1165,13 @@ export default function HomeClient({
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto mb-16 relative z-10"
           >
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest px-4 py-1.5 rounded-full border custom-pill-badge">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold custom-text-color uppercase tracking-widest bg-[#064e3b]/5 px-4 py-1.5 rounded-full border border-[#064e3b]/10">
               Fitur Unggulan
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold mt-4 custom-text-color tracking-tight leading-tight">
               Semua yang Anda Butuhkan untuk Undangan Sempurna
             </h2>
-            <p className="custom-text-color opacity-70 text-xs sm:text-sm mt-3 font-medium">
+            <p className="text-[#064e3b]/70 text-xs sm:text-sm mt-3 font-medium">
               Dengan fitur terkini yang mempermudah tamu Anda menerima, mengonfirmasi, dan merayakan kebahagiaan Anda.
             </p>
           </motion.div>          <motion.div
@@ -1242,7 +1184,7 @@ export default function HomeClient({
             {/* Feature Card 1 */}
             <motion.div
               variants={itemVariants}
-              className="relative rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:from-white/90 hover:to-white/70 cursor-default custom-feature-card"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1264,7 +1206,7 @@ export default function HomeClient({
             {/* Feature Card 2 */}
             <motion.div
               variants={itemVariants}
-              className="relative rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:from-white/90 hover:to-white/70 cursor-default custom-feature-card"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1286,7 +1228,7 @@ export default function HomeClient({
             {/* Feature Card 3 */}
             <motion.div
               variants={itemVariants}
-              className="relative rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:from-white/90 hover:to-white/70 cursor-default custom-feature-card"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1308,7 +1250,7 @@ export default function HomeClient({
             {/* Feature Card 4 */}
             <motion.div
               variants={itemVariants}
-              className="relative rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:from-white/90 hover:to-white/70 cursor-default custom-feature-card"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1330,7 +1272,7 @@ export default function HomeClient({
             {/* Feature Card 5 */}
             <motion.div
               variants={itemVariants}
-              className="relative rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:from-white/90 hover:to-white/70 cursor-default custom-feature-card"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1352,7 +1294,7 @@ export default function HomeClient({
             {/* Feature Card 6 */}
             <motion.div
               variants={itemVariants}
-              className="relative rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:from-white/90 hover:to-white/70 cursor-default custom-feature-card"
+              className="relative border border-[#064e3b]/25 rounded-xl sm:rounded-3xl p-3 sm:p-5 md:p-8 bg-gradient-to-br from-white/70 to-white/30 backdrop-blur-md hover:border-[#064e3b]/60 hover:-translate-y-2 hover:scale-[1.01] sm:hover:scale-[1.02] transition-all duration-500 group overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#064e3b]/5 hover:from-white/90 hover:to-white/70 cursor-default"
             >
               {/* Glowing Accent Corner */}
               <div
@@ -1491,14 +1433,8 @@ export default function HomeClient({
       {/* FAQ SECTION */}
       <section id="faq" className="py-12 sm:py-24 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-transparent via-white to-transparent scroll-mt-24">
         {/* Soft elegant glows */}
-        <div
-          className="absolute top-1/4 left-10 w-72 h-72 rounded-full blur-3xl pointer-events-none opacity-20"
-          style={{ backgroundColor: settings.text_color || "#064e3b" }}
-        />
-        <div
-          className="absolute bottom-1/4 right-10 w-72 h-72 rounded-full blur-3xl pointer-events-none opacity-20"
-          style={{ backgroundColor: settings.accent_color || "#d4af37" }}
-        />
+        <div className="absolute top-1/4 left-10 w-72 h-72 rounded-full bg-[#064e3b]/[0.02] blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-10 w-72 h-72 rounded-full bg-[#d4af37]/[0.03] blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div
@@ -1508,7 +1444,7 @@ export default function HomeClient({
             transition={{ duration: 0.6 }}
             className="text-center mb-8 sm:mb-16 max-w-3xl mx-auto"
           >
-            <span className="inline-flex items-center gap-1.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border custom-pill-badge">
+            <span className="inline-flex items-center gap-1.5 text-[9px] sm:text-[10px] font-extrabold custom-text-color uppercase tracking-widest bg-[#064e3b]/5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-[#064e3b]/10">
               <HelpCircle className="w-3.5 h-3.5" /> Tanya Jawab
             </span>
             <h2 className="text-lg sm:text-4xl font-extrabold mt-3 sm:mt-4 custom-text-color tracking-tight leading-tight">
@@ -1532,38 +1468,31 @@ export default function HomeClient({
                 <motion.div
                   key={idx}
                   variants={itemVariants}
-                  className={`border rounded-2xl overflow-hidden transition-all duration-300 bg-white custom-faq-card ${isOpen ? "custom-faq-card-open" : ""}`}
+                  className={`border rounded-2xl overflow-hidden transition-all duration-300 bg-white ${isOpen
+                    ? "border-[#064e3b]/35 shadow-md shadow-[#064e3b]/5 bg-gradient-to-r from-[#064e3b]/[0.02] to-transparent"
+                    : "border-[#064e3b]/10 shadow-sm hover:shadow-md hover:border-[#064e3b]/25"
+                    }`}
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
                     className="w-full px-4 py-3.5 sm:px-6 sm:py-5 flex items-center justify-between text-left font-bold custom-text-color transition-colors cursor-pointer group"
                   >
                     <span className="flex items-center gap-3 pr-4">
-                      <span
-                        className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
-                        style={isOpen ? {
-                          backgroundColor: settings.text_color || "#064e3b",
-                          color: settings.bg_color || "#f5f5dc"
-                        } : {
-                          backgroundColor: `${settings.text_color || "#064e3b"}0d`,
-                          color: settings.text_color || "#064e3b"
-                        }}
-                      >
+                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isOpen
+                        ? "bg-[#064e3b] text-[#f5f5dc]"
+                        : "bg-[#064e3b]/5 text-[#064e3b] group-hover:bg-[#064e3b]/10"
+                        }`}>
                         <HelpCircle className="w-4 h-4" />
                       </span>
                       <span className="text-xs sm:text-lg font-black tracking-tight">{faq.tanya}</span>
                     </span>
-                    <span
-                      className="w-6 h-6 rounded-full flex items-center justify-center transition-all"
-                      style={{
-                        backgroundColor: isOpen ? `${settings.text_color || "#064e3b"}1a` : "transparent"
-                      }}
-                    >
+                    <span className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-[#064e3b]/10" : "bg-transparent"
+                      }`}>
                       <ChevronDown
                         className="w-4 h-4 transition-transform duration-300"
                         style={{
                           transform: isOpen ? "rotate(180deg)" : "none",
-                          color: isOpen ? (settings.text_color || "#064e3b") : "currentColor"
+                          color: isOpen ? "#064e3b" : "currentColor"
                         }}
                       />
                     </span>
@@ -1577,10 +1506,7 @@ export default function HomeClient({
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <div
-                          className="px-4 pb-4 pt-1 text-xs sm:text-sm leading-relaxed font-medium pl-11 sm:pl-[52px] opacity-85"
-                          style={{ color: settings.text_color || "#064e3b" }}
-                        >
+                        <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-[#064e3b]/85 leading-relaxed font-medium pl-11 sm:pl-[52px]">
                           {faq.jawab}
                         </div>
                       </motion.div>
