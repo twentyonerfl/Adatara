@@ -763,30 +763,6 @@ export function PenutupPreview({
                   })}
                 </div>
               </div>
-
-              {/* 4. Jumlah Tamu */}
-              {activeKehadiran === "HADIR" && (
-                <div className="space-y-1.5 transition-all duration-300">
-                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Jumlah Tamu</label>
-                  <div className="flex items-center bg-white/5 border border-white/10 overflow-hidden max-w-[120px]" style={{ borderRadius: "6%" }}>
-                    <button
-                      type="button"
-                      onClick={() => handleJumlahChange(Math.max(1, activeJumlahTamu - 1))}
-                      className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
-                    >
-                      -
-                    </button>
-                    <span className="flex-1 text-center text-[10px] text-white font-black">{activeJumlahTamu}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleJumlahChange(Math.min(10, activeJumlahTamu + 1))}
-                      className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              )}
               
               <button
                 type="submit"
