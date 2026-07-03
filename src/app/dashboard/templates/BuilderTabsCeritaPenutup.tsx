@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget } from "./BuilderWidgets";
+import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget } from "./BuilderWidgets";
 import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -571,6 +571,11 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
                 onChange={v => upd("setting_pesan_penutup", v)}
                 showAnimation
               />
+              <ButtonSettingsWidget
+                label="Setting Tombol RSVP / Konfirmasi"
+                value={data.setting_tombol || { text: "Konfirmasi", size: "9.5px", color: "#064e3b", bg_color: "#d4af37", border_color: "transparent", family: "Inter" }}
+                onChange={v => upd("setting_tombol", v)}
+              />
             </div>
           </SectionInput>
           <SectionInput label="Background Penutup">
@@ -754,21 +759,43 @@ export function PenutupPreview({
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-2 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-extrabold text-[9.5px] tracking-wider transition-all duration-300 shadow-md shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                style={{ borderRadius: "10px" }}
-              >
-                {submitting ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-2 border-[#064e3b] border-t-transparent rounded-full animate-spin" />
-                    <span>Mengirim...</span>
-                  </>
-                ) : (
-                  <span>Konfirmasi</span>
-                )}
-              </button>
+              {(() => {
+                const btnSetting = data.setting_tombol || {};
+                const btnText = btnSetting.text || "Konfirmasi";
+                const btnSize = btnSetting.size || "9.5px";
+                const btnColor = btnSetting.color || "#064e3b";
+                const btnBg = btnSetting.bg_color || "#d4af37";
+                const btnBorder = btnSetting.border_color || "transparent";
+                const btnFamily = btnSetting.family || "Inter";
+                
+                const hasCustomBg = btnSetting.bg_color && btnSetting.bg_color !== "#d4af37";
+                const bgStyle = hasCustomBg ? { backgroundColor: btnBg } : {};
+
+                return (
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className={`w-full py-2 hover:brightness-105 active:scale-[0.98] font-extrabold tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 border ${!hasCustomBg ? 'bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37]' : ''}`}
+                    style={{
+                      borderRadius: "10px",
+                      fontSize: btnSize,
+                      color: btnColor,
+                      borderColor: btnBorder,
+                      fontFamily: btnFamily,
+                      ...bgStyle,
+                    }}
+                  >
+                    {submitting ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        <span>Mengirim...</span>
+                      </>
+                    ) : (
+                      <span>{btnText}</span>
+                    )}
+                  </button>
+                );
+              })()}
             </form>
           )}
         </div>

@@ -75,6 +75,7 @@ export const defaultTemplateJson = {
     pesan_penutup: "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu berkenan hadir.",
     salam: "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
     tertanda: "Nama & Nama",
+    setting_tombol: { text: "Konfirmasi", size: "9.5px", color: "#064e3b", bg_color: "#d4af37", border_color: "transparent", family: "Inter" }
   },
 };
 
