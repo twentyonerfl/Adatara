@@ -662,6 +662,8 @@ export function PenutupPreview({
                     {formError}
                   </div>
                 )}
+                
+                {/* 1. Nama Tamu */}
                 <div className="space-y-1.5">
                   <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Nama Tamu</label>
                   <input
@@ -674,14 +676,47 @@ export function PenutupPreview({
                     style={{ borderRadius: "6%" }}
                   />
                 </div>
-                
+
+                {/* 2. Ucapan & Doa Restu */}
                 <div className="space-y-1.5">
-                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Kehadiran</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Ucapan & Doa Restu</label>
+                  <textarea
+                    value={ucapan}
+                    onChange={(e) => setUcapan?.(e.target.value)}
+                    rows={2.5}
+                    placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
+                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
+                    style={{ borderRadius: "6%" }}
+                  />
+                </div>
+
+                {/* 3. Konfirmasi Kehadiran */}
+                <div className="space-y-1.5">
+                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Konfirmasi Kehadiran ?</label>
+                  <div className="grid grid-cols-2 gap-2.5">
                     {[
-                      { value: "HADIR", label: "Hadir" },
-                      { value: "TIDAK_HADIR", label: "Absen" },
-                      { value: "RAGU_RAGU", label: "Ragu" }
+                      {
+                        value: "HADIR",
+                        label: "Hadir",
+                        icon: (
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        ),
+                        activeClass: "bg-emerald-500/20 border-emerald-500 text-emerald-400 font-extrabold shadow-md shadow-emerald-500/10",
+                        inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/20"
+                      },
+                      {
+                        value: "TIDAK_HADIR",
+                        label: "Tidak Hadir",
+                        icon: (
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        ),
+                        activeClass: "bg-rose-500/20 border-rose-500 text-rose-400 font-extrabold shadow-md shadow-rose-500/10",
+                        inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20"
+                      }
                     ].map((opt) => {
                       const isSelected = (kehadiran || "HADIR") === opt.value;
                       return (
@@ -689,20 +724,20 @@ export function PenutupPreview({
                           key={opt.value}
                           type="button"
                           onClick={() => setKehadiran?.(opt.value as any)}
-                          className={`py-1.5 text-[9px] font-extrabold tracking-wider border transition-all duration-300 cursor-pointer text-center ${
-                            isSelected
-                              ? "bg-[#d4af37] border-[#d4af37] text-[#064e3b] shadow-md shadow-[#d4af37]/10"
-                              : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+                          className={`py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 ${
+                            isSelected ? opt.activeClass : opt.inactiveClass
                           }`}
                           style={{ borderRadius: "6%" }}
                         >
-                          {opt.label}
+                          {opt.icon}
+                          <span>{opt.label}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
+                {/* 4. Jumlah Tamu */}
                 {(kehadiran || "HADIR") === "HADIR" && (
                   <div className="space-y-1.5 transition-all duration-300">
                     <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Jumlah Tamu</label>
@@ -725,18 +760,6 @@ export function PenutupPreview({
                     </div>
                   </div>
                 )}
-
-                <div className="space-y-1.5">
-                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Ucapan & Doa Restu</label>
-                  <textarea
-                    value={ucapan}
-                    onChange={(e) => setUcapan?.(e.target.value)}
-                    rows={2.5}
-                    placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
-                    style={{ borderRadius: "6%" }}
-                  />
-                </div>
                 
                 <button
                   type="submit"
