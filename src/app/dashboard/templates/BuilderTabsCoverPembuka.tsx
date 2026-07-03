@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, ButtonSettingsWidget, CardSettingsWidget, FramedPhoto, BingkaiCoverWidget, PhotoStyleWidget } from "./BuilderWidgets";
+import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, ButtonSettingsWidget, CardSettingsWidget, FramedPhoto, BingkaiCoverWidget, PhotoStyleWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { KATEGORI_OPTIONS, FONT_FAMILIES, KATEGORI_EN_MAP } from "./builder-constants";
 import { Plus, Trash2, Play, Pause, Search, Loader2, Music } from "lucide-react";
 
@@ -585,9 +585,11 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontFamily: fontKategori.family || "Inter",
             textAlign: (fontKategori.position || "center") as any,
           }}
-          className="font-bold opacity-60"
+          className="font-bold opacity-60 w-full"
         >
-          {kategoriLabel}
+          <AnimatedWrapper val={fontKategori}>
+            {kategoriLabel}
+          </AnimatedWrapper>
         </div>
       )}
       {!isNamaCustom && (
@@ -598,9 +600,11 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontFamily: fontNama.family || "Inter",
             textAlign: (fontNama.position || "center") as any,
           }}
-          className="font-bold"
+          className="font-bold w-full"
         >
-          {coverData?.nama_acara || "Nama Pasangan"}
+          <AnimatedWrapper val={fontNama}>
+            {coverData?.nama_acara || "Nama Pasangan"}
+          </AnimatedWrapper>
         </div>
       )}
       {!isTanggalCustom && data.tanggal_acara && (
@@ -611,34 +615,39 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontFamily: fontTanggal.family || "Inter",
             textAlign: (fontTanggal.position || "center") as any,
           }}
-          className="text-sm font-bold"
+          className="text-sm font-bold w-full"
         >
-          {(() => {
-            const d = new Date(data.tanggal_acara);
-            if (isNaN(d.getTime())) return "";
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            return `${day}.${month}.${year}`;
-          })()}
+          <AnimatedWrapper val={fontTanggal}>
+            {(() => {
+              const d = new Date(data.tanggal_acara);
+              if (isNaN(d.getTime())) return "";
+              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const year = d.getFullYear();
+              return `${day}.${month}.${year}`;
+            })()}
+          </AnimatedWrapper>
         </div>
       )}
       {data.foto_pembuka && (
-        <FramedPhoto
-          src={data.foto_pembuka}
-          bingkai={data.foto_setting?.bingkai || "oval"}
-          className="w-32 h-32"
-          customWidth={data.foto_setting?.width}
-          customHeight={data.foto_setting?.height}
-          overlayUrl={data.foto_setting?.overlay_url}
-          photoScale={data.foto_setting?.photo_scale}
-          photoX={data.foto_setting?.photo_x}
-          photoY={data.foto_setting?.photo_y}
-        />
+        <div className="w-full flex justify-center">
+          <AnimatedWrapper val={data.foto_setting}>
+            <FramedPhoto
+              src={data.foto_pembuka}
+              bingkai={data.foto_setting?.bingkai || "oval"}
+              className="w-32 h-32"
+              customWidth={data.foto_setting?.width}
+              customHeight={data.foto_setting?.height}
+              overlayUrl={data.foto_setting?.overlay_url}
+              photoScale={data.foto_setting?.photo_scale}
+              photoX={data.foto_setting?.photo_x}
+              photoY={data.foto_setting?.photo_y}
+            />
+          </AnimatedWrapper>
+        </div>
       )}
       {!isUcapanCustom && (
-        <p
-          className="opacity-80 whitespace-pre-wrap"
+        <div
           style={{
             color: fontUcapan.color || "#ffffff",
             fontFamily: fontUcapan.family || "Inter",
@@ -647,9 +656,12 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             width: fontUcapan.width || "100%",
             lineHeight: fontUcapan.lineHeight || "1.5",
           }}
+          className="opacity-80 whitespace-pre-wrap w-full"
         >
-          {data.ucapan || "Ucapan pembuka belum diisi."}
-        </p>
+          <AnimatedWrapper val={fontUcapan}>
+            {data.ucapan || "Ucapan pembuka belum diisi."}
+          </AnimatedWrapper>
+        </div>
       )}
     </>
   );
@@ -685,7 +697,9 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
           }}
           className="font-bold opacity-60"
         >
-          {kategoriLabel}
+          <AnimatedWrapper val={fontKategori}>
+            {kategoriLabel}
+          </AnimatedWrapper>
         </div>
       )}
 
@@ -705,7 +719,9 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
           }}
           className="font-bold"
         >
-          {coverData?.nama_acara || "Nama Pasangan"}
+          <AnimatedWrapper val={fontNama}>
+            {coverData?.nama_acara || "Nama Pasangan"}
+          </AnimatedWrapper>
         </div>
       )}
 
@@ -725,19 +741,21 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
           }}
           className="text-sm font-bold"
         >
-          {(() => {
-            const d = new Date(data.tanggal_acara);
-            if (isNaN(d.getTime())) return "";
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            return `${day}.${month}.${year}`;
-          })()}
+          <AnimatedWrapper val={fontTanggal}>
+            {(() => {
+              const d = new Date(data.tanggal_acara);
+              if (isNaN(d.getTime())) return "";
+              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const year = d.getFullYear();
+              return `${day}.${month}.${year}`;
+            })()}
+          </AnimatedWrapper>
         </div>
       )}
 
       {isUcapanCustom && (
-        <p
+        <div
           className="opacity-80 whitespace-pre-wrap"
           style={{
             color: fontUcapan.color || "#ffffff",
@@ -753,8 +771,10 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             zIndex: 10,
           }}
         >
-          {data.ucapan || "Ucapan pembuka belum diisi."}
-        </p>
+          <AnimatedWrapper val={fontUcapan}>
+            {data.ucapan || "Ucapan pembuka belum diisi."}
+          </AnimatedWrapper>
+        </div>
       )}
 
       <div className="relative z-10 w-full flex flex-col items-center justify-center gap-4">

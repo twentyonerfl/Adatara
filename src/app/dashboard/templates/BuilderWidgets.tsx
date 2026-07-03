@@ -1668,3 +1668,53 @@ export function MapsButtonStyleWidget({
     </div>
   );
 }
+
+export function AnimatedWrapper({ 
+  val, 
+  children, 
+  className = "" 
+}: { 
+  val: any; 
+  children: React.ReactNode; 
+  className?: string;
+}) {
+  const [key, setKey] = useState(0);
+  const animationName = val?.animation || "none";
+  const duration = val?.animationDuration || "1s";
+
+  useEffect(() => {
+    setKey(prev => prev + 1);
+  }, [animationName, duration]);
+
+  if (!animationName || animationName === "none") {
+    return <>{children}</>;
+  }
+
+  const animationClass = animationName === "fade-in"
+    ? "animate-fade-in"
+    : animationName === "slide-up"
+    ? "animate-slide-up"
+    : animationName === "zoom-in"
+    ? "animate-zoom-in"
+    : animationName === "bounce"
+    ? "animate-bounce-in"
+    : "";
+
+  return (
+    <div 
+      key={key} 
+      className={`${animationClass} ${className}`} 
+      style={{ 
+        animationDuration: duration,
+        width: "100%",
+        display: "inherit",
+        flexDirection: "inherit",
+        alignItems: "inherit",
+        justifyContent: "inherit",
+        textAlign: "inherit"
+      }}
+    >
+      {children}
+    </div>
+  );
+}

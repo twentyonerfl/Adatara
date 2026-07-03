@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget } from "./BuilderWidgets";
+import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -263,9 +263,11 @@ export function CeritaPreview({ data }: { data: any }) {
     <div className="rounded-none overflow-hidden min-h-[512px] bg-[#f5f5dc]">
       {/* Cerita Section */}
       <div className="p-6 space-y-4" style={bgCerita}>
-        <div style={getFontStyles(data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
-          <div>Cerita Kita</div>
-          <div className={getDividerClass(data.setting_head_cerita?.position)} />
+      <div style={getFontStyles(data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
+          <AnimatedWrapper val={data.setting_head_cerita}>
+            <div>Cerita Kita</div>
+            <div className={getDividerClass(data.setting_head_cerita?.position)} />
+          </AnimatedWrapper>
         </div>
         {(() => {
           const cardStyle = data.cerita_card_style || "glass";
@@ -408,8 +410,10 @@ export function CeritaPreview({ data }: { data: any }) {
       {/* Galeri Section */}
       <div className="p-6 space-y-3" style={bgGaleri}>
         <div style={getFontStyles(data.setting_head_galeri || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
-          <div>Galeri Foto</div>
-          <div className={getDividerClass(data.setting_head_galeri?.position)} />
+          <AnimatedWrapper val={data.setting_head_galeri}>
+            <div>Galeri Foto</div>
+            <div className={getDividerClass(data.setting_head_galeri?.position)} />
+          </AnimatedWrapper>
         </div>
         {galeris.length > 0 ? (
           (() => {
@@ -663,8 +667,10 @@ export function PenutupPreview({
       {data.rsvp_aktif && (
         <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 text-center space-y-4 shadow-xl relative" style={{ borderRadius: "6%" }}>
           <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
-            <div>Konfirmasi Kehadiran</div>
-            <div className={getDividerClass(data.setting_head_rsvp?.position)} />
+            <AnimatedWrapper val={data.setting_head_rsvp}>
+              <div>Konfirmasi Kehadiran</div>
+              <div className={getDividerClass(data.setting_head_rsvp?.position)} />
+            </AnimatedWrapper>
           </div>
           {formSuccess ? (
             <div className="text-center py-6 space-y-3">
@@ -804,8 +810,10 @@ export function PenutupPreview({
       {amplops.length > 0 && (
         <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl relative" style={{ borderRadius: "6%" }}>
           <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
-            <div>Special Gift</div>
-            <div className={getDividerClass(data.setting_head_gift?.position)} />
+            <AnimatedWrapper val={data.setting_head_gift}>
+              <div>Special Gift</div>
+              <div className={getDividerClass(data.setting_head_gift?.position)} />
+            </AnimatedWrapper>
           </div>
           <div className="space-y-3 pt-1.5">
             {amplops.map((a, i) => (
@@ -833,9 +841,13 @@ export function PenutupPreview({
       )}
 
       <div className="text-center space-y-2.5 pt-5 border-t border-white/15">
-        <p style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
-        <p style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-bold">{data.salam || ""}</p>
-        <p style={getFontStyles(data.setting_pesan_penutup || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-black mt-2">{data.tertanda || "Nama & Nama"}</p>
+        <div style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
+          <AnimatedWrapper val={data.setting_pesan_penutup}>
+            <p className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
+            <p className="font-bold">{data.salam || ""}</p>
+            <p className="font-black mt-2" style={{ fontSize: "14px" }}>{data.tertanda || "Nama & Nama"}</p>
+          </AnimatedWrapper>
+        </div>
         <p className="text-[9px] text-white/30 uppercase tracking-widest mt-4">Made with ❤ by Adatara</p>
       </div>
     </div>

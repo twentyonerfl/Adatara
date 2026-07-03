@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "./BuilderWidgets";
+import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { Plus, Trash2 } from "lucide-react";
 
 function getMapsEmbedUrl(input?: string) {
@@ -157,7 +157,7 @@ export function ProfilPreview({ data }: { data: any }) {
   return (
     <div className="w-full min-h-[512px] flex flex-col items-center justify-center relative rounded-none overflow-hidden p-6 gap-5" style={bg}>
       {isUcapanCustom ? (
-        <p
+        <div
           className="opacity-80 whitespace-pre-wrap z-10"
           style={{
             color: data.setting_ucapan_profil?.color || "#ffffff",
@@ -172,10 +172,12 @@ export function ProfilPreview({ data }: { data: any }) {
             lineHeight: data.setting_ucapan_profil?.lineHeight || "1.5",
           }}
         >
-          {data.ucapan_profil || "Ucapan profil belum diisi."}
-        </p>
+          <AnimatedWrapper val={data.setting_ucapan_profil}>
+            {data.ucapan_profil || "Ucapan profil belum diisi."}
+          </AnimatedWrapper>
+        </div>
       ) : (
-        <p
+        <div
           className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap z-10"
           style={{
             color: data.setting_ucapan_profil?.color || "#ffffff",
@@ -185,8 +187,10 @@ export function ProfilPreview({ data }: { data: any }) {
             lineHeight: data.setting_ucapan_profil?.lineHeight || "1.5",
           }}
         >
-          {data.ucapan_profil || "Ucapan profil belum diisi."}
-        </p>
+          <AnimatedWrapper val={data.setting_ucapan_profil}>
+            {data.ucapan_profil || "Ucapan profil belum diisi."}
+          </AnimatedWrapper>
+        </div>
       )}
       <div className={`flex gap-6 justify-center flex-wrap z-10`}>
         {profils.map((p, i) => (
