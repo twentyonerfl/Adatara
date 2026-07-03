@@ -290,6 +290,16 @@ export default function HomeClient({
 
   const settings = initialSettings ? { ...defaultSettings, ...initialSettings } : defaultSettings;
 
+  const isNavbarDark = (() => {
+    const hexColor = settings.bg_color || "#f5f5dc";
+    const cleanHex = hexColor.replace("#", "");
+    const r = parseInt(cleanHex.substring(0, 2), 16) || 0;
+    const g = parseInt(cleanHex.substring(2, 4), 16) || 0;
+    const b = parseInt(cleanHex.substring(4, 6), 16) || 0;
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq < 128;
+  })();
+
   // Safe slide parser
   const slides = (() => {
     try {
@@ -366,6 +376,19 @@ export default function HomeClient({
         }
         .custom-border-color {
           border-color: #064e3b1a !important;
+        }
+        .nav-link-custom {
+          color: ${isNavbarDark ? "#ffffff" : "#064e3b"} !important;
+        }
+        .nav-link-custom-hover {
+          color: ${isNavbarDark ? "rgba(255, 255, 255, 0.75)" : "rgba(6, 78, 59, 0.75)"} !important;
+          transition: color 0.3s ease !important;
+        }
+        .nav-link-custom-hover:hover {
+          color: ${settings.accent_color || "#d4af37"} !important;
+        }
+        .header-border-custom {
+          border-color: ${isNavbarDark ? "rgba(255, 255, 255, 0.15)" : "rgba(6, 78, 59, 0.1)"} !important;
         }
         .custom-btn-primary {
           background-color: #064e3b !important;
@@ -493,29 +516,18 @@ export default function HomeClient({
             text-align: ${settings.hero_subtitle_align || "left"} !important;
             font-size: ${settings.hero_subtitle_size || 16}px !important;
           }
-        .hero-bg-pattern-image {
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        }
-        @media (max-width: 768px) {
-          .hero-bg-pattern-image {
-            background-size: contain !important;
-            background-position: center top !important;
-            background-repeat: no-repeat !important;
-          }
         }
       `}</style>
 
       {/* HEADER NAVBAR */}
       <header
-        className="sticky top-0 z-50 backdrop-blur-md border-b custom-border-color transition-all"
+        className="sticky top-0 z-50 backdrop-blur-md border-b header-border-custom transition-all"
         style={{ backgroundColor: `${settings.bg_color}e6` }}
       >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center select-none">
             <img
-              src="/logo.png"
+              src={isNavbarDark ? "/logo-white.png" : "/logo.png"}
               alt="Adatara Logo"
               className="h-10 md:h-12 w-auto object-contain"
             />
@@ -523,12 +535,12 @@ export default function HomeClient({
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold opacity-80">
-            <a href="#" className="custom-text-color font-bold transition-colors">Beranda</a>
-            <a href="#cara-order" className="custom-text-color-hover transition-colors">Cara Order</a>
-            <a href="#template" className="custom-text-color-hover transition-colors">Katalog</a>
-            <a href="#fitur" className="custom-text-color-hover transition-colors">Fitur</a>
-            <a href="#harga" className="custom-text-color-hover transition-colors">Paket Harga</a>
-            <a href="#faq" className="custom-text-color-hover transition-colors">FAQ</a>
+            <a href="#" className="nav-link-custom font-bold transition-colors">Beranda</a>
+            <a href="#cara-order" className="nav-link-custom-hover transition-colors">Cara Order</a>
+            <a href="#template" className="nav-link-custom-hover transition-colors">Katalog</a>
+            <a href="#fitur" className="nav-link-custom-hover transition-colors">Fitur</a>
+            <a href="#harga" className="nav-link-custom-hover transition-colors">Paket Harga</a>
+            <a href="#faq" className="nav-link-custom-hover transition-colors">FAQ</a>
           </nav>
 
           {/* Action Buttons */}
@@ -541,7 +553,7 @@ export default function HomeClient({
           {/* Mobile Menu Icon */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 opacity-80 hover:opacity-100 md:hidden cursor-pointer custom-text-color"
+            className="p-2 opacity-80 hover:opacity-100 md:hidden cursor-pointer nav-link-custom"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -554,16 +566,16 @@ export default function HomeClient({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t custom-border-color px-6 py-6 flex flex-col gap-5 text-base font-semibold"
+              className="md:hidden border-t header-border-custom px-6 py-6 flex flex-col gap-5 text-base font-semibold"
               style={{ backgroundColor: settings.bg_color }}
             >
-              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="custom-text-color font-bold">Beranda</Link>
-              <a href="#cara-order" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Cara Order</a>
-              <a href="#template" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Katalog</a>
-              <a href="#fitur" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Fitur</a>
-              <a href="#harga" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">Paket Harga</a>
-              <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="opacity-75 custom-text-color custom-text-color-hover">FAQ</a>
-              <hr className="custom-border-color my-1" />
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="nav-link-custom font-bold">Beranda</Link>
+              <a href="#cara-order" onClick={() => setMobileMenuOpen(false)} className="nav-link-custom-hover">Cara Order</a>
+              <a href="#template" onClick={() => setMobileMenuOpen(false)} className="nav-link-custom-hover">Katalog</a>
+              <a href="#fitur" onClick={() => setMobileMenuOpen(false)} className="nav-link-custom-hover">Fitur</a>
+              <a href="#harga" onClick={() => setMobileMenuOpen(false)} className="nav-link-custom-hover">Paket Harga</a>
+              <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="nav-link-custom-hover">FAQ</a>
+              <hr className="header-border-custom my-1" />
               <div className="flex flex-col gap-3">
                 <Link href={settings.hero_cta_url} onClick={() => setMobileMenuOpen(false)} className="w-full text-center py-3 rounded-xl font-semibold border custom-btn-primary">
                   Buat Undangan
@@ -582,9 +594,11 @@ export default function HomeClient({
         {/* Background Pattern Layer with Custom Opacity and Blur */}
         {settings.bg_image && (
           <div
-            className="absolute inset-0 -z-20 pointer-events-none hero-bg-pattern-image"
+            className="absolute inset-0 -z-20 pointer-events-none"
             style={{
               backgroundImage: `url(${settings.bg_image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               opacity: settings.bg_pattern_opacity ?? 0.3,
               filter: settings.bg_pattern_blur ? `blur(${settings.bg_pattern_blur}px)` : "none",
               transform: settings.bg_pattern_blur ? "scale(1.05)" : "none"
