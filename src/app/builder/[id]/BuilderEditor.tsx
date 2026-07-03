@@ -1203,16 +1203,6 @@ export function BuilderEditor({
                       />
                       <span className="text-xs font-bold">Aktifkan RSVP (Konfirmasi Kehadiran)</span>
                     </label>
-
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={!!data?.penutup?.ucapan_aktif}
-                        onChange={(e) => updateNestedVal("penutup", "ucapan_aktif", e.target.checked)}
-                        className="w-4.5 h-4.5 accent-[#064e3b] cursor-pointer"
-                      />
-                      <span className="text-xs font-bold">Aktifkan Kolom Doa & Ucapan Tamu</span>
-                    </label>
                   </div>
 
                   {/* Amplop / Bank Digital */}

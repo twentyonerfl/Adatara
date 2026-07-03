@@ -12,7 +12,7 @@ function getFontStyles(val?: any) {
     color: val.color,
     fontSize: val.size,
   };
-  
+
   if (val.position === "custom") {
     styles.position = "absolute";
     styles.left = `${val.x ?? 50}%`;
@@ -56,31 +56,31 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                   </div>
                   <div>
                     <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Judul Cerita</label>
-                    <input 
-                      type="text" 
-                      value={c.judul} 
-                      onChange={e => updCerita(i, "judul", e.target.value)} 
-                      placeholder="Awal Pertemuan..." 
+                    <input
+                      type="text"
+                      value={c.judul}
+                      onChange={e => updCerita(i, "judul", e.target.value)}
+                      placeholder="Awal Pertemuan..."
                       className="w-full px-3 py-2 text-xs bg-white/60 border border-[#064e3b]/15 rounded-xl outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 transition-all duration-300"
                     />
                   </div>
                   <div>
                     <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Waktu / Tanggal</label>
-                    <input 
-                      type="text" 
-                      value={c.waktu} 
-                      onChange={e => updCerita(i, "waktu", e.target.value)} 
-                      placeholder="Januari 2024" 
+                    <input
+                      type="text"
+                      value={c.waktu}
+                      onChange={e => updCerita(i, "waktu", e.target.value)}
+                      placeholder="Januari 2024"
                       className="w-full px-3 py-2 text-xs bg-white/60 border border-[#064e3b]/15 rounded-xl outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 transition-all duration-300"
                     />
                   </div>
                   <div>
                     <label className="text-[9px] font-black uppercase tracking-wider text-[#064e3b]/60 block mb-1">Isi Cerita</label>
-                    <textarea 
-                      value={c.isi} 
-                      onChange={e => updCerita(i, "isi", e.target.value)} 
-                      placeholder="Ceritakan momen ini..." 
-                      rows={3} 
+                    <textarea
+                      value={c.isi}
+                      onChange={e => updCerita(i, "isi", e.target.value)}
+                      placeholder="Ceritakan momen ini..."
+                      rows={3}
                       className="w-full px-3 py-2 text-xs bg-white/60 border border-[#064e3b]/15 rounded-xl outline-none focus:border-[#d4af37] text-[#064e3b] placeholder-[#064e3b]/30 resize-none transition-all duration-300"
                     />
                   </div>
@@ -123,29 +123,29 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
         <>
           <SectionInput label="Desain & Tipografi Cerita">
             <div className="space-y-4">
-              <FontSettingsWidget 
-                label="Setting Header 'Cerita Kita'" 
-                value={data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" }} 
-                onChange={v => upd("setting_head_cerita", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Header 'Cerita Kita'"
+                value={data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" }}
+                onChange={v => upd("setting_head_cerita", v)}
+                showAnimation
               />
-              <FontSettingsWidget 
-                label="Setting Font Judul Cerita" 
-                value={data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" }} 
-                onChange={v => upd("setting_judul_cerita", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Font Judul Cerita"
+                value={data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" }}
+                onChange={v => upd("setting_judul_cerita", v)}
+                showAnimation
               />
-              <FontSettingsWidget 
-                label="Setting Font Waktu Cerita" 
-                value={data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" }} 
-                onChange={v => upd("setting_waktu_cerita", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Font Waktu Cerita"
+                value={data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" }}
+                onChange={v => upd("setting_waktu_cerita", v)}
+                showAnimation
               />
-              <FontSettingsWidget 
-                label="Setting Font Isi Cerita" 
-                value={data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" }} 
-                onChange={v => upd("setting_isi_cerita", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Font Isi Cerita"
+                value={data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" }}
+                onChange={v => upd("setting_isi_cerita", v)}
+                showAnimation
               />
             </div>
           </SectionInput>
@@ -168,11 +168,10 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                     const isActive = data.cerita_card_style === c.id || (!data.cerita_card_style && c.id === "glass");
                     return (
                       <button key={c.id} type="button" onClick={() => upd("cerita_card_style", c.id)}
-                        className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${
-                          isActive 
-                            ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15" 
+                        className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${isActive
+                            ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15"
                             : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5 hover:text-[#064e3b]"
-                        }`}>
+                          }`}>
                         {c.label}
                       </button>
                     );
@@ -191,11 +190,10 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                     const isActive = data.cerita_timeline_style === t.id || (!data.cerita_timeline_style && t.id === "left");
                     return (
                       <button key={t.id} type="button" onClick={() => upd("cerita_timeline_style", t.id)}
-                        className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${
-                          isActive 
-                            ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15" 
+                        className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${isActive
+                            ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15"
                             : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5 hover:text-[#064e3b]"
-                        }`}>
+                          }`}>
                         {t.label}
                       </button>
                     );
@@ -211,19 +209,18 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
               <div className="flex gap-1.5 flex-wrap">
                 {GALERI_LAYOUT_OPTIONS.map(l => {
                   const label = l === "grid-2" ? "Grid 2 Kolom" :
-                                l === "grid-3" ? "Grid 3 Kolom" :
-                                l === "masonry" ? "Masonry (Estetik)" :
-                                l === "carousel" ? "Carousel (Geser)" :
-                                l === "collage" ? "Collage Editorial" :
-                                l === "polaroid" ? "Polaroid Stack" : l;
+                    l === "grid-3" ? "Grid 3 Kolom" :
+                      l === "masonry" ? "Masonry (Estetik)" :
+                        l === "carousel" ? "Carousel (Geser)" :
+                          l === "collage" ? "Collage Editorial" :
+                            l === "polaroid" ? "Polaroid Stack" : l;
                   const isActive = data.galeri_layout === l || (l === "grid-2" && data.galeri_layout === "grid") || (!data.galeri_layout && l === "grid-2");
                   return (
                     <button key={l} type="button" onClick={() => upd("galeri_layout", l)}
-                      className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${
-                        isActive 
-                          ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15" 
+                      className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${isActive
+                          ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15"
                           : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5 hover:text-[#064e3b]"
-                      }`}>
+                        }`}>
                       {label}
                     </button>
                   );
@@ -233,11 +230,11 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
           </SectionInput>
 
           <SectionInput label="Desain & Tipografi Galeri">
-            <FontSettingsWidget 
-              label="Setting Header 'Galeri Foto'" 
-              value={data.setting_head_galeri || { size: "18px", color: "#ffffff", family: "Inter", position: "center" }} 
-              onChange={v => upd("setting_head_galeri", v)} 
-              showAnimation 
+            <FontSettingsWidget
+              label="Setting Header 'Galeri Foto'"
+              value={data.setting_head_galeri || { size: "18px", color: "#ffffff", family: "Inter", position: "center" }}
+              onChange={v => upd("setting_head_galeri", v)}
+              showAnimation
             />
           </SectionInput>
 
@@ -295,7 +292,7 @@ export function CeritaPreview({ data }: { data: any }) {
               <div className="relative space-y-3.5 py-2">
                 {/* Center Vertical Line */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#d4af37]/35 -translate-x-1/2" />
-                
+
                 {ceritas.map((c, i) => {
                   const isEven = i % 2 === 0;
                   const starTopClass = cardStyle === "none" ? "top-[6px]" : "top-[16px]";
@@ -307,7 +304,7 @@ export function CeritaPreview({ data }: { data: any }) {
                           <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
                         </svg>
                       </div>
-                      
+
                       {/* Card wrapper */}
                       <div className={`w-[calc(100%-10px)] max-w-full ${isEven ? "pl-3.5" : "pr-3.5"}`}>
                         <div className={cardClass}>
@@ -320,7 +317,7 @@ export function CeritaPreview({ data }: { data: any }) {
                               {c.waktu || "Waktu"}
                             </div>
                           </div>
-                          
+
                           {/* Card Content */}
                           <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light break-words">
                             {c.isi || "Isi cerita..."}
@@ -346,7 +343,7 @@ export function CeritaPreview({ data }: { data: any }) {
                         <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
                       </svg>
                     </div>
-                    
+
                     {/* Card Container */}
                     <div className={cardClass}>
                       {/* Card Header */}
@@ -358,7 +355,7 @@ export function CeritaPreview({ data }: { data: any }) {
                           {c.waktu || "Waktu"}
                         </div>
                       </div>
-                      
+
                       {/* Card Content */}
                       <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
                         {c.isi || "Isi cerita..."}
@@ -382,7 +379,7 @@ export function CeritaPreview({ data }: { data: any }) {
                       <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
                     </svg>
                   </div>
-                  
+
                   {/* Card Container */}
                   <div className={cardClass}>
                     {/* Card Header */}
@@ -394,7 +391,7 @@ export function CeritaPreview({ data }: { data: any }) {
                         {c.waktu || "Waktu"}
                       </div>
                     </div>
-                    
+
                     {/* Card Content */}
                     <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
                       {c.isi || "Isi cerita..."}
@@ -500,7 +497,6 @@ export function CeritaPreview({ data }: { data: any }) {
     </div>
   );
 }
-
 // ─── PENUTUP TAB ──────────────────────────────────────────────────────────────
 
 export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d: any) => void; mode?: "data" | "settings" }) {
@@ -521,11 +517,6 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
               <input type="checkbox" checked={!!data.rsvp_aktif} onChange={e => upd("rsvp_aktif", e.target.checked)}
                 className="w-4 h-4 accent-[#064e3b]" />
               <span className="text-xs font-bold text-[#064e3b]">Aktifkan Fitur RSVP</span>
-            </label>
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" checked={!!data.ucapan_aktif} onChange={e => upd("ucapan_aktif", e.target.checked)}
-                className="w-4 h-4 accent-[#064e3b]" />
-              <span className="text-xs font-bold text-[#064e3b]">Aktifkan Kolom Doa & Ucapan</span>
             </label>
           </SectionInput>
 
@@ -562,23 +553,23 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
         <>
           <SectionInput label="Desain & Tipografi Penutup">
             <div className="space-y-4">
-              <FontSettingsWidget 
-                label="Setting Header RSVP & Ucapan" 
-                value={data.setting_head_rsvp || { size: "16px", color: "#ffffff", family: "Inter", position: "center" }} 
-                onChange={v => upd("setting_head_rsvp", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Header RSVP"
+                value={data.setting_head_rsvp || { size: "16px", color: "#ffffff", family: "Inter", position: "center" }}
+                onChange={v => upd("setting_head_rsvp", v)}
+                showAnimation
               />
-              <FontSettingsWidget 
-                label="Setting Header Special Gift" 
-                value={data.setting_head_gift || { size: "16px", color: "#ffffff", family: "Inter", position: "center" }} 
-                onChange={v => upd("setting_head_gift", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Header Special Gift"
+                value={data.setting_head_gift || { size: "16px", color: "#ffffff", family: "Inter", position: "center" }}
+                onChange={v => upd("setting_head_gift", v)}
+                showAnimation
               />
-              <FontSettingsWidget 
-                label="Setting Font Pesan Penutup" 
-                value={data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" }} 
-                onChange={v => upd("setting_pesan_penutup", v)} 
-                showAnimation 
+              <FontSettingsWidget
+                label="Setting Font Pesan Penutup"
+                value={data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" }}
+                onChange={v => upd("setting_pesan_penutup", v)}
+                showAnimation
               />
             </div>
           </SectionInput>
@@ -591,7 +582,7 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
   );
 }
 
-export function PenutupPreview({ 
+export function PenutupPreview({
   data,
   wishes,
   onRsvpSubmit,
@@ -608,7 +599,7 @@ export function PenutupPreview({
   formError = null,
   onCopyClick,
   copiedIndex = null
-}: { 
+}: {
   data: any;
   wishes?: any[];
   onRsvpSubmit?: (e: React.FormEvent) => void;
@@ -689,7 +680,7 @@ export function PenutupPreview({
                   {formError}
                 </div>
               )}
-              
+
               {/* 1. Nama Tamu */}
               <div className="space-y-1.5">
                 <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/85">Nama Tamu</label>
@@ -751,9 +742,8 @@ export function PenutupPreview({
                         key={opt.value}
                         type="button"
                         onClick={() => handleKehadiranChange(opt.value as any)}
-                        className={`py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 ${
-                          isSelected ? opt.activeClass : opt.inactiveClass
-                        }`}
+                        className={`py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 ${isSelected ? opt.activeClass : opt.inactiveClass
+                          }`}
                         style={{ borderRadius: "10px" }}
                       >
                         {opt.icon}
@@ -763,7 +753,7 @@ export function PenutupPreview({
                   })}
                 </div>
               </div>
-              
+
               <button
                 type="submit"
                 disabled={submitting}
@@ -776,7 +766,7 @@ export function PenutupPreview({
                     <span>Mengirim...</span>
                   </>
                 ) : (
-                  <span>Kirim Konfirmasi</span>
+                  <span>Konfirmasi</span>
                 )}
               </button>
             </form>
@@ -801,11 +791,10 @@ export function PenutupPreview({
                 <button
                   type="button"
                   onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className={`px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${
-                    copiedIndex === i
+                  className={`px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${copiedIndex === i
                       ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
                       : "bg-white/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-white/15 hover:border-[#d4af37]"
-                  }`}
+                    }`}
                   style={{ borderRadius: "6%" }}
                 >
                   {copiedIndex === i ? "Tersalin" : "Salin"}

@@ -1405,7 +1405,7 @@ export function BuilderEditor({
                     <h4 className="font-extrabold text-[11px] uppercase tracking-wider text-[#d4af37] border-b border-[#064e3b]/10 pb-1">Penutupan & RSVP</h4>
 
                     {/* Toggles */}
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2">
                       <div className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-center justify-between">
                         <div>
                           <span className="font-bold text-[9px] block">Form RSVP</span>
@@ -1415,19 +1415,6 @@ export function BuilderEditor({
                           type="checkbox"
                           checked={data.penutup?.rsvp_aktif || false}
                           onChange={(e) => updateData("penutup", "rsvp_aktif", e.target.checked)}
-                          className="w-4 h-4 accent-[#064e3b] cursor-pointer"
-                        />
-                      </div>
-
-                      <div className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl flex items-center justify-between">
-                        <div>
-                          <span className="font-bold text-[9px] block">Wall Ucapan</span>
-                          <span className="text-[7.5px] opacity-60">Komentar Tamu</span>
-                        </div>
-                        <input
-                          type="checkbox"
-                          checked={data.penutup?.ucapan_aktif || false}
-                          onChange={(e) => updateData("penutup", "ucapan_aktif", e.target.checked)}
                           className="w-4 h-4 accent-[#064e3b] cursor-pointer"
                         />
                       </div>
