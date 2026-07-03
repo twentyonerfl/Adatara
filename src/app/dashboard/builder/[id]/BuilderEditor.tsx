@@ -2270,7 +2270,7 @@ export function BuilderEditor({
                     }}
                   >
                     {renderOrnament("penutup")}
-                    <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
+                    <span className="text-[9px] font-extrabold text-[#d4af37] tracking-widest block">
                       Ungkapan Terima Kasih
                     </span>
 
@@ -2287,13 +2287,13 @@ export function BuilderEditor({
                     {/* Cashless Digital Gifts Preview */}
                     {data.penutup?.amplops?.length > 0 && (
                       <div className="pt-4 space-y-2 border-t border-[#064e3b]/10">
-                        <span className="text-[8px] font-bold text-[#064e3b]/60 uppercase tracking-widest block">
+                        <span className="text-[8px] font-bold text-[#064e3b]/60 tracking-widest block">
                           Amplop Digital / Kado
                         </span>
                         <div className="space-y-2">
                           {data.penutup.amplops.map((gift: any, idx: number) => (
                             <div key={idx} className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 text-left relative" style={{ borderRadius: "6%" }}>
-                              <span className="text-[8px] font-black text-[#d4af37] block uppercase">{gift.bank}</span>
+                              <span className="text-[8px] font-black text-[#d4af37] block">{gift.bank}</span>
                               <span className="text-[#064e3b] text-xs font-black block mt-0.5 tracking-wide">{gift.nomor_rekening}</span>
                               <span className="text-[9px] text-[#064e3b]/60 block">A/N: {gift.atas_nama}</span>
                             </div>

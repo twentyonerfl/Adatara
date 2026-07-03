@@ -638,7 +638,7 @@ export function PenutupPreview({
     <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6" style={bgPenutup}>
       {data.rsvp_aktif && (
         <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 text-center space-y-4 shadow-xl relative" style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-wider">
+          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
             <div>Konfirmasi Kehadiran</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
           </div>
@@ -651,7 +651,7 @@ export function PenutupPreview({
                   </svg>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-white font-extrabold text-[12px] tracking-wider uppercase">Konfirmasi Terkirim!</div>
+                  <div className="text-white font-extrabold text-[12px] tracking-wider">Konfirmasi Terkirim!</div>
                   <div className="text-[9.5px] text-white/70 max-w-[200px] mx-auto leading-relaxed">Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
                 </div>
               </div>
@@ -689,7 +689,7 @@ export function PenutupPreview({
                           key={opt.value}
                           type="button"
                           onClick={() => setKehadiran?.(opt.value as any)}
-                          className={`py-2 text-[9.5px] font-black uppercase tracking-wider border transition-all duration-300 cursor-pointer text-center ${
+                          className={`py-2 text-[9.5px] font-black tracking-wider border transition-all duration-300 cursor-pointer text-center ${
                             isSelected
                               ? "bg-[#d4af37] border-[#d4af37] text-[#064e3b] shadow-md shadow-[#d4af37]/10"
                               : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
@@ -757,8 +757,8 @@ export function PenutupPreview({
             )
           ) : (
             <div className="flex gap-3 justify-center pt-2">
-              <div className="px-6 py-2.5 bg-[#d4af37] text-[#064e3b] text-[10px] font-black uppercase tracking-widest shadow-md hover:scale-102 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Hadir</div>
-              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
+              <div className="px-6 py-2.5 bg-[#d4af37] text-[#064e3b] text-[10px] font-black tracking-widest shadow-md hover:scale-102 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Hadir</div>
+              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-[10px] font-black tracking-widest hover:bg-white/5 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
             </div>
           )}
         </div>
@@ -766,7 +766,7 @@ export function PenutupPreview({
 
       {amplops.length > 0 && (
         <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl relative" style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-wider">
+          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
             <div>Special Gift</div>
             <div className={getDividerClass(data.setting_head_gift?.position)} />
           </div>
@@ -781,7 +781,7 @@ export function PenutupPreview({
                 <button
                   type="button"
                   onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className={`px-3.5 py-1.5 border text-[8.5px] font-black uppercase tracking-widest transition-all duration-300 cursor-pointer ${
+                  className={`px-3.5 py-1.5 border text-[8.5px] font-black tracking-widest transition-all duration-300 cursor-pointer ${
                     copiedIndex === i
                       ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
                       : "bg-white/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-white/15 hover:border-[#d4af37]"
@@ -798,7 +798,7 @@ export function PenutupPreview({
 
       {data.ucapan_aktif && (
         <div className="bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-4 shadow-xl relative text-left" style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase text-center tracking-wider">
+          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold text-center tracking-wider">
             <div>Doa & Ucapan</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
           </div>
@@ -819,7 +819,7 @@ export function PenutupPreview({
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10px] font-extrabold text-white truncate block">{w.nama_tamu}</span>
-                        <span className={`px-1.5 py-0.5 text-[6.5px] font-black uppercase tracking-wider ${
+                        <span className={`px-1.5 py-0.5 text-[6.5px] font-black tracking-wider ${
                           w.kehadiran === "HADIR"
                             ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
                             : w.kehadiran === "TIDAK_HADIR"
