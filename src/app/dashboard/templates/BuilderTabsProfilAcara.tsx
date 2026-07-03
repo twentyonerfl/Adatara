@@ -178,13 +178,14 @@ export function ProfilPreview({ data }: { data: any }) {
         </div>
       ) : (
         <div
-          className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap z-10"
+          className="leading-relaxed opacity-80 whitespace-pre-wrap z-10"
           style={{
             color: data.setting_ucapan_profil?.color || "#ffffff",
             fontFamily: data.setting_ucapan_profil?.family || "Inter",
             fontSize: data.setting_ucapan_profil?.size || "12px",
             textAlign: (data.setting_ucapan_profil?.position || "center") as any,
             lineHeight: data.setting_ucapan_profil?.lineHeight || "1.5",
+            width: data.setting_ucapan_profil?.width || "100%",
           }}
         >
           <AnimatedWrapper val={data.setting_ucapan_profil}>
