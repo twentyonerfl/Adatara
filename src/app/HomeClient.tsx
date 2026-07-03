@@ -493,6 +493,17 @@ export default function HomeClient({
             text-align: ${settings.hero_subtitle_align || "left"} !important;
             font-size: ${settings.hero_subtitle_size || 16}px !important;
           }
+        .hero-bg-pattern-image {
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+        @media (max-width: 768px) {
+          .hero-bg-pattern-image {
+            background-size: contain !important;
+            background-position: center top !important;
+            background-repeat: no-repeat !important;
+          }
         }
       `}</style>
 
@@ -571,11 +582,9 @@ export default function HomeClient({
         {/* Background Pattern Layer with Custom Opacity and Blur */}
         {settings.bg_image && (
           <div
-            className="absolute inset-0 -z-20 pointer-events-none"
+            className="absolute inset-0 -z-20 pointer-events-none hero-bg-pattern-image"
             style={{
               backgroundImage: `url(${settings.bg_image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
               opacity: settings.bg_pattern_opacity ?? 0.3,
               filter: settings.bg_pattern_blur ? `blur(${settings.bg_pattern_blur}px)` : "none",
               transform: settings.bg_pattern_blur ? "scale(1.05)" : "none"
