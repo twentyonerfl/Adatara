@@ -689,7 +689,7 @@ export function PenutupPreview({
                           key={opt.value}
                           type="button"
                           onClick={() => setKehadiran?.(opt.value as any)}
-                          className={`py-2 text-[9.5px] font-black tracking-wider border transition-all duration-300 cursor-pointer text-center ${
+                          className={`py-1.5 text-[9px] font-extrabold tracking-wider border transition-all duration-300 cursor-pointer text-center ${
                             isSelected
                               ? "bg-[#d4af37] border-[#d4af37] text-[#064e3b] shadow-md shadow-[#d4af37]/10"
                               : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
@@ -741,7 +741,7 @@ export function PenutupPreview({
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-2.5 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-black uppercase text-[10px] tracking-widest transition-all duration-300 shadow-lg shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="w-full py-2 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-extrabold text-[9.5px] tracking-wider transition-all duration-300 shadow-md shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                   style={{ borderRadius: "6%" }}
                 >
                   {submitting ? (
@@ -756,9 +756,9 @@ export function PenutupPreview({
               </form>
             )
           ) : (
-            <div className="flex gap-3 justify-center pt-2">
-              <div className="px-6 py-2.5 bg-[#d4af37] text-[#064e3b] text-[10px] font-black tracking-widest shadow-md hover:scale-102 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Hadir</div>
-              <div className="px-6 py-2.5 border border-white/20 text-white/90 text-[10px] font-black tracking-widest hover:bg-white/5 transition-all cursor-pointer" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
+            <div className="flex gap-2.5 justify-center pt-2">
+              <div className="px-4 py-1.5 bg-[#d4af37] text-[#064e3b] text-[9.5px] font-extrabold tracking-wider shadow-md hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer text-center min-w-[76px]" style={{ borderRadius: "6%" }}>Hadir</div>
+              <div className="px-4 py-1.5 border border-white/20 text-white/90 text-[9.5px] font-extrabold tracking-wider hover:bg-white/5 hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer text-center min-w-[76px]" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
             </div>
           )}
         </div>
@@ -781,7 +781,7 @@ export function PenutupPreview({
                 <button
                   type="button"
                   onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className={`px-3.5 py-1.5 border text-[8.5px] font-black tracking-widest transition-all duration-300 cursor-pointer ${
+                  className={`px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${
                     copiedIndex === i
                       ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
                       : "bg-white/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-white/15 hover:border-[#d4af37]"
