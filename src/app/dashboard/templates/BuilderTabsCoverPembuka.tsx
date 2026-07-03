@@ -501,7 +501,7 @@ export function PembukaForm({ data, onChange, mode }: { data: any; onChange: (d:
                   </div>
                   <div>
                     <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">Durasi</label>
-                    <div className="flex gap-1 items-center h-7 pt-1">
+                    <div className="flex gap-1.5 items-center h-7">
                       <input 
                         type="range" 
                         min="0.2" 

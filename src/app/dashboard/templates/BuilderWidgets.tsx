@@ -54,7 +54,7 @@ export function FontSettingsWidget({
       <div className="grid grid-cols-2 gap-x-3 gap-y-2">
         <div>
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Ukuran</label>
-          <div className="flex gap-1.5 items-center">
+          <div className="flex gap-1.5 items-center h-5">
             <input type="range" min="5" max="120" value={sizeVal}
               onChange={e => onChange({ ...safeVal, size: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" />
@@ -89,7 +89,7 @@ export function FontSettingsWidget({
           <div className="col-span-2 grid grid-cols-2 gap-2 mt-1 p-2 bg-[#064e3b]/5 rounded-lg border border-[#064e3b]/10">
             <div>
               <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi X (%)</label>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 h-5">
                 <input type="range" min="0" max="100" value={safeVal.x}
                   onChange={e => onChange({ ...safeVal, x: parseInt(e.target.value) })}
                   className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
@@ -98,7 +98,7 @@ export function FontSettingsWidget({
             </div>
             <div>
               <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi Y (%)</label>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 h-5">
                 <input type="range" min="0" max="100" value={safeVal.y}
                   onChange={e => onChange({ ...safeVal, y: parseInt(e.target.value) })}
                   className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
@@ -118,7 +118,7 @@ export function FontSettingsWidget({
             </div>
             <div>
               <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Durasi</label>
-              <div className="flex gap-1.5 items-center">
+              <div className="flex gap-1.5 items-center h-5">
                 <input 
                   type="range" 
                   min="0.2" 
@@ -137,7 +137,7 @@ export function FontSettingsWidget({
           <>
             <div>
               <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Lebar Text</label>
-              <div className="flex gap-1.5 items-center">
+              <div className="flex gap-1.5 items-center h-5">
                 <input 
                   type="range" 
                   min="40" 
@@ -151,7 +151,7 @@ export function FontSettingsWidget({
             </div>
             <div>
               <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Jarak Baris</label>
-              <div className="flex gap-1.5 items-center">
+              <div className="flex gap-1.5 items-center h-5">
                 <input 
                   type="range" 
                   min="0.8" 
