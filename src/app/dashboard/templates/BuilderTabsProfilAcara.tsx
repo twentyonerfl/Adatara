@@ -97,6 +97,9 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
                         photoScale={p.foto_scale}
                         photoX={p.foto_x}
                         photoY={p.foto_y}
+                        position={p.foto_position || "center"}
+                        posX={p.foto_pos_x}
+                        posY={p.foto_pos_y}
                         onChange={(updates) => {
                           updProfil(i, {
                             bingkai: updates.bingkai,
@@ -105,7 +108,10 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
                             overlay_url: updates.overlay_url,
                             foto_scale: updates.photo_scale,
                             foto_x: updates.photo_x,
-                            foto_y: updates.photo_y
+                            foto_y: updates.photo_y,
+                            foto_position: updates.position,
+                            foto_pos_x: updates.pos_x,
+                            foto_pos_y: updates.pos_y,
                           });
                         }}
                       />
@@ -193,56 +199,107 @@ export function ProfilPreview({ data }: { data: any }) {
           </AnimatedWrapper>
         </div>
       )}
-      <div className={`flex gap-6 justify-center flex-wrap z-10`}>
-        {profils.map((p, i) => (
-          <div key={i} className="flex flex-col items-center gap-2 text-center">
-            <FramedPhoto
-              src={p.foto}
-              bingkai={p.bingkai || "oval"}
-              className="w-24 h-24"
-              customWidth={p.foto_width}
-              customHeight={p.foto_height}
-              overlayUrl={p.overlay_url}
-              photoScale={p.foto_scale}
-              photoX={p.foto_x}
-              photoY={p.foto_y}
-            />
-            <div>
-              <div 
-                className="text-sm font-bold" 
-                style={{ 
-                  fontFamily: p.setting_nama?.family || data.setting_nama_profil?.family || "Inter",
-                  fontSize: p.setting_nama?.size || data.setting_nama_profil?.size || "14px",
-                  color: p.setting_nama?.color || data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#064e3b" 
-                }}
-              >
-                {p.nama || "Nama"}
-              </div>
-              <div 
-                className="text-[10px] opacity-70 mt-1 leading-normal" 
-                style={{ 
-                  fontFamily: p.setting_keterangan?.family || data.setting_keterangan_profil?.family || "Inter",
-                  fontSize: p.setting_keterangan?.size || data.setting_keterangan_profil?.size || "10px",
-                  color: p.setting_keterangan?.color || data.setting_keterangan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b" 
-                }}
-              >
-                {p.keterangan || "Keterangan"}
-              </div>
-              {p.urutan_anak && (
-                <div 
-                  className="text-[9px] opacity-60 italic mt-0.5 leading-normal" 
-                  style={{ 
-                    fontFamily: p.setting_urutan?.family || data.setting_urutan_profil?.family || "Inter",
-                    fontSize: p.setting_urutan?.size || data.setting_urutan_profil?.size || "9px",
-                    color: p.setting_urutan?.color || data.setting_urutan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b" 
-                  }}
-                >
-                  {p.urutan_anak}
+      <div className="relative w-full flex flex-col items-center z-10">
+        {/* Absolute positioned photos */}
+        {profils.filter(p => p.foto_position === "custom").map((p, i) => (
+          <div
+            key={`abs-${i}`}
+            style={{
+              position: "absolute",
+              left: `${p.foto_pos_x ?? 50}%`,
+              top: `${p.foto_pos_y ?? 50}%`,
+              transform: "translate(-50%, -50%)",
+              zIndex: 10,
+            }}
+          >
+            <div className="flex flex-col items-center gap-2 text-center">
+              <FramedPhoto
+                src={p.foto}
+                bingkai={p.bingkai || "oval"}
+                className="w-24 h-24"
+                customWidth={p.foto_width}
+                customHeight={p.foto_height}
+                overlayUrl={p.overlay_url}
+                photoScale={p.foto_scale}
+                photoX={p.foto_x}
+                photoY={p.foto_y}
+              />
+              <div>
+                <div className="text-sm font-bold" style={{ fontFamily: p.setting_nama?.family || "Inter", fontSize: p.setting_nama?.size || "14px", color: p.setting_nama?.color || data.setting_ucapan_profil?.color || "#064e3b" }}>
+                  {p.nama || "Nama"}
                 </div>
-              )}
+                <div className="text-[10px] opacity-70 mt-1 leading-normal" style={{ fontFamily: p.setting_keterangan?.family || "Inter", fontSize: p.setting_keterangan?.size || "10px", color: p.setting_keterangan?.color || data.setting_ucapan_profil?.color || "#064e3b" }}>
+                  {p.keterangan || "Keterangan"}
+                </div>
+                {p.urutan_anak && (
+                  <div className="text-[9px] opacity-60 italic mt-0.5 leading-normal" style={{ fontFamily: p.setting_urutan?.family || "Inter", fontSize: p.setting_urutan?.size || "9px", color: p.setting_urutan?.color || data.setting_ucapan_profil?.color || "#064e3b" }}>
+                    {p.urutan_anak}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         ))}
+
+        {/* Normal flow photos grouped by align */}
+        {["left", "center", "right"].map(align => {
+          const group = profils.filter(p => (p.foto_position || "center") === align);
+          if (group.length === 0) return null;
+          const justifyClass = align === "left" ? "justify-start" : align === "right" ? "justify-end" : "justify-center";
+          return (
+            <div key={align} className={`flex gap-6 flex-wrap w-full ${justifyClass}`}>
+              {group.map((p, i) => (
+                <div key={i} className="flex flex-col items-center gap-2 text-center">
+                  <FramedPhoto
+                    src={p.foto}
+                    bingkai={p.bingkai || "oval"}
+                    className="w-24 h-24"
+                    customWidth={p.foto_width}
+                    customHeight={p.foto_height}
+                    overlayUrl={p.overlay_url}
+                    photoScale={p.foto_scale}
+                    photoX={p.foto_x}
+                    photoY={p.foto_y}
+                  />
+                  <div>
+                    <div
+                      className="text-sm font-bold"
+                      style={{
+                        fontFamily: p.setting_nama?.family || data.setting_nama_profil?.family || "Inter",
+                        fontSize: p.setting_nama?.size || data.setting_nama_profil?.size || "14px",
+                        color: p.setting_nama?.color || data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                      }}
+                    >
+                      {p.nama || "Nama"}
+                    </div>
+                    <div
+                      className="text-[10px] opacity-70 mt-1 leading-normal"
+                      style={{
+                        fontFamily: p.setting_keterangan?.family || data.setting_keterangan_profil?.family || "Inter",
+                        fontSize: p.setting_keterangan?.size || data.setting_keterangan_profil?.size || "10px",
+                        color: p.setting_keterangan?.color || data.setting_keterangan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                      }}
+                    >
+                      {p.keterangan || "Keterangan"}
+                    </div>
+                    {p.urutan_anak && (
+                      <div
+                        className="text-[9px] opacity-60 italic mt-0.5 leading-normal"
+                        style={{
+                          fontFamily: p.setting_urutan?.family || data.setting_urutan_profil?.family || "Inter",
+                          fontSize: p.setting_urutan?.size || data.setting_urutan_profil?.size || "9px",
+                          color: p.setting_urutan?.color || data.setting_urutan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                        }}
+                      >
+                        {p.urutan_anak}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

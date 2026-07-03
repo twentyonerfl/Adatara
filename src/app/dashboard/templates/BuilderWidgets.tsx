@@ -1219,6 +1219,9 @@ export function PhotoStyleWidget({
   photoScale,
   photoX,
   photoY,
+  position,
+  posX,
+  posY,
   onChange,
 }: {
   bingkai: string;
@@ -1228,7 +1231,10 @@ export function PhotoStyleWidget({
   photoScale?: number;
   photoX?: number;
   photoY?: number;
-  onChange: (updates: { bingkai: string; width: string; height: string; overlay_url: string; photo_scale: number; photo_x: number; photo_y: number }) => void;
+  position?: string;
+  posX?: number;
+  posY?: number;
+  onChange: (updates: { bingkai: string; width: string; height: string; overlay_url: string; photo_scale: number; photo_x: number; photo_y: number; position: string; pos_x: number; pos_y: number }) => void;
 }) {
   const safeBingkai = bingkai || "oval";
   const safeWidth = width || "120px";
@@ -1237,8 +1243,15 @@ export function PhotoStyleWidget({
   const safePhotoScale = photoScale ?? 100;
   const safePhotoX = photoX ?? 0;
   const safePhotoY = photoY ?? 0;
+  const safePosition = position || "center";
+  const safePosX = posX ?? 50;
+  const safePosY = posY ?? 50;
 
   const isCustomOverlay = safeBingkai === "custom";
+  const isCustomPos = safePosition === "custom";
+
+  const emit = (overrides: Partial<{ bingkai: string; width: string; height: string; overlay_url: string; photo_scale: number; photo_x: number; photo_y: number; position: string; pos_x: number; pos_y: number }>) =>
+    onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY, position: safePosition, pos_x: safePosX, pos_y: safePosY, ...overrides });
 
   return (
     <div className="space-y-2.5 p-2.5 bg-[#064e3b]/5 rounded-xl border border-[#064e3b]/10 text-left">
@@ -1246,7 +1259,7 @@ export function PhotoStyleWidget({
         <label className="text-[9px] font-black uppercase tracking-widest text-[#d4af37] block">Bentuk / Bingkai Foto</label>
         <div className="flex gap-1 flex-wrap mt-1.5">
           {BINGKAI_OPTIONS.map(b => (
-            <button key={b} type="button" onClick={() => onChange({ bingkai: b, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
+            <button key={b} type="button" onClick={() => emit({ bingkai: b })}
               className={`px-1.5 py-0.5 rounded text-[8px] font-black border transition-all ${safeBingkai === b ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-white text-[#064e3b]/60 border-[#064e3b]/20"}`}>
               {b}
             </button>
@@ -1259,13 +1272,13 @@ export function PhotoStyleWidget({
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Bingkai PNG Kustom (Upload/URL)</label>
           <FileUploader 
             value={safeOverlayUrl}
-            onChange={(url) => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: url, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
+            onChange={(url) => emit({ overlay_url: url })}
             accept="image/png"
           />
           <input
             type="text"
             value={safeOverlayUrl}
-            onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: e.target.value, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
+            onChange={e => emit({ overlay_url: e.target.value })}
             placeholder="Atau tempel URL gambar kustom di sini..."
             className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none focus:border-[#d4af37] h-6"
           />
@@ -1273,6 +1286,43 @@ export function PhotoStyleWidget({
       )}
 
       <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+        {/* Posisi Foto */}
+        <div className="col-span-2 border-b border-[#064e3b]/5 pb-2">
+          <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Posisi</label>
+          <select
+            value={safePosition}
+            onChange={e => emit({ position: e.target.value })}
+            className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+            <option value="left">Kiri</option>
+            <option value="center">Tengah</option>
+            <option value="right">Kanan</option>
+            <option value="custom">Custom (X, Y)</option>
+          </select>
+        </div>
+
+        {isCustomPos && (
+          <>
+            <div>
+              <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi X (%)</label>
+              <div className="flex items-center gap-1.5 h-5">
+                <input type="range" min="0" max="100" value={safePosX}
+                  onChange={e => emit({ pos_x: parseInt(e.target.value) })}
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safePosX}%</span>
+              </div>
+            </div>
+            <div>
+              <label className="text-[7.5px] font-bold uppercase text-[#064e3b]/60 block mb-0.5">Posisi Y (%)</label>
+              <div className="flex items-center gap-1.5 h-5">
+                <input type="range" min="0" max="100" value={safePosY}
+                  onChange={e => emit({ pos_y: parseInt(e.target.value) })}
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5" />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safePosY}%</span>
+              </div>
+            </div>
+          </>
+        )}
+
         <div>
           <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Lebar Bingkai</label>
           <div className="flex gap-1.5 items-center">
@@ -1281,7 +1331,7 @@ export function PhotoStyleWidget({
               min="50" 
               max="300" 
               value={parseInt(safeWidth) || 120}
-              onChange={e => onChange({ bingkai: safeBingkai, width: e.target.value + "px", height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
+              onChange={e => emit({ width: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
             <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safeWidth}</span>
@@ -1296,7 +1346,7 @@ export function PhotoStyleWidget({
               min="50" 
               max="300" 
               value={parseInt(safeHeight) || 120}
-              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: e.target.value + "px", overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: safePhotoY })}
+              onChange={e => emit({ height: e.target.value + "px" })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
             <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safeHeight}</span>
@@ -1315,7 +1365,7 @@ export function PhotoStyleWidget({
               min="10" 
               max="200" 
               value={safePhotoScale}
-              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: parseInt(e.target.value), photo_x: safePhotoX, photo_y: safePhotoY })}
+              onChange={e => emit({ photo_scale: parseInt(e.target.value) })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
             <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safePhotoScale}%</span>
@@ -1330,7 +1380,7 @@ export function PhotoStyleWidget({
               min="-100" 
               max="100" 
               value={safePhotoX}
-              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: parseInt(e.target.value), photo_y: safePhotoY })}
+              onChange={e => emit({ photo_x: parseInt(e.target.value) })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
             <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safePhotoX}px</span>
@@ -1345,7 +1395,7 @@ export function PhotoStyleWidget({
               min="-100" 
               max="100" 
               value={safePhotoY}
-              onChange={e => onChange({ bingkai: safeBingkai, width: safeWidth, height: safeHeight, overlay_url: safeOverlayUrl, photo_scale: safePhotoScale, photo_x: safePhotoX, photo_y: parseInt(e.target.value) })}
+              onChange={e => emit({ photo_y: parseInt(e.target.value) })}
               className="flex-1 min-w-0 accent-[#d4af37] h-0.5" 
             />
             <span className="text-[8px] font-bold w-9 text-right text-[#064e3b]/80 shrink-0">{safePhotoY}px</span>
