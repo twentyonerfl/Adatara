@@ -692,34 +692,34 @@ export function PenutupPreview({
               
               {/* 1. Nama Tamu */}
               <div className="space-y-1.5">
-                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Nama Tamu</label>
+                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/85">Nama Tamu</label>
                 <input
                   type="text"
                   required
                   value={activeNamaTamu}
                   onChange={(e) => handleNamaChange(e.target.value)}
                   placeholder="Masukkan nama lengkap Anda..."
-                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
+                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/10 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
                   style={{ borderRadius: "6%" }}
                 />
               </div>
 
               {/* 2. Ucapan & Doa Restu */}
               <div className="space-y-1.5">
-                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Ucapan & Doa Restu</label>
+                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/85">Ucapan & Doa Restu</label>
                 <textarea
                   value={activeUcapan}
                   onChange={(e) => handleUcapanChange(e.target.value)}
                   rows={2.5}
                   placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
+                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/10 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
                   style={{ borderRadius: "6%" }}
                 />
               </div>
 
               {/* 3. Konfirmasi Kehadiran */}
               <div className="space-y-1.5">
-                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Konfirmasi Kehadiran ?</label>
+                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest text-white/85">Konfirmasi Kehadiran ?</label>
                 <div className="grid grid-cols-2 gap-2.5">
                   {[
                     {
@@ -730,7 +730,7 @@ export function PenutupPreview({
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       ),
-                      activeClass: "bg-emerald-500/20 border-emerald-500 text-emerald-400 font-extrabold shadow-md shadow-emerald-500/10",
+                      activeClass: "bg-emerald-500/15 border-emerald-500/50 text-emerald-300 font-extrabold shadow-md shadow-emerald-500/5",
                       inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/20"
                     },
                     {
@@ -741,7 +741,7 @@ export function PenutupPreview({
                           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       ),
-                      activeClass: "bg-rose-500/20 border-rose-500 text-rose-400 font-extrabold shadow-md shadow-rose-500/10",
+                      activeClass: "bg-rose-500/15 border-rose-500/50 text-rose-300 font-extrabold shadow-md shadow-rose-500/5",
                       inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20"
                     }
                   ].map((opt) => {
