@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget } from "./BuilderWidgets";
 import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
 import { Plus, Trash2 } from "lucide-react";
@@ -594,19 +595,19 @@ export function PenutupPreview({
   data,
   wishes,
   onRsvpSubmit,
-  namaTamu,
+  namaTamu = "",
   setNamaTamu,
-  kehadiran,
+  kehadiran = "HADIR",
   setKehadiran,
-  jumlahTamu,
+  jumlahTamu = 1,
   setJumlahTamu,
-  ucapan,
+  ucapan = "",
   setUcapan,
-  submitting,
-  formSuccess,
-  formError,
+  submitting = false,
+  formSuccess = false,
+  formError = null,
   onCopyClick,
-  copiedIndex
+  copiedIndex = null
 }: { 
   data: any;
   wishes?: any[];
@@ -625,6 +626,33 @@ export function PenutupPreview({
   onCopyClick?: (text: string, index: number) => void;
   copiedIndex?: number | null;
 }) {
+  const [localNamaTamu, setLocalNamaTamu] = useState("");
+  const [localKehadiran, setLocalKehadiran] = useState<"HADIR" | "TIDAK_HADIR" | "RAGU_RAGU">("HADIR");
+  const [localJumlahTamu, setLocalJumlahTamu] = useState(1);
+  const [localUcapan, setLocalUcapan] = useState("");
+
+  const activeNamaTamu = setNamaTamu ? namaTamu : localNamaTamu;
+  const activeKehadiran = setKehadiran ? kehadiran : localKehadiran;
+  const activeJumlahTamu = setJumlahTamu ? jumlahTamu : localJumlahTamu;
+  const activeUcapan = setUcapan ? ucapan : localUcapan;
+
+  const handleNamaChange = (v: string) => {
+    if (setNamaTamu) setNamaTamu(v);
+    else setLocalNamaTamu(v);
+  };
+  const handleKehadiranChange = (v: "HADIR" | "TIDAK_HADIR" | "RAGU_RAGU") => {
+    if (setKehadiran) setKehadiran(v);
+    else setLocalKehadiran(v);
+  };
+  const handleJumlahChange = (v: number) => {
+    if (setJumlahTamu) setJumlahTamu(v);
+    else setLocalJumlahTamu(v);
+  };
+  const handleUcapanChange = (v: string) => {
+    if (setUcapan) setUcapan(v);
+    else setLocalUcapan(v);
+  };
+
   const bgPenutup = getBgStyle(data.background);
   const amplops: any[] = data.amplops || [];
 
@@ -642,147 +670,140 @@ export function PenutupPreview({
             <div>Konfirmasi Kehadiran</div>
             <div className={getDividerClass(data.setting_head_rsvp?.position)} />
           </div>
-          {onRsvpSubmit ? (
-            formSuccess ? (
-              <div className="text-center py-6 space-y-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
-                  <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                  </svg>
+          {formSuccess ? (
+            <div className="text-center py-6 space-y-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
+                <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="space-y-1">
+                <div className="text-white font-extrabold text-[12px] tracking-wider">Konfirmasi Terkirim!</div>
+                <div className="text-[9.5px] text-white/70 max-w-[200px] mx-auto leading-relaxed">Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={onRsvpSubmit || ((e) => e.preventDefault())} className="space-y-4 pt-1 text-left">
+              {formError && (
+                <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 text-[9px] font-semibold" style={{ borderRadius: "6%" }}>
+                  {formError}
                 </div>
-                <div className="space-y-1">
-                  <div className="text-white font-extrabold text-[12px] tracking-wider">Konfirmasi Terkirim!</div>
-                  <div className="text-[9.5px] text-white/70 max-w-[200px] mx-auto leading-relaxed">Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
+              )}
+              
+              {/* 1. Nama Tamu */}
+              <div className="space-y-1.5">
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Nama Tamu</label>
+                <input
+                  type="text"
+                  required
+                  value={activeNamaTamu}
+                  onChange={(e) => handleNamaChange(e.target.value)}
+                  placeholder="Masukkan nama lengkap Anda..."
+                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
+                  style={{ borderRadius: "6%" }}
+                />
+              </div>
+
+              {/* 2. Ucapan & Doa Restu */}
+              <div className="space-y-1.5">
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Ucapan & Doa Restu</label>
+                <textarea
+                  value={activeUcapan}
+                  onChange={(e) => handleUcapanChange(e.target.value)}
+                  rows={2.5}
+                  placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
+                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
+                  style={{ borderRadius: "6%" }}
+                />
+              </div>
+
+              {/* 3. Konfirmasi Kehadiran */}
+              <div className="space-y-1.5">
+                <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Konfirmasi Kehadiran ?</label>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {[
+                    {
+                      value: "HADIR",
+                      label: "Hadir",
+                      icon: (
+                        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ),
+                      activeClass: "bg-emerald-500/20 border-emerald-500 text-emerald-400 font-extrabold shadow-md shadow-emerald-500/10",
+                      inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/20"
+                    },
+                    {
+                      value: "TIDAK_HADIR",
+                      label: "Tidak Hadir",
+                      icon: (
+                        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      ),
+                      activeClass: "bg-rose-500/20 border-rose-500 text-rose-400 font-extrabold shadow-md shadow-rose-500/10",
+                      inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20"
+                    }
+                  ].map((opt) => {
+                    const isSelected = activeKehadiran === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => handleKehadiranChange(opt.value as any)}
+                        className={`py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 ${
+                          isSelected ? opt.activeClass : opt.inactiveClass
+                        }`}
+                        style={{ borderRadius: "6%" }}
+                      >
+                        {opt.icon}
+                        <span>{opt.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            ) : (
-              <form onSubmit={onRsvpSubmit} className="space-y-4 pt-1 text-left">
-                {formError && (
-                  <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 text-[9px] font-semibold" style={{ borderRadius: "6%" }}>
-                    {formError}
+
+              {/* 4. Jumlah Tamu */}
+              {activeKehadiran === "HADIR" && (
+                <div className="space-y-1.5 transition-all duration-300">
+                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Jumlah Tamu</label>
+                  <div className="flex items-center bg-white/5 border border-white/10 overflow-hidden max-w-[120px]" style={{ borderRadius: "6%" }}>
+                    <button
+                      type="button"
+                      onClick={() => handleJumlahChange(Math.max(1, activeJumlahTamu - 1))}
+                      className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
+                    >
+                      -
+                    </button>
+                    <span className="flex-1 text-center text-[10px] text-white font-black">{activeJumlahTamu}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleJumlahChange(Math.min(10, activeJumlahTamu + 1))}
+                      className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
+                    >
+                      +
+                    </button>
                   </div>
+                </div>
+              )}
+              
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-2 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-extrabold text-[9.5px] tracking-wider transition-all duration-300 shadow-md shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                style={{ borderRadius: "6%" }}
+              >
+                {submitting ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-[#064e3b] border-t-transparent rounded-full animate-spin" />
+                    <span>Mengirim...</span>
+                  </>
+                ) : (
+                  <span>Kirim Konfirmasi</span>
                 )}
-                
-                {/* 1. Nama Tamu */}
-                <div className="space-y-1.5">
-                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Nama Tamu</label>
-                  <input
-                    type="text"
-                    required
-                    value={namaTamu}
-                    onChange={(e) => setNamaTamu?.(e.target.value)}
-                    placeholder="Masukkan nama lengkap Anda..."
-                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300"
-                    style={{ borderRadius: "6%" }}
-                  />
-                </div>
-
-                {/* 2. Ucapan & Doa Restu */}
-                <div className="space-y-1.5">
-                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Ucapan & Doa Restu</label>
-                  <textarea
-                    value={ucapan}
-                    onChange={(e) => setUcapan?.(e.target.value)}
-                    rows={2.5}
-                    placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-[#d4af37]/60 focus:ring-1 focus:ring-[#d4af37]/40 text-[10px] text-white placeholder-white/30 outline-none resize-none transition-all duration-300"
-                    style={{ borderRadius: "6%" }}
-                  />
-                </div>
-
-                {/* 3. Konfirmasi Kehadiran */}
-                <div className="space-y-1.5">
-                  <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Konfirmasi Kehadiran ?</label>
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {[
-                      {
-                        value: "HADIR",
-                        label: "Hadir",
-                        icon: (
-                          <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        ),
-                        activeClass: "bg-emerald-500/20 border-emerald-500 text-emerald-400 font-extrabold shadow-md shadow-emerald-500/10",
-                        inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/20"
-                      },
-                      {
-                        value: "TIDAK_HADIR",
-                        label: "Tidak Hadir",
-                        icon: (
-                          <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        ),
-                        activeClass: "bg-rose-500/20 border-rose-500 text-rose-400 font-extrabold shadow-md shadow-rose-500/10",
-                        inactiveClass: "bg-white/5 border-white/10 text-white/60 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/20"
-                      }
-                    ].map((opt) => {
-                      const isSelected = (kehadiran || "HADIR") === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => setKehadiran?.(opt.value as any)}
-                          className={`py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 ${
-                            isSelected ? opt.activeClass : opt.inactiveClass
-                          }`}
-                          style={{ borderRadius: "6%" }}
-                        >
-                          {opt.icon}
-                          <span>{opt.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 4. Jumlah Tamu */}
-                {(kehadiran || "HADIR") === "HADIR" && (
-                  <div className="space-y-1.5 transition-all duration-300">
-                    <label className="block text-[8px] font-extrabold uppercase tracking-widest text-[#d4af37]">Jumlah Tamu</label>
-                    <div className="flex items-center bg-white/5 border border-white/10 overflow-hidden max-w-[120px]" style={{ borderRadius: "6%" }}>
-                      <button
-                        type="button"
-                        onClick={() => setJumlahTamu?.(Math.max(1, (jumlahTamu || 1) - 1))}
-                        className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
-                      >
-                        -
-                      </button>
-                      <span className="flex-1 text-center text-[10px] text-white font-black">{jumlahTamu || 1}</span>
-                      <button
-                        type="button"
-                        onClick={() => setJumlahTamu?.(Math.min(10, (jumlahTamu || 1) + 1))}
-                        className="px-3 py-1.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors text-xs font-black cursor-pointer select-none"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                )}
-                
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full py-2 bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37] hover:brightness-105 active:scale-[0.98] text-[#064e3b] font-extrabold text-[9.5px] tracking-wider transition-all duration-300 shadow-md shadow-[#d4af37]/10 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                  style={{ borderRadius: "6%" }}
-                >
-                  {submitting ? (
-                    <>
-                      <div className="w-3.5 h-3.5 border-2 border-[#064e3b] border-t-transparent rounded-full animate-spin" />
-                      <span>Mengirim...</span>
-                    </>
-                  ) : (
-                    <span>Kirim Konfirmasi</span>
-                  )}
-                </button>
-              </form>
-            )
-          ) : (
-            <div className="flex gap-2.5 justify-center pt-2">
-              <div className="px-4 py-1.5 bg-[#d4af37] text-[#064e3b] text-[9.5px] font-extrabold tracking-wider shadow-md hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer text-center min-w-[76px]" style={{ borderRadius: "6%" }}>Hadir</div>
-              <div className="px-4 py-1.5 border border-white/20 text-white/90 text-[9.5px] font-extrabold tracking-wider hover:bg-white/5 hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer text-center min-w-[76px]" style={{ borderRadius: "6%" }}>Tidak Hadir</div>
-            </div>
+              </button>
+            </form>
           )}
         </div>
       )}
