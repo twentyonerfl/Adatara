@@ -83,10 +83,33 @@ export default async function TemplatesPublicPage() {
       "Wisuda & Kelulusan"
     ];
 
+  // Fetch homepage settings
+  let settings = null;
+  try {
+    settings = await db.homepageSetting.findFirst();
+  } catch (err) {
+    console.error("Gagal memuat setting homepage dari database: ", err);
+  }
+
+  const bgColor = settings?.bg_color || "#f5f5dc";
+  const textColor = settings?.text_color || "#064e3b";
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#f5f5dc] text-[#064e3b] font-sans">
+    <div
+      className="flex flex-col min-h-screen font-sans"
+      style={{
+        backgroundColor: bgColor,
+        color: textColor
+      }}
+    >
       {/* HEADER NAVBAR */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#f5f5dc]/80 border-b border-[#064e3b]/10">
+      <header
+        className="sticky top-0 z-50 backdrop-blur-md border-b transition-all"
+        style={{
+          backgroundColor: `${bgColor}e6`,
+          borderColor: `${textColor}1a`
+        }}
+      >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center select-none">
             <img
@@ -96,7 +119,11 @@ export default async function TemplatesPublicPage() {
             />
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/" className="px-4 py-2 text-sm font-bold hover:text-[#064e3b] text-[#064e3b]/70 transition-colors">
+            <Link
+              href="/"
+              className="px-4 py-2 text-sm font-bold transition-colors opacity-80 hover:opacity-100"
+              style={{ color: textColor }}
+            >
               Beranda
             </Link>
           </div>
@@ -106,17 +133,30 @@ export default async function TemplatesPublicPage() {
       {/* CONTENT AREA */}
       <main className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full">
         <div className="mb-12 text-center md:text-left">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#064e3b]/5 border border-[#064e3b]/10 text-xs font-bold text-[#064e3b] mb-4">
+          <div
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold mb-4"
+            style={{
+              backgroundColor: `${textColor}0d`,
+              borderColor: `${textColor}1a`,
+              color: textColor
+            }}
+          >
             <Heart className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />
             Desain Undangan Premium Tanpa Login
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#064e3b] tracking-tight">Pilih Template Terbaik</h1>
-          <p className="text-[#064e3b]/70 text-sm mt-1 max-w-xl">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: textColor }}>
+            Pilih Template Terbaik
+          </h1>
+          <p className="text-sm mt-1 max-w-xl opacity-70" style={{ color: textColor }}>
             Pilih tema desain dasar favorit Anda, isi data acara secara langsung, bayar, dan aktifkan undangan digital instan Anda.
           </p>
         </div>
 
-        <TemplateListPublic templates={templates} categories={categories} />
+        <TemplateListPublic
+          templates={templates}
+          categories={categories}
+          settings={settings ? JSON.parse(JSON.stringify(settings)) : null}
+        />
       </main>
 
       {/* FOOTER */}
