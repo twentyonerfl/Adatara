@@ -21,7 +21,40 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
   const upd = (key: string, val: any) => onChange({ ...data, [key]: val });
   const profils: any[] = data.profils || [];
 
-  const addProfil = () => upd("profils", [...profils, { foto: "", bingkai: "oval", foto_width: "120px", foto_height: "120px", overlay_url: "", nama: "", keterangan: "", urutan_anak: "" }]);
+  const updAllProfilsStyle = (updates: Record<string, any>) => {
+    const next = profils.map((p) => ({
+      ...p,
+      ...updates
+    }));
+    upd("profils", next);
+  };
+
+  const addProfil = () => {
+    const first = profils[0] || {};
+    upd("profils", [
+      ...profils,
+      {
+        foto: "",
+        bingkai: first.bingkai || "oval",
+        foto_width: first.foto_width || "120px",
+        foto_height: first.foto_height || "120px",
+        overlay_url: first.overlay_url || "",
+        foto_scale: first.foto_scale,
+        foto_x: first.foto_x,
+        foto_y: first.foto_y,
+        foto_position: first.foto_position || "center",
+        foto_pos_x: first.foto_pos_x,
+        foto_pos_y: first.foto_pos_y,
+        setting_nama: first.setting_nama || {},
+        setting_keterangan: first.setting_keterangan || {},
+        setting_urutan: first.setting_urutan || {},
+        nama: "",
+        keterangan: "",
+        urutan_anak: ""
+      }
+    ]);
+  };
+
   const removeProfil = (i: number) => upd("profils", profils.filter((_, idx) => idx !== i));
   const updProfil = (i: number, keyOrUpdates: string | Record<string, any>, val?: any) => {
     const next = profils.map((p, idx) => {
@@ -82,69 +115,68 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
             <FontSettingsWidget label="Setting Font Ucapan" value={data.setting_ucapan_profil || {}} onChange={v => upd("setting_ucapan_profil", v)} showAnimation showSpacing />
           </SectionInput>
 
-          {profils.length > 0 && (
-            <SectionInput label="Setting Foto & Style Tokoh Profil">
-              <div className="space-y-4">
-                {profils.map((p, i) => (
-                  <div key={i} className="p-3.5 bg-white border border-[#064e3b]/10 rounded-xl space-y-4">
-                    <div>
-                      <p className="text-[9px] font-black uppercase text-[#d4af37] mb-2">Foto Profil #{i + 1} ({p.nama || "Tanpa Nama"})</p>
-                      <PhotoStyleWidget
-                        bingkai={p.bingkai || "oval"}
-                        width={p.foto_width || "120px"}
-                        height={p.foto_height || "120px"}
-                        overlayUrl={p.overlay_url || ""}
-                        photoScale={p.foto_scale}
-                        photoX={p.foto_x}
-                        photoY={p.foto_y}
-                        position={p.foto_position || "center"}
-                        posX={p.foto_pos_x}
-                        posY={p.foto_pos_y}
-                        onChange={(updates) => {
-                          updProfil(i, {
-                            bingkai: updates.bingkai,
-                            foto_width: updates.width,
-                            foto_height: updates.height,
-                            overlay_url: updates.overlay_url,
-                            foto_scale: updates.photo_scale,
-                            foto_x: updates.photo_x,
-                            foto_y: updates.photo_y,
-                            foto_position: updates.position,
-                            foto_pos_x: updates.pos_x,
-                            foto_pos_y: updates.pos_y,
-                          });
-                        }}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Nama Lengkap"
-                        value={p.setting_nama || {}}
-                        onChange={(val) => updProfil(i, "setting_nama", val)}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Keterangan (Orang Tua)"
-                        value={p.setting_keterangan || {}}
-                        onChange={(val) => updProfil(i, "setting_keterangan", val)}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Urutan Anak / Bersaudara"
-                        value={p.setting_urutan || {}}
-                        onChange={(val) => updProfil(i, "setting_urutan", val)}
-                      />
-                    </div>
+          {profils.length > 0 && (() => {
+            const p = profils[0];
+            return (
+              <SectionInput label="Setting Foto & Style Tokoh Profil">
+                <div className="p-3.5 bg-white border border-[#064e3b]/10 rounded-xl space-y-4">
+                  <div>
+                    <p className="text-[9px] font-black uppercase text-[#d4af37] mb-2">Foto Profil #1 ({p.nama || "Tanpa Nama"})</p>
+                    <PhotoStyleWidget
+                      bingkai={p.bingkai || "oval"}
+                      width={p.foto_width || "120px"}
+                      height={p.foto_height || "120px"}
+                      overlayUrl={p.overlay_url || ""}
+                      photoScale={p.foto_scale}
+                      photoX={p.foto_x}
+                      photoY={p.foto_y}
+                      position={p.foto_position || "center"}
+                      posX={p.foto_pos_x}
+                      posY={p.foto_pos_y}
+                      onChange={(updates) => {
+                        updAllProfilsStyle({
+                          bingkai: updates.bingkai,
+                          foto_width: updates.width,
+                          foto_height: updates.height,
+                          overlay_url: updates.overlay_url,
+                          foto_scale: updates.photo_scale,
+                          foto_x: updates.photo_x,
+                          foto_y: updates.photo_y,
+                          foto_position: updates.position,
+                          foto_pos_x: updates.pos_x,
+                          foto_pos_y: updates.pos_y,
+                        });
+                      }}
+                    />
                   </div>
-                ))}
-              </div>
-            </SectionInput>
-          )}
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <FontSettingsWidget
+                      label="Style Nama Lengkap"
+                      value={p.setting_nama || {}}
+                      onChange={(val) => updAllProfilsStyle({ setting_nama: val })}
+                    />
+                  </div>
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <FontSettingsWidget
+                      label="Style Keterangan (Orang Tua)"
+                      value={p.setting_keterangan || {}}
+                      onChange={(val) => updAllProfilsStyle({ setting_keterangan: val })}
+                    />
+                  </div>
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <FontSettingsWidget
+                      label="Style Urutan Anak / Bersaudara"
+                      value={p.setting_urutan || {}}
+                      onChange={(val) => updAllProfilsStyle({ setting_urutan: val })}
+                    />
+                  </div>
+                </div>
+              </SectionInput>
+            );
+          })()}
 
           <SectionInput label="Background Profil">
             <BackgroundWidget value={data.background || { type: "solid", value: "#fefcf6" }} onChange={v => upd("background", v)} />
@@ -422,7 +454,36 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
   const upd = (key: string, val: any) => onChange({ ...data, [key]: val });
   const acaras: any[] = data.acaras || [];
 
-  const addAcara = () => upd("acaras", [...acaras, { nama: "", tanggal: "", jam_mulai: "08:00", jam_selesai: "10:00", alamat: "", link_maps: "", embed_maps: "" }]);
+  const updAllAcarasStyle = (updates: Record<string, any>) => {
+    const next = acaras.map((a) => ({
+      ...a,
+      ...updates
+    }));
+    upd("acaras", next);
+  };
+
+  const addAcara = () => {
+    const first = acaras[0] || {};
+    upd("acaras", [
+      ...acaras,
+      {
+        nama: "",
+        tanggal: "",
+        jam_mulai: "08:00",
+        jam_selesai: "10:00",
+        alamat: "",
+        link_maps: "",
+        embed_maps: "",
+        setting_nama: first.setting_nama || {},
+        setting_tanggal: first.setting_tanggal || {},
+        setting_jam: first.setting_jam || {},
+        setting_alamat: first.setting_alamat || {},
+        setting_card: first.setting_card || { type: "glass" },
+        setting_maps_button: first.setting_maps_button || {},
+      }
+    ]);
+  };
+
   const removeAcara = (i: number) => upd("acaras", acaras.filter((_, idx) => idx !== i));
   const updAcara = (i: number, keyOrUpdates: string | Record<string, any>, val?: any) => {
     const next = acaras.map((a, idx) => {
@@ -542,71 +603,70 @@ export function AcaraForm({ data, onChange, mode }: { data: any; onChange: (d: a
             </SectionInput>
           )}
 
-          {acaras.length > 0 && (
-            <SectionInput label="Setting Style Acara">
-              <div className="space-y-4">
-                {acaras.map((a, i) => (
-                  <div key={i} className="p-3.5 bg-white border border-[#064e3b]/10 rounded-xl space-y-4">
-                    <p className="text-[9px] font-black uppercase text-[#d4af37]">Acara #{i + 1} ({a.nama || "Tanpa Nama"})</p>
-                    
-                    <div className="pt-2">
-                      <FontSettingsWidget
-                        label="Style Nama Acara"
-                        value={a.setting_nama || {}}
-                        onChange={(val) => updAcara(i, "setting_nama", val)}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Tanggal Acara"
-                        value={a.setting_tanggal || {}}
-                        onChange={(val) => updAcara(i, "setting_tanggal", val)}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Jam (Waktu) Acara"
-                        value={a.setting_jam || {}}
-                        onChange={(val) => updAcara(i, "setting_jam", val)}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <FontSettingsWidget
-                        label="Style Alamat Lengkap"
-                        value={a.setting_alamat || {}}
-                        onChange={(val) => updAcara(i, "setting_alamat", val)}
-                      />
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Style Card Acara</label>
-                      <select
-                        value={a.setting_card?.type || "glass"}
-                        onChange={e => updAcara(i, "setting_card", { ...a.setting_card, type: e.target.value })}
-                        className="w-full px-2 py-1.5 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none font-bold cursor-pointer text-[#064e3b]"
-                      >
-                        <option value="glass">Kaca (Glassmorphism)</option>
-                        <option value="outline">Garis (Outline)</option>
-                        <option value="solid">Solid (Putih)</option>
-                        <option value="none">Tanpa Card (Polos)</option>
-                      </select>
-                    </div>
-
-                    <div className="pt-3 border-t border-[#064e3b]/10">
-                      <MapsButtonStyleWidget
-                        label="Style Tombol Google Maps"
-                        value={a.setting_maps_button || {}}
-                        onChange={(val) => updAcara(i, "setting_maps_button", val)}
-                      />
-                    </div>
+          {acaras.length > 0 && (() => {
+            const a = acaras[0];
+            return (
+              <SectionInput label="Setting Style Acara">
+                <div className="p-3.5 bg-white border border-[#064e3b]/10 rounded-xl space-y-4">
+                  <p className="text-[9px] font-black uppercase text-[#d4af37]">Acara #1 ({a.nama || "Tanpa Nama"})</p>
+                  
+                  <div className="pt-2">
+                    <FontSettingsWidget
+                      label="Style Nama Acara"
+                      value={a.setting_nama || {}}
+                      onChange={(val) => updAllAcarasStyle({ setting_nama: val })}
+                    />
                   </div>
-                ))}
-              </div>
-            </SectionInput>
-          )}
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <FontSettingsWidget
+                      label="Style Tanggal Acara"
+                      value={a.setting_tanggal || {}}
+                      onChange={(val) => updAllAcarasStyle({ setting_tanggal: val })}
+                    />
+                  </div>
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <FontSettingsWidget
+                      label="Style Jam (Waktu) Acara"
+                      value={a.setting_jam || {}}
+                      onChange={(val) => updAllAcarasStyle({ setting_jam: val })}
+                    />
+                  </div>
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <FontSettingsWidget
+                      label="Style Alamat Lengkap"
+                      value={a.setting_alamat || {}}
+                      onChange={(val) => updAllAcarasStyle({ setting_alamat: val })}
+                    />
+                  </div>
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <label className="text-[9px] font-bold uppercase text-[#064e3b]/60 block mb-1">Style Card Acara</label>
+                    <select
+                      value={a.setting_card?.type || "glass"}
+                      onChange={e => updAllAcarasStyle({ setting_card: { ...a.setting_card, type: e.target.value } })}
+                      className="w-full px-2 py-1.5 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none font-bold cursor-pointer text-[#064e3b]"
+                    >
+                      <option value="glass">Kaca (Glassmorphism)</option>
+                      <option value="outline">Garis (Outline)</option>
+                      <option value="solid">Solid (Putih)</option>
+                      <option value="none">Tanpa Card (Polos)</option>
+                    </select>
+                  </div>
+
+                  <div className="pt-3 border-t border-[#064e3b]/10">
+                    <MapsButtonStyleWidget
+                      label="Style Tombol Google Maps"
+                      value={a.setting_maps_button || {}}
+                      onChange={(val) => updAllAcarasStyle({ setting_maps_button: val })}
+                    />
+                  </div>
+                </div>
+              </SectionInput>
+            );
+          })()}
 
           <SectionInput label="Background Jadwal Acara">
             <BackgroundWidget value={data.background || { type: "solid", value: "#f5f5dc" }} onChange={v => upd("background", v)} />

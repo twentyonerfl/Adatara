@@ -392,17 +392,56 @@ export default function HomeClient({
           box-shadow: 0 8px 32px 0 rgba(6, 78, 59, 0.08) !important;
           transform: translateY(-2px) !important;
         }
-        .custom-card-btn {
+        .custom-card-btn-basic {
           background-color: transparent !important;
           color: ${settings.text_color} !important;
           border-color: ${settings.text_color}26 !important;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
-        .group:hover .custom-card-btn {
-          background-color: ${settings.text_color} !important;
+        .group:hover .custom-card-btn-basic {
+          background-color: #64748b !important;
           color: #ffffff !important;
-          border-color: ${settings.text_color} !important;
-          box-shadow: 0 4px 12px ${settings.text_color}20 !important;
+          border-color: #64748b !important;
+          box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2) !important;
+        }
+
+        .custom-card-btn-premium {
+          background-color: transparent !important;
+          color: ${settings.text_color} !important;
+          border-color: ${settings.text_color}26 !important;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .group:hover .custom-card-btn-premium {
+          background-color: #059669 !important;
+          color: #ffffff !important;
+          border-color: #059669 !important;
+          box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2) !important;
+        }
+
+        .custom-card-btn-sultan {
+          background-color: transparent !important;
+          color: ${settings.text_color} !important;
+          border-color: ${settings.text_color}26 !important;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .group:hover .custom-card-btn-sultan {
+          background-color: #78350f !important;
+          color: #ffffff !important;
+          border-color: #78350f !important;
+          box-shadow: 0 4px 12px rgba(120, 53, 15, 0.2) !important;
+        }
+
+        .custom-card-btn-exclusive {
+          background-color: transparent !important;
+          color: ${settings.text_color} !important;
+          border-color: ${settings.text_color}26 !important;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .group:hover .custom-card-btn-exclusive {
+          background-color: #800020 !important;
+          color: #ffffff !important;
+          border-color: #800020 !important;
+          box-shadow: 0 4px 12px rgba(128, 0, 32, 0.2) !important;
         }
         .custom-badge {
           background-color: rgba(255, 255, 255, 0.08) !important;
@@ -1090,7 +1129,15 @@ export default function HomeClient({
                       {/* Button */}
                       <Link
                         href={`/demo/${template.id}`}
-                        className="mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase custom-card-btn"
+                        className={`mt-1.5 w-full py-1.5 text-center text-[8.5px] font-black rounded-md border flex items-center justify-center gap-1.5 transition-all shadow-sm tracking-widest uppercase ${
+                          template.paket === "EXCLUSIVE"
+                            ? "custom-card-btn-exclusive"
+                            : template.paket === "SULTAN"
+                              ? "custom-card-btn-sultan"
+                              : template.paket === "PREMIUM"
+                                ? "custom-card-btn-premium"
+                                : "custom-card-btn-basic"
+                        }`}
                       >
                         Live Demo
                         <ArrowRight className="w-2.5 h-2.5" />
