@@ -491,12 +491,29 @@ export function PembukaForm({ data, onChange, mode }: { data: any; onChange: (d:
                     photo_y: updates.photo_y,
                   })}
                 />
-                <div>
-                  <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">Animasi</label>
-                  <select value={data.foto_setting?.animation || "fade-in"} onChange={e => upd("foto_setting", { ...(data.foto_setting || {}), animation: e.target.value })}
-                    className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none font-bold">
-                    {["none", "fade-in", "slide-up", "zoom-in"].map(a => <option key={a}>{a}</option>)}
-                  </select>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">Animasi</label>
+                    <select value={data.foto_setting?.animation || "fade-in"} onChange={e => upd("foto_setting", { ...(data.foto_setting || {}), animation: e.target.value })}
+                      className="w-full px-2 py-1 text-[10px] bg-white border border-[#064e3b]/20 rounded-lg outline-none font-bold h-7">
+                      {["none", "fade-in", "slide-up", "zoom-in"].map(a => <option key={a}>{a}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">Durasi</label>
+                    <div className="flex gap-1 items-center h-7 pt-1">
+                      <input 
+                        type="range" 
+                        min="0.2" 
+                        max="5" 
+                        step="0.1" 
+                        value={parseFloat(data.foto_setting?.animationDuration) || 1}
+                        onChange={e => upd("foto_setting", { ...(data.foto_setting || {}), animationDuration: e.target.value + "s" })}
+                        className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" 
+                      />
+                      <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{data.foto_setting?.animationDuration || "1s"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </SectionInput>

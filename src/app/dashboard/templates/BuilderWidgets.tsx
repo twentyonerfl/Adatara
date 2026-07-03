@@ -12,6 +12,7 @@ interface FontSettings {
   x?: number;
   y?: number;
   animation?: string;
+  animationDuration?: string;
   width?: string;
   lineHeight?: string;
 }
@@ -40,6 +41,7 @@ export function FontSettingsWidget({
     x: value?.x ?? 50,
     y: value?.y ?? 50,
     animation: value?.animation || "none",
+    animationDuration: value?.animationDuration || "1s",
     width: value?.width || "100%",
     lineHeight: value?.lineHeight || "1.5",
   };
@@ -106,13 +108,30 @@ export function FontSettingsWidget({
           </div>
         )}
         {showAnimation && (
-          <div className="col-span-2">
-            <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Animasi</label>
-            <select value={safeVal.animation} onChange={e => onChange({ ...safeVal, animation: e.target.value })}
-              className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
-              {ANIMATION_OPTIONS.map(a => <option key={a}>{a}</option>)}
-            </select>
-          </div>
+          <>
+            <div>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Animasi</label>
+              <select value={safeVal.animation} onChange={e => onChange({ ...safeVal, animation: e.target.value })}
+                className="w-full px-1.5 py-0.5 text-[9px] bg-white border border-[#064e3b]/10 rounded-md outline-none text-[#064e3b] font-medium h-5">
+                {ANIMATION_OPTIONS.map(a => <option key={a}>{a}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-[8px] font-extrabold uppercase tracking-wider text-[#064e3b]/50 block mb-0.5">Durasi</label>
+              <div className="flex gap-1.5 items-center">
+                <input 
+                  type="range" 
+                  min="0.2" 
+                  max="5" 
+                  step="0.1" 
+                  value={parseFloat(safeVal.animationDuration) || 1}
+                  onChange={e => onChange({ ...safeVal, animationDuration: e.target.value + "s" })}
+                  className="flex-1 min-w-0 accent-[#d4af37] h-0.5 cursor-pointer" 
+                />
+                <span className="text-[8px] font-bold w-6 text-right text-[#064e3b]/80 shrink-0">{safeVal.animationDuration}</span>
+              </div>
+            </div>
+          </>
         )}
         {showSpacing && (
           <>
