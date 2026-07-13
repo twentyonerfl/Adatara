@@ -440,84 +440,86 @@ export function CeritaPreview({ data }: { data: any }) {
           </AnimatedWrapper>
         </div>
         {galeris.length > 0 ? (
-          (() => {
-            const layout = data.galeri_layout || "grid-2";
-            if (layout === "grid" || layout === "grid-2") {
-              return (
-                <div className="grid grid-cols-2 gap-2">
-                  {galeris.map((g, i) => (
-                    <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
-                      <img src={g} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              );
-            }
-            if (layout === "grid-3") {
-              return (
-                <div className="grid grid-cols-3 gap-1.5">
-                  {galeris.map((g, i) => (
-                    <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
-                      <img src={g} alt="" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              );
-            }
-            if (layout === "masonry") {
-              return (
-                <div className="columns-2 gap-2 space-y-2">
-                  {galeris.map((g, i) => (
-                    <div key={i} className="break-inside-avoid">
-                      <img src={g} alt="" className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" />
-                    </div>
-                  ))}
-                </div>
-              );
-            }
-            if (layout === "carousel") {
-              return (
-                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
-                  {galeris.map((g, i) => (
-                    <div key={i} className="w-[160px] shrink-0 snap-center">
-                      <img src={g} alt="" className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" />
-                    </div>
-                  ))}
-                </div>
-              );
-            }
-            if (layout === "collage") {
-              return (
-                <div className="grid grid-cols-6 gap-2">
-                  {galeris.map((g, i) => {
-                    const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
-                    return (
-                      <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+          <div className="mt-5">
+            {(() => {
+              const layout = data.galeri_layout || "grid-2";
+              if (layout === "grid" || layout === "grid-2") {
+                return (
+                  <div className="grid grid-cols-2 gap-2">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
                         <img src={g} alt="" className="w-full h-full object-cover" />
                       </div>
-                    );
-                  })}
-                </div>
-              );
-            }
-            if (layout === "polaroid") {
-              return (
-                <div className="grid grid-cols-2 gap-3.5 pt-1">
-                  {galeris.map((g, i) => {
-                    const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
-                    const rot = rotations[i % rotations.length];
-                    return (
-                      <div key={i} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
-                        <img src={g} alt="" className="w-full aspect-square object-cover" />
-                        <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{i + 1}</div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "grid-3") {
+                return (
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
+                        <img src={g} alt="" className="w-full h-full object-cover" />
                       </div>
-                    );
-                  })}
-                </div>
-              );
-            }
-            return null;
-          })()
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "masonry") {
+                return (
+                  <div className="columns-2 gap-2 space-y-2">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="break-inside-avoid">
+                        <img src={g} alt="" className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" />
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "carousel") {
+                return (
+                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="w-[160px] shrink-0 snap-center">
+                        <img src={g} alt="" className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" />
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "collage") {
+                return (
+                  <div className="grid grid-cols-6 gap-2">
+                    {galeris.map((g, i) => {
+                      const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
+                      return (
+                        <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "polaroid") {
+                return (
+                  <div className="grid grid-cols-2 gap-3.5 pt-1">
+                    {galeris.map((g, i) => {
+                      const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
+                      const rot = rotations[i % rotations.length];
+                      return (
+                        <div key={i} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
+                          <img src={g} alt="" className="w-full aspect-square object-cover" />
+                          <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{i + 1}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              return null;
+            })()}
+          </div>
         ) : (
           <div className="text-center text-xs text-[#064e3b]/40 py-6">Belum ada foto galeri.</div>
         )}
