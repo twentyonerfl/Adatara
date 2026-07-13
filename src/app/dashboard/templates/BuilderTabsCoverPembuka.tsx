@@ -211,6 +211,22 @@ export function CoverForm({ data, onChange, musicLibrary, mode }: { data: any; o
           <SectionInput label="Bingkai Garis Cover">
             <BingkaiCoverWidget label="Bingkai Garis Cover" value={data.setting_bingkai || { enabled: false }} onChange={v => upd("setting_bingkai", v)} />
           </SectionInput>
+          <SectionInput label="Animasi Transisi Halaman (Keseluruhan)">
+            <div className="space-y-1 text-left">
+              <select
+                value={data.transition_style || "none"}
+                onChange={e => upd("transition_style", e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-white border border-[#064e3b]/20 rounded-xl outline-none focus:border-[#d4af37] font-bold h-9"
+              >
+                <option value="none">Tanpa Animasi (Statis)</option>
+                <option value="fade">Fade In (Mudar Masuk)</option>
+                <option value="slide-up">Slide Up (Geser Naik)</option>
+                <option value="zoom">Zoom In (Perbesar)</option>
+                <option value="slide-left">Slide Left (Geser Kiri)</option>
+              </select>
+              <p className="text-[9px] text-[#064e3b]/50 mt-1 font-semibold">Mengatur transisi animasi ketika section/halaman undangan muncul saat di-scroll.</p>
+            </div>
+          </SectionInput>
         </>
       )}
 

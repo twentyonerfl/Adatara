@@ -250,6 +250,56 @@ export function PublicInvitationView({
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
+  const transitionStyle = data.cover?.transition_style || "none";
+
+  const getTransitionVariants = (style: string) => {
+    switch (style) {
+      case "fade":
+        return {
+          initial: { opacity: 0 },
+          whileInView: { opacity: 1 },
+          viewport: { once: true, margin: "-100px" },
+          transition: { duration: 0.8, ease: "easeOut" }
+        };
+      case "slide-up":
+        return {
+          initial: { opacity: 0, y: 65 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "-100px" },
+          transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] }
+        };
+      case "zoom":
+        return {
+          initial: { opacity: 0, scale: 0.92 },
+          whileInView: { opacity: 1, scale: 1 },
+          viewport: { once: true, margin: "-100px" },
+          transition: { duration: 0.8, ease: "easeOut" }
+        };
+      case "slide-left":
+        return {
+          initial: { opacity: 0, x: 50 },
+          whileInView: { opacity: 1, x: 0 },
+          viewport: { once: true, margin: "-100px" },
+          transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] }
+        };
+      default:
+        return null;
+    }
+  };
+
+  const animProps = getTransitionVariants(transitionStyle);
+
+  const renderAnimatedSection = (children: React.ReactNode) => {
+    if (animProps) {
+      return (
+        <motion.div {...animProps} className="w-full">
+          {children}
+        </motion.div>
+      );
+    }
+    return <>{children}</>;
+  };
+
   return (
     <div className="min-h-screen bg-white text-slate-800 font-sans relative overflow-x-hidden">
       {/* Dynamic Font Loader */}
@@ -321,44 +371,52 @@ export function PublicInvitationView({
       {/* SCREEN 2: MAIN SCROLLABLE INVITATION */}
       {isOpen && (
         <div className="w-full max-w-md mx-auto bg-white relative overflow-hidden min-h-screen">
-          <ScaledSection scale={scale}>
-            <PembukaPreview data={data.pembuka} coverData={data.cover} bahasa={bahasa} />
-          </ScaledSection>
+          {renderAnimatedSection(
+            <ScaledSection scale={scale}>
+              <PembukaPreview data={data.pembuka} coverData={data.cover} bahasa={bahasa} />
+            </ScaledSection>
+          )}
 
-          <ScaledSection scale={scale}>
-            <ProfilPreview data={data.profil} />
-          </ScaledSection>
+          {renderAnimatedSection(
+            <ScaledSection scale={scale}>
+              <ProfilPreview data={data.profil} />
+            </ScaledSection>
+          )}
 
-          <ScaledSection scale={scale}>
-            <AcaraPreview data={data.acara} />
-          </ScaledSection>
+          {renderAnimatedSection(
+            <ScaledSection scale={scale}>
+              <AcaraPreview data={data.acara} />
+            </ScaledSection>
+          )}
 
-          {data.cerita && (
+          {data.cerita && renderAnimatedSection(
             <ScaledSection scale={scale}>
               <CeritaPreview data={data.cerita} />
             </ScaledSection>
           )}
 
-          <ScaledSection scale={scale}>
-            <PenutupPreview 
-              data={data.penutup}
-              wishes={wishes}
-              onRsvpSubmit={handleRsvpSubmit}
-              namaTamu={namaTamu}
-              setNamaTamu={setNamaTamu}
-              kehadiran={kehadiran}
-              setKehadiran={setKehadiran}
-              jumlahTamu={jumlahTamu}
-              setJumlahTamu={setJumlahTamu}
-              ucapan={ucapan}
-              setUcapan={setUcapan}
-              submitting={submitting}
-              formSuccess={formSuccess}
-              formError={formError}
-              onCopyClick={handleCopy}
-              copiedIndex={copiedIndex}
-            />
-          </ScaledSection>
+          {renderAnimatedSection(
+            <ScaledSection scale={scale}>
+              <PenutupPreview 
+                data={data.penutup}
+                wishes={wishes}
+                onRsvpSubmit={handleRsvpSubmit}
+                namaTamu={namaTamu}
+                setNamaTamu={setNamaTamu}
+                kehadiran={kehadiran}
+                setKehadiran={setKehadiran}
+                jumlahTamu={jumlahTamu}
+                setJumlahTamu={setJumlahTamu}
+                ucapan={ucapan}
+                setUcapan={setUcapan}
+                submitting={submitting}
+                formSuccess={formSuccess}
+                formError={formError}
+                onCopyClick={handleCopy}
+                copiedIndex={copiedIndex}
+              />
+            </ScaledSection>
+          )}
         </div>
       )}
     </div>

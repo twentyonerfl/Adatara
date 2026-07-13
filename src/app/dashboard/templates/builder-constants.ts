@@ -6,6 +6,7 @@ export const defaultTemplateJson = {
     background: { type: "solid", value: "#000000", gradient_to: "#000000", direction: "to bottom" },
     setting_bingkai: { enabled: false, width: "2px", color: "#d4af37", style: "solid", padding: "16px", radius: "12px" },
     music_url: "",
+    transition_style: "none",
   },
   pembuka: {
     setting_kategori: { size: "12px", color: "#ffffff", family: "Inter", position: "center" },

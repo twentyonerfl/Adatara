@@ -372,14 +372,59 @@ export default function TemplateBuilderEditor({
               {/* Screen */}
               <div className="rounded-[30px] overflow-y-auto bg-white animate-fade-in w-[288px] h-[512px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:none">
                 <AnimatePresence mode="wait">
-                  <motion.div key={activeTab} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
-                    {activeTab === "cover"   && <CoverPreview   data={coverData}   meta={{ kategori, bahasa }} />}
-                    {activeTab === "pembuka" && <PembukaPreview data={pembukaData} coverData={coverData} bahasa={bahasa} />}
-                    {activeTab === "profil"  && <ProfilPreview  data={profilData} />}
-                    {activeTab === "acara"   && <AcaraPreview   data={acaraData} />}
-                    {activeTab === "cerita"  && <CeritaPreview  data={ceritaData} />}
-                    {activeTab === "penutup" && <PenutupPreview data={penutupData} />}
-                  </motion.div>
+                  {(() => {
+                    const transitionStyle = coverData?.transition_style || "none";
+                    const getPreviewVariants = (style: string) => {
+                      switch (style) {
+                        case "fade":
+                          return {
+                            initial: { opacity: 0 },
+                            animate: { opacity: 1 },
+                            exit: { opacity: 0 },
+                            transition: { duration: 0.3 }
+                          };
+                        case "slide-up":
+                          return {
+                            initial: { opacity: 0, y: 40 },
+                            animate: { opacity: 1, y: 0 },
+                            exit: { opacity: 0, y: -40 },
+                            transition: { duration: 0.35, ease: "easeOut" }
+                          };
+                        case "zoom":
+                          return {
+                            initial: { opacity: 0, scale: 0.95 },
+                            animate: { opacity: 1, scale: 1 },
+                            exit: { opacity: 0, scale: 0.95 },
+                            transition: { duration: 0.3 }
+                          };
+                        case "slide-left":
+                          return {
+                            initial: { opacity: 0, x: 40 },
+                            animate: { opacity: 1, x: 0 },
+                            exit: { opacity: 0, x: -40 },
+                            transition: { duration: 0.35, ease: "easeOut" }
+                          };
+                        default:
+                          return {
+                            initial: { opacity: 0 },
+                            animate: { opacity: 1 },
+                            exit: { opacity: 0 },
+                            transition: { duration: 0.18 }
+                          };
+                      }
+                    };
+                    const previewAnimProps = getPreviewVariants(transitionStyle);
+                    return (
+                      <motion.div key={activeTab} {...previewAnimProps}>
+                        {activeTab === "cover"   && <CoverPreview   data={coverData}   meta={{ kategori, bahasa }} />}
+                        {activeTab === "pembuka" && <PembukaPreview data={pembukaData} coverData={coverData} bahasa={bahasa} />}
+                        {activeTab === "profil"  && <ProfilPreview  data={profilData} />}
+                        {activeTab === "acara"   && <AcaraPreview   data={acaraData} />}
+                        {activeTab === "cerita"  && <CeritaPreview  data={ceritaData} />}
+                        {activeTab === "penutup" && <PenutupPreview data={penutupData} />}
+                      </motion.div>
+                    );
+                  })()}
                 </AnimatePresence>
               </div>
             </div>
