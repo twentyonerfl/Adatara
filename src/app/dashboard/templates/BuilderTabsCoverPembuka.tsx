@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, ButtonSettingsWidget, CardSettingsWidget, FramedPhoto, BingkaiCoverWidget, PhotoStyleWidget, AnimatedWrapper } from "./BuilderWidgets";
-import { KATEGORI_OPTIONS, FONT_FAMILIES, KATEGORI_EN_MAP } from "./builder-constants";
+import { KATEGORI_OPTIONS, FONT_FAMILIES, KATEGORI_EN_MAP, DEFAULT_SHARE_TEMPLATE } from "./builder-constants";
 import { Plus, Trash2, Play, Pause, Search, Loader2, Music } from "lucide-react";
 
 // ─── COVER TAB ───────────────────────────────────────────────────────────────
@@ -248,7 +248,7 @@ export function CoverForm({ data, onChange, musicLibrary, mode }: { data: any; o
                 </label>
                 <textarea
                   rows={4}
-                  value={data.share_text_template ?? `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`}
+                  value={data.share_text_template ?? DEFAULT_SHARE_TEMPLATE}
                   onChange={e => upd("share_text_template", e.target.value)}
                   placeholder="Format pesan..."
                   className="w-full px-3 py-2 text-xs bg-white border border-[#064e3b]/20 rounded-xl outline-none focus:border-[#d4af37] font-semibold font-sans"

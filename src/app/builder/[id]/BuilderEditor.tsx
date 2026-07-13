@@ -626,7 +626,7 @@ export function BuilderEditor({
                     </div>
                     <textarea
                       rows={4}
-                      value={data.cover?.share_text_template ?? `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`}
+                      value={data.cover?.share_text_template ?? DEFAULT_SHARE_TEMPLATE}
                       onChange={(e) => {
                         updateNestedVal("cover", "share_text_template", e.target.value);
                       }}
