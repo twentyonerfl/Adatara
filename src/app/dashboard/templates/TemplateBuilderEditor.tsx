@@ -211,11 +211,11 @@ export default function TemplateBuilderEditor({
         {/* Actions */}
         <div className="flex gap-2">
           <button onClick={handleSave} disabled={isPending}
-            className={`px-4 py-2 rounded-xl text-xs font-black border flex items-center gap-2 transition-all ${
+            className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${
               saveStatus === "saved" ? "bg-emerald-600 text-white border-emerald-700" : "bg-white border-[#064e3b]/20 text-[#064e3b] hover:bg-[#064e3b]/5"
-            } disabled:opacity-50`}>
+            } disabled:opacity-50`}
+            title={saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Draft"}>
             {saveStatus === "saving" ? <Loader2 className="w-4 h-4 animate-spin" /> : saveStatus === "saved" ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-            {saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Draft"}
           </button>
           <button onClick={handlePublish} disabled={isPending}
             className="px-4 py-2 rounded-xl text-xs font-black bg-[#064e3b] hover:bg-[#064e3b]/90 text-white border border-[#d4af37] flex items-center gap-2 shadow-lg shadow-[#064e3b]/10 disabled:opacity-50">
