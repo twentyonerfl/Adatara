@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 
 function getFontStyles(val?: any) {
   if (!val) return {};
@@ -31,13 +31,49 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
   const upd = (key: string, val: any) => onChange({ ...data, [key]: val });
   const ceritas: any[] = data.ceritas || [];
   const galeris: string[] = data.galeris || [];
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const addCerita = () => upd("ceritas", [...ceritas, { judul: "", waktu: "", isi: "" }]);
   const removeCerita = (i: number) => upd("ceritas", ceritas.filter((_, idx) => idx !== i));
   const updCerita = (i: number, key: string, val: string) => upd("ceritas", ceritas.map((c, idx) => idx === i ? { ...c, [key]: val } : c));
   const addGaleri = () => upd("galeris", [...galeris, ""]);
-  const removeGaleri = (i: number) => upd("galeris", galeris.filter((_, idx) => idx !== i));
+  const removeGaleri = (i: number) => {
+    const newGaleris = galeris.filter((_, idx) => idx !== i);
+    const newConfigs = (data.galeri_custom_configs || []).filter((_: any, idx: number) => idx !== i);
+    onChange({
+      ...data,
+      galeris: newGaleris,
+      galeri_custom_configs: newConfigs
+    });
+  };
   const updGaleri = (i: number, val: string) => upd("galeris", galeris.map((g, idx) => idx === i ? val : g));
+  
+  const moveGaleri = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= galeris.length) return;
+    
+    const newGaleris = [...galeris];
+    const [removedGaleri] = newGaleris.splice(fromIndex, 1);
+    newGaleris.splice(toIndex, 0, removedGaleri);
+
+    const newConfigs = data.galeri_custom_configs ? [...data.galeri_custom_configs] : [];
+    while (newConfigs.length < galeris.length) {
+      newConfigs.push({
+        colSpan: "col-span-3",
+        aspect: "aspect-[3/4]",
+        rotate: "rotate-0",
+        styleType: "polaroid"
+      });
+    }
+    const [removedConfig] = newConfigs.splice(fromIndex, 1);
+    newConfigs.splice(toIndex, 0, removedConfig);
+
+    onChange({
+      ...data,
+      galeris: newGaleris,
+      galeri_custom_configs: newConfigs
+    });
+  };
+
   const updCustomConfig = (idx: number, key: string, val: string) => {
     const configs = [...(data.galeri_custom_configs || [])];
     while (configs.length <= idx) {
@@ -109,11 +145,56 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
           <SectionInput label="Galeri Foto">
             <div className="space-y-3">
               {galeris.map((g, i) => (
-                <div key={i} className="p-3 bg-white border border-[#064e3b]/10 rounded-xl space-y-2 relative">
-                  <button type="button" onClick={() => removeGaleri(i)} className="absolute top-2 right-2 p-1 text-red-400 hover:text-red-600 rounded-lg">
+                <div
+                  key={i}
+                  draggable
+                  onDragStart={(e) => {
+                    setDraggedIndex(i);
+                    e.dataTransfer.effectAllowed = "move";
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (draggedIndex !== null && draggedIndex !== i) {
+                      moveGaleri(draggedIndex, i);
+                    }
+                    setDraggedIndex(null);
+                  }}
+                  className={`p-3 bg-white border rounded-xl space-y-2 relative transition-all duration-200 ${
+                    draggedIndex === i ? "opacity-40 border-dashed border-[#d4af37] bg-slate-50" : "border-[#064e3b]/10"
+                  }`}
+                >
+                  <div className="absolute top-2 right-8 flex gap-1 items-center z-10">
+                    {i > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => moveGaleri(i, i - 1)}
+                        className="p-1 text-[#064e3b]/50 hover:text-[#d4af37] hover:bg-[#064e3b]/5 rounded transition-all cursor-pointer"
+                        title="Pindahkan Ke Atas"
+                      >
+                        <ArrowUp className="w-3 h-3" />
+                      </button>
+                    )}
+                    {i < galeris.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() => moveGaleri(i, i + 1)}
+                        className="p-1 text-[#064e3b]/50 hover:text-[#d4af37] hover:bg-[#064e3b]/5 rounded transition-all cursor-pointer"
+                        title="Pindahkan Ke Bawah"
+                      >
+                        <ArrowDown className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                  <button type="button" onClick={() => removeGaleri(i)} className="absolute top-2 right-2 p-1 text-red-400 hover:text-red-600 rounded-lg z-10 cursor-pointer">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
-                  <p className="text-[9px] font-black uppercase text-[#d4af37]">Foto #{i + 1}</p>
+                  <div className="flex items-center gap-1 cursor-grab active:cursor-grabbing text-slate-400 select-none w-max">
+                    <GripVertical className="w-3 h-3" />
+                    <span className="text-[9px] font-black uppercase text-[#d4af37]">Foto #{i + 1}</span>
+                  </div>
                   <FileUploader
                     value={g}
                     onChange={v => updGaleri(i, v)}

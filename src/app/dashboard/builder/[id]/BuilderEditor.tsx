@@ -35,7 +35,10 @@ import {
   User as UserIcon,
   MessageSquare,
   Copy,
-  ChevronDown
+  ChevronDown,
+  ArrowUp,
+  ArrowDown,
+  GripVertical
 } from "lucide-react";
 import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "../../templates/BuilderWidgets";
 import { CeritaPreview, PenutupPreview } from "../../templates/BuilderTabsCeritaPenutup";
@@ -375,6 +378,7 @@ export function BuilderEditor({
   const [tempStoryContent, setTempStoryContent] = useState("");
 
   const [tempGaleriUrl, setTempGaleriUrl] = useState("");
+  const [draggedGalleryIndex, setDraggedGalleryIndex] = useState<number | null>(null);
 
   const [tempBankName, setTempBankName] = useState("");
   const [tempBankAccount, setTempBankAccount] = useState("");
@@ -552,7 +556,31 @@ export function BuilderEditor({
 
   const removeGalleryImage = (idx: number) => {
     const currentList = data.cerita?.galeris || [];
-    updateData("cerita", "galeris", currentList.filter((_: any, i: number) => i !== idx));
+    const newGaleris = currentList.filter((_: any, i: number) => i !== idx);
+    const newConfigs = (data.cerita?.galeri_custom_configs || []).filter((_: any, i: number) => i !== idx);
+    setData((prev: any) => ({
+      ...prev,
+      cerita: { ...prev.cerita, galeris: newGaleris, galeri_custom_configs: newConfigs }
+    }));
+  };
+
+  const moveGalleryImage = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= (data.cerita?.galeris?.length || 0)) return;
+    const newGaleris = [...(data.cerita?.galeris || [])];
+    const [removedImg] = newGaleris.splice(fromIndex, 1);
+    newGaleris.splice(toIndex, 0, removedImg);
+
+    const newConfigs = [...(data.cerita?.galeri_custom_configs || [])];
+    while (newConfigs.length < newGaleris.length) {
+      newConfigs.push({ colSpan: "col-span-3", aspect: "aspect-[3/4]", rotate: "rotate-0", styleType: "polaroid" });
+    }
+    const [removedCfg] = newConfigs.splice(fromIndex, 1);
+    newConfigs.splice(toIndex, 0, removedCfg);
+
+    setData((prev: any) => ({
+      ...prev,
+      cerita: { ...prev.cerita, galeris: newGaleris, galeri_custom_configs: newConfigs }
+    }));
   };
 
   const updateCustomConfig = (idx: number, key: string, val: string) => {
@@ -1379,31 +1407,61 @@ export function BuilderEditor({
 
                       <div className="space-y-2">
                         <label className="block text-[10px] font-extrabold uppercase opacity-75">Foto Terdaftar ({data.cerita?.galeris?.length || 0})</label>
-                        {data.cerita?.galeri_layout === "custom" ? (
+                         {data.cerita?.galeri_layout === "custom" ? (
                           <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
                             {data.cerita?.galeris?.map((img: string, idx: number) => {
                               const config = data.cerita?.galeri_custom_configs?.[idx] || {};
                               return (
-                                <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2 relative">
-                                  <button
-                                    type="button"
-                                    onClick={() => removeGalleryImage(idx)}
-                                    className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700 cursor-pointer"
-                                  >
+                                <div
+                                  key={idx}
+                                  draggable
+                                  onDragStart={(e) => {
+                                    setDraggedGalleryIndex(idx);
+                                    e.dataTransfer.effectAllowed = "move";
+                                  }}
+                                  onDragOver={(e) => e.preventDefault()}
+                                  onDrop={(e) => {
+                                    e.preventDefault();
+                                    if (draggedGalleryIndex !== null && draggedGalleryIndex !== idx) {
+                                      moveGalleryImage(draggedGalleryIndex, idx);
+                                    }
+                                    setDraggedGalleryIndex(null);
+                                  }}
+                                  className={`p-2.5 border rounded-xl space-y-2 relative transition-all duration-200 ${
+                                    draggedGalleryIndex === idx
+                                      ? "opacity-40 border-dashed border-[#d4af37] bg-slate-50"
+                                      : "bg-[#064e3b]/5 border-[#064e3b]/10"
+                                  }`}
+                                >
+                                  {/* Sort arrows */}
+                                  <div className="absolute top-2 right-8 flex gap-0.5 z-10">
+                                    {idx > 0 && (
+                                      <button type="button" onClick={() => moveGalleryImage(idx, idx - 1)}
+                                        className="p-1 text-[#064e3b]/40 hover:text-[#d4af37] rounded transition-all cursor-pointer" title="Naik">
+                                        <ArrowUp className="w-3 h-3" />
+                                      </button>
+                                    )}
+                                    {idx < (data.cerita?.galeris?.length || 0) - 1 && (
+                                      <button type="button" onClick={() => moveGalleryImage(idx, idx + 1)}
+                                        className="p-1 text-[#064e3b]/40 hover:text-[#d4af37] rounded transition-all cursor-pointer" title="Turun">
+                                        <ArrowDown className="w-3 h-3" />
+                                      </button>
+                                    )}
+                                  </div>
+                                  <button type="button" onClick={() => removeGalleryImage(idx)}
+                                    className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700 cursor-pointer z-10">
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </button>
-                                  <div className="flex gap-2 items-center">
-                                    <img src={img} className="w-10 h-10 object-cover rounded-lg border border-[#064e3b]/10 bg-white" alt="" />
+                                  <div className="flex gap-2 items-center cursor-grab active:cursor-grabbing">
+                                    <GripVertical className="w-3 h-3 text-slate-400 shrink-0" />
+                                    <img src={img} className="w-10 h-10 object-cover rounded-lg border border-[#064e3b]/10 bg-white shrink-0" alt="" />
                                     <span className="text-[10px] font-bold text-[#064e3b]">Foto #{idx + 1}</span>
                                   </div>
                                   <div className="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#064e3b]/5">
                                     <div>
                                       <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Lebar Grid</label>
-                                      <select
-                                        value={config.colSpan || "col-span-3"}
-                                        onChange={e => updateCustomConfig(idx, "colSpan", e.target.value)}
-                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
-                                      >
+                                      <select value={config.colSpan || "col-span-3"} onChange={e => updateCustomConfig(idx, "colSpan", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]">
                                         <option value="col-span-1">1/6 (Kecil)</option>
                                         <option value="col-span-2">1/3 (Sedang)</option>
                                         <option value="col-span-3">1/2 (Setengah)</option>
@@ -1413,11 +1471,8 @@ export function BuilderEditor({
                                     </div>
                                     <div>
                                       <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Rasio</label>
-                                      <select
-                                        value={config.aspect || "aspect-[3/4]"}
-                                        onChange={e => updateCustomConfig(idx, "aspect", e.target.value)}
-                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
-                                      >
+                                      <select value={config.aspect || "aspect-[3/4]"} onChange={e => updateCustomConfig(idx, "aspect", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]">
                                         <option value="aspect-square">Square (1:1)</option>
                                         <option value="aspect-[3/4]">Portrait (3:4)</option>
                                         <option value="aspect-[4/3]">Landscape (4:3)</option>
@@ -1427,11 +1482,8 @@ export function BuilderEditor({
                                     </div>
                                     <div>
                                       <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Kemiringan</label>
-                                      <select
-                                        value={config.rotate || "rotate-0"}
-                                        onChange={e => updateCustomConfig(idx, "rotate", e.target.value)}
-                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
-                                      >
+                                      <select value={config.rotate || "rotate-0"} onChange={e => updateCustomConfig(idx, "rotate", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]">
                                         <option value="rotate-0">Normal (0°)</option>
                                         <option value="rotate-1">Kanan 1°</option>
                                         <option value="rotate-2">Kanan 2°</option>
@@ -1443,11 +1495,8 @@ export function BuilderEditor({
                                     </div>
                                     <div>
                                       <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Gaya Sudut</label>
-                                      <select
-                                        value={config.styleType || "polaroid"}
-                                        onChange={e => updateCustomConfig(idx, "styleType", e.target.value)}
-                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
-                                      >
+                                      <select value={config.styleType || "polaroid"} onChange={e => updateCustomConfig(idx, "styleType", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]">
                                         <option value="polaroid">Bingkai Foto</option>
                                         <option value="rounded">Melengkung</option>
                                         <option value="sharp">Siku Tajam</option>
@@ -1460,17 +1509,50 @@ export function BuilderEditor({
                             })}
                           </div>
                         ) : (
-                          <div className="grid grid-cols-4 gap-1.5">
+                          <div className="space-y-1.5 max-h-[260px] overflow-y-auto pr-0.5">
                             {data.cerita?.galeris?.map((img: string, idx: number) => (
-                              <div key={idx} className="relative group aspect-square rounded-lg overflow-hidden border border-[#064e3b]/15 bg-[#064e3b]/5">
-                                <img src={img} className="w-full h-full object-cover" alt="" />
-                                <button
-                                  type="button"
-                                  onClick={() => removeGalleryImage(idx)}
-                                  className="absolute inset-0 bg-rose-950/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-rose-200 transition-all cursor-pointer"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
+                              <div
+                                key={idx}
+                                draggable
+                                onDragStart={(e) => {
+                                  setDraggedGalleryIndex(idx);
+                                  e.dataTransfer.effectAllowed = "move";
+                                }}
+                                onDragOver={(e) => e.preventDefault()}
+                                onDrop={(e) => {
+                                  e.preventDefault();
+                                  if (draggedGalleryIndex !== null && draggedGalleryIndex !== idx) {
+                                    moveGalleryImage(draggedGalleryIndex, idx);
+                                  }
+                                  setDraggedGalleryIndex(null);
+                                }}
+                                className={`flex items-center gap-2 px-2 py-1.5 border rounded-lg relative transition-all duration-200 ${
+                                  draggedGalleryIndex === idx
+                                    ? "opacity-40 border-dashed border-[#d4af37] bg-slate-50"
+                                    : "border-[#064e3b]/10 bg-[#064e3b]/5"
+                                }`}
+                              >
+                                <GripVertical className="w-3.5 h-3.5 text-slate-400 cursor-grab active:cursor-grabbing shrink-0" />
+                                <img src={img} className="w-9 h-9 object-cover rounded-md border border-[#064e3b]/10 bg-white shrink-0" alt="" />
+                                <span className="text-[10px] font-bold text-[#064e3b] flex-1 truncate">Foto #{idx + 1}</span>
+                                <div className="flex gap-0.5 shrink-0">
+                                  {idx > 0 && (
+                                    <button type="button" onClick={() => moveGalleryImage(idx, idx - 1)}
+                                      className="p-1 text-[#064e3b]/40 hover:text-[#d4af37] rounded cursor-pointer" title="Naik">
+                                      <ArrowUp className="w-3 h-3" />
+                                    </button>
+                                  )}
+                                  {idx < (data.cerita?.galeris?.length || 0) - 1 && (
+                                    <button type="button" onClick={() => moveGalleryImage(idx, idx + 1)}
+                                      className="p-1 text-[#064e3b]/40 hover:text-[#d4af37] rounded cursor-pointer" title="Turun">
+                                      <ArrowDown className="w-3 h-3" />
+                                    </button>
+                                  )}
+                                  <button type="button" onClick={() => removeGalleryImage(idx)}
+                                    className="p-1 text-red-400 hover:text-red-600 rounded cursor-pointer">
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                </div>
                               </div>
                             ))}
                           </div>
