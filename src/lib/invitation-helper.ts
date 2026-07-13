@@ -19,7 +19,6 @@ export function clearTemplateUserData(json: any): any {
 
   // 2. Pembuka
   if (clean.pembuka) {
-    clean.pembuka.ucapan = "";
     clean.pembuka.tanggal_acara = "";
     clean.pembuka.foto_pembuka = "";
   }
@@ -68,9 +67,6 @@ export function clearTemplateUserData(json: any): any {
   // 6. Penutup
   if (clean.penutup) {
     clean.penutup.amplops = [];
-    clean.penutup.pesan_penutup = "";
-    clean.penutup.salam = "";
-    clean.penutup.tertanda = "";
   }
 
   return clean;

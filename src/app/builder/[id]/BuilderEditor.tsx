@@ -229,20 +229,20 @@ export function BuilderEditor({
         const nickname2 = profs[1].nama_panggilan || profs[1].nama || "";
         const combined = nickname1 && nickname2 ? `${nickname1} & ${nickname2}` : "";
         if (combined) {
-          if (data?.cover?.nama_acara !== combined) {
+          if (!data?.cover?.nama_acara) {
             updateNestedVal("cover", "nama_acara", combined);
           }
-          if (data?.penutup?.tertanda !== combined) {
+          if (!data?.penutup?.tertanda) {
             updateNestedVal("penutup", "tertanda", combined);
           }
         }
       } else if (profs[0]) {
         const nickname = profs[0].nama_panggilan || profs[0].nama || "";
         if (nickname) {
-          if (data?.cover?.nama_acara !== nickname) {
+          if (!data?.cover?.nama_acara) {
             updateNestedVal("cover", "nama_acara", nickname);
           }
-          if (data?.penutup?.tertanda !== nickname) {
+          if (!data?.penutup?.tertanda) {
             updateNestedVal("penutup", "tertanda", nickname);
           }
         }

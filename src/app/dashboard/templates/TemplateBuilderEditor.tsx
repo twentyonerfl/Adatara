@@ -139,15 +139,26 @@ export default function TemplateBuilderEditor({
   };
 
   const handlePublish = async () => {
-    if (!templateId) { await handleSave(); return; }
+    if (!namaTemplate.trim()) { setErrorMsg("Nama template wajib diisi."); setSaveStatus("error"); return; }
     setSaveStatus("saving");
+    setErrorMsg("");
     startTransition(async () => {
-      const res = await publishTemplate(templateId);
+      const payload = { nama_template: namaTemplate, kategori, paket, thumbnail, deskripsi, template_json: buildJson() };
+      const saveRes = templateId ? await updateTemplate(templateId, payload) : await createTemplate(payload);
+      if (saveRes.error) {
+        setSaveStatus("error");
+        setErrorMsg(saveRes.error);
+        return;
+      }
+      
+      const newTemplateId = templateId || (saveRes as any).id;
+      const res = await publishTemplate(newTemplateId);
       if (res.error) { setSaveStatus("error"); setErrorMsg(res.error); }
       else { 
         setSaveStatus("saved"); 
         setStatus("PUBLISHED");
         setTimeout(() => setSaveStatus("idle"), 2000); 
+        if (!templateId) router.replace(`/dashboard/templates/edit/${newTemplateId}`);
       }
     });
   };
