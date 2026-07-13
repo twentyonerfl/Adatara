@@ -213,7 +213,8 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                       l === "masonry" ? "Masonry (Estetik)" :
                         l === "carousel" ? "Carousel (Geser)" :
                           l === "collage" ? "Collage Editorial" :
-                            l === "polaroid" ? "Polaroid Stack" : l;
+                            l === "polaroid" ? "Polaroid Stack" :
+                              l === "aesthetic" ? "Aesthetic Scrapbook" : l;
                   const isActive = data.galeri_layout === l || (l === "grid-2" && data.galeri_layout === "grid") || (!data.galeri_layout && l === "grid-2");
                   return (
                     <button key={l} type="button" onClick={() => upd("galeri_layout", l)}
@@ -494,6 +495,35 @@ export function CeritaPreview({ data }: { data: any }) {
                       const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
                       return (
                         <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "aesthetic") {
+                return (
+                  <div className="grid grid-cols-6 gap-x-2 gap-y-4 pt-1 pb-4">
+                    {galeris.map((g, i) => {
+                      let gridClass = "";
+                      if (i % 7 === 0) {
+                        gridClass = "col-span-3 aspect-[3/4]";
+                      } else if (i % 7 === 1) {
+                        gridClass = "col-span-3 aspect-[3/4] translate-y-3";
+                      } else if (i % 7 === 2) {
+                        gridClass = "col-span-4 aspect-[4/3] mt-3";
+                      } else if (i % 7 === 3) {
+                        gridClass = "col-span-2 aspect-[3/4] mt-3";
+                      } else if (i % 7 === 4) {
+                        gridClass = "col-span-2 aspect-[3/4]";
+                      } else if (i % 7 === 5) {
+                        gridClass = "col-span-4 aspect-[4/3]";
+                      } else {
+                        gridClass = "col-span-6 max-w-[150px] mx-auto aspect-[3/4]";
+                      }
+                      return (
+                        <div key={i} className={`${gridClass} border-2 border-white shadow-lg overflow-hidden rounded-none`}>
                           <img src={g} alt="" className="w-full h-full object-cover" />
                         </div>
                       );

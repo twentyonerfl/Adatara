@@ -1358,6 +1358,7 @@ export function BuilderEditor({
                           <option value="carousel">Carousel (Geser)</option>
                           <option value="collage">Collage Editorial</option>
                           <option value="polaroid">Polaroid Stack</option>
+                          <option value="aesthetic">Aesthetic Scrapbook</option>
                         </select>
                       </div>
 
@@ -2216,6 +2217,35 @@ export function BuilderEditor({
                                   const colSpan = (idx % 4 === 0 || idx % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
                                   return (
                                     <div key={idx} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "aesthetic") {
+                            return (
+                              <div className="grid grid-cols-6 gap-x-2 gap-y-4 pt-1 pb-4">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  let gridClass = "";
+                                  if (idx % 7 === 0) {
+                                    gridClass = "col-span-3 aspect-[3/4]";
+                                  } else if (idx % 7 === 1) {
+                                    gridClass = "col-span-3 aspect-[3/4] translate-y-3";
+                                  } else if (idx % 7 === 2) {
+                                    gridClass = "col-span-4 aspect-[4/3] mt-3";
+                                  } else if (idx % 7 === 3) {
+                                    gridClass = "col-span-2 aspect-[3/4] mt-3";
+                                  } else if (idx % 7 === 4) {
+                                    gridClass = "col-span-2 aspect-[3/4]";
+                                  } else if (idx % 7 === 5) {
+                                    gridClass = "col-span-4 aspect-[4/3]";
+                                  } else {
+                                    gridClass = "col-span-6 max-w-[150px] mx-auto aspect-[3/4]";
+                                  }
+                                  return (
+                                    <div key={idx} className={`${gridClass} border-2 border-white shadow-lg overflow-hidden rounded-none`}>
                                       <img src={img} className="w-full h-full object-cover" alt="" />
                                     </div>
                                   );
