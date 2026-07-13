@@ -38,9 +38,6 @@ import {
   ChevronDown
 } from "lucide-react";
 import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "../../templates/BuilderWidgets";
-import { CoverPreview, PembukaPreview } from "../../templates/BuilderTabsCoverPembuka";
-import { ProfilPreview, AcaraPreview } from "../../templates/BuilderTabsProfilAcara";
-import { CeritaPreview, PenutupPreview } from "../../templates/BuilderTabsCeritaPenutup";
 
 type TemplateType = {
   id: string;
@@ -653,7 +650,7 @@ export function BuilderEditor({
     <div className="flex-1 flex flex-col min-h-0 bg-[#f5f5dc] text-[#064e3b] font-sans">
       {/* Dynamic Font Loader */}
       <link
-        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600;700;900&family=Lato:wght@300;400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600;800&family=Outfit:wght@300;400;600;700;800;900&family=Pinyon+Script&family=Playball&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,900&family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&family=Inter:wght@100..900&family=Sacramento&family=Pinyon+Script&display=swap"
         rel="stylesheet"
       />
 
@@ -1656,67 +1653,641 @@ export function BuilderEditor({
                   {/* PREVIEW: COVER SECTION */}
                   <div
                     id="preview-cover"
-                    onClick={() => setActiveSection("cover")}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      activeSection === "cover" ? "ring-2 ring-inset ring-[#d4af37] z-10" : ""
-                    }`}
+                    className={`min-h-full flex flex-col justify-between p-6 relative overflow-hidden text-center border-b-2 border-dashed ${activeSection === "cover" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-transparent"
+                      }`}
+                    style={{
+                      background: data.cover?.background?.type === "image"
+                        ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.55)), url(${data.cover?.background?.value}) center/cover no-repeat`
+                        : data.cover?.background?.type === "gradient"
+                          ? data.cover?.background?.value
+                          : data.cover?.background?.value || "#064e3b"
+                    }}
                   >
-                    <CoverPreview data={data.cover} meta={data} onOpen={() => {}} guestName="Tamu Undangan" />
+                    {/* Cover Border Frame */}
+                    {data.cover?.setting_bingkai?.enabled && (
+                      <div
+                        className="absolute pointer-events-none z-20"
+                        style={{
+                          top: data.cover.setting_bingkai.padding || "16px",
+                          bottom: data.cover.setting_bingkai.padding || "16px",
+                          left: data.cover.setting_bingkai.padding || "16px",
+                          right: data.cover.setting_bingkai.padding || "16px",
+                          borderWidth: data.cover.setting_bingkai.width || "2px",
+                          borderStyle: data.cover.setting_bingkai.style || "solid",
+                          borderColor: data.cover.setting_bingkai.color || "#d4af37",
+                          borderRadius: data.cover.setting_bingkai.radius || "12px",
+                        }}
+                      />
+                    )}
+                    <div />
+                    <div className="my-auto py-10 space-y-6">
+                      {renderOrnament("cover")}
+                      <span className="text-[10px] font-extrabold tracking-widest text-[#d4af37] uppercase block">
+                        UNDANGAN {invitation.template.kategori}
+                      </span>
+
+                      <h1
+                        style={{
+                          fontSize: data.cover?.setting_nama?.size || "40px",
+                          color: data.cover?.setting_nama?.color || "#ffffff",
+                          fontFamily: data.cover?.setting_nama?.family || "Inter"
+                        }}
+                        className="leading-tight break-words drop-shadow-md px-2"
+                      >
+                        {data.cover?.nama_acara || "Aditya & Tara"}
+                      </h1>
+
+                      <div className="space-y-1.5 pt-4 flex flex-col items-center">
+                        <span className="text-[9px] text-[#f5f5dc]/75 block font-semibold">Kepada Yth. Bpk/Ibu/Saudara/i</span>
+                        <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-[10px] font-bold text-white shadow-sm">
+                          Tamu Undangan
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pb-6">
+                      <button
+                        type="button"
+                        className="px-6 py-2.5 rounded-full text-[10px] font-black bg-[#d4af37] text-white shadow-lg animate-bounce flex items-center gap-1.5 mx-auto uppercase tracking-wider"
+                      >
+                        <Heart className="w-3 h-3 fill-white text-white" />
+                        Buka Undangan
+                      </button>
+                    </div>
                   </div>
 
                   {/* PREVIEW: PEMBUKA SECTION */}
                   <div
                     id="preview-pembuka"
-                    onClick={() => setActiveSection("pembuka")}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      activeSection === "pembuka" ? "ring-2 ring-inset ring-[#d4af37] z-10" : ""
-                    }`}
+                    className={`p-6 text-center flex flex-col justify-center gap-6 min-h-[300px] border-b border-dashed ${activeSection === "pembuka" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
+                      }`}
+                    style={{
+                      background: data.pembuka?.background?.type === "image"
+                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.pembuka?.background?.value}) center/cover no-repeat`
+                        : data.pembuka?.background?.type === "gradient"
+                          ? data.pembuka?.background?.value
+                          : undefined
+                    }}
                   >
-                    <PembukaPreview data={data.pembuka} coverData={data.cover} bahasa="id" />
+                    {renderOrnament("pembuka")}
+
+                    <div
+                      style={{
+                        fontSize: data.pembuka?.setting_kategori?.size || "12px",
+                        color: data.pembuka?.setting_kategori?.color || "#064e3b",
+                        fontFamily: data.pembuka?.setting_kategori?.family || "Inter"
+                      }}
+                      className="font-bold opacity-60 text-xs"
+                    >
+                      {invitation?.template?.kategori || "Kategori Acara"}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: data.pembuka?.setting_nama?.size || "24px",
+                        color: data.pembuka?.setting_nama?.color || "#064e3b",
+                        fontFamily: data.pembuka?.setting_nama?.family || "Inter"
+                      }}
+                      className="font-bold text-2xl"
+                    >
+                      {data.cover?.nama_acara || "Nama Pasangan"}
+                    </div>
+
+                    {data.pembuka?.foto_pembuka && (
+                      <div className="mx-auto flex justify-center">
+                        <FramedPhoto
+                          src={data.pembuka.foto_pembuka}
+                          bingkai={data.pembuka.foto_setting?.bingkai || "oval"}
+                          className="w-36 h-36"
+                          customWidth={data.pembuka.foto_setting?.width}
+                          customHeight={data.pembuka.foto_setting?.height}
+                          overlayUrl={data.pembuka.foto_setting?.overlay_url}
+                          photoScale={data.pembuka.foto_setting?.photo_scale}
+                          photoX={data.pembuka.foto_setting?.photo_x}
+                          photoY={data.pembuka.foto_setting?.photo_y}
+                        />
+                      </div>
+                    )}
+
+                    <p
+                      style={{
+                        color: data.pembuka?.setting_ucapan?.color || "#064e3b",
+                        fontFamily: data.pembuka?.setting_ucapan?.family || "Inter"
+                      }}
+                      className="text-[11px] leading-relaxed italic max-w-xs mx-auto"
+                    >
+                      {data.pembuka?.ucapan || "Kalimat pembuka..."}
+                    </p>
                   </div>
 
                   {/* PREVIEW: PROFIL SECTION */}
                   <div
                     id="preview-profil"
-                    onClick={() => setActiveSection("profil")}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      activeSection === "profil" ? "ring-2 ring-inset ring-[#d4af37] z-10" : ""
-                    }`}
+                    className={`p-6 text-center space-y-6 border-b border-dashed relative ${activeSection === "profil" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
+                      }`}
+                    style={{
+                      background: data.profil?.background?.type === "image"
+                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.profil?.background?.value}) center/cover no-repeat`
+                        : data.profil?.background?.type === "gradient"
+                          ? data.profil?.background?.value
+                          : undefined
+                    }}
                   >
-                    <ProfilPreview data={data.profil} />
+                    {renderOrnament("profil")}
+                    <span className="text-[9px] font-extrabold text-[#d4af37] uppercase tracking-widest block">
+                      Kami Yang Berbahagia
+                    </span>
+                    {data.profil?.setting_ucapan_profil?.position === "custom" ? (
+                      <p
+                        className="opacity-80 whitespace-pre-wrap z-10"
+                        style={{
+                          color: data.profil?.setting_ucapan_profil?.color || "#064e3b",
+                          fontFamily: data.profil?.setting_ucapan_profil?.family || "Inter",
+                          fontSize: data.profil?.setting_ucapan_profil?.size || "10px",
+                          position: "absolute",
+                          left: `${data.profil?.setting_ucapan_profil?.x ?? 50}%`,
+                          top: `${data.profil?.setting_ucapan_profil?.y ?? 15}%`,
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                          width: data.profil?.setting_ucapan_profil?.width || "90%",
+                          lineHeight: data.profil?.setting_ucapan_profil?.lineHeight || "1.5",
+                        }}
+                      >
+                        {data.profil?.ucapan_profil || "Maha suci Allah..."}
+                      </p>
+                    ) : (
+                      <p
+                        className="leading-relaxed opacity-80 max-w-xs whitespace-pre-wrap z-10 mx-auto"
+                        style={{
+                          color: data.profil?.setting_ucapan_profil?.color || "#064e3b",
+                          fontFamily: data.profil?.setting_ucapan_profil?.family || "Inter",
+                          fontSize: data.profil?.setting_ucapan_profil?.size || "10px",
+                          textAlign: (data.profil?.setting_ucapan_profil?.position || "center") as any,
+                          lineHeight: data.profil?.setting_ucapan_profil?.lineHeight || "1.5",
+                        }}
+                      >
+                        {data.profil?.ucapan_profil || "Maha suci Allah..."}
+                      </p>
+                    )}
+
+                    <div className="space-y-6 pt-2">
+                      {data.profil?.profils?.map((prof: any, idx: number) => (
+                        <div key={idx} className="flex flex-col items-center">
+                          <FramedPhoto
+                            src={prof.foto}
+                            bingkai={prof.bingkai || "oval"}
+                            className="w-24 h-24"
+                            customWidth={prof.foto_width}
+                            customHeight={prof.foto_height}
+                            overlayUrl={prof.overlay_url}
+                            photoScale={prof.foto_scale}
+                            photoX={prof.foto_x}
+                            photoY={prof.foto_y}
+                          />
+                          <div className="relative w-full min-h-[80px] mt-2">
+                            <div style={getFontStyles(data.profil?.setting_nama_profil || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold">
+                              {prof.nama}
+                            </div>
+                            <div style={getFontStyles(data.profil?.setting_keterangan_profil || { size: "9px", color: "#ffffff", family: "Inter", position: "center" })} className="mt-1 max-w-[180px] mx-auto leading-normal">
+                              {prof.keterangan}
+                            </div>
+                            {prof.urutan_anak && (
+                              <div style={getFontStyles(data.profil?.setting_urutan_profil || { size: "8px", color: "#ffffff", family: "Inter", position: "center" })} className="mt-1 max-w-[180px] mx-auto leading-normal italic">
+                                {prof.urutan_anak}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   {/* PREVIEW: ACARA SECTION */}
                   <div
                     id="preview-acara"
-                    onClick={() => setActiveSection("acara")}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      activeSection === "acara" ? "ring-2 ring-inset ring-[#d4af37] z-10" : ""
-                    }`}
+                    className={`p-6 text-center space-y-6 border-b border-dashed ${activeSection === "acara" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
+                      }`}
+                    style={{
+                      background: data.acara?.background?.type === "image"
+                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.acara?.background?.value}) center/cover no-repeat`
+                        : data.acara?.background?.type === "gradient"
+                          ? data.acara?.background?.value
+                          : undefined
+                    }}
                   >
-                    <AcaraPreview data={data.acara} />
+                    {renderOrnament("acara")}
+
+                    <div className="space-y-3 text-left">
+                      {data.acara?.countdown_aktif && (() => {
+                        const idx = data.acara.countdown_acara_index ?? 0;
+                        const targetEvent = data.acara.acaras?.[idx];
+                        if (!targetEvent || !targetEvent.tanggal) return null;
+                        const targetDateTime = getTargetDateTime(targetEvent.tanggal, targetEvent.jam || targetEvent.jam_mulai);
+                        const pos = data.acara?.setting_countdown?.position || "center";
+                        const alignClass = pos === "left" ? "text-left" : pos === "right" ? "text-right" : "text-center";
+                        return (
+                          <div className={`space-y-1.5 py-2 ${alignClass}`}>
+                            <div className="text-[9px] font-black uppercase tracking-wider opacity-60 text-white">
+                              Hitung Mundur Acara
+                            </div>
+                            <Countdown targetDateStr={targetDateTime} settings={data.acara?.setting_countdown} />
+                          </div>
+                        );
+                      })()}
+
+                      <div className="text-center">
+                        <span className="text-[9px] font-extrabold text-white uppercase tracking-widest block mb-2">
+                          Waktu & Tempat
+                        </span>
+                      </div>
+
+                      {data.acara?.acaras?.map((evt: any, idx: number) => {
+                        const endJam = evt.is_selesai_custom ? (evt.jam_selesai_custom || "Selesai") : evt.jam_selesai;
+                        
+                        let timeDisplay = "";
+                        if (evt.jam) {
+                          timeDisplay = evt.jam;
+                        } else if (evt.jam_mulai || endJam) {
+                          const start = evt.jam_mulai || "";
+                          const end = endJam || "";
+                          if (end.toLowerCase() === "selesai") {
+                            timeDisplay = `${start} WIB – Selesai`;
+                          } else if (start && end) {
+                            timeDisplay = `${start} – ${end} WIB`;
+                          } else {
+                            timeDisplay = `${start || end} WIB`;
+                          }
+                        }
+
+                        let formattedDate = "";
+                        if (evt.tanggal) {
+                          try {
+                            const date = new Date(evt.tanggal);
+                            if (!isNaN(date.getTime())) {
+                              formattedDate = date.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+                            } else {
+                              formattedDate = evt.tanggal;
+                            }
+                          } catch (e) {
+                            formattedDate = evt.tanggal;
+                          }
+                        }
+
+                        const cardStyle = evt.setting_card?.type || "glass";
+                        let cardClass = "relative space-y-2 ";
+                        if (cardStyle === "none") {
+                          cardClass += "p-0 bg-transparent border-none min-h-0";
+                        } else {
+                          cardClass += "min-h-[140px] ";
+                          if (cardStyle === "outline") {
+                            cardClass += "p-3.5 bg-transparent border border-[#064e3b]/20 rounded-xl";
+                          } else if (cardStyle === "solid") {
+                            cardClass += "p-3.5 bg-white border border-slate-100 rounded-xl shadow-sm";
+                          } else {
+                            cardClass += "p-3.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl";
+                          }
+                        }
+
+                        return (
+                          <div key={idx} className={cardClass}>
+                            <h5 style={getFontStyles(data.acara?.setting_nama_acara || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-extrabold pb-1.5 flex items-center gap-1.5 border-b border-[#064e3b]/10">
+                              <Calendar className="w-3.5 h-3.5 text-[#d4af37]" />
+                              {evt.nama}
+                            </h5>
+                            <div className="space-y-1 mt-1">
+                              {formattedDate && (
+                                <p style={getFontStyles(data.acara?.setting_tanggal_acara || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="font-semibold">
+                                  Tanggal: {formattedDate}
+                                </p>
+                              )}
+                              {timeDisplay && (
+                                <p style={getFontStyles(data.acara?.setting_jam_acara || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })}>
+                                  Pukul: {timeDisplay}
+                                </p>
+                              )}
+                              <p style={getFontStyles(data.acara?.setting_alamat_acara || { size: "9px", color: "#064e3b", family: "Inter", position: "left" })} className="leading-normal mt-1">
+                                Lokasi: {evt.alamat}
+                              </p>
+                              {evt.embed_maps && (
+                                <div
+                                  className="w-full rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10"
+                                  style={{ height: evt.embed_maps_height ? `${evt.embed_maps_height}px` : "112px", position: "relative" }}
+                                >
+                                  <iframe
+                                    src={getMapsEmbedUrl(evt.embed_maps)}
+                                    width="100%"
+                                    style={{ border: 0, position: "absolute", top: 0, left: 0, width: "100%", height: "calc(100% + 30px)" }}
+                                    allowFullScreen={false}
+                                    loading="lazy"
+                                  />
+                                </div>
+                              )}
+                              {evt.link_maps && (() => {
+                                const ms = evt.setting_maps_button || {};
+                                const display = ms.display || "button";
+                                const pos = ms.position || "left";
+                                const justifyStyle: React.CSSProperties = {
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: pos === "center" ? "center" : pos === "right" ? "flex-end" : "flex-start",
+                                  marginTop: "6px",
+                                };
+                                const linkStyle: React.CSSProperties = {
+                                  fontFamily: ms.family || "Inter",
+                                  fontSize: ms.size || "10px",
+                                  color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
+                                  ...(display === "button" ? {
+                                    display: "inline-block",
+                                    backgroundColor: ms.bg_color || "#064e3b",
+                                    border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
+                                    borderRadius: ms.border_radius || "8px",
+                                    padding: "4px 12px",
+                                    fontWeight: 700,
+                                  } : {
+                                    fontWeight: 700,
+                                    textDecoration: "underline",
+                                  }),
+                                };
+                                return (
+                                  <div style={justifyStyle}>
+                                    <a href={evt.link_maps} target="_blank" style={linkStyle}>
+                                      {evt.link_maps_label || "Lihat di Maps \u2192"}
+                                    </a>
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   {/* PREVIEW: CERITA & GALERI SECTION */}
                   <div
                     id="preview-cerita"
-                    onClick={() => setActiveSection("cerita")}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      activeSection === "cerita" ? "ring-2 ring-inset ring-[#d4af37] z-10" : ""
-                    }`}
+                    className={`p-6 text-center space-y-6 border-b border-dashed ${activeSection === "cerita" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-[#064e3b]/10"
+                      }`}
+                    style={{
+                      background: data.cerita?.background?.type === "image"
+                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.cerita?.background?.value}) center/cover no-repeat`
+                        : data.cerita?.background?.type === "gradient"
+                          ? data.cerita?.background?.value
+                          : undefined
+                    }}
                   >
-                    <CeritaPreview data={data.cerita} />
+                    {renderOrnament("cerita")}
+                    {data.cerita?.ceritas?.length > 0 && (
+                      <>
+                        <span style={getFontStyles(data.cerita?.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-widest block">
+                          Kisah Perjalanan
+                        </span>
+
+                        {(() => {
+                          const cardStyle = data.cerita?.cerita_card_style || "glass";
+                          const timelineStyle = data.cerita?.cerita_timeline_style || "left";
+
+                          const getCardClass = () => {
+                            if (cardStyle === "glass") {
+                              return "bg-white/12 backdrop-blur-lg border border-white/20 rounded-[8px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35";
+                            }
+                            if (cardStyle === "outline") {
+                              return "bg-transparent border border-[#d4af37]/30 rounded-[8px] p-4 relative space-y-2.5 transition-all duration-300 hover:border-[#d4af37]/60";
+                            }
+                            if (cardStyle === "solid") {
+                              return "bg-white border border-slate-100 rounded-[8px] p-4 shadow-sm relative space-y-2.5 transition-all duration-300 hover:shadow-md";
+                            }
+                            // none
+                            return "bg-transparent border-none p-0 relative space-y-2.5";
+                          };
+
+                          const cardClass = getCardClass();
+
+                          if (timelineStyle === "alternate") {
+                            return (
+                              <div className="relative space-y-2.5 py-2">
+                                {/* Center Vertical Line */}
+                                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#d4af37]/35 -translate-x-1/2" />
+                                
+                                {data.cerita.ceritas.map((st: any, idx: number) => {
+                                  const isEven = idx % 2 === 0;
+                                  const starTopClass = cardStyle === "none" ? "top-[6px]" : "top-[16px]";
+                                  return (
+                                    <div key={idx} className={`relative flex items-start ${isEven ? "justify-start pl-[50%]" : "justify-end pr-[50%]"}`}>
+                                      {/* Elegant 4-pointed Star Node */}
+                                      <div className={`absolute left-1/2 -translate-x-1/2 ${starTopClass} w-5 h-5 flex items-center justify-center bg-transparent z-10`}>
+                                        <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                                          <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                                        </svg>
+                                      </div>
+                                      
+                                      {/* Card wrapper */}
+                                      <div className={`w-[calc(100%-10px)] max-w-full ${isEven ? "pl-3.5" : "pr-3.5"}`}>
+                                        <div className={cardClass}>
+                                          {/* Card Header */}
+                                          <div className="flex flex-col gap-1 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                            <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide break-words">{st.judul}</h6>
+                                            <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-black uppercase tracking-widest text-[8px] opacity-80">{st.waktu}</span>
+                                          </div>
+                                          
+                                          {/* Card Content */}
+                                          <p style={getFontStyles(data.cerita?.setting_isi_cerita || { size: "9.5px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light break-words">{st.isi}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+
+                          if (timelineStyle === "right") {
+                            return (
+                              <div className="space-y-2.5 text-right relative pr-5 border-r border-[#d4af37]/35 mr-1">
+                                {data.cerita.ceritas.map((st: any, idx: number) => (
+                                  <div key={idx} className="relative pb-1">
+                                    {/* Elegant 4-pointed Star Node */}
+                                    <div className="absolute -right-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
+                                      <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                                      </svg>
+                                    </div>
+                                    
+                                    {/* Card Container */}
+                                    <div className={cardClass}>
+                                      <div className="flex items-baseline justify-between gap-2 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                        <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">{st.judul}</h6>
+                                        <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">{st.waktu}</span>
+                                      </div>
+                                      <p style={getFontStyles(data.cerita?.setting_isi_cerita || { size: "9.5px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">{st.isi}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+
+                          // Left/standard style
+                          return (
+                            <div className="space-y-2.5 text-left relative pl-5 border-l border-[#d4af37]/35 ml-1">
+                              {data.cerita.ceritas.map((st: any, idx: number) => (
+                                <div key={idx} className="relative pb-1">
+                                  {/* Elegant 4-pointed Star Node */}
+                                  <div className="absolute -left-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
+                                    <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                                      <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                                    </svg>
+                                  </div>
+                                  
+                                  {/* Card Container */}
+                                  <div className={cardClass}>
+                                    <div className="flex items-baseline justify-between gap-2 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                      <h6 style={getFontStyles(data.cerita?.setting_judul_cerita || { size: "12px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">{st.judul}</h6>
+                                      <span style={getFontStyles(data.cerita?.setting_waktu_cerita || { size: "8px", color: "#ffffff", family: "Inter", position: "left" })} className="block font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">{st.waktu}</span>
+                                    </div>
+                                    <p style={getFontStyles(data.cerita?.setting_isi_cerita || { size: "9.5px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">{st.isi}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        })()}
+                      </>
+                    )}
+
+                    {data.cerita?.galeris?.length > 0 && (
+                      <>
+                        <span style={getFontStyles(data.cerita?.setting_head_galeri || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold uppercase tracking-widest block pt-3">
+                          Galeri Foto
+                        </span>
+
+                        {(() => {
+                          const layout = data.cerita?.galeri_layout || "grid-2";
+                          if (layout === "grid" || layout === "grid-2") {
+                            return (
+                              <div className="grid grid-cols-2 gap-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
+                                    <img src={img} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "grid-3") {
+                            return (
+                              <div className="grid grid-cols-3 gap-1.5 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
+                                    <img src={img} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "masonry") {
+                            return (
+                              <div className="columns-2 gap-2 space-y-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="break-inside-avoid">
+                                    <img src={img} className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "carousel") {
+                            return (
+                              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="w-[160px] shrink-0 snap-center">
+                                    <img src={img} className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "collage") {
+                            return (
+                              <div className="grid grid-cols-6 gap-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const colSpan = (idx % 4 === 0 || idx % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
+                                  return (
+                                    <div key={idx} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "polaroid") {
+                            return (
+                              <div className="grid grid-cols-2 gap-3.5 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
+                                  const rot = rotations[idx % rotations.length];
+                                  return (
+                                    <div key={idx} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
+                                      <img src={img} className="w-full aspect-square object-cover" alt="" />
+                                      <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{idx + 1}</div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          return null;
+                        })()}
+                      </>
+                    )}
                   </div>
 
                   {/* PREVIEW: PENUTUP SECTION */}
                   <div
                     id="preview-penutup"
-                    onClick={() => setActiveSection("penutup")}
-                    className={`relative cursor-pointer transition-all duration-300 ${
-                      activeSection === "penutup" ? "ring-2 ring-inset ring-[#d4af37] z-10" : ""
-                    }`}
+                    className={`p-6 text-center space-y-6 pb-12 border-b border-dashed ${activeSection === "penutup" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-transparent"
+                      }`}
+                    style={{
+                      background: data.penutup?.background?.type === "image"
+                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.penutup?.background?.value}) center/cover no-repeat`
+                        : data.penutup?.background?.type === "gradient"
+                          ? data.penutup?.background?.value
+                          : undefined
+                    }}
                   >
-                    <PenutupPreview data={data.penutup} />
+                    {renderOrnament("penutup")}
+                    <span className="text-[9px] font-extrabold text-[#d4af37] tracking-widest block">
+                      Ungkapan Terima Kasih
+                    </span>
+
+                    <p className="text-[10px] text-[#064e3b]/70 italic leading-relaxed px-1">
+                      {data.penutup?.pesan_penutup}
+                    </p>
+
+                    <div className="space-y-1 text-[#064e3b]/80 text-[10px]">
+                      <p>{data.penutup?.salam}</p>
+                      <p className="font-extrabold mt-3">Kami yang berbahagia,</p>
+                      <p className="font-black text-xs text-[#d4af37]">{data.penutup?.tertanda}</p>
+                    </div>
+
+                    {/* Cashless Digital Gifts Preview */}
+                    {data.penutup?.amplops?.length > 0 && (
+                      <div className="pt-4 space-y-2 border-t border-[#064e3b]/10">
+                        <span className="text-[8px] font-bold text-[#064e3b]/60 tracking-widest block">
+                          Amplop Digital / Kado
+                        </span>
+                        <div className="space-y-2">
+                          {data.penutup.amplops.map((gift: any, idx: number) => (
+                            <div key={idx} className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 text-left relative" style={{ borderRadius: "6%" }}>
+                              <span className="text-[8px] font-black text-[#d4af37] block">{gift.bank}</span>
+                              <span className="text-[#064e3b] text-xs font-black block mt-0.5 tracking-wide">{gift.nomor_rekening}</span>
+                              <span className="text-[9px] text-[#064e3b]/60 block">A/N: {gift.atas_nama}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                 </div>

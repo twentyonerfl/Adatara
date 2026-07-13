@@ -5,36 +5,6 @@ import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, F
 import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
 import { Plus, Trash2 } from "lucide-react";
 
-function isLightBg(background: any) {
-  if (!background) return false;
-  if (background.type === "image") return false;
-  if (background.type === "gradient") {
-    const val = background.value?.toLowerCase() || "";
-    if (val.includes("#f5f5dc") || val.includes("#ffffff") || val.includes("#fdf6e2") || val.includes("#eaeaec") || val.includes("rgb(255") || val.includes("rgb(245")) {
-      return true;
-    }
-    return false;
-  }
-  if (background.type === "solid" && background.value) {
-    const hex = background.value.replace("#", "");
-    if (hex.length === 6) {
-      const r = parseInt(hex.substring(0, 2), 16);
-      const g = parseInt(hex.substring(2, 4), 16);
-      const b = parseInt(hex.substring(4, 6), 16);
-      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-      return luminance > 170;
-    }
-    if (hex.length === 3) {
-      const r = parseInt(hex.substring(0, 1) + hex.substring(0, 1), 16);
-      const g = parseInt(hex.substring(1, 2) + hex.substring(1, 2), 16);
-      const b = parseInt(hex.substring(2, 3) + hex.substring(2, 3), 16);
-      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-      return luminance > 170;
-    }
-  }
-  return false;
-}
-
 function getFontStyles(val?: any) {
   if (!val) return {};
   const styles: React.CSSProperties = {
@@ -46,7 +16,7 @@ function getFontStyles(val?: any) {
   if (val.position === "custom") {
     styles.position = "absolute";
     styles.left = `${val.x ?? 50}%`;
-    styles.top = `${((val.y ?? 50) * 512) / 100}px`;
+    styles.top = `${val.y ?? 50}%`;
     styles.transform = "translate(-50%, -50%)";
     styles.whiteSpace = "nowrap";
   } else if (val.position) {
@@ -621,6 +591,19 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
   );
 }
 
+const getTranslucentColor = (colorStr: string, opacityHex: string) => {
+  let cleanColor = (colorStr || "#ffffff").trim();
+  if (cleanColor.startsWith("#")) {
+    if (cleanColor.length === 4) {
+      cleanColor = "#" + cleanColor[1] + cleanColor[1] + cleanColor[2] + cleanColor[2] + cleanColor[3] + cleanColor[3];
+    }
+    if (cleanColor.length === 7) {
+      return cleanColor + opacityHex;
+    }
+  }
+  return cleanColor;
+};
+
 export function PenutupPreview({
   data,
   wishes,
@@ -692,52 +675,32 @@ export function PenutupPreview({
     return "w-8 h-0.5 bg-[#d4af37] mt-2 mx-auto";
   };
 
-  const isLight = isLightBg(data.background);
-
-  const cardBgClass = isLight 
-    ? "bg-[#064e3b]/5 border-[#064e3b]/15 text-[#064e3b]" 
-    : "bg-white/10 border-white/15 text-white";
-
-  const labelColorClass = isLight ? "text-[#064e3b]/80" : "text-white/85";
-
-  const inputClass = isLight 
-    ? "w-full px-3.5 py-2.5 bg-white border border-[#064e3b]/20 focus:border-[#064e3b] focus:ring-1 focus:ring-[#064e3b]/10 text-[10px] text-[#064e3b] placeholder-[#064e3b]/30 outline-none transition-all duration-300"
-    : "w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:border-white/40 focus:ring-1 focus:ring-white/10 text-[10px] text-white placeholder-white/30 outline-none transition-all duration-300";
-
-  const inactiveKehadiranClass = isLight 
-    ? "bg-white border-[#064e3b]/10 text-[#064e3b]/60 hover:bg-[#064e3b]/10 hover:text-[#064e3b] hover:border-[#064e3b]/20"
-    : "bg-white/5 border-white/10 text-white/60 hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/20";
-
-  const giftItemClass = isLight 
-    ? "bg-[#064e3b]/5 p-3.5 border border-[#064e3b]/10 border-l-2 border-l-[#d4af37] flex justify-between items-center transition-all duration-300 hover:bg-[#064e3b]/10 shadow-sm"
-    : "bg-white/[0.02] backdrop-blur-md p-3.5 border border-white/10 border-l-2 border-l-[#d4af37] flex justify-between items-center transition-all duration-300 hover:bg-white/[0.05] shadow-sm";
-
-  const giftTitleClass = isLight ? "text-[#064e3b]/60" : "text-white/50";
-  const giftNumberClass = isLight ? "text-[#064e3b]" : "text-white";
-  const giftAnClass = isLight ? "text-[#d4af37]" : "text-white/80";
-
-  const copyButtonClass = isLight 
-    ? "bg-[#064e3b]/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-[#064e3b]/15 hover:border-[#d4af37] text-[#064e3b]"
-    : "bg-white/10 hover:bg-[#d4af37] hover:text-[#064e3b] border-white/15 hover:border-[#d4af37] text-white";
-
-  const mockWishes = [
-    { nama_tamu: "Budi Santoso", kehadiran: "HADIR", ucapan: "Selamat menempuh hidup baru Aditya & Tara! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin." },
-    { nama_tamu: "Siti Rahma", kehadiran: "HADIR", ucapan: "Selamat yaa! Senang sekali melihat kalian berdua bersanding di pelaminan. Lancar terus acaranya!" },
-    { nama_tamu: "Ahmad Hidayat", kehadiran: "TIDAK_HADIR", ucapan: "Selamat berbahagia Aditya & Tara! Mohon maaf belum bisa hadir langsung karena sedang di luar kota. Doa terbaik untuk kalian." }
-  ];
-
-  const isEditorOrDemo = typeof window !== "undefined" && 
-    (window.location.pathname.includes("/dashboard") || window.location.pathname.includes("/demo") || window.location.pathname.includes("/templates"));
-  
-  const displayWishes = (wishes && wishes.length > 0)
-    ? wishes
-    : (isEditorOrDemo ? mockWishes : []);
+  const textColor = data.setting_pesan_penutup?.color || "#ffffff";
+  const bgCardColor = getTranslucentColor(textColor, "15"); // ~8% opacity
+  const borderCardColor = getTranslucentColor(textColor, "25"); // ~15% opacity
+  const inputBgColor = getTranslucentColor(textColor, "08"); // ~3% opacity
+  const inputBorderColor = getTranslucentColor(textColor, "18"); // ~10% opacity
 
   return (
-    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6" style={bgPenutup}>
+    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6 penutup-preview-container" style={bgPenutup}>
+      <style dangerouslySetInnerHTML={{__html: `
+        .penutup-preview-container input::placeholder,
+        .penutup-preview-container textarea::placeholder {
+          color: ${textColor} !important;
+          opacity: 0.35 !important;
+        }
+      `}} />
+
       {data.rsvp_aktif && (
-        <div className={`${cardBgClass} backdrop-blur-md border p-5 text-center space-y-4 shadow-xl relative`} style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: isLight ? "#064e3b" : "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
+        <div 
+          className="backdrop-blur-md border p-5 text-center space-y-4 shadow-xl relative" 
+          style={{ 
+            borderRadius: "6%",
+            backgroundColor: bgCardColor,
+            borderColor: borderCardColor
+          }}
+        >
+          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
             <AnimatedWrapper val={data.setting_head_rsvp}>
               <div>Konfirmasi Kehadiran</div>
               <div className={getDividerClass(data.setting_head_rsvp?.position)} />
@@ -751,8 +714,8 @@ export function PenutupPreview({
                 </svg>
               </div>
               <div className="space-y-1">
-                <div className={`font-extrabold text-[12px] tracking-wider ${isLight ? 'text-[#064e3b]' : 'text-white'}`}>Konfirmasi Terkirim!</div>
-                <div className={`text-[9.5px] max-w-[200px] mx-auto leading-relaxed ${isLight ? 'text-[#064e3b]/70' : 'text-white/70'}`}>Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
+                <div className="font-extrabold text-[12px] tracking-wider" style={{ color: textColor }}>Konfirmasi Terkirim!</div>
+                <div className="text-[9.5px] max-w-[200px] mx-auto leading-relaxed" style={{ color: textColor, opacity: 0.7 }}>Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
               </div>
             </div>
           ) : (
@@ -765,34 +728,44 @@ export function PenutupPreview({
 
               {/* 1. Nama Tamu */}
               <div className="space-y-1.5">
-                <label className={`block text-[8.5px] font-extrabold uppercase tracking-widest ${labelColorClass}`}>Nama Tamu</label>
+                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Nama Tamu</label>
                 <input
                   type="text"
                   required
                   value={activeNamaTamu}
                   onChange={(e) => handleNamaChange(e.target.value)}
                   placeholder="Masukkan nama lengkap Anda..."
-                  className={inputClass}
-                  style={{ borderRadius: "10px" }}
+                  className="w-full px-3.5 py-2.5 border text-[10px] outline-none transition-all duration-300"
+                  style={{ 
+                    borderRadius: "10px",
+                    backgroundColor: inputBgColor,
+                    borderColor: inputBorderColor,
+                    color: textColor
+                  }}
                 />
               </div>
 
               {/* 2. Ucapan & Doa Restu */}
               <div className="space-y-1.5">
-                <label className={`block text-[8.5px] font-extrabold uppercase tracking-widest ${labelColorClass}`}>Ucapan & Doa Restu</label>
+                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Ucapan & Doa Restu</label>
                 <textarea
                   value={activeUcapan}
                   onChange={(e) => handleUcapanChange(e.target.value)}
                   rows={2.5}
                   placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                  className={inputClass}
-                  style={{ borderRadius: "10px" }}
+                  className="w-full px-3.5 py-2.5 border text-[10px] outline-none resize-none transition-all duration-300"
+                  style={{ 
+                    borderRadius: "10px",
+                    backgroundColor: inputBgColor,
+                    borderColor: inputBorderColor,
+                    color: textColor
+                  }}
                 />
               </div>
 
               {/* 3. Konfirmasi Kehadiran */}
               <div className="space-y-1.5">
-                <label className={`block text-[8.5px] font-extrabold uppercase tracking-widest ${labelColorClass}`}>Konfirmasi Kehadiran ?</label>
+                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Konfirmasi Kehadiran ?</label>
                 <div className="grid grid-cols-2 gap-2.5">
                   {[
                     {
@@ -803,8 +776,16 @@ export function PenutupPreview({
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       ),
-                      activeClass: "bg-emerald-500/15 border-emerald-500/50 text-emerald-300 font-extrabold shadow-md shadow-emerald-500/5",
-                      inactiveClass: inactiveKehadiranClass
+                      activeStyle: {
+                        backgroundColor: "rgba(16, 185, 129, 0.15)",
+                        borderColor: "#10b981",
+                        color: "#10b981"
+                      },
+                      inactiveStyle: {
+                        backgroundColor: inputBgColor,
+                        borderColor: inputBorderColor,
+                        color: getTranslucentColor(textColor, "99")
+                      }
                     },
                     {
                       value: "TIDAK_HADIR",
@@ -814,19 +795,27 @@ export function PenutupPreview({
                           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       ),
-                      activeClass: "bg-rose-500/15 border-rose-500/50 text-rose-300 font-extrabold shadow-md shadow-rose-500/5",
-                      inactiveClass: inactiveKehadiranClass
+                      activeStyle: {
+                        backgroundColor: "rgba(244, 63, 94, 0.15)",
+                        borderColor: "#f43f5e",
+                        color: "#f43f5e"
+                      },
+                      inactiveStyle: {
+                        backgroundColor: inputBgColor,
+                        borderColor: inputBorderColor,
+                        color: getTranslucentColor(textColor, "99")
+                      }
                     }
                   ].map((opt) => {
                     const isSelected = activeKehadiran === opt.value;
+                    const btnStyle = isSelected ? opt.activeStyle : opt.inactiveStyle;
                     return (
                       <button
                         key={opt.value}
                         type="button"
                         onClick={() => handleKehadiranChange(opt.value as any)}
-                        className={`py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 ${isSelected ? opt.activeClass : opt.inactiveClass
-                          }`}
-                        style={{ borderRadius: "10px" }}
+                        className="py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 font-bold"
+                        style={{ borderRadius: "10px", ...btnStyle }}
                       >
                         {opt.icon}
                         <span>{opt.label}</span>
@@ -878,43 +867,16 @@ export function PenutupPreview({
         </div>
       )}
 
-      {/* Doa & Ucapan Feed */}
-      {data.rsvp_aktif && (
-        <div className={`${cardBgClass} backdrop-blur-md border p-5 space-y-4 shadow-xl relative`} style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: isLight ? "#064e3b" : "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
-            <AnimatedWrapper val={data.setting_head_rsvp}>
-              <div>Doa & Ucapan</div>
-              <div className={getDividerClass(data.setting_head_rsvp?.position)} />
-            </AnimatedWrapper>
-          </div>
-          <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1.5 scrollbar-thin text-left">
-            {displayWishes.map((w, i) => (
-              <div key={i} className={`p-3 rounded-xl space-y-1 ${isLight ? 'bg-[#064e3b]/5 border border-[#064e3b]/10' : 'bg-white/5 border border-white/10'}`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[10px] font-black ${isLight ? 'text-[#064e3b]' : 'text-white'}`}>{w.nama_tamu}</span>
-                  <span className={`text-[7.5px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                    w.kehadiran === "HADIR"
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                      : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
-                  }`}>
-                    {w.kehadiran === "HADIR" ? "Hadir" : "Tidak Hadir"}
-                  </span>
-                </div>
-                <p className={`text-[9.5px] leading-relaxed font-light ${isLight ? 'text-[#064e3b]/85' : 'text-white/80'}`}>{w.ucapan}</p>
-              </div>
-            ))}
-            {displayWishes.length === 0 && (
-              <div className={`text-center py-6 text-[9.5px] italic ${isLight ? 'text-[#064e3b]/50' : 'text-white/40'}`}>
-                Belum ada ucapan. Kirim doa restu Anda di atas!
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {amplops.length > 0 && (
-        <div className={`${cardBgClass} backdrop-blur-md border p-5 space-y-4 shadow-xl relative`} style={{ borderRadius: "6%" }}>
-          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: isLight ? "#064e3b" : "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
+        <div 
+          className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative" 
+          style={{ 
+            borderRadius: "6%",
+            backgroundColor: bgCardColor,
+            borderColor: borderCardColor
+          }}
+        >
+          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
             <AnimatedWrapper val={data.setting_head_gift}>
               <div>Special Gift</div>
               <div className={getDividerClass(data.setting_head_gift?.position)} />
@@ -922,20 +884,31 @@ export function PenutupPreview({
           </div>
           <div className="space-y-3 pt-1.5">
             {amplops.map((a, i) => (
-              <div key={i} className={giftItemClass} style={{ borderRadius: "6%" }}>
+              <div 
+                key={i} 
+                className="backdrop-blur-md p-3.5 border border-l-2 flex justify-between items-center transition-all duration-300 shadow-sm" 
+                style={{ 
+                  borderRadius: "6%",
+                  backgroundColor: getTranslucentColor(textColor, "05"),
+                  borderColor: inputBorderColor,
+                  borderLeftColor: "#d4af37"
+                }}
+              >
                 <div className="space-y-0.5 text-left">
-                  <div className={`text-[9px] font-bold uppercase tracking-widest ${giftTitleClass}`}>{a.bank || "Bank / E-Wallet"}</div>
-                  <div className={`text-xs font-mono font-bold tracking-wider my-0.5 ${giftNumberClass}`}>{a.nomor_rekening || "No. Rekening"}</div>
-                  <div className={`text-[9.5px] font-medium ${giftAnClass}`}>a.n. {a.atas_nama || "Atas Nama"}</div>
+                  <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: textColor, opacity: 0.5 }}>{a.bank || "Bank / E-Wallet"}</div>
+                  <div className="text-xs font-mono font-bold tracking-wider my-0.5" style={{ color: textColor }}>{a.nomor_rekening || "No. Rekening"}</div>
+                  <div className="text-[9.5px] font-medium" style={{ color: "#d4af37" }}>a.n. {a.atas_nama || "Atas Nama"}</div>
                 </div>
                 <button
                   type="button"
                   onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className={`px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer ${copiedIndex === i
-                      ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
-                      : copyButtonClass
-                    }`}
-                  style={{ borderRadius: "6%" }}
+                  className="px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer"
+                  style={{ 
+                    borderRadius: "6%",
+                    backgroundColor: copiedIndex === i ? getTranslucentColor("#10b981", "30") : getTranslucentColor(textColor, "15"),
+                    borderColor: copiedIndex === i ? "#10b981" : borderCardColor,
+                    color: copiedIndex === i ? "#10b981" : textColor
+                  }}
                 >
                   {copiedIndex === i ? "Tersalin" : "Salin"}
                 </button>
@@ -945,15 +918,15 @@ export function PenutupPreview({
         </div>
       )}
 
-      <div className="text-center space-y-2.5 pt-5 border-t border-white/15">
-        <div style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: isLight ? "#064e3b" : "#ffffff", family: "Inter", position: "center" })}>
+      <div className="text-center space-y-2.5 pt-5 border-t" style={{ borderTopColor: borderCardColor }}>
+        <div style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
           <AnimatedWrapper val={data.setting_pesan_penutup}>
             <p className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
             <p className="font-bold">{data.salam || ""}</p>
             <p className="font-black mt-2" style={{ fontSize: "14px" }}>{data.tertanda || "Nama & Nama"}</p>
           </AnimatedWrapper>
         </div>
-        <p className={`text-[9px] uppercase tracking-widest mt-4 ${isLight ? 'text-[#064e3b]/30' : 'text-white/30'}`}>Made with ❤ by Adatara</p>
+        <p className="text-[9px] uppercase tracking-widest mt-4" style={{ color: textColor, opacity: 0.3 }}>Made with ❤ by Adatara</p>
       </div>
     </div>
   );

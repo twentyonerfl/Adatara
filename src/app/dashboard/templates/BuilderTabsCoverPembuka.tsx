@@ -299,7 +299,7 @@ export function CoverPreview({
             lineHeight: 1.2,
             position: "absolute",
             left: `${fontTitle.x ?? 50}%`,
-            top: `${((fontTitle.y ?? 35) * 512) / 100}px`,
+            top: `${fontTitle.y ?? 35}%`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: "90%",
@@ -319,7 +319,7 @@ export function CoverPreview({
             lineHeight: 1.2,
             position: "absolute",
             left: `${fontNama.x ?? 50}%`,
-            top: `${((fontNama.y ?? 48) * 512) / 100}px`,
+            top: `${fontNama.y ?? 48}%`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: "90%",
@@ -336,7 +336,7 @@ export function CoverPreview({
           style={{
             position: "absolute",
             left: `${btn.x ?? 50}%`,
-            top: `${((btn.y ?? 65) * 512) / 100}px`,
+            top: `${btn.y ?? 65}%`,
             transform: "translate(-50%, -50%)",
             width: "90%",
           }}
@@ -689,7 +689,7 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontFamily: fontKategori.family || "Inter",
             position: "absolute",
             left: `${fontKategori.x ?? 50}%`,
-            top: `${((fontKategori.y ?? 20) * 512) / 100}px`,
+            top: `${fontKategori.y ?? 20}%`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: "90%",
@@ -711,7 +711,7 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontFamily: fontNama.family || "Inter",
             position: "absolute",
             left: `${fontNama.x ?? 50}%`,
-            top: `${((fontNama.y ?? 40) * 512) / 100}px`,
+            top: `${fontNama.y ?? 40}%`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: "90%",
@@ -733,7 +733,7 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontFamily: fontTanggal.family || "Inter",
             position: "absolute",
             left: `${fontTanggal.x ?? 50}%`,
-            top: `${((fontTanggal.y ?? 55) * 512) / 100}px`,
+            top: `${fontTanggal.y ?? 55}%`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: "90%",
@@ -763,7 +763,7 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
             fontSize: fontUcapan.size || "12px",
             position: "absolute",
             left: `${fontUcapan.x ?? 50}%`,
-            top: `${((fontUcapan.y ?? 75) * 512) / 100}px`,
+            top: `${fontUcapan.y ?? 75}%`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: fontUcapan.width || "90%",
@@ -1090,7 +1090,7 @@ export function ScaledCoverPreview({ coverData, meta }: { coverData: any; meta: 
     <div ref={containerRef} className="absolute inset-0 w-full h-full select-none pointer-events-none rounded-t-2xl overflow-hidden flex items-center justify-center">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600;700;900&family=Lato:wght@300;400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600;800&family=Outfit:wght@300;400;600;700;800;900&family=Pinyon+Script&family=Playball&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,900&family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;600;700&family=Great+Vibes&family=Inter:wght@300;400;600;700;900&family=Lato:wght@300;400;700&family=Outfit:wght@300;400;600;700;900&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
       <div
         className="transition-opacity duration-300 flex-shrink-0"
         style={{
