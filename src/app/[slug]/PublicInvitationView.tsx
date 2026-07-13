@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { CoverPreview, PembukaPreview } from "../dashboard/templates/BuilderTabsCoverPembuka";
+import { getBgStyle } from "../dashboard/templates/BuilderWidgets";
 import { ProfilPreview, AcaraPreview } from "../dashboard/templates/BuilderTabsProfilAcara";
 import { CeritaPreview, PenutupPreview } from "../dashboard/templates/BuilderTabsCeritaPenutup";
 
@@ -253,7 +254,7 @@ export function PublicInvitationView({
 
   const transitionStyle = data.cover?.transition_style || "none";
 
-  const getTransitionVariants = (style: string) => {
+  const getTransitionVariants = (style: string): any => {
     switch (style) {
       case "fade":
         return {
@@ -339,34 +340,54 @@ export function PublicInvitationView({
 
       {/* SCREEN 1: COVER OVERLAY */}
       <AnimatePresence>
-        {!isOpen && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, y: "-100vh" }}
-            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-white"
-          >
-            <div
-              className="rounded-none"
-              style={{
-                width: "288px",
-                height: "512px",
-                transform: `scale(${scale})`,
-                transformOrigin: "center center",
-                position: "relative",
-                overflow: "hidden",
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
-              }}
+        {!isOpen && (() => {
+          const isMobileCover = scale < 1.48;
+          const coverBgStyle = getBgStyle(data.cover?.background);
+          return (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0, y: "-100vh" }}
+              transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+              className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden ${
+                isMobileCover ? "" : "bg-[#1a1a1a]"
+              }`}
+              style={isMobileCover ? coverBgStyle : {}}
             >
-              <CoverPreview 
-                data={data.cover} 
-                meta={{ kategori: kategoriId, bahasa: bahasa }} 
-                onOpen={handleOpen} 
-                guestName={guestName}
-              />
-            </div>
-          </motion.div>
-        )}
+              {isMobileCover && data.cover?.background?.type === "video" && data.cover?.background?.value && (
+                <video
+                  key={data.cover.background.value}
+                  src={data.cover.background.value}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover z-0"
+                />
+              )}
+              
+              <div
+                className="rounded-none z-10"
+                style={{
+                  width: "288px",
+                  height: "512px",
+                  transform: `scale(${scale})`,
+                  transformOrigin: "center center",
+                  position: "relative",
+                  overflow: "hidden",
+                  boxShadow: isMobileCover ? "none" : "0 25px 50px -12px rgba(0, 0, 0, 0.6)"
+                }}
+              >
+                <CoverPreview 
+                  data={data.cover} 
+                  meta={{ kategori: kategoriId, bahasa: bahasa }} 
+                  onOpen={handleOpen} 
+                  guestName={guestName}
+                  transparentBg={isMobileCover}
+                />
+              </div>
+            </motion.div>
+          );
+        })()}
       </AnimatePresence>
 
       {/* SCREEN 2: MAIN SCROLLABLE INVITATION */}

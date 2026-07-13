@@ -249,12 +249,14 @@ export function CoverPreview({
   data,
   meta,
   onOpen,
-  guestName
+  guestName,
+  transparentBg = false
 }: {
   data: any;
   meta: any;
   onOpen?: () => void;
   guestName?: string;
+  transparentBg?: boolean;
 }) {
   const bg = getBgStyle(data.background);
   const fontTitle = data.setting_font || {};
@@ -275,8 +277,8 @@ export function CoverPreview({
 
   return (
     <div className="w-full h-full min-h-[512px] flex flex-col items-center justify-center relative overflow-hidden rounded-none"
-      style={bg}>
-      {data.background?.type === "video" && data.background?.value && (
+      style={transparentBg ? {} : bg}>
+      {!transparentBg && data.background?.type === "video" && data.background?.value && (
         <video
           key={data.background.value}
           src={data.background.value}

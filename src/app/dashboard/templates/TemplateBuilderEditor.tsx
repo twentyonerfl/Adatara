@@ -374,7 +374,7 @@ export default function TemplateBuilderEditor({
                 <AnimatePresence mode="wait">
                   {(() => {
                     const transitionStyle = coverData?.transition_style || "none";
-                    const getPreviewVariants = (style: string) => {
+                    const getPreviewVariants = (style: string): any => {
                       switch (style) {
                         case "fade":
                           return {
