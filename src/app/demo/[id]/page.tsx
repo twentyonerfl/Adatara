@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { PublicInvitationView } from "@/app/[slug]/PublicInvitationView";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0; // Disable cache for real-time preview
 
 export default async function TemplateDemoPage({

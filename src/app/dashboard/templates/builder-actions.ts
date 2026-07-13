@@ -68,6 +68,27 @@ export async function updateTemplate(
         template_json: formData.template_json,
       },
     });
+
+    // Cari dan perbarui undangan aktif yang dibuat dari template ini dan dimiliki oleh SUPER_ADMIN
+    const adminInvitations = await db.invitation.findMany({
+      where: {
+        template_id: id,
+        user: {
+          role: "SUPER_ADMIN",
+        },
+      },
+    });
+
+    for (const inv of adminInvitations) {
+      await db.invitation.update({
+        where: { id: inv.id },
+        data: {
+          data_undangan_json: formData.template_json,
+        },
+      });
+      revalidatePath(`/${inv.slug}`);
+    }
+
     revalidatePath("/dashboard/templates");
     revalidatePath(`/dashboard/templates/edit/${id}`);
     revalidatePath(`/demo/${id}`);

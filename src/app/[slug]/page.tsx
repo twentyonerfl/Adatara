@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { PublicInvitationView } from "./PublicInvitationView";
