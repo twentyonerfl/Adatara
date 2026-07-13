@@ -555,6 +555,20 @@ export function BuilderEditor({
     updateData("cerita", "galeris", currentList.filter((_: any, i: number) => i !== idx));
   };
 
+  const updateCustomConfig = (idx: number, key: string, val: string) => {
+    const configs = [...(data.cerita?.galeri_custom_configs || [])];
+    while (configs.length <= idx) {
+      configs.push({
+        colSpan: "col-span-3",
+        aspect: "aspect-[3/4]",
+        rotate: "rotate-0",
+        styleType: "polaroid"
+      });
+    }
+    configs[idx] = { ...configs[idx], [key]: val };
+    updateData("cerita", "galeri_custom_configs", configs);
+  };
+
   // Cashless Bank management
   const addBank = () => {
     if (!tempBankName || !tempBankAccount) return;
@@ -1359,25 +1373,108 @@ export function BuilderEditor({
                           <option value="collage">Collage Editorial</option>
                           <option value="polaroid">Polaroid Stack</option>
                           <option value="aesthetic">Aesthetic Scrapbook</option>
+                          <option value="custom">Gaya Custom (Bebas)</option>
                         </select>
                       </div>
 
                       <div className="space-y-2">
                         <label className="block text-[10px] font-extrabold uppercase opacity-75">Foto Terdaftar ({data.cerita?.galeris?.length || 0})</label>
-                        <div className="grid grid-cols-4 gap-1.5">
-                          {data.cerita?.galeris?.map((img: string, idx: number) => (
-                            <div key={idx} className="relative group aspect-square rounded-lg overflow-hidden border border-[#064e3b]/15 bg-[#064e3b]/5">
-                              <img src={img} className="w-full h-full object-cover" alt="" />
-                              <button
-                                type="button"
-                                onClick={() => removeGalleryImage(idx)}
-                                className="absolute inset-0 bg-rose-950/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-rose-200 transition-all cursor-pointer"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
+                        {data.cerita?.galeri_layout === "custom" ? (
+                          <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
+                            {data.cerita?.galeris?.map((img: string, idx: number) => {
+                              const config = data.cerita?.galeri_custom_configs?.[idx] || {};
+                              return (
+                                <div key={idx} className="p-2.5 bg-[#064e3b]/5 border border-[#064e3b]/10 rounded-xl space-y-2 relative">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeGalleryImage(idx)}
+                                    className="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700 cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <div className="flex gap-2 items-center">
+                                    <img src={img} className="w-10 h-10 object-cover rounded-lg border border-[#064e3b]/10 bg-white" alt="" />
+                                    <span className="text-[10px] font-bold text-[#064e3b]">Foto #{idx + 1}</span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#064e3b]/5">
+                                    <div>
+                                      <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Lebar Grid</label>
+                                      <select
+                                        value={config.colSpan || "col-span-3"}
+                                        onChange={e => updateCustomConfig(idx, "colSpan", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
+                                      >
+                                        <option value="col-span-1">1/6 (Kecil)</option>
+                                        <option value="col-span-2">1/3 (Sedang)</option>
+                                        <option value="col-span-3">1/2 (Setengah)</option>
+                                        <option value="col-span-4">2/3 (Lebar)</option>
+                                        <option value="col-span-6">6/6 (Penuh)</option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Rasio</label>
+                                      <select
+                                        value={config.aspect || "aspect-[3/4]"}
+                                        onChange={e => updateCustomConfig(idx, "aspect", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
+                                      >
+                                        <option value="aspect-square">Square (1:1)</option>
+                                        <option value="aspect-[3/4]">Portrait (3:4)</option>
+                                        <option value="aspect-[4/3]">Landscape (4:3)</option>
+                                        <option value="aspect-[16/9]">Landscape (16:9)</option>
+                                        <option value="aspect-auto">Auto (Asli)</option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Kemiringan</label>
+                                      <select
+                                        value={config.rotate || "rotate-0"}
+                                        onChange={e => updateCustomConfig(idx, "rotate", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
+                                      >
+                                        <option value="rotate-0">Normal (0°)</option>
+                                        <option value="rotate-1">Kanan 1°</option>
+                                        <option value="rotate-2">Kanan 2°</option>
+                                        <option value="rotate-3">Kanan 3°</option>
+                                        <option value="-rotate-1">Kiri -1°</option>
+                                        <option value="-rotate-2">Kiri -2°</option>
+                                        <option value="-rotate-3">Kiri -3°</option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Gaya Sudut</label>
+                                      <select
+                                        value={config.styleType || "polaroid"}
+                                        onChange={e => updateCustomConfig(idx, "styleType", e.target.value)}
+                                        className="w-full px-2 py-1 text-[9px] bg-white border border-[#064e3b]/10 rounded-lg outline-none text-[#064e3b]"
+                                      >
+                                        <option value="polaroid">Bingkai Foto</option>
+                                        <option value="rounded">Melengkung</option>
+                                        <option value="sharp">Siku Tajam</option>
+                                        <option value="circle">Bulat / Oval</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-4 gap-1.5">
+                            {data.cerita?.galeris?.map((img: string, idx: number) => (
+                              <div key={idx} className="relative group aspect-square rounded-lg overflow-hidden border border-[#064e3b]/15 bg-[#064e3b]/5">
+                                <img src={img} className="w-full h-full object-cover" alt="" />
+                                <button
+                                  type="button"
+                                  onClick={() => removeGalleryImage(idx)}
+                                  className="absolute inset-0 bg-rose-950/70 opacity-0 group-hover:opacity-100 flex items-center justify-center text-rose-200 transition-all cursor-pointer"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
                       {/* Add Gallery image URL */}
@@ -2263,6 +2360,39 @@ export function BuilderEditor({
                                     <div key={idx} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
                                       <img src={img} className="w-full aspect-square object-cover" alt="" />
                                       <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{idx + 1}</div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "custom") {
+                            return (
+                              <div className="grid grid-cols-6 gap-x-2 gap-y-4 pt-1 pb-4">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const config = data.cerita?.galeri_custom_configs?.[idx] || {};
+                                  const colSpan = config.colSpan || "col-span-3";
+                                  const aspect = config.aspect || "aspect-[3/4]";
+                                  const rotate = config.rotate || "rotate-0";
+                                  const styleType = config.styleType || "polaroid";
+
+                                  let styleClass = "";
+                                  let imgClass = "w-full h-full object-cover";
+
+                                  if (styleType === "polaroid") {
+                                    styleClass = "border-4 border-white shadow-lg rounded-none bg-white p-1 pb-4 flex flex-col";
+                                    imgClass = "w-full flex-1 object-cover aspect-square";
+                                  } else if (styleType === "rounded") {
+                                    styleClass = "border border-white/20 shadow-md rounded-xl";
+                                  } else if (styleType === "circle") {
+                                    styleClass = "border border-white/20 shadow-md rounded-full aspect-square";
+                                  } else {
+                                    styleClass = "border border-white/20 shadow-sm rounded-none";
+                                  }
+
+                                  return (
+                                    <div key={idx} className={`${colSpan} ${aspect} ${rotate} ${styleClass} overflow-hidden transition-all duration-300`}>
+                                      <img src={img} className={imgClass} alt="" />
                                     </div>
                                   );
                                 })}

@@ -38,6 +38,19 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
   const addGaleri = () => upd("galeris", [...galeris, ""]);
   const removeGaleri = (i: number) => upd("galeris", galeris.filter((_, idx) => idx !== i));
   const updGaleri = (i: number, val: string) => upd("galeris", galeris.map((g, idx) => idx === i ? val : g));
+  const updCustomConfig = (idx: number, key: string, val: string) => {
+    const configs = [...(data.galeri_custom_configs || [])];
+    while (configs.length <= idx) {
+      configs.push({
+        colSpan: "col-span-3",
+        aspect: "aspect-[3/4]",
+        rotate: "rotate-0",
+        styleType: "polaroid"
+      });
+    }
+    configs[idx] = { ...configs[idx], [key]: val };
+    upd("galeri_custom_configs", configs);
+  };
 
   return (
     <div className="space-y-4">
@@ -107,6 +120,67 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                     accept="image/*"
                     type="image"
                   />
+                  {data.galeri_layout === "custom" && (
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#064e3b]/5">
+                      <div>
+                        <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Lebar Grid</label>
+                        <select
+                          value={(data.galeri_custom_configs?.[i]?.colSpan) || "col-span-3"}
+                          onChange={e => updCustomConfig(i, "colSpan", e.target.value)}
+                          className="w-full px-2 py-1 text-[9px] bg-slate-50 border border-slate-200 rounded-lg outline-none font-bold text-[#064e3b]"
+                        >
+                          <option value="col-span-1">1/6 (Kecil)</option>
+                          <option value="col-span-2">1/3 (Sedang)</option>
+                          <option value="col-span-3">1/2 (Setengah)</option>
+                          <option value="col-span-4">2/3 (Lebar)</option>
+                          <option value="col-span-6">6/6 (Penuh)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Rasio Foto</label>
+                        <select
+                          value={(data.galeri_custom_configs?.[i]?.aspect) || "aspect-[3/4]"}
+                          onChange={e => updCustomConfig(i, "aspect", e.target.value)}
+                          className="w-full px-2 py-1 text-[9px] bg-slate-50 border border-slate-200 rounded-lg outline-none font-bold text-[#064e3b]"
+                        >
+                          <option value="aspect-square">Square (1:1)</option>
+                          <option value="aspect-[3/4]">Portrait (3:4)</option>
+                          <option value="aspect-[4/3]">Landscape (4:3)</option>
+                          <option value="aspect-[16/9]">Landscape (16:9)</option>
+                          <option value="aspect-auto">Auto (Asli)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Kemiringan</label>
+                        <select
+                          value={(data.galeri_custom_configs?.[i]?.rotate) || "rotate-0"}
+                          onChange={e => updCustomConfig(i, "rotate", e.target.value)}
+                          className="w-full px-2 py-1 text-[9px] bg-slate-50 border border-slate-200 rounded-lg outline-none font-bold text-[#064e3b]"
+                        >
+                          <option value="rotate-0">Normal (0°)</option>
+                          <option value="rotate-1">Kanan 1°</option>
+                          <option value="rotate-2">Kanan 2°</option>
+                          <option value="rotate-3">Kanan 3°</option>
+                          <option value="-rotate-1">Kiri -1°</option>
+                          <option value="-rotate-2">Kiri -2°</option>
+                          <option value="-rotate-3">Kiri -3°</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[8px] font-black uppercase text-[#064e3b]/60 block mb-0.5">Gaya Bingkai</label>
+                        <select
+                          value={(data.galeri_custom_configs?.[i]?.styleType) || "polaroid"}
+                          onChange={e => updCustomConfig(i, "styleType", e.target.value)}
+                          className="w-full px-2 py-1 text-[9px] bg-slate-50 border border-slate-200 rounded-lg outline-none font-bold text-[#064e3b]"
+                        >
+                          <option value="polaroid">Bingkai Foto</option>
+                          <option value="rounded">Melengkung</option>
+                          <option value="sharp">Siku Tajam</option>
+                          <option value="circle">Bulat / Oval</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -541,6 +615,39 @@ export function CeritaPreview({ data }: { data: any }) {
                         <div key={i} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
                           <img src={g} alt="" className="w-full aspect-square object-cover" />
                           <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{i + 1}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "custom") {
+                return (
+                  <div className="grid grid-cols-6 gap-x-2 gap-y-4 pt-1 pb-4">
+                    {galeris.map((g, i) => {
+                      const config = data.galeri_custom_configs?.[i] || {};
+                      const colSpan = config.colSpan || "col-span-3";
+                      const aspect = config.aspect || "aspect-[3/4]";
+                      const rotate = config.rotate || "rotate-0";
+                      const styleType = config.styleType || "polaroid";
+
+                      let styleClass = "";
+                      let imgClass = "w-full h-full object-cover";
+
+                      if (styleType === "polaroid") {
+                        styleClass = "border-4 border-white shadow-lg rounded-none bg-white p-1 pb-4 flex flex-col";
+                        imgClass = "w-full flex-1 object-cover aspect-square";
+                      } else if (styleType === "rounded") {
+                        styleClass = "border border-white/20 shadow-md rounded-xl";
+                      } else if (styleType === "circle") {
+                        styleClass = "border border-white/20 shadow-md rounded-full aspect-square";
+                      } else {
+                        styleClass = "border border-white/20 shadow-sm rounded-none";
+                      }
+
+                      return (
+                        <div key={i} className={`${colSpan} ${aspect} ${rotate} ${styleClass} overflow-hidden transition-all duration-300`}>
+                          <img src={g} alt="" className={imgClass} />
                         </div>
                       );
                     })}
