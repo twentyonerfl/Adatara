@@ -14,6 +14,35 @@ function getMapsEmbedUrl(input?: string) {
   }
   return input.trim();
 }
+function isLightBg(background: any) {
+  if (!background) return false;
+  if (background.type === "image") return false;
+  if (background.type === "gradient") {
+    const val = background.value?.toLowerCase() || "";
+    if (val.includes("#f5f5dc") || val.includes("#ffffff") || val.includes("#fdf6e2") || val.includes("#eaeaec") || val.includes("rgb(255") || val.includes("rgb(245")) {
+      return true;
+    }
+    return false;
+  }
+  if (background.type === "solid" && background.value) {
+    const hex = background.value.replace("#", "");
+    if (hex.length === 6) {
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+      return luminance > 170;
+    }
+    if (hex.length === 3) {
+      const r = parseInt(hex.substring(0, 1) + hex.substring(0, 1), 16);
+      const g = parseInt(hex.substring(1, 2) + hex.substring(1, 2), 16);
+      const b = parseInt(hex.substring(2, 3) + hex.substring(2, 3), 16);
+      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+      return luminance > 170;
+    }
+  }
+  return false;
+}
 
 // ─── PROFIL TAB ───────────────────────────────────────────────────────────────
 
@@ -203,7 +232,7 @@ export function ProfilPreview({ data }: { data: any }) {
             fontSize: data.setting_ucapan_profil?.size || "12px",
             position: "absolute",
             left: `${data.setting_ucapan_profil?.x ?? 50}%`,
-            top: `${data.setting_ucapan_profil?.y ?? 15}%`,
+            top: `${((data.setting_ucapan_profil?.y ?? 15) * 512) / 100}px`,
             transform: "translate(-50%, -50%)",
             textAlign: "center",
             width: data.setting_ucapan_profil?.width || "90%",
@@ -239,7 +268,7 @@ export function ProfilPreview({ data }: { data: any }) {
             style={{
               position: "absolute",
               left: `${p.foto_pos_x ?? 50}%`,
-              top: `${p.foto_pos_y ?? 50}%`,
+              top: `${((p.foto_pos_y ?? 50) * 512) / 100}px`,
               transform: "translate(-50%, -50%)",
               zIndex: 10,
             }}
@@ -731,6 +760,8 @@ function formatEventTime(jamMulai?: string, jamSelesai?: string) {
 export function AcaraPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const acaras: any[] = data.acaras || [];
+  const isLight = isLightBg(data.background);
+  const titleColorClass = isLight ? "text-[#064e3b]" : "text-white";
   return (
     <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-3" style={bg}>
       {data.countdown_aktif && (() => {
@@ -750,7 +781,7 @@ export function AcaraPreview({ data }: { data: any }) {
         const alignClass = pos === "left" ? "text-left" : pos === "right" ? "text-right" : "text-center";
         return (
           <div className={`space-y-1.5 py-2 ${alignClass}`}>
-            <div className="text-[10px] font-black uppercase tracking-wider opacity-60 text-white">
+            <div className={`text-[10px] font-black uppercase tracking-wider opacity-60 ${titleColorClass}`}>
               Hitung Mundur Acara
             </div>
             <Countdown targetDateStr={targetDateTime} settings={data.setting_countdown} />
@@ -759,7 +790,7 @@ export function AcaraPreview({ data }: { data: any }) {
       })()}
 
       <div className="text-center mb-4">
-        <div className="text-xs font-black uppercase tracking-wider opacity-60 text-white">Jadwal & Lokasi</div>
+        <div className={`text-xs font-black uppercase tracking-wider opacity-60 ${titleColorClass}`}>Jadwal & Lokasi</div>
         <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
       </div>
 

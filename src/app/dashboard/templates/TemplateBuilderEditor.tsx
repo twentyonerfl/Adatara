@@ -156,7 +156,7 @@ export default function TemplateBuilderEditor({
     <div className="flex flex-col h-full min-h-screen bg-[#f5f5dc] text-[#064e3b]">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;600;700&family=Great+Vibes&family=Inter:wght@300;400;600;700;900&family=Lato:wght@300;400;700&family=Outfit:wght@300;400;600;700;900&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600;700;900&family=Lato:wght@300;400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600;800&family=Outfit:wght@300;400;600;700;800;900&family=Pinyon+Script&family=Playball&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,900&family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
       {/* ── HEADER ── */}
       <header className="sticky top-0 z-20 bg-[#f5f5dc]/95 backdrop-blur-sm border-b border-[#064e3b]/10 px-6 py-3 flex items-center gap-4 flex-wrap">
         <button onClick={() => router.push("/dashboard/templates")}
