@@ -61,7 +61,8 @@ function ScaledSection({ children, scale }: { children: React.ReactNode; scale: 
         width: "100%", 
         height: height * scale, 
         position: "relative",
-        overflow: "hidden"
+        overflow: "hidden",
+        marginTop: "-1px"
       }}
     >
       <div
