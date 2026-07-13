@@ -227,6 +227,36 @@ export function CoverForm({ data, onChange, musicLibrary, mode }: { data: any; o
               <p className="text-[9px] text-[#064e3b]/50 mt-1 font-semibold">Mengatur transisi animasi ketika section/halaman undangan muncul saat di-scroll.</p>
             </div>
           </SectionInput>
+
+          <SectionInput label="Setting Tamu & Pesan WhatsApp Default">
+            <div className="space-y-3 text-left">
+              <div>
+                <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">
+                  Label Default Tamu (Tanpa Nama)
+                </label>
+                <input
+                  type="text"
+                  value={data.default_guest_label ?? "Tamu Undangan"}
+                  onChange={e => upd("default_guest_label", e.target.value)}
+                  placeholder="Tamu Undangan"
+                  className="w-full px-3 py-2 text-xs bg-white border border-[#064e3b]/20 rounded-xl outline-none focus:border-[#d4af37] font-semibold h-9"
+                />
+              </div>
+              <div>
+                <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">
+                  Format Pesan Share WhatsApp Default
+                </label>
+                <textarea
+                  rows={4}
+                  value={data.share_text_template ?? `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`}
+                  onChange={e => upd("share_text_template", e.target.value)}
+                  placeholder="Format pesan..."
+                  className="w-full px-3 py-2 text-xs bg-white border border-[#064e3b]/20 rounded-xl outline-none focus:border-[#d4af37] font-semibold font-sans"
+                />
+                <p className="text-[8px] text-[#064e3b]/40 mt-1 font-semibold">* Gunakan tag {"{nama}"} & {"{link}"} untuk nama tamu & tautan otomatis.</p>
+              </div>
+            </div>
+          </SectionInput>
         </>
       )}
 
@@ -367,7 +397,7 @@ export function CoverPreview({
             <div className="inline-block px-3.5 py-1 bg-white/10 backdrop-blur-sm border rounded-xl text-[11px] font-bold shadow-sm"
               style={{ color: fontTitle.color, borderColor: fontTitle.color && fontTitle.color.startsWith("#") ? fontTitle.color + '20' : 'rgba(255,255,255,0.2)' }}
             >
-              {guestName || "Tamu Undangan"}
+              {guestName || data.default_guest_label || "Tamu Undangan"}
             </div>
           </div>
           <button
@@ -421,7 +451,7 @@ export function CoverPreview({
               <div className="inline-block px-3.5 py-1 bg-white/10 backdrop-blur-sm border rounded-xl text-[11px] font-bold shadow-sm"
                 style={{ color: fontTitle.color, borderColor: fontTitle.color && fontTitle.color.startsWith("#") ? fontTitle.color + '20' : 'rgba(255,255,255,0.2)' }}
               >
-                {guestName || "Tamu Undangan"}
+                {guestName || data.default_guest_label || "Tamu Undangan"}
               </div>
             </div>
             <button

@@ -86,15 +86,17 @@ function ScaledSection({ children, scale }: { children: React.ReactNode; scale: 
 
 export function PublicInvitationView({
   invitation,
-  wishes: initialWishes
+  wishes: initialWishes,
+  guestNameFromPath
 }: {
   invitation: InvitationType;
   wishes: WishType[];
+  guestNameFromPath?: string;
 }) {
   const searchParams = useSearchParams();
-  const guestName = searchParams.get("to") || "Tamu Undangan";
-
   const data = invitation.data_undangan_json;
+  const guestName = guestNameFromPath || searchParams.get("to") || data.cover?.default_guest_label || "Tamu Undangan";
+
   const musicUrl = data.cover?.music_url;
   const bahasa: "id" | "en" = data.cover?.bahasa || "id";
   const kategoriId = invitation.template.kategori || "";

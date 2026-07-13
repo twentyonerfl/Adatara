@@ -7,6 +7,8 @@ export const defaultTemplateJson = {
     setting_bingkai: { enabled: false, width: "2px", color: "#d4af37", style: "solid", padding: "16px", radius: "12px" },
     music_url: "",
     transition_style: "none",
+    default_guest_label: "Tamu Undangan",
+    share_text_template: "Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.",
   },
   pembuka: {
     setting_kategori: { size: "12px", color: "#ffffff", family: "Inter", position: "center" },

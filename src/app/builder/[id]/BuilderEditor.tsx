@@ -108,6 +108,7 @@ export function BuilderEditor({
   // Guest Link Generator State
   const [guestNameInput, setGuestNameInput] = useState("");
   const [copiedLink, setCopiedLink] = useState(false);
+  const [linkType, setLinkType] = useState<"query" | "path">("query");
 
   // Map PaketTier to package names
   useEffect(() => {
@@ -400,7 +401,9 @@ export function BuilderEditor({
   };
   const primaryInvitationUrl = `${getBaseUrl()}/${invitationSlug}`;
   const customGuestUrl = guestNameInput
-    ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`
+    ? (linkType === "path"
+      ? `${primaryInvitationUrl}/${encodeURIComponent(guestNameInput.trim())}`
+      : `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`)
     : primaryInvitationUrl;
 
   const copyToClipboard = (text: string) => {
@@ -410,7 +413,12 @@ export function BuilderEditor({
   };
 
   const getWhatsAppShareLink = () => {
-    const textMessage = `Kepada Yth. ${guestNameInput || "Tamu Undangan"},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n${customGuestUrl}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`;
+    const defaultLabel = data.cover?.default_guest_label || "Tamu Undangan";
+    const namaTamu = guestNameInput.trim() || defaultLabel;
+    const template = data.cover?.share_text_template || `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`;
+    const textMessage = template
+      .replace(/{nama}/g, namaTamu)
+      .replace(/{link}/g, customGuestUrl);
     return `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
   };
 
@@ -556,6 +564,32 @@ export function BuilderEditor({
               <div className="bg-white border border-[#064e3b]/10 rounded-2xl p-4 space-y-3">
                 <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-wider block">Generator Undangan Tamu</span>
                 
+                {/* Link Type Toggle */}
+                <div className="flex items-center gap-1.5 p-1 bg-slate-100/70 border border-slate-200/40 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setLinkType("query")}
+                    className={`flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all tracking-wider cursor-pointer ${
+                      linkType === "query"
+                        ? "bg-[#064e3b] text-white shadow-sm"
+                        : "text-slate-500 hover:text-slate-700 bg-transparent"
+                    }`}
+                  >
+                    Format ?to=Nama
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLinkType("path")}
+                    className={`flex-1 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all tracking-wider cursor-pointer ${
+                      linkType === "path"
+                        ? "bg-[#064e3b] text-white shadow-sm"
+                        : "text-slate-500 hover:text-slate-700 bg-transparent"
+                    }`}
+                  >
+                    Format /Nama
+                  </button>
+                </div>
+
                 <div className="relative">
                   <UserIcon className="absolute left-3 top-2.5 w-4 h-4 text-[#064e3b]/40" />
                   <input
@@ -589,6 +623,42 @@ export function BuilderEditor({
                     <Phone className="w-3.5 h-3.5" />
                     Share WhatsApp
                   </a>
+                </div>
+
+                {/* Custom Guest Name & WhatsApp Template Customizer */}
+                <div className="border-t border-slate-100 pt-3 space-y-3">
+                  <div>
+                    <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1">
+                      Label Default (Tamu Tanpa Nama)
+                    </label>
+                    <input
+                      type="text"
+                      value={data.cover?.default_guest_label ?? "Tamu Undangan"}
+                      onChange={(e) => {
+                        updateNestedVal("cover", "default_guest_label", e.target.value);
+                      }}
+                      placeholder="Tamu Undangan"
+                      className="w-full px-3 py-1.5 bg-[#f5f5dc]/10 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs text-[#064e3b] outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block">
+                        Format Pesan WhatsApp
+                      </label>
+                      <span className="text-[8px] text-[#d4af37] font-bold">Gunakan {"{nama}"} & {"{link}"}</span>
+                    </div>
+                    <textarea
+                      rows={4}
+                      value={data.cover?.share_text_template ?? `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`}
+                      onChange={(e) => {
+                        updateNestedVal("cover", "share_text_template", e.target.value);
+                      }}
+                      placeholder="Tulis format pesan..."
+                      className="w-full px-3 py-1.5 bg-[#f5f5dc]/10 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs text-[#064e3b] outline-none font-sans"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
