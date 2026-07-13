@@ -110,10 +110,10 @@ export async function createActiveInvitationFromTemplate(formData: {
   email: string;
   name: string;
   nomor_hp: string;
+  templateJson: any;
 }) {
-  const { clearTemplateUserData } = await import("@/lib/invitation-helper");
   await verifyAdmin();
-  const { templateId, slug, email, name, nomor_hp } = formData;
+  const { templateId, slug, email, name, nomor_hp, templateJson } = formData;
   const formattedSlug = slug.toLowerCase().trim().replace(/\s+/g, "-");
 
   try {
@@ -160,14 +160,13 @@ export async function createActiveInvitationFromTemplate(formData: {
       });
     }
 
-    // 4. Create the new invitation as ACTIVE directly
-    const cleanJson = clearTemplateUserData(template.template_json);
+    // 4. Create the new invitation as ACTIVE directly with exact template JSON data from editor
     const invitation = await db.invitation.create({
       data: {
         user_id: user.id,
         template_id: templateId,
         slug: formattedSlug,
-        data_undangan_json: cleanJson as any,
+        data_undangan_json: templateJson as any,
         status: "ACTIVE",
       }
     });

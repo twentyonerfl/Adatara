@@ -97,6 +97,7 @@ export default function TemplateBuilderEditor({
         name: activeName,
         email: activeEmail,
         nomor_hp: activePhone,
+        templateJson: buildJson(),
       });
 
       if (res?.error) {
