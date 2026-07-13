@@ -169,21 +169,21 @@ export default function TemplateBuilderEditor({
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;600;700&family=Great+Vibes&family=Inter:wght@300;400;600;700;900&family=Lato:wght@300;400;700&family=Outfit:wght@300;400;600;700;900&family=Pinyon+Script&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@300;400;600;700;900&family=Roboto:wght@300;400;500;700&family=Sacramento&display=swap" rel="stylesheet" />
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-20 bg-[#f5f5dc]/95 backdrop-blur-sm border-b border-[#064e3b]/10 px-6 py-3 flex items-center gap-4 flex-wrap">
-        <button onClick={() => router.push("/dashboard/templates")}
-          className="p-2 hover:bg-[#064e3b]/10 rounded-xl text-[#064e3b] transition-all">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
+      <header className="sticky top-0 z-20 bg-[#f5f5dc]/95 backdrop-blur-sm border-b border-[#064e3b]/10 px-6 py-3 flex items-center justify-between gap-4 flex-wrap">
+        {/* Left Section: Navigation & Info Inputs */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <button onClick={() => router.push("/dashboard/templates")}
+            className="p-2 hover:bg-[#064e3b]/10 rounded-xl text-[#064e3b] transition-all shrink-0">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
 
-        {/* Name & Kategori & Paket */}
-        <div className="flex items-center gap-3 flex-1 min-w-0">
           <input value={namaTemplate} onChange={e => setNamaTemplate(e.target.value)} placeholder="Nama Template..."
-            className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-44 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors" />
+            className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-44 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors shrink-0" />
 
           <select
             value={kategori}
             onChange={e => { setKategori(e.target.value); setCoverData((p: any) => ({ ...p, kategori: e.target.value })); }}
-            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] max-w-[150px]"
+            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[150px] shrink-0"
           >
             <option value="">-- Kategori --</option>
             {(categories.length > 0 ? categories.map(c => c.nama) : KATEGORI_OPTIONS).map(k => (
@@ -194,7 +194,7 @@ export default function TemplateBuilderEditor({
           <select
             value={paket}
             onChange={e => setPaket(e.target.value as PaketTier)}
-            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[120px]"
+            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[120px] shrink-0"
           >
             <option value="BASIC">BASIC</option>
             <option value="PREMIUM">PREMIUM</option>
@@ -203,94 +203,96 @@ export default function TemplateBuilderEditor({
           </select>
         </div>
 
+        {/* Right Section: Language, Status & Actions */}
+        <div className="flex items-center gap-3.5 flex-wrap">
+          {/* Language Pill Toggle */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[9px] font-black uppercase tracking-widest text-[#064e3b]/40">Lang</span>
+            <div className="flex bg-[#064e3b]/8 border border-[#064e3b]/15 rounded-xl p-0.5 gap-0.5">
+              <button
+                type="button"
+                onClick={() => { setBahasa("id"); setCoverData((p: any) => ({ ...p, bahasa: "id" })); }}
+                className={`px-3 py-1 rounded-lg text-[10px] font-black transition-all ${
+                  bahasa === "id"
+                    ? "bg-[#064e3b] text-white shadow-sm"
+                    : "text-[#064e3b]/50 hover:text-[#064e3b]"
+                }`}
+              >
+                ID
+              </button>
+              <button
+                type="button"
+                onClick={() => { setBahasa("en"); setCoverData((p: any) => ({ ...p, bahasa: "en" })); }}
+                className={`px-3 py-1 rounded-lg text-[10px] font-black transition-all ${
+                  bahasa === "en"
+                    ? "bg-[#d4af37] text-white shadow-sm"
+                    : "text-[#064e3b]/50 hover:text-[#064e3b]"
+                }`}
+              >
+                EN
+              </button>
+            </div>
+          </div>
 
-        {/* Language Pill Toggle */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span className="text-[9px] font-black uppercase tracking-widest text-[#064e3b]/40">Lang</span>
-          <div className="flex bg-[#064e3b]/8 border border-[#064e3b]/15 rounded-xl p-0.5 gap-0.5">
-            <button
-              type="button"
-              onClick={() => { setBahasa("id"); setCoverData((p: any) => ({ ...p, bahasa: "id" })); }}
-              className={`px-3 py-1 rounded-lg text-[10px] font-black transition-all ${
-                bahasa === "id"
-                  ? "bg-[#064e3b] text-white shadow-sm"
-                  : "text-[#064e3b]/50 hover:text-[#064e3b]"
-              }`}
-            >
-              ID
+          {/* Status badge */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className={`text-[9px] font-black px-3 py-1 rounded-full border uppercase tracking-wider ${
+              status === "PUBLISHED" ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-amber-50 border-amber-200 text-amber-800"
+            }`}>{status}</span>
+            
+            {status === "PUBLISHED" && templateId && (
+              <a 
+                href={`/demo/${templateId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 bg-white border border-[#064e3b]/20 text-[#064e3b] hover:text-white hover:bg-[#064e3b] rounded-xl transition-all shadow-sm flex items-center justify-center shrink-0"
+                title="Lihat Hasil Undangan"
+              >
+                <Eye className="w-3.5 h-3.5" />
+              </a>
+            )}
+          </div>
+
+          {/* Alerts */}
+          {saveStatus === "error" && (
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 px-3 py-1.5 rounded-xl">
+              <AlertCircle className="w-4 h-4" />{errorMsg}
+            </div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-2 shrink-0">
+            {templateId && (
+              <button 
+                onClick={() => {
+                  setActiveName("");
+                  setActiveEmail("");
+                  setActivePhone("");
+                  setActiveSlug("");
+                  setActiveSuccess(false);
+                  setActiveError(null);
+                  setIsActivateModalOpen(true);
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-500 flex items-center gap-2 shadow-lg shadow-emerald-950/10 transition-all cursor-pointer shrink-0"
+                title="Aktifkan Undangan Dari Template Ini"
+              >
+                <CheckCircle className="w-4 h-4" />
+                Aktifkan Undangan
+              </button>
+            )}
+            <button onClick={handleSave} disabled={isPending}
+              className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${
+                saveStatus === "saved" ? "bg-emerald-600 text-white border-emerald-700" : "bg-white border-[#064e3b]/20 text-[#064e3b] hover:bg-[#064e3b]/5"
+              } disabled:opacity-50 shrink-0`}
+              title={saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Draft"}>
+              {saveStatus === "saving" ? <Loader2 className="w-4 h-4 animate-spin" /> : saveStatus === "saved" ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
             </button>
-            <button
-              type="button"
-              onClick={() => { setBahasa("en"); setCoverData((p: any) => ({ ...p, bahasa: "en" })); }}
-              className={`px-3 py-1 rounded-lg text-[10px] font-black transition-all ${
-                bahasa === "en"
-                  ? "bg-[#d4af37] text-white shadow-sm"
-                  : "text-[#064e3b]/50 hover:text-[#064e3b]"
-              }`}
-            >
-              EN
+            <button onClick={handlePublish} disabled={isPending}
+              className="px-4 py-2 rounded-xl text-xs font-black bg-[#064e3b] hover:bg-[#064e3b]/90 text-white border border-[#d4af37] flex items-center gap-2 shadow-lg shadow-[#064e3b]/10 disabled:opacity-50 shrink-0">
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4 text-[#d4af37]" />}
+              Publish
             </button>
           </div>
-        </div>
-
-        {/* Status badge */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span className={`text-[9px] font-black px-3 py-1 rounded-full border uppercase tracking-wider ${
-            status === "PUBLISHED" ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-amber-50 border-amber-200 text-amber-800"
-          }`}>{status}</span>
-          
-          {status === "PUBLISHED" && templateId && (
-            <a 
-              href={`/demo/${templateId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 bg-white border border-[#064e3b]/20 text-[#064e3b] hover:text-white hover:bg-[#064e3b] rounded-xl transition-all shadow-sm flex items-center justify-center"
-              title="Lihat Hasil Undangan"
-            >
-              <Eye className="w-3.5 h-3.5" />
-            </a>
-          )}
-        </div>
-
-        {/* Alerts */}
-        {saveStatus === "error" && (
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 px-3 py-1.5 rounded-xl">
-            <AlertCircle className="w-4 h-4" />{errorMsg}
-          </div>
-        )}
-
-        {/* Actions */}
-        <div className="flex gap-2">
-          {templateId && (
-            <button 
-              onClick={() => {
-                setActiveName("");
-                setActiveEmail("");
-                setActivePhone("");
-                setActiveSlug("");
-                setActiveSuccess(false);
-                setActiveError(null);
-                setIsActivateModalOpen(true);
-              }}
-              className="px-4 py-2 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-500 flex items-center gap-2 shadow-lg shadow-emerald-950/10 transition-all cursor-pointer shrink-0"
-              title="Aktifkan Undangan Dari Template Ini"
-            >
-              <CheckCircle className="w-4 h-4" />
-              Aktifkan Undangan
-            </button>
-          )}
-          <button onClick={handleSave} disabled={isPending}
-            className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${
-              saveStatus === "saved" ? "bg-emerald-600 text-white border-emerald-700" : "bg-white border-[#064e3b]/20 text-[#064e3b] hover:bg-[#064e3b]/5"
-            } disabled:opacity-50`}
-            title={saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Draft"}>
-            {saveStatus === "saving" ? <Loader2 className="w-4 h-4 animate-spin" /> : saveStatus === "saved" ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-          </button>
-          <button onClick={handlePublish} disabled={isPending}
-            className="px-4 py-2 rounded-xl text-xs font-black bg-[#064e3b] hover:bg-[#064e3b]/90 text-white border border-[#d4af37] flex items-center gap-2 shadow-lg shadow-[#064e3b]/10 disabled:opacity-50">
-            {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4 text-[#d4af37]" />}
-            Publish
-          </button>
         </div>
       </header>
 
