@@ -367,9 +367,11 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                     l === "grid-3" ? "Grid 3 Kolom" :
                       l === "masonry" ? "Masonry (Estetik)" :
                         l === "carousel" ? "Carousel (Geser)" :
-                          l === "collage" ? "Collage Editorial" :
-                            l === "polaroid" ? "Polaroid Stack" :
-                              l === "aesthetic" ? "Aesthetic Scrapbook" : l;
+                          l === "scroll" ? "Scroll (Gulir)" :
+                            l === "collage" ? "Collage Editorial" :
+                              l === "polaroid" ? "Polaroid Stack" :
+                                l === "aesthetic" ? "Aesthetic Scrapbook" :
+                                  l === "custom" ? "Gaya Custom" : l;
                   const isActive = data.galeri_layout === l || (l === "grid-2" && data.galeri_layout === "grid") || (!data.galeri_layout && l === "grid-2");
                   return (
                     <button key={l} type="button" onClick={() => upd("galeri_layout", l)}
@@ -411,6 +413,57 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                       </button>
                     );
                   })}
+                </div>
+              </div>
+            )}
+
+            {/* Scroll height setting — only visible for scroll layout */}
+            {data.galeri_layout === "scroll" && (
+              <div className="mt-3 pt-3 border-t border-[#064e3b]/8">
+                <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1.5">Tinggi Galeri Scroll</label>
+                <div className="flex gap-1.5 flex-wrap">
+                  {[
+                    { val: "h-[180px]", label: "Kecil (180px)" },
+                    { val: "h-[260px]", label: "Sedang (260px)" },
+                    { val: "h-[360px]", label: "Besar (360px)" },
+                    { val: "h-[480px]", label: "Sangat Besar (480px)" },
+                  ].map(({ val, label }) => {
+                    const isActive = (data.galeri_scroll_height || "h-[260px]") === val;
+                    return (
+                      <button key={val} type="button" onClick={() => upd("galeri_scroll_height", val)}
+                        className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-all duration-200 ${
+                          isActive
+                            ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm"
+                            : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="mt-2">
+                  <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1.5">Kolom Foto</label>
+                  <div className="flex gap-1.5">
+                    {[
+                      { val: "1", label: "1 Kolom" },
+                      { val: "2", label: "2 Kolom" },
+                      { val: "3", label: "3 Kolom" },
+                    ].map(({ val, label }) => {
+                      const isActive = (data.galeri_scroll_cols || "2") === val;
+                      return (
+                        <button key={val} type="button" onClick={() => upd("galeri_scroll_cols", val)}
+                          className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-all duration-200 ${
+                            isActive
+                              ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm"
+                              : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
@@ -671,6 +724,25 @@ export function CeritaPreview({ data }: { data: any }) {
                         <img src={g} alt="" className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" />
                       </div>
                     ))}
+                  </div>
+                );
+              }
+              if (layout === "scroll") {
+                const scrollH = data.galeri_scroll_height || "h-[260px]";
+                const scrollCols = data.galeri_scroll_cols || "2";
+                const colsClass = scrollCols === "1" ? "grid-cols-1" : scrollCols === "3" ? "grid-cols-3" : "grid-cols-2";
+                return (
+                  <div className="relative">
+                    <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-2 pr-1 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent`}
+                      style={{ scrollbarWidth: "thin" }}>
+                      {galeris.map((g, i) => (
+                        <div key={i} className="aspect-square rounded-xl overflow-hidden border border-white/20 shadow-sm shrink-0">
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                    {/* Fade gradient hint at bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-b-xl" />
                   </div>
                 );
               }

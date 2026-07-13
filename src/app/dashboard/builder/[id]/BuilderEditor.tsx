@@ -1398,6 +1398,7 @@ export function BuilderEditor({
                           <option value="grid-3">Grid 3 Kolom</option>
                           <option value="masonry">Masonry (Estetik)</option>
                           <option value="carousel">Carousel (Geser)</option>
+                          <option value="scroll">Scroll (Gulir)</option>
                           <option value="collage">Collage Editorial</option>
                           <option value="polaroid">Polaroid Stack</option>
                           <option value="aesthetic">Aesthetic Scrapbook</option>
@@ -1431,6 +1432,43 @@ export function BuilderEditor({
                                 >
                                   {label}
                                 </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Scroll settings - only for scroll layout */}
+                      {data.cerita?.galeri_layout === "scroll" && (
+                        <div className="space-y-2">
+                          <label className="block text-[10px] font-extrabold uppercase opacity-75">Tinggi Galeri Scroll</label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {[
+                              { val: "h-[180px]", label: "Kecil" },
+                              { val: "h-[260px]", label: "Sedang" },
+                              { val: "h-[360px]", label: "Besar" },
+                              { val: "h-[480px]", label: "XL" },
+                            ].map(({ val, label }) => {
+                              const isActive = (data.cerita?.galeri_scroll_height || "h-[260px]") === val;
+                              return (
+                                <button key={val} type="button"
+                                  onClick={() => updateData("cerita", "galeri_scroll_height", val)}
+                                  className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-all ${
+                                    isActive ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-[#f5f5dc] text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                                  }`}>{label}</button>
+                              );
+                            })}
+                          </div>
+                          <label className="block text-[10px] font-extrabold uppercase opacity-75 pt-1">Kolom Foto</label>
+                          <div className="flex gap-1.5">
+                            {["1", "2", "3"].map(val => {
+                              const isActive = (data.cerita?.galeri_scroll_cols || "2") === val;
+                              return (
+                                <button key={val} type="button"
+                                  onClick={() => updateData("cerita", "galeri_scroll_cols", val)}
+                                  className={`px-3 py-1 rounded-lg text-[9px] font-bold border transition-all ${
+                                    isActive ? "bg-[#064e3b] text-white border-[#d4af37]" : "bg-[#f5f5dc] text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                                  }`}>{val} Kolom</button>
                               );
                             })}
                           </div>
@@ -2418,6 +2456,24 @@ export function BuilderEditor({
                                     <img src={img} className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" alt="" />
                                   </div>
                                 ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "scroll") {
+                            const scrollH = data.cerita?.galeri_scroll_height || "h-[260px]";
+                            const scrollCols = data.cerita?.galeri_scroll_cols || "2";
+                            const colsClass = scrollCols === "1" ? "grid-cols-1" : scrollCols === "3" ? "grid-cols-3" : "grid-cols-2";
+                            return (
+                              <div className="relative">
+                                <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-2 pt-1 pr-0.5`}
+                                  style={{ scrollbarWidth: "thin" }}>
+                                  {data.cerita.galeris.map((img: string, idx: number) => (
+                                    <div key={idx} className="aspect-square rounded-xl overflow-hidden border border-white/20 shadow-sm">
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-b-xl" />
                               </div>
                             );
                           }
