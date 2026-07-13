@@ -1041,7 +1041,6 @@ export function PenutupPreview({
             <p className="font-black mt-2">{data.tertanda || "Nama & Nama"}</p>
           </AnimatedWrapper>
         </div>
-        <p className="text-[9px] uppercase tracking-widest mt-4" style={{ color: textColor, opacity: 0.3 }}>Made with ❤ by Adatara</p>
       </div>
       </div>
     </div>
