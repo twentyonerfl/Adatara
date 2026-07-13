@@ -16,6 +16,7 @@ import {
   Users
 } from "lucide-react";
 import { deleteInvitationAdmin, updateInvitationStatusAdmin } from "./actions";
+import { DEFAULT_SHARE_TEMPLATE, formatShareText } from "@/app/dashboard/templates/builder-constants";
 
 interface InvitationWithRelations {
   id: string;
@@ -46,9 +47,7 @@ export default function InvitationsListAdmin({
   const [selectedInvForGuests, setSelectedInvForGuests] = useState<any | null>(null);
   const [guestListInput, setGuestListInput] = useState("");
   const [linkType, setLinkType] = useState<"query" | "path">("path");
-  const [shareTextTemplate, setShareTextTemplate] = useState(
-    "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\n\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_pasangan}*\nTanggal : *{tanggal}*\nPukul : *{jam}*\nLokasi : *{lokasi}*\n\nKlik tautan berikut :\n{link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{nama_pasangan}*"
-  );
+  const [shareTextTemplate, setShareTextTemplate] = useState(DEFAULT_SHARE_TEMPLATE);
   const [generatedGuests, setGeneratedGuests] = useState<Array<{ name: string; url: string; waUrl: string; waText: string }>>([]);
 
   const handleOpenGuestGenerator = (inv: any) => {
@@ -58,9 +57,7 @@ export default function InvitationsListAdmin({
     if (cover.share_text_template) {
       setShareTextTemplate(cover.share_text_template);
     } else {
-      setShareTextTemplate(
-        "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\n\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_pasangan}*\nTanggal : *{tanggal}*\nPukul : *{jam}*\nLokasi : *{lokasi}*\n\nKlik tautan berikut :\n{link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{nama_pasangan}*"
-      );
+      setShareTextTemplate(DEFAULT_SHARE_TEMPLATE);
     }
     setGeneratedGuests([]);
     setGuestListInput("");
@@ -84,28 +81,8 @@ export default function InvitationsListAdmin({
         url = `${primaryUrl}/${encodeURIComponent(name.replace(/ /g, "+"))}`;
       }
       
-      const dataJson = selectedInvForGuests.data_undangan_json as any;
-      const cover = dataJson?.cover || {};
-      const acara = dataJson?.acara || {};
+      const waText = formatShareText(shareTextTemplate, name, url, selectedInvForGuests);
       
-      const namaPasangan = cover.nama_acara || "Nama Pasangan";
-      const kategori = selectedInvForGuests.template?.nama_template || selectedInvForGuests.template?.kategori || "Acara";
-      const firstEvent = acara.acaras?.[0] || {};
-      const tanggal = firstEvent.tanggal || "Tanggal Acara";
-      const jam = firstEvent.jam_mulai && firstEvent.jam_selesai 
-        ? `${firstEvent.jam_mulai} - ${firstEvent.jam_selesai}` 
-        : firstEvent.jam_mulai || "Waktu Acara";
-      const lokasi = firstEvent.alamat || "Lokasi Acara";
-
-      const waText = shareTextTemplate
-        .replace(/{nama}/g, name)
-        .replace(/{link}/g, url)
-        .replace(/{nama_pasangan}/g, namaPasangan)
-        .replace(/{kategori}/g, kategori)
-        .replace(/{tanggal}/g, tanggal)
-        .replace(/{jam}/g, jam)
-        .replace(/{lokasi}/g, lokasi);
-        
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`;
       
       return {

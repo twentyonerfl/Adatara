@@ -35,6 +35,7 @@ import {
   ExternalLink,
   Upload
 } from "lucide-react";
+import { DEFAULT_SHARE_TEMPLATE, formatShareText } from "@/app/dashboard/templates/builder-constants";
 
 type TemplateType = {
   id: string;
@@ -412,27 +413,13 @@ export function BuilderEditor({
   const getWhatsAppShareLink = () => {
     const defaultLabel = data.cover?.default_guest_label || "Tamu Undangan";
     const namaTamu = guestNameInput.trim() || defaultLabel;
-    const defaultTemplate = "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\n\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_pasangan}*\nTanggal : *{tanggal}*\nPukul : *{jam}*\nLokasi : *{lokasi}*\n\nKlik tautan berikut :\n{link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{nama_pasangan}*";
-    const template = data.cover?.share_text_template || defaultTemplate;
-
-    const namaPasangan = data.cover?.nama_acara || "Nama Pasangan";
-    const kategori = invitation.template?.nama_template || invitation.template?.kategori || "Acara";
-    const firstEvent = data.acara?.acaras?.[0] || {};
-    const tanggal = firstEvent.tanggal || "Tanggal Acara";
-    const jam = firstEvent.jam_mulai && firstEvent.jam_selesai 
-      ? `${firstEvent.jam_mulai} - ${firstEvent.jam_selesai}` 
-      : firstEvent.jam_mulai || "Waktu Acara";
-    const lokasi = firstEvent.alamat || "Lokasi Acara";
-
-    const textMessage = template
-      .replace(/{nama}/g, namaTamu)
-      .replace(/{link}/g, customGuestUrl)
-      .replace(/{nama_pasangan}/g, namaPasangan)
-      .replace(/{kategori}/g, kategori)
-      .replace(/{tanggal}/g, tanggal)
-      .replace(/{jam}/g, jam)
-      .replace(/{lokasi}/g, lokasi);
-
+    const template = data.cover?.share_text_template || DEFAULT_SHARE_TEMPLATE;
+    const textMessage = formatShareText(
+      template,
+      namaTamu,
+      customGuestUrl,
+      { ...invitation, data_undangan_json: data }
+    );
     return `https://api.whatsapp.com/send?text=${encodeURIComponent(textMessage)}`;
   };
 

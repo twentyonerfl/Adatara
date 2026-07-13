@@ -8,7 +8,7 @@ export const defaultTemplateJson = {
     music_url: "",
     transition_style: "none",
     default_guest_label: "Tamu Undangan",
-    share_text_template: "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\n\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_pasangan}*\nTanggal : *{tanggal}*\nPukul : *{jam}*\nLokasi : *{lokasi}*\n\nKlik tautan berikut :\n{link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{nama_pasangan}*",
+    share_text_template: "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_acara}*\nTanggal : {tanggal}\nPukul : {jam} WIB\nLokasi : {alamat}\n\nKlik tautan berikut : {link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{tertanda}*",
   },
   pembuka: {
     setting_kategori: { size: "12px", color: "#ffffff", family: "Inter", position: "center" },
@@ -113,3 +113,56 @@ export const KATEGORI_EN_MAP: Record<string, string> = {
 export const ANIMATION_OPTIONS = ["none", "fade-in", "slide-up", "zoom-in", "bounce"];
 export const BINGKAI_OPTIONS = ["none", "bulat", "oval", "kubah", "hexagon", "daun", "perisai", "kotak-rounded", "kotak", "overlay-1", "overlay-2", "overlay-3", "custom"];
 export const GALERI_LAYOUT_OPTIONS = ["grid-2", "grid-3", "masonry", "carousel", "collage", "polaroid"];
+
+export const DEFAULT_SHARE_TEMPLATE = `Bismillahirrahmanirrahim.
+Assalamu’alaikum wr.wb.
+Yth. Bapak/Ibu/Saudara/i
+*{nama}*
+Di Tempat
+
+Dengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :
+
+*{kategori} {nama_acara}*
+Tanggal : {tanggal}
+Pukul : {jam} WIB
+Lokasi : {alamat}
+
+Klik tautan berikut : {link}
+
+Merupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. 
+
+Atas kehadiran dan doa restunya, kami ucapkan terima kasih.
+
+Hormat kami,
+*{tertanda}*`;
+
+export function formatShareText(
+  template: string,
+  guestName: string,
+  url: string,
+  invitation: any
+) {
+  const data = invitation.data_undangan_json as any;
+  const kategori = invitation.template?.kategori || "";
+  const nama_acara = data?.cover?.nama_acara || "";
+  
+  const firstEvent = data?.acara?.acaras?.[0] || {};
+  const tanggal = firstEvent.tanggal || "";
+  
+  const jam_mulai = firstEvent.jam_mulai || "";
+  const jam_selesai = firstEvent.jam_selesai || "";
+  const jam = jam_mulai && jam_selesai ? `${jam_mulai} - ${jam_selesai}` : jam_mulai || "";
+  
+  const alamat = firstEvent.alamat || "";
+  const tertanda = data?.penutup?.tertanda || nama_acara;
+
+  return template
+    .replace(/{nama}/g, guestName)
+    .replace(/{link}/g, url)
+    .replace(/{kategori}/g, kategori)
+    .replace(/{nama_acara}/g, nama_acara)
+    .replace(/{tanggal}/g, tanggal)
+    .replace(/{jam}/g, jam)
+    .replace(/{alamat}/g, alamat)
+    .replace(/{tertanda}/g, tertanda);
+}
