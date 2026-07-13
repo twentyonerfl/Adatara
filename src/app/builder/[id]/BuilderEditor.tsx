@@ -103,6 +103,7 @@ export function BuilderEditor({
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [activationLoading, setActivationLoading] = useState(false);
 
   // Guest Link Generator State
   const [guestNameInput, setGuestNameInput] = useState("");
@@ -341,6 +342,29 @@ export function BuilderEditor({
       console.error(err);
       setCheckoutError("Kesalahan sistem dalam memproses pembayaran.");
       setCheckoutLoading(false);
+    }
+  };
+
+  const handleDirectActivate = async () => {
+    setActivationLoading(true);
+    setSaveError(null);
+    try {
+      const res = await saveInvitationPublic(invitation.id, data, "ACTIVE");
+      if (res?.error) {
+        setSaveError(res.error);
+      } else {
+        setStatus("ACTIVE");
+        setActiveStep(0);
+        setSaveSuccess(true);
+        setTimeout(() => {
+          setSaveSuccess(false);
+          router.refresh();
+        }, 1500);
+      }
+    } catch (err) {
+      setSaveError("Gagal mengaktifkan undangan.");
+    } finally {
+      setActivationLoading(false);
     }
   };
 
@@ -1348,23 +1372,43 @@ export function BuilderEditor({
                         </span>
                       </div>
 
-                      <button
-                        onClick={handleCheckout}
-                        disabled={checkoutLoading}
-                        className="px-6 py-3 bg-[#d4af37] hover:bg-[#c49f27] text-[#064e3b] hover:text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-black/10 disabled:opacity-50"
-                      >
-                        {checkoutLoading ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Menghubungi Payment Gateway...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="w-4 h-4 animate-pulse" />
-                            Bayar & Aktifkan Sekarang
-                          </>
-                        )}
-                      </button>
+                      <div className="flex flex-wrap gap-3">
+                        <button
+                          onClick={handleCheckout}
+                          disabled={checkoutLoading || activationLoading}
+                          className="px-6 py-3 bg-[#d4af37] hover:bg-[#c49f27] text-[#064e3b] hover:text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-black/10 disabled:opacity-50"
+                        >
+                          {checkoutLoading ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Menghubungi Payment Gateway...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 animate-pulse" />
+                              Bayar & Aktifkan Sekarang
+                            </>
+                          )}
+                        </button>
+
+                        <button
+                          onClick={handleDirectActivate}
+                          disabled={checkoutLoading || activationLoading}
+                          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-emerald-900/10 disabled:opacity-50"
+                        >
+                          {activationLoading ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Mengaktifkan...
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle className="w-4 h-4" />
+                              Aktifkan Undangan
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
 
                     {checkoutError && (
