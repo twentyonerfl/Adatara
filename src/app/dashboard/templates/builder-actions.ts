@@ -103,3 +103,81 @@ export async function deleteTemplate(id: string) {
     return { error: "Gagal menghapus template." };
   }
 }
+
+export async function createActiveInvitationFromTemplate(formData: {
+  templateId: string;
+  slug: string;
+  email: string;
+  name: string;
+  nomor_hp: string;
+}) {
+  const { clearTemplateUserData } = await import("@/lib/invitation-helper");
+  await verifyAdmin();
+  const { templateId, slug, email, name, nomor_hp } = formData;
+  const formattedSlug = slug.toLowerCase().trim().replace(/\s+/g, "-");
+
+  try {
+    // 1. Check if slug is already taken
+    const existingSlug = await db.invitation.findUnique({
+      where: { slug: formattedSlug }
+    });
+
+    if (existingSlug) {
+      return { error: "Link undangan (slug) ini sudah digunakan. Coba nama lain." };
+    }
+
+    // 2. Fetch the template to copy its default config
+    const template = await db.template.findUnique({
+      where: { id: templateId }
+    });
+
+    if (!template) {
+      return { error: "Template tidak ditemukan." };
+    }
+
+    // 3. Find or Create user
+    let user = await db.user.findUnique({
+      where: { email }
+    });
+
+    if (!user) {
+      user = await db.user.create({
+        data: {
+          email,
+          name,
+          nomor_hp,
+          role: "USER",
+          status: "ACTIVE"
+        }
+      });
+    } else {
+      user = await db.user.update({
+        where: { id: user.id },
+        data: {
+          name,
+          nomor_hp
+        }
+      });
+    }
+
+    // 4. Create the new invitation as ACTIVE directly
+    const cleanJson = clearTemplateUserData(template.template_json);
+    const invitation = await db.invitation.create({
+      data: {
+        user_id: user.id,
+        template_id: templateId,
+        slug: formattedSlug,
+        data_undangan_json: cleanJson as any,
+        status: "ACTIVE",
+      }
+    });
+
+    revalidatePath("/dashboard/invitations");
+    revalidatePath("/dashboard");
+
+    return { success: true, invitationId: invitation.id, slug: formattedSlug };
+  } catch (err) {
+    console.error("Gagal membuat undangan aktif dari admin: ", err);
+    return { error: "Terjadi kesalahan saat membuat undangan. Silakan coba lagi." };
+  }
+}
