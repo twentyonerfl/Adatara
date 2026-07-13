@@ -31,7 +31,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; guestName: string }>;
 }): Promise<Metadata> {
   const { slug, guestName } = await params;
-  const decodedGuestName = guestName ? decodeURIComponent(guestName).replace(/[-_]/g, ' ') : "";
+  const decodedGuestName = decodeURIComponent(guestName.replace(/\+/g, " "));
 
   const invitation = await db.invitation.findUnique({
     where: { slug },
@@ -46,11 +46,8 @@ export async function generateMetadata({
   const namaAcara: string = dataJson?.cover?.nama_acara || "Undangan Spesial";
   const ogImage = extractOgImage(dataJson, invitation.template.thumbnail);
 
-  const title = decodedGuestName
-    ? `Undangan Spesial Untuk ${decodedGuestName} – ${namaAcara}`
-    : `${namaAcara} – Undangan Digital`;
-
-  const description = `Anda mendapat undangan dari ${namaAcara}. Buka link ini untuk melihat undangan digital interaktif di Adatara.`;
+  const title = `Undangan untuk ${decodedGuestName} – ${namaAcara}`;
+  const description = `Kepada Yth. ${decodedGuestName}, Anda mendapat undangan dari ${namaAcara}. Silakan buka link ini untuk melihat undangan digital interaktif di Adatara.`;
 
   return {
     title,
@@ -81,13 +78,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function PublicInvitationWithGuestPage({
+export default async function PublicInvitationGuestPage({
   params,
 }: {
   params: Promise<{ slug: string; guestName: string }>;
 }) {
   const { slug, guestName } = await params;
-  const decodedGuestName = guestName ? decodeURIComponent(guestName).replace(/[-_]/g, ' ') : "";
+  const decodedGuestName = decodeURIComponent(guestName.replace(/\+/g, " "));
 
   const invitation = await db.invitation.findUnique({
     where: { slug },
@@ -143,7 +140,7 @@ export default async function PublicInvitationWithGuestPage({
     <PublicInvitationView 
       invitation={invitation} 
       wishes={wishes}
-      guestNameFromPath={decodedGuestName}
+      guestNameOverride={decodedGuestName}
     />
   );
 }

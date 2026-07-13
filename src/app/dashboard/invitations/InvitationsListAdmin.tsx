@@ -12,7 +12,8 @@ import {
   Loader2,
   Calendar,
   Layers,
-  Link2
+  Link2,
+  Users
 } from "lucide-react";
 import { deleteInvitationAdmin, updateInvitationStatusAdmin } from "./actions";
 
@@ -40,6 +41,65 @@ export default function InvitationsListAdmin({
   const [search, setSearch] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Batch Guest Generator states
+  const [selectedInvForGuests, setSelectedInvForGuests] = useState<any | null>(null);
+  const [guestListInput, setGuestListInput] = useState("");
+  const [linkType, setLinkType] = useState<"query" | "path">("path");
+  const [shareTextTemplate, setShareTextTemplate] = useState(
+    `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`
+  );
+  const [generatedGuests, setGeneratedGuests] = useState<Array<{ name: string; url: string; waUrl: string; waText: string }>>([]);
+
+  const handleOpenGuestGenerator = (inv: any) => {
+    setSelectedInvForGuests(inv);
+    const dataJson = inv.data_undangan_json as any;
+    const cover = dataJson?.cover || {};
+    if (cover.share_text_template) {
+      setShareTextTemplate(cover.share_text_template);
+    } else {
+      setShareTextTemplate(
+        `Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.`
+      );
+    }
+    setGeneratedGuests([]);
+    setGuestListInput("");
+  };
+
+  const handleGenerateLinks = () => {
+    if (!selectedInvForGuests) return;
+    const names = guestListInput
+      .split("\n")
+      .map(n => n.trim())
+      .filter(n => n.length > 0);
+      
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://adatara.my.id";
+    const primaryUrl = `${origin}/${selectedInvForGuests.slug}`;
+    
+    const results = names.map(name => {
+      let url = "";
+      if (linkType === "query") {
+        url = `${primaryUrl}?to=${encodeURIComponent(name)}`;
+      } else {
+        url = `${primaryUrl}/${encodeURIComponent(name.replace(/ /g, "+"))}`;
+      }
+      
+      const waText = shareTextTemplate
+        .replace(/{nama}/g, name)
+        .replace(/{link}/g, url);
+        
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`;
+      
+      return {
+        name,
+        url,
+        waText,
+        waUrl
+      };
+    });
+    
+    setGeneratedGuests(results);
+  };
 
   // Search Filter
   const filtered = invitations.filter(inv => {
@@ -207,6 +267,13 @@ export default function InvitationsListAdmin({
                         <Eye className="w-3.5 h-3.5" />
                       </Link>
                       <button
+                        onClick={() => handleOpenGuestGenerator(inv)}
+                        className="p-2 bg-[#d4af37]/10 hover:bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/35 rounded-xl transition-all cursor-pointer"
+                        title="Kelola & Share Tamu (Batch)"
+                      >
+                        <Users className="w-3.5 h-3.5" />
+                      </button>
+                      <button
                         onClick={() => handleDelete(inv.id, inv.slug)}
                         disabled={updatingId === inv.id}
                         className="p-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-xl transition-colors disabled:opacity-50 cursor-pointer"
@@ -230,6 +297,158 @@ export default function InvitationsListAdmin({
           </table>
         </div>
       </div>
+
+      {/* GUEST GENERATOR MODAL */}
+      {selectedInvForGuests && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white border border-[#064e3b]/10 rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh]">
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-[#064e3b]/10 flex items-center justify-between bg-[#064e3b]/5">
+              <div>
+                <h3 className="font-black text-sm uppercase text-[#064e3b] tracking-wider">
+                  Generator Link Tamu Undangan
+                </h3>
+                <p className="text-[10px] text-[#064e3b]/60 font-semibold mt-0.5">
+                  Undangan: /{selectedInvForGuests.slug}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedInvForGuests(null);
+                  setGeneratedGuests([]);
+                  setGuestListInput("");
+                }}
+                className="p-1.5 hover:bg-[#064e3b]/10 rounded-lg text-[#064e3b] font-bold text-xs cursor-pointer"
+              >
+                ✕ Tutup
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto flex-1 space-y-4 text-[#064e3b]">
+              {/* Input section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Guest Names List */}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block">
+                    Daftar Nama Tamu (Satu Nama Per Baris)
+                  </label>
+                  <textarea
+                    rows={6}
+                    value={guestListInput}
+                    onChange={(e) => setGuestListInput(e.target.value)}
+                    placeholder="Contoh:&#10;Budi Santoso&#10;Ani & Suami&#10;Keluarga Hermawan"
+                    className="w-full p-3 bg-[#f5f5dc]/10 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-2xl text-xs outline-none font-sans"
+                  />
+                </div>
+
+                {/* Link Format & Template Settings */}
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block mb-1.5">
+                      Format Tautan (Link)
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setLinkType("path")}
+                        className={`py-2 px-3 border rounded-xl text-[10px] font-black uppercase transition-all cursor-pointer ${
+                          linkType === "path"
+                            ? "bg-[#064e3b] text-white border-[#d4af37]"
+                            : "bg-white text-[#064e3b] border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                        }`}
+                      >
+                        Sub-Route (/Nama)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setLinkType("query")}
+                        className={`py-2 px-3 border rounded-xl text-[10px] font-black uppercase transition-all cursor-pointer ${
+                          linkType === "query"
+                            ? "bg-[#064e3b] text-white border-[#d4af37]"
+                            : "bg-white text-[#064e3b] border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                        }`}
+                      >
+                        Query (?to=Nama)
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block">
+                      Format Pesan WhatsApp
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={shareTextTemplate}
+                      onChange={(e) => setShareTextTemplate(e.target.value)}
+                      placeholder="Gunakan {nama} dan {link}..."
+                      className="w-full p-2.5 bg-[#f5f5dc]/10 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-[10px] outline-none font-sans"
+                    />
+                    <p className="text-[8px] text-[#064e3b]/40 mt-1 font-semibold">* Tag {"{nama}"} & {"{link}"} diganti otomatis.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button
+                type="button"
+                onClick={handleGenerateLinks}
+                className="w-full py-3 bg-[#064e3b] hover:bg-[#064e3b]/95 text-white border border-[#d4af37] rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
+              >
+                Generate Tautan Tamu ({guestListInput.split("\n").filter(n => n.trim().length > 0).length} Tamu)
+              </button>
+
+              {/* Output Results */}
+              {generatedGuests.length > 0 && (
+                <div className="space-y-2 border-t border-[#064e3b]/10 pt-4">
+                  <span className="text-[10px] font-black uppercase text-[#064e3b]/80 block">
+                    Hasil Tautan Tamu ({generatedGuests.length})
+                  </span>
+                  <div className="divide-y divide-[#064e3b]/5 max-h-[300px] overflow-y-auto pr-1">
+                    {generatedGuests.map((g, idx) => (
+                      <div key={idx} className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                        <div className="min-w-0 flex-1 space-y-0.5">
+                          <div className="font-extrabold text-[#064e3b] truncate">{g.name}</div>
+                          <div className="text-[10px] font-mono text-[#064e3b]/60 truncate select-all">{g.url}</div>
+                        </div>
+                        <div className="flex gap-1.5 shrink-0 self-end sm:self-center">
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(g.url);
+                              alert(`Tautan untuk ${g.name} telah disalin!`);
+                            }}
+                            className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-[9px] font-black uppercase tracking-wide transition-colors cursor-pointer"
+                          >
+                            Salin Link
+                          </button>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(g.waText);
+                              alert(`Pesan WA untuk ${g.name} telah disalin!`);
+                            }}
+                            className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg text-[9px] font-black uppercase tracking-wide transition-colors cursor-pointer"
+                          >
+                            Salin WA
+                          </button>
+                          <a
+                            href={g.waUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2.5 py-1.5 bg-[#25d366] hover:bg-[#20ba5a] text-white rounded-lg text-[9px] font-black uppercase tracking-wide flex items-center gap-1 transition-colors cursor-pointer"
+                          >
+                            Kirim WA
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

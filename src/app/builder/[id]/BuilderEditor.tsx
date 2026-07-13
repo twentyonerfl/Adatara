@@ -107,7 +107,6 @@ export function BuilderEditor({
 
   // Guest Link Generator State
   const [guestNameInput, setGuestNameInput] = useState("");
-  const [linkFormat, setLinkFormat] = useState<"query" | "path">("query");
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Map PaketTier to package names
@@ -401,9 +400,7 @@ export function BuilderEditor({
   };
   const primaryInvitationUrl = `${getBaseUrl()}/${invitationSlug}`;
   const customGuestUrl = guestNameInput
-    ? (linkFormat === "query"
-        ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`
-        : `${primaryInvitationUrl}/${encodeURIComponent(guestNameInput.trim().replace(/\s+/g, '-'))}`)
+    ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`
     : primaryInvitationUrl;
 
   const copyToClipboard = (text: string) => {
@@ -573,32 +570,6 @@ export function BuilderEditor({
                     placeholder="Masukkan Nama Tamu (misal: Budi & Istri)"
                     className="w-full pl-9 pr-4 py-2 bg-[#f5f5dc]/20 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs text-[#064e3b] outline-none"
                   />
-                </div>
-
-                {/* Format Selector Tab */}
-                <div className="flex bg-[#f5f5dc]/40 p-1 rounded-xl border border-[#064e3b]/5">
-                  <button
-                    type="button"
-                    onClick={() => setLinkFormat("query")}
-                    className={`flex-1 py-1 rounded-lg text-[9px] font-black uppercase transition-all cursor-pointer ${
-                      linkFormat === "query"
-                        ? "bg-[#064e3b] text-white shadow-sm"
-                        : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                    }`}
-                  >
-                    Format Tautan (?to=...)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setLinkFormat("path")}
-                    className={`flex-1 py-1 rounded-lg text-[9px] font-black uppercase transition-all cursor-pointer ${
-                      linkFormat === "path"
-                        ? "bg-[#064e3b] text-white shadow-sm"
-                        : "text-[#064e3b]/60 hover:text-[#064e3b]"
-                    }`}
-                  >
-                    Format Bersih (/Nama-Tamu)
-                  </button>
                 </div>
 
                 <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-[10px] truncate">
