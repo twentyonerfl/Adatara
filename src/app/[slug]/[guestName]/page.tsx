@@ -1,32 +1,27 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-
-export const dynamic = "force-dynamic";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { PublicInvitationView } from "../PublicInvitationView";
 
+export const dynamic = "force-dynamic";
+
 const BASE_URL = "https://adatara.my.id";
 
-/** Extract the best OG image from the invitation JSON data */
 function extractOgImage(dataJson: any, templateThumbnail?: string | null): string {
   try {
     const cover = dataJson?.cover;
-    // 1st choice: cover background image uploaded by user
     if (cover?.background?.type === "image" && cover?.background?.value) {
       return cover.background.value;
     }
-    // 2nd choice: framed photo / couple photo on cover
     if (cover?.foto && typeof cover.foto === "string" && cover.foto.startsWith("http")) {
       return cover.foto;
     }
-    // 3rd choice: template thumbnail
     if (templateThumbnail && templateThumbnail.startsWith("http")) {
       return templateThumbnail;
     }
   } catch {}
-  // Fallback: Adatara logo
   return `${BASE_URL}/logo.png`;
 }
 
@@ -36,7 +31,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; guestName: string }>;
 }): Promise<Metadata> {
   const { slug, guestName } = await params;
-  const decodedGuestName = decodeURIComponent(guestName);
+  const decodedGuestName = guestName ? decodeURIComponent(guestName).replace(/[-_]/g, ' ') : "";
 
   const invitation = await db.invitation.findUnique({
     where: { slug },
@@ -51,8 +46,11 @@ export async function generateMetadata({
   const namaAcara: string = dataJson?.cover?.nama_acara || "Undangan Spesial";
   const ogImage = extractOgImage(dataJson, invitation.template.thumbnail);
 
-  const title = `Undangan Spesial untuk ${decodedGuestName} – ${namaAcara}`;
-  const description = `Kepada Yth. Bpk/Ibu/Saudara/i ${decodedGuestName}, Anda diundang untuk menghadiri acara ${namaAcara}.`;
+  const title = decodedGuestName
+    ? `Undangan Spesial Untuk ${decodedGuestName} – ${namaAcara}`
+    : `${namaAcara} – Undangan Digital`;
+
+  const description = `Anda mendapat undangan dari ${namaAcara}. Buka link ini untuk melihat undangan digital interaktif di Adatara.`;
 
   return {
     title,
@@ -83,13 +81,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function PublicInvitationPathGuestPage({
+export default async function PublicInvitationWithGuestPage({
   params,
 }: {
   params: Promise<{ slug: string; guestName: string }>;
 }) {
   const { slug, guestName } = await params;
-  const decodedGuestName = decodeURIComponent(guestName);
+  const decodedGuestName = guestName ? decodeURIComponent(guestName).replace(/[-_]/g, ' ') : "";
 
   const invitation = await db.invitation.findUnique({
     where: { slug },
@@ -106,7 +104,6 @@ export default async function PublicInvitationPathGuestPage({
 
   const isOwner = session?.user?.id === invitation.user_id;
 
-  // If draft and not the creator, block viewing
   if (invitation.status === "DRAFT" && !isOwner) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center text-white">
@@ -121,7 +118,6 @@ export default async function PublicInvitationPathGuestPage({
     );
   }
 
-  // Fetch guest wishes (RSVPs containing wishes)
   const wishesData = await db.rSVP.findMany({
     where: {
       invitation_id: invitation.id,
@@ -135,7 +131,6 @@ export default async function PublicInvitationPathGuestPage({
     orderBy: { created_at: "desc" },
   });
 
-  // Map to wishes array structure expected by frontend
   const wishes = wishesData.map((w) => ({
     id: w.id,
     nama_tamu: w.guest.nama,
