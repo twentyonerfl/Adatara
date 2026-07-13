@@ -262,153 +262,177 @@ export function CeritaPreview({ data }: { data: any }) {
   return (
     <div className="rounded-none overflow-hidden min-h-[512px] bg-[#f5f5dc]">
       {/* Cerita Section */}
-      <div className="p-6 space-y-4" style={bgCerita}>
-      <div style={getFontStyles(data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
-          <AnimatedWrapper val={data.setting_head_cerita}>
-            <div>Cerita Kita</div>
-            <div className={getDividerClass(data.setting_head_cerita?.position)} />
-          </AnimatedWrapper>
-        </div>
-        {(() => {
-          const cardStyle = data.cerita_card_style || "glass";
-          const timelineStyle = data.cerita_timeline_style || "left";
+      {ceritas.length > 0 && (
+        <div className="p-6 space-y-4 relative" style={bgCerita}>
+          {data.background_cerita?.type === "video" && data.background_cerita?.value && (
+            <video
+              key={data.background_cerita.value}
+              src={data.background_cerita.value}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover z-0"
+            />
+          )}
+          <div className="relative z-10">
+            <div style={getFontStyles(data.setting_head_cerita || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
+              <AnimatedWrapper val={data.setting_head_cerita}>
+                <div>Cerita Kita</div>
+                <div className={getDividerClass(data.setting_head_cerita?.position)} />
+              </AnimatedWrapper>
+            </div>
+            {(() => {
+              const cardStyle = data.cerita_card_style || "glass";
+              const timelineStyle = data.cerita_timeline_style || "left";
 
-          const getCardClass = () => {
-            if (cardStyle === "glass") {
-              return "bg-white/12 backdrop-blur-lg border border-white/20 rounded-[8px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35 hover:shadow-[0_12px_40px_rgba(6,78,59,0.05)]";
-            }
-            if (cardStyle === "outline") {
-              return "bg-transparent border border-[#d4af37]/30 rounded-[8px] p-4 relative space-y-2.5 transition-all duration-300 hover:border-[#d4af37]/60";
-            }
-            if (cardStyle === "solid") {
-              return "bg-white border border-slate-100 rounded-[8px] p-4 shadow-sm relative space-y-2.5 transition-all duration-300 hover:shadow-md";
-            }
-            // none
-            return "bg-transparent border-none p-0 relative space-y-2.5";
-          };
+              const getCardClass = () => {
+                if (cardStyle === "glass") {
+                  return "bg-white/12 backdrop-blur-lg border border-white/20 rounded-[8px] p-4 shadow-[0_8px_32px_0_rgba(6,78,59,0.03)] relative space-y-2.5 transition-all duration-300 hover:bg-white/18 hover:border-white/35 hover:shadow-[0_12px_40px_rgba(6,78,59,0.05)]";
+                }
+                if (cardStyle === "outline") {
+                  return "bg-transparent border border-[#d4af37]/30 rounded-[8px] p-4 relative space-y-2.5 transition-all duration-300 hover:border-[#d4af37]/60";
+                }
+                if (cardStyle === "solid") {
+                  return "bg-white border border-slate-100 rounded-[8px] p-4 shadow-sm relative space-y-2.5 transition-all duration-300 hover:shadow-md";
+                }
+                // none
+                return "bg-transparent border-none p-0 relative space-y-2.5";
+              };
 
-          const cardClass = getCardClass();
+              const cardClass = getCardClass();
 
-          if (timelineStyle === "alternate") {
-            return (
-              <div className="relative space-y-3.5 py-2">
-                {/* Center Vertical Line */}
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#d4af37]/35 -translate-x-1/2" />
+              if (timelineStyle === "alternate") {
+                return (
+                  <div className="relative space-y-3.5 py-2">
+                    {/* Center Vertical Line */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#d4af37]/35 -translate-x-1/2" />
 
-                {ceritas.map((c, i) => {
-                  const isEven = i % 2 === 0;
-                  const starTopClass = cardStyle === "none" ? "top-[6px]" : "top-[16px]";
-                  return (
-                    <div key={i} className={`relative flex items-start ${isEven ? "justify-start pl-[50%]" : "justify-end pr-[50%]"}`}>
-                      {/* Elegant 4-pointed Star Node */}
-                      <div className={`absolute left-1/2 -translate-x-1/2 ${starTopClass} w-5 h-5 flex items-center justify-center bg-transparent z-10`}>
-                        <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
-                          <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
-                        </svg>
-                      </div>
+                    {ceritas.map((c, i) => {
+                      const isEven = i % 2 === 0;
+                      const starTopClass = cardStyle === "none" ? "top-[6px]" : "top-[16px]";
+                      return (
+                        <div key={i} className={`relative flex items-start ${isEven ? "justify-start pl-[50%]" : "justify-end pr-[50%]"}`}>
+                          {/* Elegant 4-pointed Star Node */}
+                          <div className={`absolute left-1/2 -translate-x-1/2 ${starTopClass} w-5 h-5 flex items-center justify-center bg-transparent z-10`}>
+                            <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                            </svg>
+                          </div>
 
-                      {/* Card wrapper */}
-                      <div className={`w-[calc(100%-10px)] max-w-full ${isEven ? "pl-3.5" : "pr-3.5"}`}>
+                          {/* Card wrapper */}
+                          <div className={`w-[calc(100%-10px)] max-w-full ${isEven ? "pl-3.5" : "pr-3.5"}`}>
+                            <div className={cardClass}>
+                              {/* Card Header */}
+                              <div className="flex flex-col gap-1 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide break-words">
+                                  {c.judul || "Judul"}
+                                </div>
+                                <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80">
+                                  {c.waktu || "Waktu"}
+                                </div>
+                              </div>
+
+                              {/* Card Content */}
+                              <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light break-words">
+                                {c.isi || "Isi cerita..."}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+
+              if (timelineStyle === "right") {
+                return (
+                  <div className="relative pr-6 border-r border-[#d4af37]/35 space-y-2.5">
+                    {ceritas.map((c, i) => (
+                      <div key={i} className="relative">
+                        {/* Elegant 4-pointed Star Node */}
+                        <div className="absolute -right-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
+                          <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                          </svg>
+                        </div>
+
+                        {/* Card Container */}
                         <div className={cardClass}>
                           {/* Card Header */}
-                          <div className="flex flex-col gap-1 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
-                            <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide break-words">
+                          <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                            <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
                               {c.judul || "Judul"}
                             </div>
-                            <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80">
+                            <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
                               {c.waktu || "Waktu"}
                             </div>
                           </div>
 
                           {/* Card Content */}
-                          <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light break-words">
+                          <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
                             {c.isi || "Isi cerita..."}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-                {ceritas.length === 0 && <div className="text-xs text-[#064e3b]/40 text-center py-4">Belum ada cerita.</div>}
-              </div>
-            );
-          }
+                    ))}
+                  </div>
+                );
+              }
 
-          if (timelineStyle === "right") {
-            return (
-              <div className="relative pr-6 border-r border-[#d4af37]/35 space-y-2.5">
-                {ceritas.map((c, i) => (
-                  <div key={i} className="relative">
-                    {/* Elegant 4-pointed Star Node */}
-                    <div className="absolute -right-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
-                      <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
-                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
-                      </svg>
-                    </div>
+              // Left/standard style
+              return (
+                <div className="relative pl-6 border-l border-[#d4af37]/35 space-y-2.5">
+                  {ceritas.map((c, i) => (
+                    <div key={i} className="relative">
+                      {/* Elegant 4-pointed Star Node */}
+                      <div className="absolute -left-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
+                        <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
+                          <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                        </svg>
+                      </div>
 
-                    {/* Card Container */}
-                    <div className={cardClass}>
-                      {/* Card Header */}
-                      <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
-                        <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
-                          {c.judul || "Judul"}
+                      {/* Card Container */}
+                      <div className={cardClass}>
+                        {/* Card Header */}
+                        <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                          <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
+                            {c.judul || "Judul"}
+                          </div>
+                          <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
+                            {c.waktu || "Waktu"}
+                          </div>
                         </div>
-                        <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
-                          {c.waktu || "Waktu"}
+
+                        {/* Card Content */}
+                        <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
+                          {c.isi || "Isi cerita..."}
                         </div>
                       </div>
-
-                      {/* Card Content */}
-                      <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
-                        {c.isi || "Isi cerita..."}
-                      </div>
                     </div>
-                  </div>
-                ))}
-                {ceritas.length === 0 && <div className="text-xs text-[#064e3b]/40 text-center py-4">Belum ada cerita.</div>}
-              </div>
-            );
-          }
-
-          // Left/standard style
-          return (
-            <div className="relative pl-6 border-l border-[#d4af37]/35 space-y-2.5">
-              {ceritas.map((c, i) => (
-                <div key={i} className="relative">
-                  {/* Elegant 4-pointed Star Node */}
-                  <div className="absolute -left-[34px] top-[16px] w-5 h-5 flex items-center justify-center bg-transparent">
-                    <svg viewBox="0 0 24 24" className="w-[17px] h-[17px] text-[#d4af37] animate-star-twinkle" fill="currentColor">
-                      <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
-                    </svg>
-                  </div>
-
-                  {/* Card Container */}
-                  <div className={cardClass}>
-                    {/* Card Header */}
-                    <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
-                      <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
-                        {c.judul || "Judul"}
-                      </div>
-                      <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
-                        {c.waktu || "Waktu"}
-                      </div>
-                    </div>
-
-                    {/* Card Content */}
-                    <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
-                      {c.isi || "Isi cerita..."}
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-              {ceritas.length === 0 && <div className="text-xs text-[#064e3b]/40 text-center py-4">Belum ada cerita.</div>}
-            </div>
-          );
-        })()}
-      </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
 
       {/* Galeri Section */}
-      <div className="p-6 space-y-3" style={bgGaleri}>
+      <div className="p-6 space-y-3 relative" style={bgGaleri}>
+        {data.background_galeri?.type === "video" && data.background_galeri?.value && (
+          <video
+            key={data.background_galeri.value}
+            src={data.background_galeri.value}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+        )}
+        <div className="relative z-10">
         <div style={getFontStyles(data.setting_head_galeri || { size: "18px", color: "#ffffff", family: "Inter", position: "center" })} className="relative">
           <AnimatedWrapper val={data.setting_head_galeri}>
             <div>Galeri Foto</div>
@@ -497,6 +521,7 @@ export function CeritaPreview({ data }: { data: any }) {
         ) : (
           <div className="text-center text-xs text-[#064e3b]/40 py-6">Belum ada foto galeri.</div>
         )}
+        </div>
       </div>
     </div>
   );
@@ -694,7 +719,19 @@ export function PenutupPreview({
   const inputBorderColor = getTranslucentColor(textColor, "18"); // ~10% opacity
 
   return (
-    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6 penutup-preview-container" style={bgPenutup}>
+    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6 penutup-preview-container relative" style={bgPenutup}>
+      {data.background?.type === "video" && data.background?.value && (
+        <video
+          key={data.background.value}
+          src={data.background.value}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+      )}
+      <div className="relative z-10 w-full space-y-6">
       <style dangerouslySetInnerHTML={{__html: `
         .penutup-preview-container input::placeholder,
         .penutup-preview-container textarea::placeholder {
@@ -1003,6 +1040,7 @@ export function PenutupPreview({
           </AnimatedWrapper>
         </div>
         <p className="text-[9px] uppercase tracking-widest mt-4" style={{ color: textColor, opacity: 0.3 }}>Made with ❤ by Adatara</p>
+      </div>
       </div>
     </div>
   );

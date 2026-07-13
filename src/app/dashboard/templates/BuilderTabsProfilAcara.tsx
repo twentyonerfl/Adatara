@@ -78,7 +78,7 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
             <InputField label="Ucapan / Ayat / Quote" value={data.ucapan_profil || ""} onChange={v => upd("ucapan_profil", v)} textarea placeholder="Maha suci Allah..." />
           </SectionInput>
 
-          <SectionInput label="Daftar Profil Undangan" className="mb-4">
+          <SectionInput label="Daftar Profil Undangan">
             <div className="space-y-3">
               {profils.map((p, i) => (
                 <div key={i} className="p-3 bg-white border border-[#064e3b]/10 rounded-xl space-y-2 relative">
@@ -194,6 +194,17 @@ export function ProfilPreview({ data }: { data: any }) {
 
   return (
     <div className="w-full min-h-[512px] flex flex-col items-center justify-center relative rounded-none overflow-hidden p-6 gap-5" style={bg}>
+      {data.background?.type === "video" && data.background?.value && (
+        <video
+          key={data.background.value}
+          src={data.background.value}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+      )}
       {isUcapanCustom ? (
         <div
           className="opacity-80 whitespace-pre-wrap z-10"
@@ -753,7 +764,19 @@ export function AcaraPreview({ data }: { data: any }) {
   const bg = getBgStyle(data.background);
   const acaras: any[] = data.acaras || [];
   return (
-    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-3" style={bg}>
+    <div className="w-full min-h-[512px] rounded-none overflow-hidden p-6 space-y-3 relative" style={bg}>
+      {data.background?.type === "video" && data.background?.value && (
+        <video
+          key={data.background.value}
+          src={data.background.value}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+      )}
+      <div className="relative z-10 space-y-3">
       {data.countdown_aktif && (() => {
         const idx = data.countdown_acara_index ?? 0;
         const targetEvent = acaras[idx];
@@ -891,6 +914,7 @@ export function AcaraPreview({ data }: { data: any }) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
