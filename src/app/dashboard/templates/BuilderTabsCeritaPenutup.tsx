@@ -575,6 +575,18 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
                 onChange={v => upd("setting_pesan_penutup", v)}
                 showAnimation
               />
+              <FontSettingsWidget
+                label="Setting Font Salam Penutup"
+                value={data.setting_salam || { size: "12px", color: "#ffffff", family: "Inter", position: "center" }}
+                onChange={v => upd("setting_salam", v)}
+                showAnimation
+              />
+              <FontSettingsWidget
+                label="Setting Font Nama/Tertanda"
+                value={data.setting_tertanda || { size: "14px", color: "#d4af37", family: "Inter", position: "center" }}
+                onChange={v => upd("setting_tertanda", v)}
+                showAnimation
+              />
               <ButtonSettingsWidget
                 label="Setting Tombol RSVP / Konfirmasi"
                 value={data.setting_tombol || { text: "Konfirmasi", size: "9.5px", color: "#064e3b", bg_color: "#d4af37", border_color: "transparent", family: "Inter" }}
@@ -867,6 +879,58 @@ export function PenutupPreview({
         </div>
       )}
 
+      {wishes && wishes.length > 0 && (
+        <div 
+          className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative animate-fade-in" 
+          style={{ 
+            borderRadius: "6%",
+            backgroundColor: bgCardColor,
+            borderColor: borderCardColor
+          }}
+        >
+          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
+            <AnimatedWrapper val={data.setting_head_rsvp}>
+              <div>Ucapan & Doa Restu</div>
+              <div className={getDividerClass(data.setting_head_rsvp?.position)} />
+            </AnimatedWrapper>
+          </div>
+          <div className="space-y-3 pt-1.5 max-h-[250px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-[#d4af37]/30 text-left">
+            {wishes.map((w, idx) => (
+              <div 
+                key={w.id || idx} 
+                className="backdrop-blur-md p-3.5 border border-slate-100/10 flex flex-col gap-1 transition-all duration-300 shadow-sm rounded-xl" 
+                style={{ 
+                  backgroundColor: getTranslucentColor(textColor, "05"),
+                  borderColor: inputBorderColor,
+                }}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: textColor }}>{w.nama_tamu || w.nama || "Tamu"}</span>
+                  {w.kehadiran && (
+                    <span 
+                      className="px-1.5 py-0.5 text-[7.5px] font-extrabold rounded" 
+                      style={{ 
+                        backgroundColor: w.kehadiran === "HADIR" ? "rgba(16, 185, 129, 0.1)" : "rgba(244, 63, 94, 0.1)",
+                        color: w.kehadiran === "HADIR" ? "#10b981" : "#f43f5e",
+                        border: `1px solid ${w.kehadiran === "HADIR" ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)"}`
+                      }}
+                    >
+                      {w.kehadiran === "HADIR" ? "Hadir" : "Tidak Hadir"}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[9.5px] italic leading-relaxed" style={{ color: textColor, opacity: 0.85 }}>"{w.ucapan || w.pesan || "Mengirim doa restu."}"</p>
+                {w.created_at && (
+                  <span className="text-[7px] self-end" style={{ color: textColor, opacity: 0.4 }}>
+                    {new Date(w.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {amplops.length > 0 && (
         <div 
           className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative" 
@@ -922,8 +986,20 @@ export function PenutupPreview({
         <div style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
           <AnimatedWrapper val={data.setting_pesan_penutup}>
             <p className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
-            <p className="font-bold">{data.salam || ""}</p>
-            <p className="font-black mt-2" style={{ fontSize: "14px" }}>{data.tertanda || "Nama & Nama"}</p>
+          </AnimatedWrapper>
+        </div>
+
+        {data.salam && (
+          <div style={getFontStyles(data.setting_salam || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
+            <AnimatedWrapper val={data.setting_salam}>
+              <p className="font-bold">{data.salam}</p>
+            </AnimatedWrapper>
+          </div>
+        )}
+
+        <div style={getFontStyles(data.setting_tertanda || { size: "14px", color: "#d4af37", family: "Inter", position: "center" })}>
+          <AnimatedWrapper val={data.setting_tertanda}>
+            <p className="font-black mt-2">{data.tertanda || "Nama & Nama"}</p>
           </AnimatedWrapper>
         </div>
         <p className="text-[9px] uppercase tracking-widest mt-4" style={{ color: textColor, opacity: 0.3 }}>Made with ❤ by Adatara</p>

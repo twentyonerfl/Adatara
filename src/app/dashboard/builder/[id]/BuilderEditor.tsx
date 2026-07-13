@@ -38,6 +38,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "../../templates/BuilderWidgets";
+import { CeritaPreview, PenutupPreview } from "../../templates/BuilderTabsCeritaPenutup";
 
 type TemplateType = {
   id: string;
@@ -337,6 +338,7 @@ export function BuilderEditor({
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   // Left sidebar active tab
   const [leftTab, setLeftTab] = useState<"components" | "layers" | "assets">("components");
@@ -2243,50 +2245,32 @@ export function BuilderEditor({
                     )}
                   </div>
 
+                  {/* PREVIEW: CERITA & GALERI SECTION */}
+                  <div
+                    id="preview-cerita"
+                    className={`border-b border-dashed ${activeSection === "cerita" ? "border-[#d4af37]" : "border-[#064e3b]/10"
+                      }`}
+                  >
+                    {data.cerita && <CeritaPreview data={data.cerita} />}
+                  </div>
+
                   {/* PREVIEW: PENUTUP SECTION */}
                   <div
                     id="preview-penutup"
-                    className={`p-6 text-center space-y-6 pb-12 border-b border-dashed ${activeSection === "penutup" ? "border-[#d4af37] bg-[#064e3b]/5" : "border-transparent"
+                    className={`border-b border-dashed ${activeSection === "penutup" ? "border-[#d4af37]" : "border-transparent"
                       }`}
-                    style={{
-                      background: data.penutup?.background?.type === "image"
-                        ? `linear-gradient(rgba(245, 245, 220, 0.9), rgba(245, 245, 220, 0.9)), url(${data.penutup?.background?.value}) center/cover no-repeat`
-                        : data.penutup?.background?.type === "gradient"
-                          ? data.penutup?.background?.value
-                          : undefined
-                    }}
                   >
-                    {renderOrnament("penutup")}
-                    <span className="text-[9px] font-extrabold text-[#d4af37] tracking-widest block">
-                      Ungkapan Terima Kasih
-                    </span>
-
-                    <p className="text-[10px] text-[#064e3b]/70 italic leading-relaxed px-1">
-                      {data.penutup?.pesan_penutup}
-                    </p>
-
-                    <div className="space-y-1 text-[#064e3b]/80 text-[10px]">
-                      <p>{data.penutup?.salam}</p>
-                      <p className="font-extrabold mt-3">Kami yang berbahagia,</p>
-                      <p className="font-black text-xs text-[#d4af37]">{data.penutup?.tertanda}</p>
-                    </div>
-
-                    {/* Cashless Digital Gifts Preview */}
-                    {data.penutup?.amplops?.length > 0 && (
-                      <div className="pt-4 space-y-2 border-t border-[#064e3b]/10">
-                        <span className="text-[8px] font-bold text-[#064e3b]/60 tracking-widest block">
-                          Amplop Digital / Kado
-                        </span>
-                        <div className="space-y-2">
-                          {data.penutup.amplops.map((gift: any, idx: number) => (
-                            <div key={idx} className="p-3 bg-[#064e3b]/5 border border-[#064e3b]/10 text-left relative" style={{ borderRadius: "6%" }}>
-                              <span className="text-[8px] font-black text-[#d4af37] block">{gift.bank}</span>
-                              <span className="text-[#064e3b] text-xs font-black block mt-0.5 tracking-wide">{gift.nomor_rekening}</span>
-                              <span className="text-[9px] text-[#064e3b]/60 block">A/N: {gift.atas_nama}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                    {data.penutup && (
+                      <PenutupPreview 
+                        data={data.penutup} 
+                        wishes={[]} 
+                        copiedIndex={copiedIndex}
+                        onCopyClick={(text, idx) => {
+                          navigator.clipboard.writeText(text);
+                          setCopiedIndex(idx);
+                          setTimeout(() => setCopiedIndex(null), 2000);
+                        }}
+                      />
                     )}
                   </div>
 
