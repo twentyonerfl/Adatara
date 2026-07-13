@@ -383,6 +383,37 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                 })}
               </div>
             </div>
+
+            {/* Gap setting — only visible for custom layout */}
+            {data.galeri_layout === "custom" && (
+              <div className="mt-3 pt-3 border-t border-[#064e3b]/8">
+                <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1.5">Jarak Antar Foto</label>
+                <div className="flex gap-1.5 flex-wrap">
+                  {[
+                    { val: "gap-0", label: "Tanpa Jarak" },
+                    { val: "gap-1", label: "Sangat Rapat" },
+                    { val: "gap-2", label: "Rapat" },
+                    { val: "gap-3", label: "Sedang" },
+                    { val: "gap-4", label: "Normal" },
+                    { val: "gap-6", label: "Lebar" },
+                    { val: "gap-8", label: "Sangat Lebar" },
+                  ].map(({ val, label }) => {
+                    const isActive = (data.galeri_custom_gap || "gap-2") === val;
+                    return (
+                      <button key={val} type="button" onClick={() => upd("galeri_custom_gap", val)}
+                        className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-all duration-200 ${
+                          isActive
+                            ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm"
+                            : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </SectionInput>
 
           <SectionInput label="Desain & Tipografi Galeri">
@@ -703,8 +734,9 @@ export function CeritaPreview({ data }: { data: any }) {
                 );
               }
               if (layout === "custom") {
+                const customGap = data.galeri_custom_gap || "gap-2";
                 return (
-                  <div className="grid grid-cols-6 gap-x-2 gap-y-4 pt-1 pb-4">
+                  <div className={`grid grid-cols-6 ${customGap} pt-1 pb-4`}>
                     {galeris.map((g, i) => {
                       const config = data.galeri_custom_configs?.[i] || {};
                       const colSpan = config.colSpan || "col-span-3";

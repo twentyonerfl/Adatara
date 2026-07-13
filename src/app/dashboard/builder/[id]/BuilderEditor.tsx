@@ -1405,6 +1405,38 @@ export function BuilderEditor({
                         </select>
                       </div>
 
+                      {/* Gap selector - only for custom layout */}
+                      {data.cerita?.galeri_layout === "custom" && (
+                        <div className="space-y-2">
+                          <label className="block text-[10px] font-extrabold uppercase opacity-75">Jarak Antar Foto</label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {[
+                              { val: "gap-0", label: "0" },
+                              { val: "gap-1", label: "4px" },
+                              { val: "gap-2", label: "8px" },
+                              { val: "gap-3", label: "12px" },
+                              { val: "gap-4", label: "16px" },
+                              { val: "gap-6", label: "24px" },
+                              { val: "gap-8", label: "32px" },
+                            ].map(({ val, label }) => {
+                              const isActive = (data.cerita?.galeri_custom_gap || "gap-2") === val;
+                              return (
+                                <button key={val} type="button"
+                                  onClick={() => updateData("cerita", "galeri_custom_gap", val)}
+                                  className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-all ${
+                                    isActive
+                                      ? "bg-[#064e3b] text-white border-[#d4af37]"
+                                      : "bg-[#f5f5dc] text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5"
+                                  }`}
+                                >
+                                  {label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="space-y-2">
                         <label className="block text-[10px] font-extrabold uppercase opacity-75">Foto Terdaftar ({data.cerita?.galeris?.length || 0})</label>
                          {data.cerita?.galeri_layout === "custom" ? (
@@ -2449,8 +2481,9 @@ export function BuilderEditor({
                             );
                           }
                           if (layout === "custom") {
+                            const customGap = data.cerita?.galeri_custom_gap || "gap-2";
                             return (
-                              <div className="grid grid-cols-6 gap-x-2 gap-y-4 pt-1 pb-4">
+                              <div className={`grid grid-cols-6 ${customGap} pt-1 pb-4`}>
                                 {data.cerita.galeris.map((img: string, idx: number) => {
                                   const config = data.cerita?.galeri_custom_configs?.[idx] || {};
                                   const colSpan = config.colSpan || "col-span-3";
