@@ -70,6 +70,7 @@ export async function updateTemplate(
     });
     revalidatePath("/dashboard/templates");
     revalidatePath(`/dashboard/templates/edit/${id}`);
+    revalidatePath(`/demo/${id}`);
     return { success: true };
   } catch (err) {
     console.error(err);
@@ -85,6 +86,8 @@ export async function publishTemplate(id: string) {
       data: { status: "PUBLISHED" },
     });
     revalidatePath("/dashboard/templates");
+    revalidatePath(`/dashboard/templates/edit/${id}`);
+    revalidatePath(`/demo/${id}`);
     return { success: true };
   } catch (err) {
     console.error(err);
@@ -173,6 +176,7 @@ export async function createActiveInvitationFromTemplate(formData: {
 
     revalidatePath("/dashboard/invitations");
     revalidatePath("/dashboard");
+    revalidatePath(`/${formattedSlug}`);
 
     return { success: true, invitationId: invitation.id, slug: formattedSlug };
   } catch (err) {
