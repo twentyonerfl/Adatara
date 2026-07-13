@@ -779,6 +779,28 @@ export function BuilderEditor({
                       />
                     </div>
                   </div>
+
+                  {/* Animasi Transisi Halaman (Keseluruhan) */}
+                  <div className="space-y-2 pt-4 border-t border-slate-100">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase tracking-wider mb-1">Animasi Transisi Undangan (Keseluruhan)</label>
+                      <p className="text-[11px] text-slate-500">Pilih efek transisi ketika section/halaman undangan muncul saat di-scroll.</p>
+                    </div>
+
+                    <div className="max-w-md">
+                      <select
+                        value={data?.cover?.transition_style || "none"}
+                        onChange={(e) => updateNestedVal("cover", "transition_style", e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#d4af37] font-bold text-[#064e3b] h-9"
+                      >
+                        <option value="none">Tanpa Animasi (Statis)</option>
+                        <option value="fade">Fade In (Mudar Masuk)</option>
+                        <option value="slide-up">Slide Up (Geser Naik)</option>
+                        <option value="zoom">Zoom In (Perbesar)</option>
+                        <option value="slide-left">Slide Left (Geser Kiri)</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               )}
 

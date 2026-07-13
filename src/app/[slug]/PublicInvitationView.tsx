@@ -259,28 +259,28 @@ export function PublicInvitationView({
         return {
           initial: { opacity: 0 },
           whileInView: { opacity: 1 },
-          viewport: { once: true, margin: "-100px" },
+          viewport: { once: true, amount: 0.15 },
           transition: { duration: 0.8, ease: "easeOut" }
         };
       case "slide-up":
         return {
           initial: { opacity: 0, y: 65 },
           whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, margin: "-100px" },
+          viewport: { once: true, amount: 0.15 },
           transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] }
         };
       case "zoom":
         return {
           initial: { opacity: 0, scale: 0.92 },
           whileInView: { opacity: 1, scale: 1 },
-          viewport: { once: true, margin: "-100px" },
+          viewport: { once: true, amount: 0.15 },
           transition: { duration: 0.8, ease: "easeOut" }
         };
       case "slide-left":
         return {
           initial: { opacity: 0, x: 50 },
           whileInView: { opacity: 1, x: 0 },
-          viewport: { once: true, margin: "-100px" },
+          viewport: { once: true, amount: 0.15 },
           transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] }
         };
       default:
