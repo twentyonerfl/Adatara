@@ -78,7 +78,7 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
             <InputField label="Ucapan / Ayat / Quote" value={data.ucapan_profil || ""} onChange={v => upd("ucapan_profil", v)} textarea placeholder="Maha suci Allah..." />
           </SectionInput>
 
-          <SectionInput label="Daftar Profil Undangan">
+          <SectionInput label="Daftar Profil Undangan" className="mb-4">
             <div className="space-y-3">
               {profils.map((p, i) => (
                 <div key={i} className="p-3 bg-white border border-[#064e3b]/10 rounded-xl space-y-2 relative">
