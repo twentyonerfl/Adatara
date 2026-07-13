@@ -8,7 +8,7 @@ export const defaultTemplateJson = {
     music_url: "",
     transition_style: "none",
     default_guest_label: "Tamu Undangan",
-    share_text_template: "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_acara}*\nTanggal : {tanggal}\nPukul : {jam} WIB\nLokasi : {alamat}\n\nKlik tautan berikut : {link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{tertanda}*",
+    share_text_template: "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_acara}*\nTanggal : {tanggal}\n\nKlik tautan berikut : {link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{tertanda}*",
   },
   pembuka: {
     setting_kategori: { size: "12px", color: "#ffffff", family: "Inter", position: "center" },
@@ -124,8 +124,6 @@ Dengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT,
 
 *{kategori} {nama_acara}*
 Tanggal : {tanggal}
-Pukul : {jam} WIB
-Lokasi : {alamat}
 
 Klik tautan berikut : {link}
 
@@ -147,7 +145,7 @@ export function formatShareText(
   const nama_acara = data?.cover?.nama_acara || "";
   
   const firstEvent = data?.acara?.acaras?.[0] || {};
-  const tanggal = firstEvent.tanggal || "";
+  const tanggal = data?.pembuka?.tanggal_acara || firstEvent.tanggal || "";
   
   const jam_mulai = firstEvent.jam_mulai || "";
   const jam_selesai = firstEvent.jam_selesai || "";
