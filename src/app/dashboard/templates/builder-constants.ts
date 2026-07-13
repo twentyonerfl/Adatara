@@ -8,7 +8,7 @@ export const defaultTemplateJson = {
     music_url: "",
     transition_style: "none",
     default_guest_label: "Tamu Undangan",
-    share_text_template: "Kepada Yth. {nama},\n\nTanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara kami.\n\nBerikut adalah link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan bagi kami jika Bapak/Ibu/Saudara/i berkenan hadir.\n\nTerima kasih.",
+    share_text_template: "Bismillahirrahmanirrahim.\nAssalamu’alaikum wr.wb.\n\nYth. Bapak/Ibu/Saudara/i\n*{nama}*\nDi Tempat\n\nDengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :\n\n*{kategori} {nama_pasangan}*\nTanggal : *{tanggal}*\nPukul : *{jam}*\nLokasi : *{lokasi}*\n\nKlik tautan berikut :\n{link}\n\nMerupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. \n\nAtas kehadiran dan doa restunya, kami ucapkan terima kasih.\n\nHormat kami,\n*{nama_pasangan}*",
   },
   pembuka: {
     setting_kategori: { size: "12px", color: "#ffffff", family: "Inter", position: "center" },
