@@ -664,6 +664,7 @@ export function FramedPhoto({
       >
         {/* Main Photo */}
         <img 
+          key={src}
           src={src} 
           alt="" 
           className="absolute object-cover rounded-xl" 
@@ -697,6 +698,7 @@ export function FramedPhoto({
         style={containerStyle}
       >
         <img 
+          key={src}
           src={src} 
           alt="" 
           className="absolute object-cover" 
@@ -730,6 +732,7 @@ export function FramedPhoto({
         }}
       >
         <img 
+          key={src}
           src={src} 
           alt="" 
           className="absolute object-cover" 

@@ -235,7 +235,7 @@ export function ProfilPreview({ data }: { data: any }) {
         {/* Absolute positioned photos */}
         {profils.filter(p => p.foto_position === "custom").map((p, i) => (
           <div
-            key={`abs-${i}`}
+            key={`abs-${p.foto || ""}-${p.nama || i}`}
             style={{
               position: "absolute",
               left: `${p.foto_pos_x ?? 50}%`,
@@ -302,7 +302,7 @@ export function ProfilPreview({ data }: { data: any }) {
           return (
             <div key={align} className={`flex gap-6 flex-wrap w-full ${justifyClass}`}>
               {group.map((p, i) => (
-                <div key={i} className="flex flex-col items-center gap-2 text-center">
+                <div key={`${p.foto || ""}-${p.nama || i}`} className="flex flex-col items-center gap-2 text-center">
                   <FramedPhoto
                     src={p.foto}
                     bingkai={p.bingkai || "oval"}
