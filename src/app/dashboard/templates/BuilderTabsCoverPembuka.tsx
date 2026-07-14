@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, ButtonSettingsWidget, CardSettingsWidget, FramedPhoto, BingkaiCoverWidget, PhotoStyleWidget, AnimatedWrapper, ScrollReveal } from "./BuilderWidgets";
+import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, ButtonSettingsWidget, CardSettingsWidget, FramedPhoto, BingkaiCoverWidget, PhotoStyleWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { KATEGORI_OPTIONS, FONT_FAMILIES, KATEGORI_EN_MAP, DEFAULT_SHARE_TEMPLATE } from "./builder-constants";
 import { Plus, Trash2, Play, Pause, Search, Loader2, Music } from "lucide-react";
 
@@ -680,19 +680,17 @@ export function PembukaPreview({ data, coverData, bahasa }: { data: any; coverDa
       {data.foto_pembuka && (
         <div className="w-full flex justify-center">
           <AnimatedWrapper val={data.foto_setting}>
-            <ScrollReveal animationType="zoom-in" duration={0.8}>
-              <FramedPhoto
-                src={data.foto_pembuka}
-                bingkai={data.foto_setting?.bingkai || "oval"}
-                className="w-32 h-32"
-                customWidth={data.foto_setting?.width}
-                customHeight={data.foto_setting?.height}
-                overlayUrl={data.foto_setting?.overlay_url}
-                photoScale={data.foto_setting?.photo_scale}
-                photoX={data.foto_setting?.photo_x}
-                photoY={data.foto_setting?.photo_y}
-              />
-            </ScrollReveal>
+            <FramedPhoto
+              src={data.foto_pembuka}
+              bingkai={data.foto_setting?.bingkai || "oval"}
+              className="w-32 h-32"
+              customWidth={data.foto_setting?.width}
+              customHeight={data.foto_setting?.height}
+              overlayUrl={data.foto_setting?.overlay_url}
+              photoScale={data.foto_setting?.photo_scale}
+              photoX={data.foto_setting?.photo_x}
+              photoY={data.foto_setting?.photo_y}
+            />
           </AnimatedWrapper>
         </div>
       )}

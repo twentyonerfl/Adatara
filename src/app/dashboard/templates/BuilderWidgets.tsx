@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { UploadCloud, X, Loader2, FileVideo, Play, Pause } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { FONT_FAMILIES, ANIMATION_OPTIONS, BINGKAI_OPTIONS } from "./builder-constants";
 
 interface FontSettings {
@@ -1810,7 +1810,7 @@ export function ScrollReveal({
   children,
   delay = 0,
   duration = 0.6,
-  animationType = "fade-up", // "fade-up", "zoom-in", "fade-left", "fade-right"
+  animationType = "fade-up",
   className = ""
 }: {
   children: React.ReactNode;
@@ -1819,6 +1819,28 @@ export function ScrollReveal({
   animationType?: "fade-up" | "zoom-in" | "fade-left" | "fade-right";
   className?: string;
 }) {
+  const controls = useAnimation();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // display:contents elements have no bounding box, so we use a native IntersectionObserver
+    // on the parent element as a proxy for this element's visibility
+    const target = ref.current?.parentElement ?? ref.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          controls.start("visible");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [controls]);
+
   const variants = {
     hidden: {
       opacity: 0,
@@ -1841,9 +1863,9 @@ export function ScrollReveal({
 
   return (
     <motion.div
+      ref={ref}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
+      animate={controls}
       variants={variants}
       className={className}
       style={{ display: "contents" }}
