@@ -277,7 +277,7 @@ export function ProfilPreview({ data }: { data: any }) {
               zIndex: 10,
             }}
           >
-            <ScrollReveal animationType="zoom-in" duration={0.8} delay={i * 0.1}>
+            <ScrollReveal animationType="zoom-in" duration={2} delay={i * 0.1}>
               <div className="flex flex-col items-center gap-2 text-center">
                 <FramedPhoto
                   src={p.foto}
@@ -353,7 +353,7 @@ export function ProfilPreview({ data }: { data: any }) {
                       </AnimatedWrapper>
                     </div>
                   )}
-                  <ScrollReveal animationType="zoom-in" duration={0.8} delay={i * 0.15}>
+                  <ScrollReveal animationType="zoom-in" duration={2} delay={i * 0.15}>
                     <div className="flex flex-col items-center gap-2 text-center">
                       <FramedPhoto
                         src={p.foto}

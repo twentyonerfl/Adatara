@@ -1767,7 +1767,7 @@ export function AnimatedWrapper({
 }) {
   const [key, setKey] = useState(0);
   const animationName = val?.animation || "none";
-  const duration = val?.animationDuration || "1s";
+  const duration = val?.animationDuration || "2s";
 
   useEffect(() => {
     setKey(prev => prev + 1);
@@ -1809,7 +1809,7 @@ export function AnimatedWrapper({
 export function ScrollReveal({
   children,
   delay = 0,
-  duration = 0.6,
+  duration = 2,
   animationType = "fade-up",
   className = ""
 }: {
