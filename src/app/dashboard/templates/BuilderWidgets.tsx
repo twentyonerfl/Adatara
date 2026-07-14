@@ -492,7 +492,7 @@ export function FileUploader({
                   Klik untuk upload atau drag file
                 </p>
                 <p className="text-[9px] text-[#064e3b]/40 font-semibold uppercase">
-                  {type === "image" ? "PNG, JPG, JPEG, WEBP" : type === "video" ? "MP4, WEBM" : "MP3, WAV"}
+                  {type === "image" ? "PNG, JPG, JPEG, WEBP, GIF" : type === "video" ? "MP4, WEBM" : "MP3, WAV"}
                 </p>
               </div>
             </>
