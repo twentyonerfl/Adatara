@@ -832,26 +832,30 @@ export function AcaraPreview({ data }: { data: any }) {
         const pos = data.setting_countdown?.position || "center";
         const alignClass = pos === "left" ? "text-left" : pos === "right" ? "text-right" : "text-center";
         return (
-          <div className={`space-y-1.5 py-2 ${alignClass}`}>
-            <div
-              className="text-[10px] font-black uppercase tracking-wider opacity-60"
-              style={{ color: data.setting_nama_acara?.color || "#ffffff" }}
-            >
-              Hitung Mundur Acara
+          <AnimatedWrapper val={data.setting_countdown || data.setting_nama_acara}>
+            <div className={`space-y-1.5 py-2 ${alignClass}`}>
+              <div
+                className="text-[10px] font-black uppercase tracking-wider opacity-60"
+                style={{ color: data.setting_nama_acara?.color || "#ffffff" }}
+              >
+                Hitung Mundur Acara
+              </div>
+              <Countdown targetDateStr={targetDateTime} settings={data.setting_countdown} />
             </div>
-            <Countdown targetDateStr={targetDateTime} settings={data.setting_countdown} />
-          </div>
+          </AnimatedWrapper>
         );
       })()}
 
       <div className="text-center mb-4">
-        <div
-          className="text-xs font-black uppercase tracking-wider opacity-60"
-          style={{ color: data.setting_nama_acara?.color || "#ffffff" }}
-        >
-          Jadwal & Lokasi
-        </div>
-        <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
+        <AnimatedWrapper val={data.setting_nama_acara}>
+          <div
+            className="text-xs font-black uppercase tracking-wider opacity-60"
+            style={{ color: data.setting_nama_acara?.color || "#ffffff" }}
+          >
+            Jadwal & Lokasi
+          </div>
+          <div className="w-8 h-0.5 bg-[#d4af37] mx-auto mt-2" />
+        </AnimatedWrapper>
       </div>
 
       {acaras.map((a, i) => {
@@ -871,86 +875,88 @@ export function AcaraPreview({ data }: { data: any }) {
         }
 
         return (
-          <div key={i} className={cardClass}>
-            <div 
-              className="text-sm font-black" 
-              style={getEventElementStyle(a.setting_nama, data.setting_nama_acara || { size: "14px", color: "#064e3b", family: "Inter", position: "left" })}
-            >
-              {a.nama || "Nama Acara"}
-            </div>
-            {a.tanggal && (
+          <AnimatedWrapper key={i} val={a.setting_nama || data.setting_nama_acara}>
+            <div className={cardClass}>
               <div 
-                className="text-xs font-semibold"
-                style={getEventElementStyle(a.setting_tanggal, data.setting_tanggal_acara || { size: "12px", color: "#064e3b", family: "Inter", position: "left" })}
+                className="text-sm font-black" 
+                style={getEventElementStyle(a.setting_nama, data.setting_nama_acara || { size: "14px", color: "#064e3b", family: "Inter", position: "left" })}
               >
-                {formatIndonesianDate(a.tanggal)}
+                {a.nama || "Nama Acara"}
               </div>
-            )}
-            {(a.jam_mulai || a.jam_selesai) && (
-              <div 
-                className="text-xs"
-                style={getEventElementStyle(a.setting_jam, data.setting_jam_acara || { size: "11px", color: "#064e3b", family: "Inter", position: "left" })}
-              >
-                {formatEventTime(a.jam_mulai, a.jam_selesai)}
-              </div>
-            )}
-            {a.alamat && (
-              <div 
-                className="text-[10px] leading-relaxed"
-                style={getEventElementStyle(a.setting_alamat, data.setting_alamat_acara || data.setting_jam_acara || { size: "10px", color: "#064e3b", family: "Inter", position: "left" })}
-              >
-                {a.alamat}
-              </div>
-            )}
-            {a.embed_maps && (
-              <div
-                className="w-full rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10"
-                style={{ height: a.embed_maps_height ? `${a.embed_maps_height}px` : "112px", position: "relative" }}
-              >
-                <iframe
-                  src={getMapsEmbedUrl(a.embed_maps)}
-                  width="100%"
-                  style={{ border: 0, position: "absolute", top: 0, left: 0, width: "100%", height: "calc(100% + 30px)" }}
-                  allowFullScreen={false}
-                  loading="lazy"
-                />
-              </div>
-            )}
-            {a.link_maps && (() => {
-              const ms = a.setting_maps_button || {};
-              const display = ms.display || "button";
-              const pos = ms.position || "left";
-              const justifyStyle: React.CSSProperties = {
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: pos === "center" ? "center" : pos === "right" ? "flex-end" : "flex-start",
-                marginTop: "6px",
-              };
-              const linkStyle: React.CSSProperties = {
-                fontFamily: ms.family || "Inter",
-                fontSize: ms.size || "10px",
-                color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
-                ...(display === "button" ? {
-                  display: "inline-block",
-                  backgroundColor: ms.bg_color || "#064e3b",
-                  border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
-                  borderRadius: ms.border_radius || "8px",
-                  padding: "4px 12px",
-                  fontWeight: 700,
-                } : {
-                  fontWeight: 700,
-                  textDecoration: "underline",
-                }),
-              };
-              return (
-                <div style={justifyStyle}>
-                  <a href={a.link_maps} target="_blank" style={linkStyle}>
-                    {a.link_maps_label || "Lihat di Maps \u2192"}
-                  </a>
+              {a.tanggal && (
+                <div 
+                  className="text-xs font-semibold"
+                  style={getEventElementStyle(a.setting_tanggal, data.setting_tanggal_acara || { size: "12px", color: "#064e3b", family: "Inter", position: "left" })}
+                >
+                  {formatIndonesianDate(a.tanggal)}
                 </div>
-              );
-            })()}
-          </div>
+              )}
+              {(a.jam_mulai || a.jam_selesai) && (
+                <div 
+                  className="text-xs"
+                  style={getEventElementStyle(a.setting_jam, data.setting_jam_acara || { size: "11px", color: "#064e3b", family: "Inter", position: "left" })}
+                >
+                  {formatEventTime(a.jam_mulai, a.jam_selesai)}
+                </div>
+              )}
+              {a.alamat && (
+                <div 
+                  className="text-[10px] leading-relaxed"
+                  style={getEventElementStyle(a.setting_alamat, data.setting_alamat_acara || data.setting_jam_acara || { size: "10px", color: "#064e3b", family: "Inter", position: "left" })}
+                >
+                  {a.alamat}
+                </div>
+              )}
+              {a.embed_maps && (
+                <div
+                  className="w-full rounded-lg overflow-hidden mt-1 border border-[#064e3b]/10"
+                  style={{ height: a.embed_maps_height ? `${a.embed_maps_height}px` : "112px", position: "relative" }}
+                >
+                  <iframe
+                    src={getMapsEmbedUrl(a.embed_maps)}
+                    width="100%"
+                    style={{ border: 0, position: "absolute", top: 0, left: 0, width: "100%", height: "calc(100% + 30px)" }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              {a.link_maps && (() => {
+                const ms = a.setting_maps_button || {};
+                const display = ms.display || "button";
+                const pos = ms.position || "left";
+                const justifyStyle: React.CSSProperties = {
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: pos === "center" ? "center" : pos === "right" ? "flex-end" : "flex-start",
+                  marginTop: "6px",
+                };
+                const linkStyle: React.CSSProperties = {
+                  fontFamily: ms.family || "Inter",
+                  fontSize: ms.size || "10px",
+                  color: ms.color || (display === "button" ? "#ffffff" : "#d4af37"),
+                  ...(display === "button" ? {
+                    display: "inline-block",
+                    backgroundColor: ms.bg_color || "#064e3b",
+                    border: `1px solid ${ms.border_color === "transparent" ? "transparent" : (ms.border_color || "transparent")}`,
+                    borderRadius: ms.border_radius || "8px",
+                    padding: "4px 12px",
+                    fontWeight: 700,
+                  } : {
+                    fontWeight: 700,
+                    textDecoration: "underline",
+                  }),
+                };
+                return (
+                  <div style={justifyStyle}>
+                    <a href={a.link_maps} target="_blank" style={linkStyle}>
+                      {a.link_maps_label || "Lihat di Maps \u2192"}
+                    </a>
+                  </div>
+                );
+              })()}
+            </div>
+          </AnimatedWrapper>
         );
       })}
       </div>

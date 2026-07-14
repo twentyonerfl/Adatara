@@ -608,22 +608,24 @@ export function CeritaPreview({ data }: { data: any }) {
 
                           {/* Card wrapper */}
                           <div className={`w-[calc(100%-10px)] max-w-full ${isEven ? "pl-3.5" : "pr-3.5"}`}>
-                            <div className={cardClass}>
-                              {/* Card Header */}
-                              <div className="flex flex-col gap-1 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
-                                <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide break-words">
-                                  {c.judul || "Judul"}
+                            <AnimatedWrapper val={data.setting_judul_cerita}>
+                              <div className={cardClass}>
+                                {/* Card Header */}
+                                <div className="flex flex-col gap-1 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                                  <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide break-words">
+                                    {c.judul || "Judul"}
+                                  </div>
+                                  <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80">
+                                    {c.waktu || "Waktu"}
+                                  </div>
                                 </div>
-                                <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80">
-                                  {c.waktu || "Waktu"}
-                                </div>
-                              </div>
 
-                              {/* Card Content */}
-                              <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light break-words">
-                                {c.isi || "Isi cerita..."}
+                                {/* Card Content */}
+                                <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light break-words">
+                                  {c.isi || "Isi cerita..."}
+                                </div>
                               </div>
-                            </div>
+                            </AnimatedWrapper>
                           </div>
                         </div>
                       );
@@ -645,22 +647,24 @@ export function CeritaPreview({ data }: { data: any }) {
                         </div>
 
                         {/* Card Container */}
-                        <div className={cardClass}>
-                          {/* Card Header */}
-                          <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
-                            <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
-                              {c.judul || "Judul"}
+                        <AnimatedWrapper val={data.setting_judul_cerita}>
+                          <div className={cardClass}>
+                            {/* Card Header */}
+                            <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                              <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
+                                {c.judul || "Judul"}
+                              </div>
+                              <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
+                                {c.waktu || "Waktu"}
+                              </div>
                             </div>
-                            <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
-                              {c.waktu || "Waktu"}
-                            </div>
-                          </div>
 
-                          {/* Card Content */}
-                          <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
-                            {c.isi || "Isi cerita..."}
+                            {/* Card Content */}
+                            <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
+                              {c.isi || "Isi cerita..."}
+                            </div>
                           </div>
-                        </div>
+                        </AnimatedWrapper>
                       </div>
                     ))}
                   </div>
@@ -680,22 +684,24 @@ export function CeritaPreview({ data }: { data: any }) {
                       </div>
 
                       {/* Card Container */}
-                      <div className={cardClass}>
-                        {/* Card Header */}
-                        <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
-                          <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
-                            {c.judul || "Judul"}
+                      <AnimatedWrapper val={data.setting_judul_cerita}>
+                        <div className={cardClass}>
+                          {/* Card Header */}
+                          <div className="flex items-baseline justify-between gap-3 border-b border-[#d4af37]/15 pb-1.5 mb-0.5">
+                            <div style={getFontStyles(data.setting_judul_cerita || { size: "14px", color: "#ffffff", family: "Inter", position: "left" })} className="font-bold tracking-wide">
+                              {c.judul || "Judul"}
+                            </div>
+                            <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
+                              {c.waktu || "Waktu"}
+                            </div>
                           </div>
-                          <div style={getFontStyles(data.setting_waktu_cerita || { size: "10px", color: "#ffffff", family: "Inter", position: "left" })} className="font-black uppercase tracking-widest text-[8px] opacity-80 shrink-0">
-                            {c.waktu || "Waktu"}
-                          </div>
-                        </div>
 
-                        {/* Card Content */}
-                        <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
-                          {c.isi || "Isi cerita..."}
+                          {/* Card Content */}
+                          <div style={getFontStyles(data.setting_isi_cerita || { size: "11px", color: "#ffffff", family: "Inter", position: "left" })} className="leading-relaxed font-light">
+                            {c.isi || "Isi cerita..."}
+                          </div>
                         </div>
-                      </div>
+                      </AnimatedWrapper>
                     </div>
                   ))}
                 </div>
