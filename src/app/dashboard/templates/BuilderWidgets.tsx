@@ -1811,13 +1811,15 @@ export function ScrollReveal({
   delay = 0,
   duration = 0.6,
   animationType = "fade-up", // "fade-up", "zoom-in", "fade-left", "fade-right"
-  className = ""
+  className = "",
+  style = {}
 }: {
   children: React.ReactNode;
   delay?: number;
   duration?: number;
   animationType?: "fade-up" | "zoom-in" | "fade-left" | "fade-right";
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const variants = {
     hidden: {
@@ -1846,7 +1848,7 @@ export function ScrollReveal({
       viewport={{ once: true, amount: 0.1 }}
       variants={variants}
       className={className}
-      style={{ display: "contents" }}
+      style={style}
     >
       {children}
     </motion.div>
