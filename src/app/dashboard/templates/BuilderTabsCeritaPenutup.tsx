@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget, AnimatedWrapper } from "./BuilderWidgets";
-import { GALERI_LAYOUT_OPTIONS } from "./builder-constants";
+import { GALERI_LAYOUT_OPTIONS, GALERI_LAYOUT_DETAILS } from "./builder-constants";
 import { Plus, Trash2, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 
 function getFontStyles(val?: any) {
@@ -32,6 +32,19 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
   const ceritas: any[] = data.ceritas || [];
   const galeris: string[] = data.galeris || [];
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const addCerita = () => upd("ceritas", [...ceritas, { judul: "", waktu: "", isi: "" }]);
   const removeCerita = (i: number) => upd("ceritas", ceritas.filter((_, idx) => idx !== i));
@@ -359,31 +372,64 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
           </SectionInput>
 
           <SectionInput label="Gaya Layout Galeri">
-            <div>
-              <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1.5">Pilih Desain Layout</label>
-              <div className="flex gap-1.5 flex-wrap">
-                {GALERI_LAYOUT_OPTIONS.map(l => {
-                  const label = l === "grid-2" ? "Grid 2 Kolom" :
-                    l === "grid-3" ? "Grid 3 Kolom" :
-                      l === "masonry" ? "Masonry (Estetik)" :
-                        l === "carousel" ? "Carousel (Geser)" :
-                          l === "scroll" ? "Scroll (Gulir)" :
-                            l === "collage" ? "Collage Editorial" :
-                              l === "polaroid" ? "Polaroid Stack" :
-                                l === "aesthetic" ? "Aesthetic Scrapbook" :
-                                  l === "custom" ? "Gaya Custom" : l;
-                  const isActive = data.galeri_layout === l || (l === "grid-2" && data.galeri_layout === "grid") || (!data.galeri_layout && l === "grid-2");
-                  return (
-                    <button key={l} type="button" onClick={() => upd("galeri_layout", l)}
-                      className={`px-3 py-1.5 rounded-xl text-[9px] font-bold border transition-all duration-300 ${isActive
-                          ? "bg-[#064e3b] text-white border-[#d4af37] shadow-sm shadow-[#064e3b]/15"
-                          : "bg-white text-[#064e3b]/60 border-[#064e3b]/10 hover:bg-[#064e3b]/5 hover:text-[#064e3b]"
-                        }`}>
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
+            <div ref={dropdownRef} className="relative">
+              <label className="text-[9px] font-black uppercase text-[#064e3b]/60 block mb-1.5 font-bold">Pilih Desain Layout</label>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-full flex items-center justify-between px-3 py-2 bg-white border border-[#064e3b]/20 hover:border-[#d4af37] focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl text-xs text-[#064e3b] font-bold transition-all duration-200 shadow-sm"
+              >
+                <div className="text-left">
+                  <span className="block text-[8px] font-black uppercase text-[#d4af37] tracking-wider mb-0.5">Layout Aktif</span>
+                  <span className="text-xs font-black text-[#064e3b] leading-none">
+                    {(() => {
+                      const activeLayout = data.galeri_layout || "grid-2";
+                      const layoutKey = activeLayout === "grid" ? "grid-2" : activeLayout;
+                      return GALERI_LAYOUT_DETAILS[layoutKey]?.label || layoutKey;
+                    })()}
+                  </span>
+                </div>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className={`w-3.5 h-3.5 text-[#064e3b]/60 transition-transform duration-300 ${dropdownOpen ? "rotate-180 text-[#d4af37]" : ""}`}
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white border border-[#064e3b]/10 rounded-2xl shadow-xl max-h-[300px] overflow-y-auto p-1.5 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+                  <div className="grid grid-cols-1 gap-1">
+                    {GALERI_LAYOUT_OPTIONS.map((l) => {
+                      const info = GALERI_LAYOUT_DETAILS[l] || { label: l, desc: "" };
+                      const isActive = data.galeri_layout === l || (l === "grid-2" && data.galeri_layout === "grid") || (!data.galeri_layout && l === "grid-2");
+                      return (
+                        <button
+                          key={l}
+                          type="button"
+                          onClick={() => {
+                            upd("galeri_layout", l);
+                            setDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all duration-200 flex flex-col gap-0.5 ${
+                            isActive
+                              ? "bg-[#064e3b] text-white border-l-4 border-l-[#d4af37]"
+                              : "hover:bg-[#064e3b]/5 text-[#064e3b] border-l-4 border-l-transparent"
+                          }`}
+                        >
+                          <span className="font-extrabold">{info.label}</span>
+                          <span className={`text-[9px] ${isActive ? "text-white/70" : "text-[#064e3b]/50"}`}>{info.desc}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Gap setting — only visible for custom layout */}
@@ -802,6 +848,193 @@ export function CeritaPreview({ data }: { data: any }) {
                         </div>
                       );
                     })}
+                  </div>
+                );
+              }
+              if (layout === "grid-4") {
+                return (
+                  <div className="grid grid-cols-4 gap-1 pt-1">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="aspect-square rounded-md overflow-hidden border border-white/20 shadow-sm">
+                        <img src={g} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "masonry-3") {
+                return (
+                  <div className="columns-3 gap-1.5 space-y-1.5 pt-1">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="break-inside-avoid">
+                        <img src={g} alt="" className="w-full h-auto rounded-lg object-cover border border-white/20 shadow-sm" />
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "mosaic-modern") {
+                return (
+                  <div className="grid grid-cols-6 gap-2 pt-1">
+                    {galeris.map((g, i) => {
+                      const indexPattern = i % 6;
+                      let colSpan = "col-span-3 aspect-[4/3]";
+                      if (indexPattern === 0) colSpan = "col-span-4 aspect-square";
+                      else if (indexPattern === 1) colSpan = "col-span-2 aspect-[3/4]";
+                      else if (indexPattern === 2) colSpan = "col-span-2 aspect-square";
+                      else if (indexPattern === 3) colSpan = "col-span-4 aspect-[16/9]";
+                      else if (indexPattern === 4) colSpan = "col-span-3 aspect-[4/3]";
+                      else if (indexPattern === 5) colSpan = "col-span-3 aspect-[4/3]";
+                      return (
+                        <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "zigzag") {
+                return (
+                  <div className="space-y-4 pt-1">
+                    {galeris.map((g, i) => {
+                      const isEven = i % 2 === 0;
+                      return (
+                        <div key={i} className={`flex ${isEven ? "justify-start" : "justify-end"}`}>
+                          <div className="w-[85%] aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-white/25 transform hover:scale-[1.02] transition-transform duration-300">
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "asymmetric") {
+                return (
+                  <div className="grid grid-cols-3 gap-2 pt-1">
+                    {galeris.map((g, i) => {
+                      const indexPattern = i % 4;
+                      const colSpan = (indexPattern === 0 || indexPattern === 3) ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-[4/3]";
+                      return (
+                        <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "bubbles") {
+                return (
+                  <div className="grid grid-cols-2 gap-4 pt-1">
+                    {galeris.map((g, i) => {
+                      const isEven = i % 2 === 0;
+                      const bubbleClass = isEven 
+                        ? "aspect-square rounded-full scale-95 hover:scale-100" 
+                        : "aspect-[3/4] rounded-[100px] translate-y-3 hover:translate-y-1";
+                      return (
+                        <div key={i} className={`${bubbleClass} overflow-hidden border-2 border-white shadow-md transition-all duration-300`}>
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "parallax-floating") {
+                return (
+                  <div className="space-y-6 pt-2 pb-6 relative">
+                    {galeris.map((g, i) => {
+                      const indexPattern = i % 3;
+                      let offsetClass = "w-[75%] mr-auto rotate-1";
+                      if (indexPattern === 1) offsetClass = "w-[75%] ml-auto -mt-6 -rotate-2 relative z-10";
+                      else if (indexPattern === 2) offsetClass = "w-[85%] mx-auto -mt-4 rotate-2";
+                      return (
+                        <div key={i} className={`${offsetClass} aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/30 transform hover:rotate-0 transition-all duration-500`}>
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "minimal-polaroid") {
+                return (
+                  <div className="space-y-6 pt-1">
+                    {galeris.map((g, i) => {
+                      const isEven = i % 2 === 0;
+                      const rotation = isEven ? "rotate-1" : "-rotate-1";
+                      return (
+                        <div key={i} className="flex justify-center">
+                          <div className={`w-[85%] bg-white p-2.5 pb-6 shadow-xl border border-black/5 rounded-none transform ${rotation} hover:rotate-0 transition-transform duration-300`}>
+                            <img src={g} alt="" className="w-full aspect-square object-cover" />
+                            <div className="mt-2 text-center font-serif text-[8px] text-gray-400 tracking-wider">Photo {i + 1}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
+              if (layout === "classic-frame") {
+                return (
+                  <div className="grid grid-cols-2 gap-4 pt-1">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="aspect-[3/4] rounded-lg overflow-hidden bg-white p-2 shadow-lg border-2 border-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
+                        <div className="w-full h-full overflow-hidden border border-[#d4af37]/20 relative">
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "filmstrip") {
+                return (
+                  <div className="flex gap-2 overflow-x-auto bg-neutral-900 py-3 px-2 border-y-4 border-dashed border-neutral-700 scrollbar-none snap-x snap-mandatory pt-1">
+                    {galeris.map((g, i) => (
+                      <div key={i} className="w-[130px] aspect-square shrink-0 bg-black relative border-x border-neutral-800 snap-center flex items-center justify-center p-1">
+                        <img src={g} alt="" className="w-full h-full object-cover" />
+                        {/* Decorative Film Sprocket Holes */}
+                        <div className="absolute top-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                        </div>
+                        <div className="absolute bottom-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }
+              if (layout === "highlight-first") {
+                const first = galeris[0];
+                const others = galeris.slice(1);
+                return (
+                  <div className="space-y-2 pt-1">
+                    {first && (
+                      <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md">
+                        <img src={first} alt="" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    {others.length > 0 && (
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {others.map((g, i) => (
+                          <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/10 shadow-sm">
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               }

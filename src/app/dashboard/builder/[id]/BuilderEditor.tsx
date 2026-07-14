@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "../../templates/BuilderWidgets";
 import { CeritaPreview, PenutupPreview } from "../../templates/BuilderTabsCeritaPenutup";
+import { GALERI_LAYOUT_OPTIONS, GALERI_LAYOUT_DETAILS } from "../../templates/builder-constants";
 
 type TemplateType = {
   id: string;
@@ -1394,15 +1395,11 @@ export function BuilderEditor({
                           onChange={(e) => updateData("cerita", "galeri_layout", e.target.value)}
                           className="w-full px-3 py-2 bg-[#f5f5dc] border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none font-bold"
                         >
-                          <option value="grid-2">Grid 2 Kolom</option>
-                          <option value="grid-3">Grid 3 Kolom</option>
-                          <option value="masonry">Masonry (Estetik)</option>
-                          <option value="carousel">Carousel (Geser)</option>
-                          <option value="scroll">Scroll (Gulir)</option>
-                          <option value="collage">Collage Editorial</option>
-                          <option value="polaroid">Polaroid Stack</option>
-                          <option value="aesthetic">Aesthetic Scrapbook</option>
-                          <option value="custom">Gaya Custom (Bebas)</option>
+                          {GALERI_LAYOUT_OPTIONS.map(opt => (
+                            <option key={opt} value={opt}>
+                              {GALERI_LAYOUT_DETAILS[opt]?.label || opt}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
@@ -2082,12 +2079,12 @@ export function BuilderEditor({
                       </p>
                     )}
 
-                    <div className="space-y-6 pt-2">
+                    <div className="flex flex-col items-center gap-3 pt-2">
                       {data.profil?.profils?.map((prof: any, idx: number) => (
                         <Fragment key={idx}>
                           {idx > 0 && (
                             <div 
-                              className="flex items-center justify-center font-serif text-3xl my-2 self-center select-none font-bold min-w-[20px]"
+                              className="flex items-center justify-center font-serif text-3xl self-center select-none font-bold min-w-[20px]"
                               style={{
                                 color: data.profil?.setting_nama_profil?.color || data.profil?.setting_ucapan_profil?.color || "#d4af37",
                                 fontFamily: data.profil?.setting_nama_profil?.family || "serif"
@@ -2546,6 +2543,193 @@ export function BuilderEditor({
                                     </div>
                                   );
                                 })}
+                              </div>
+                            );
+                          }
+                          if (layout === "grid-4") {
+                            return (
+                              <div className="grid grid-cols-4 gap-1 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="aspect-square rounded-md overflow-hidden border border-white/20 shadow-sm">
+                                    <img src={img} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "masonry-3") {
+                            return (
+                              <div className="columns-3 gap-1.5 space-y-1.5 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="break-inside-avoid">
+                                    <img src={img} className="w-full h-auto rounded-lg object-cover border border-white/20 shadow-sm" alt="" />
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "mosaic-modern") {
+                            return (
+                              <div className="grid grid-cols-6 gap-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const indexPattern = idx % 6;
+                                  let colSpan = "col-span-3 aspect-[4/3]";
+                                  if (indexPattern === 0) colSpan = "col-span-4 aspect-square";
+                                  else if (indexPattern === 1) colSpan = "col-span-2 aspect-[3/4]";
+                                  else if (indexPattern === 2) colSpan = "col-span-2 aspect-square";
+                                  else if (indexPattern === 3) colSpan = "col-span-4 aspect-[16/9]";
+                                  else if (indexPattern === 4) colSpan = "col-span-3 aspect-[4/3]";
+                                  else if (indexPattern === 5) colSpan = "col-span-3 aspect-[4/3]";
+                                  return (
+                                    <div key={idx} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                               </div>
+                            );
+                          }
+                          if (layout === "zigzag") {
+                            return (
+                              <div className="space-y-4 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const isEven = idx % 2 === 0;
+                                  return (
+                                    <div key={idx} className={`flex ${isEven ? "justify-start" : "justify-end"}`}>
+                                      <div className="w-[85%] aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-white/25 transform hover:scale-[1.02] transition-transform duration-300">
+                                        <img src={img} className="w-full h-full object-cover" alt="" />
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "asymmetric") {
+                            return (
+                              <div className="grid grid-cols-3 gap-2 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const indexPattern = idx % 4;
+                                  const colSpan = (indexPattern === 0 || indexPattern === 3) ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-[4/3]";
+                                  return (
+                                    <div key={idx} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "bubbles") {
+                            return (
+                              <div className="grid grid-cols-2 gap-4 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const isEven = idx % 2 === 0;
+                                  const bubbleClass = isEven 
+                                    ? "aspect-square rounded-full scale-95 hover:scale-100" 
+                                    : "aspect-[3/4] rounded-[100px] translate-y-3 hover:translate-y-1";
+                                  return (
+                                    <div key={idx} className={`${bubbleClass} overflow-hidden border-2 border-white shadow-md transition-all duration-300`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "parallax-floating") {
+                            return (
+                              <div className="space-y-6 pt-2 pb-6 relative">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const indexPattern = idx % 3;
+                                  let offsetClass = "w-[75%] mr-auto rotate-1";
+                                  if (indexPattern === 1) offsetClass = "w-[75%] ml-auto -mt-6 -rotate-2 relative z-10";
+                                  else if (indexPattern === 2) offsetClass = "w-[85%] mx-auto -mt-4 rotate-2";
+                                  return (
+                                    <div key={idx} className={`${offsetClass} aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/30 transform hover:rotate-0 transition-all duration-500`}>
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "minimal-polaroid") {
+                            return (
+                              <div className="space-y-6 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => {
+                                  const isEven = idx % 2 === 0;
+                                  const rotation = isEven ? "rotate-1" : "-rotate-1";
+                                  return (
+                                    <div key={idx} className="flex justify-center">
+                                      <div className={`w-[85%] bg-white p-2.5 pb-6 shadow-xl border border-black/5 rounded-none transform ${rotation} hover:rotate-0 transition-transform duration-300`}>
+                                        <img src={img} className="w-full aspect-square object-cover" alt="" />
+                                        <div className="mt-2 text-center font-serif text-[8px] text-gray-400 tracking-wider">Photo {idx + 1}</div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }
+                          if (layout === "classic-frame") {
+                            return (
+                              <div className="grid grid-cols-2 gap-4 pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="aspect-[3/4] rounded-lg overflow-hidden bg-white p-2 shadow-lg border-2 border-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
+                                    <div className="w-full h-full overflow-hidden border border-[#d4af37]/20 relative">
+                                      <img src={img} className="w-full h-full object-cover" alt="" />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "filmstrip") {
+                            return (
+                              <div className="flex gap-2 overflow-x-auto bg-neutral-900 py-3 px-2 border-y-4 border-dashed border-neutral-700 scrollbar-none snap-x snap-mandatory pt-1">
+                                {data.cerita.galeris.map((img: string, idx: number) => (
+                                  <div key={idx} className="w-[130px] aspect-square shrink-0 bg-black relative border-x border-neutral-800 snap-center flex items-center justify-center p-1">
+                                    <img src={img} className="w-full h-full object-cover" alt="" />
+                                    {/* Decorative Film Sprocket Holes */}
+                                    <div className="absolute top-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                    </div>
+                                    <div className="absolute bottom-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                      <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          if (layout === "highlight-first") {
+                            const first = data.cerita.galeris[0];
+                            const others = data.cerita.galeris.slice(1);
+                            return (
+                              <div className="space-y-2 pt-1">
+                                {first && (
+                                  <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md">
+                                    <img src={first} className="w-full h-full object-cover" alt="" />
+                                  </div>
+                                )}
+                                {others.length > 0 && (
+                                  <div className="grid grid-cols-3 gap-1.5">
+                                    {others.map((img: string, idx: number) => (
+                                      <div key={idx} className="aspect-square rounded-lg overflow-hidden border border-white/10 shadow-sm">
+                                        <img src={img} className="w-full h-full object-cover" alt="" />
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             );
                           }

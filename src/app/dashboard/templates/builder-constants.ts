@@ -112,7 +112,52 @@ export const KATEGORI_EN_MAP: Record<string, string> = {
 
 export const ANIMATION_OPTIONS = ["none", "fade-in", "slide-up", "zoom-in", "bounce"];
 export const BINGKAI_OPTIONS = ["none", "bulat", "oval", "kubah", "hexagon", "daun", "perisai", "kotak-rounded", "kotak", "overlay-1", "overlay-2", "overlay-3", "custom"];
-export const GALERI_LAYOUT_OPTIONS = ["grid-2", "grid-3", "masonry", "carousel", "scroll", "collage", "polaroid", "aesthetic", "custom"];
+export const GALERI_LAYOUT_OPTIONS = [
+  "grid-2",
+  "grid-3",
+  "grid-4",
+  "masonry",
+  "masonry-3",
+  "carousel",
+  "scroll",
+  "collage",
+  "polaroid",
+  "aesthetic",
+  "mosaic-modern",
+  "zigzag",
+  "asymmetric",
+  "bubbles",
+  "parallax-floating",
+  "minimal-polaroid",
+  "classic-frame",
+  "filmstrip",
+  "highlight-first",
+  "custom"
+];
+
+export const GALERI_LAYOUT_DETAILS: Record<string, { label: string; desc: string }> = {
+  "grid-2": { label: "Grid 2 Kolom", desc: "Tampilan grid 2 kolom simetris" },
+  "grid-3": { label: "Grid 3 Kolom", desc: "Tampilan grid 3 kolom simetris" },
+  "grid-4": { label: "Grid 4 Kolom", desc: "Tampilan grid 4 kolom padat" },
+  "masonry": { label: "Masonry 2 Kolom", desc: "Pinterest style 2 kolom asimetris" },
+  "masonry-3": { label: "Masonry 3 Kolom", desc: "Pinterest style 3 kolom asimetris" },
+  "carousel": { label: "Carousel (Geser)", desc: "Slide foto horisontal snap-scroll" },
+  "scroll": { label: "Scroll (Gulir)", desc: "Scroll vertikal dengan efek gradasi" },
+  "collage": { label: "Collage Editorial", desc: "Tata letak ala majalah/berita" },
+  "polaroid": { label: "Polaroid Stack", desc: "Bingkai polaroid dengan rotasi estetik" },
+  "aesthetic": { label: "Aesthetic Scrapbook", desc: "Gaya scrapbook bertingkat & estetik" },
+  "mosaic-modern": { label: "Mosaic Modern", desc: "Pola mosaik interkoneksi modern" },
+  "zigzag": { label: "Zig-Zag Staggered", desc: "Foto berseling kiri dan kanan" },
+  "asymmetric": { label: "Asymmetric Alternating", desc: "Grid asimetris kolom berseling" },
+  "bubbles": { label: "Bubble Grid", desc: "Bingkai bulat & oval yang mengalir" },
+  "parallax-floating": { label: "Parallax Floating", desc: "Foto melayang saling tumpang tindih" },
+  "minimal-polaroid": { label: "Minimal Polaroid (1 Kolom)", desc: "Satu kolom polaroid minimalis vertikal" },
+  "classic-frame": { label: "Elegant Framed", desc: "Foto bingkai ganda klasik premium" },
+  "filmstrip": { label: "Filmstrip (Rol Film)", desc: "Slide horisontal ala negatif film" },
+  "highlight-first": { label: "Highlight Utama", desc: "Satu foto utama besar, sisanya kecil" },
+  "custom": { label: "Gaya Custom", desc: "Bebas atur lebar & aspek per foto" }
+};
+
 
 export const DEFAULT_SHARE_TEMPLATE = `Bismillahirrahmanirrahim.
 Assalamu’alaikum wr.wb.

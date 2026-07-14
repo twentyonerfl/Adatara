@@ -311,12 +311,12 @@ export function ProfilPreview({ data }: { data: any }) {
           if (group.length === 0) return null;
           const justifyClass = align === "left" ? "justify-start" : align === "right" ? "justify-end" : "justify-center";
           return (
-            <div key={align} className={`flex gap-6 flex-wrap w-full ${justifyClass}`}>
+            <div key={align} className={`flex gap-4 md:gap-6 flex-wrap w-full ${justifyClass}`}>
               {group.map((p, i) => (
                 <Fragment key={`${p.foto || ""}-${p.nama || i}`}>
                   {i > 0 && (
                     <div 
-                      className="flex items-center justify-center font-serif text-3xl my-2 self-center select-none font-bold min-w-[20px]"
+                      className="flex items-center justify-center font-serif text-3xl -my-1 md:my-0 self-center select-none font-bold min-w-[20px]"
                       style={{
                         color: data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#d4af37",
                         fontFamily: data.setting_nama_profil?.family || "serif"
