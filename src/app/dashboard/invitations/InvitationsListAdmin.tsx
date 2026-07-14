@@ -348,10 +348,10 @@ export default function InvitationsListAdmin({
                         <Sliders className="w-3.5 h-3.5" />
                       </button>
                       <Link
-                        href={`/${inv.slug}`}
+                        href={`/builder/${inv.id}?edit=true`}
                         target="_blank"
                         className="p-2 bg-slate-100 hover:bg-slate-200 text-[#064e3b] border border-slate-200 rounded-xl transition-all"
-                        title="Lihat Pratinjau Undangan Live"
+                        title="Buka Builder Editor Undangan & Generate WhatsApp Link"
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </Link>
