@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Save, Globe, ArrowLeft, Loader2, CheckCircle, AlertCircle, Sparkles,
-  Layout, BookOpen, Users, Calendar, Image, Heart, Eye, X, User, Phone, Mail, Link as LinkIcon
+  Layout, BookOpen, Users, Calendar, Image, Heart, Eye, X, User, Phone, Mail, Link as LinkIcon, Send, Copy, Share2
 } from "lucide-react";
 import { createTemplate, updateTemplate, publishTemplate, createActiveInvitationFromTemplate } from "./builder-actions";
 import { saveInvitationPublic } from "@/app/builder/[id]/actions";
@@ -73,6 +73,40 @@ export default function TemplateBuilderEditor({
   const [acaraData, setAcaraData]   = useState<any>(base.acara || {});
   const [ceritaData, setCeritaData] = useState<any>(base.cerita || {});
   const [penutupData, setPenutupData] = useState<any>(base.penutup || {});
+
+  // WA Guest Link Generator states
+  const [waGuestName, setWaGuestName] = useState("");
+  const [waLinkFormat, setWaLinkFormat] = useState<"path" | "query">("path");
+  const [waCopiedLink, setWaCopiedLink] = useState(false);
+  const [isWaBatchModalOpen, setIsWaBatchModalOpen] = useState(false);
+  const [waBatchInput, setWaBatchInput] = useState("");
+  const [waBatchResults, setWaBatchResults] = useState<Array<{ name: string; url: string; waUrl: string; waText: string }>>([]);
+
+  const getOrigin = () => typeof window !== "undefined" ? window.location.origin : "https://adatara.my.id";
+  const currentSlugPath = invitationSlug || namaTemplate || "undangan";
+  const baseWaUrl = `${getOrigin()}/${currentSlugPath}`;
+  const customWaGuestUrl = waGuestName.trim()
+    ? (waLinkFormat === "query"
+        ? `${baseWaUrl}?to=${encodeURIComponent(waGuestName.trim())}`
+        : `${baseWaUrl}/${encodeURIComponent(waGuestName.trim().replace(/ /g, "+"))}`)
+    : baseWaUrl;
+
+  const currentCoupleName = coverData?.nama_acara || penutupData?.tertanda || "Mempelai";
+  const defaultWaMessage = `*Undangan Pernikahan ${currentCoupleName}*\n\nKepada Yth. Bpk/Ibu/Saudara/i\n*${waGuestName.trim() || "Tamu Undangan"}*\n\nTanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri acara pernikahan kami:\n\nLink Undangan:\n${customWaGuestUrl}\n\nTerima kasih.`;
+  const directWaApiUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(defaultWaMessage)}`;
+
+  const handleGenerateBatchWa = () => {
+    const names = waBatchInput.split("\n").map(n => n.trim()).filter(n => n.length > 0);
+    const resList = names.map(name => {
+      const guestUrl = waLinkFormat === "query"
+        ? `${baseWaUrl}?to=${encodeURIComponent(name)}`
+        : `${baseWaUrl}/${encodeURIComponent(name.replace(/ /g, "+"))}`;
+      const waText = `*Undangan Pernikahan ${currentCoupleName}*\n\nKepada Yth. Bpk/Ibu/Saudara/i\n*${name}*\n\nTanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri acara pernikahan kami:\n\nLink Undangan:\n${guestUrl}\n\nTerima kasih.`;
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`;
+      return { name, url: guestUrl, waText, waUrl };
+    });
+    setWaBatchResults(resList);
+  };
 
   // UI state
   const [saveStatus, setSaveStatus] = useState<"idle"|"saving"|"saved"|"error">("idle");
@@ -368,6 +402,93 @@ export default function TemplateBuilderEditor({
       <div className="flex flex-1 overflow-hidden">
         {/* COLUMN 1: Data Form (Left) */}
         <div className="w-full md:w-[32%] lg:w-[28%] border-r border-[#064e3b]/10 overflow-y-auto p-4 space-y-4 bg-[#f5f5dc]">
+          {/* GENERATOR LINK TAMU & SHARE WHATSAPP CARD */}
+          <div className="p-3.5 bg-[#064e3b] text-white rounded-2xl border-2 border-[#d4af37]/40 shadow-lg space-y-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <div className="flex items-center gap-1.5">
+                <Send className="w-4 h-4 text-[#d4af37]" />
+                <span className="text-xs font-black uppercase text-[#d4af37] tracking-wider">Generator Tamu & Share WA</span>
+              </div>
+              <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Siap Kirim</span>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-white/80 block">Nama Tamu Undangan:</label>
+              <div className="relative">
+                <User className="absolute left-3 top-2.5 w-3.5 h-3.5 text-white/50" />
+                <input
+                  type="text"
+                  value={waGuestName}
+                  onChange={(e) => setWaGuestName(e.target.value)}
+                  placeholder="Contoh: Budi & Istri"
+                  className="w-full pl-8 pr-3 py-1.5 bg-black/20 border border-white/20 focus:border-[#d4af37] rounded-xl text-xs text-white outline-none placeholder-white/40"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[9px] font-bold text-white/80">
+                <span>Format Link:</span>
+                <div className="flex gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setWaLinkFormat("path")}
+                    className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase transition-all cursor-pointer ${
+                      waLinkFormat === "path" ? "bg-[#d4af37] text-[#064e3b] font-extrabold" : "bg-black/20 text-white/70"
+                    }`}
+                  >
+                    /Nama
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setWaLinkFormat("query")}
+                    className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase transition-all cursor-pointer ${
+                      waLinkFormat === "query" ? "bg-[#d4af37] text-[#064e3b] font-extrabold" : "bg-black/20 text-white/70"
+                    }`}
+                  >
+                    ?to=Nama
+                  </button>
+                </div>
+              </div>
+              <div className="p-1.5 bg-black/30 rounded-lg text-[9px] font-mono text-emerald-200 truncate select-all">
+                {customWaGuestUrl}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-1.5 pt-1">
+              <a
+                href={directWaApiUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2 px-2 bg-[#25d366] hover:bg-[#20ba5a] text-white rounded-xl text-[10px] font-black uppercase flex items-center justify-center gap-1 transition-all shadow-md cursor-pointer"
+              >
+                <Send className="w-3.5 h-3.5" />
+                Kirim WA
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(customWaGuestUrl);
+                  setWaCopiedLink(true);
+                  setTimeout(() => setWaCopiedLink(false), 2000);
+                }}
+                className="py-2 px-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                {waCopiedLink ? "Tersalin!" : "Salin Link"}
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsWaBatchModalOpen(true)}
+              className="w-full py-1.5 bg-[#d4af37]/20 hover:bg-[#d4af37]/30 text-[#d4af37] border border-[#d4af37]/40 rounded-xl text-[9.5px] font-black uppercase flex items-center justify-center gap-1 transition-all cursor-pointer"
+            >
+              <Users className="w-3 h-3" />
+              Generator Banyak Tamu (Batch WA)
+            </button>
+          </div>
+
           {/* Thumbnail & Deskripsi (always visible) */}
           <div className="p-3 bg-white rounded-2xl border border-[#064e3b]/10 space-y-3">
             <p className="text-[10px] font-black uppercase tracking-wider text-[#d4af37] flex items-center gap-1.5">
@@ -683,6 +804,93 @@ export default function TemplateBuilderEditor({
                     </button>
                   </div>
                 </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* BATCH WA GUEST GENERATOR MODAL */}
+      <AnimatePresence>
+        {isWaBatchModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-3xl border border-[#064e3b]/10 w-full max-w-xl shadow-2xl p-6 space-y-4 text-[#064e3b]"
+            >
+              <div className="flex items-center justify-between border-b border-[#064e3b]/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <Send className="w-5 h-5 text-[#d4af37]" />
+                  <h3 className="text-sm font-black uppercase text-[#064e3b] tracking-wider">
+                    Generator Banyak Tamu (Batch Kirim WA)
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setIsWaBatchModalOpen(false)}
+                  className="p-1.5 hover:bg-[#064e3b]/10 rounded-lg text-[#064e3b] font-bold text-xs cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block">
+                  Daftar Nama Tamu (Satu Nama Per Baris):
+                </label>
+                <textarea
+                  rows={5}
+                  value={waBatchInput}
+                  onChange={(e) => setWaBatchInput(e.target.value)}
+                  placeholder="Contoh:&#10;Budi Santoso&#10;Ani & Suami&#10;Keluarga Hermawan"
+                  className="w-full p-3 bg-[#f5f5dc]/20 border border-[#064e3b]/10 focus:border-[#d4af37] rounded-2xl text-xs outline-none"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGenerateBatchWa}
+                className="w-full py-2.5 bg-[#064e3b] hover:bg-[#064e3b]/95 text-white border border-[#d4af37] rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md"
+              >
+                Generate Tautan Tamu ({waBatchInput.split("\n").filter(n => n.trim().length > 0).length} Tamu)
+              </button>
+
+              {waBatchResults.length > 0 && (
+                <div className="space-y-2 border-t border-[#064e3b]/10 pt-3">
+                  <span className="text-[10px] font-black uppercase text-[#064e3b]/80 block">
+                    Hasil Tautan Tamu ({waBatchResults.length}):
+                  </span>
+                  <div className="divide-y divide-[#064e3b]/10 max-h-[220px] overflow-y-auto pr-1">
+                    {waBatchResults.map((g, idx) => (
+                      <div key={idx} className="py-2 flex items-center justify-between gap-2 text-xs">
+                        <div className="min-w-0 flex-1">
+                          <div className="font-bold truncate">{g.name}</div>
+                          <div className="text-[10px] font-mono text-[#064e3b]/60 truncate select-all">{g.url}</div>
+                        </div>
+                        <div className="flex gap-1 shrink-0">
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(g.url);
+                              alert(`Tautan untuk ${g.name} telah disalin!`);
+                            }}
+                            className="px-2 py-1 bg-slate-100 hover:bg-slate-200 border rounded-lg text-[9px] font-bold cursor-pointer"
+                          >
+                            Salin Link
+                          </button>
+                          <a
+                            href={g.waUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2 py-1 bg-[#25d366] hover:bg-[#20ba5a] text-white rounded-lg text-[9px] font-bold flex items-center gap-1 cursor-pointer"
+                          >
+                            <Send className="w-2.5 h-2.5" /> Kirim WA
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </motion.div>
           </div>
