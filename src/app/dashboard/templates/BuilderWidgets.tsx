@@ -547,7 +547,7 @@ export function SectionInput({ label, className = "", children }: { label: strin
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`border border-[#064e3b]/10 rounded-2xl bg-white/40 backdrop-blur-md transition-all duration-300 ${isOpen ? "shadow-sm border-[#064e3b]/15 bg-white/60" : "overflow-hidden"} ${className}`}>
+    <div className={`border border-[#064e3b]/10 rounded-2xl bg-white/40 backdrop-blur-md transition-all duration-300 ${isOpen ? "relative z-20 shadow-sm border-[#064e3b]/15 bg-white/60" : "overflow-hidden"} ${className}`}>
       {/* Accordion Header Button */}
       <button
         type="button"
