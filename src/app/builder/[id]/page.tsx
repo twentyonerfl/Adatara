@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { BuilderEditor } from "@/app/dashboard/builder/[id]/BuilderEditor";
+import WaSharePage from "./WaSharePage";
 
 export const revalidate = 0; // Disable caching to ensure real-time edits are shown
 
@@ -21,17 +21,5 @@ export default async function PublicBuilderPage({
     redirect("/templates");
   }
 
-  // Fetch background music library
-  const musicList = await db.musicLibrary.findMany({
-    orderBy: { judul: "asc" },
-  });
-
-  return (
-    <div className="min-h-screen w-full flex flex-col bg-[#fefcf6]">
-      <BuilderEditor
-        invitation={invitation}
-        musicList={musicList}
-      />
-    </div>
-  );
+  return <WaSharePage invitation={invitation} />;
 }
