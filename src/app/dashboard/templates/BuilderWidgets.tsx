@@ -294,10 +294,10 @@ export function FileUploader({
   };
 
   const uploadFile = async (file: File) => {
-    // Batas ukuran file 10MB
-    const MAX_SIZE = 10 * 1024 * 1024;
+    // Batas ukuran file 15MB
+    const MAX_SIZE = 15 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      setError("Ukuran file terlalu besar. Maksimal ukuran file adalah 10 MB.");
+      setError("Ukuran file terlalu besar. Maksimal ukuran file adalah 15 MB.");
       return;
     }
 
