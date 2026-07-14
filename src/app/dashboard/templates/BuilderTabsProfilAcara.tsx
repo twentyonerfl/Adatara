@@ -178,6 +178,28 @@ export function ProfilForm({ data, onChange, mode }: { data: any; onChange: (d: 
             );
           })()}
 
+          <SectionInput label="Setting Separator Pasangan">
+            <div className="p-3.5 bg-white border border-[#064e3b]/10 rounded-xl space-y-4">
+              <div>
+                <label className="block text-[10px] font-extrabold uppercase text-[#064e3b]/60 mb-1">Teks Separator</label>
+                <input
+                  type="text"
+                  value={data.setting_separator_profil?.text ?? "&"}
+                  onChange={e => upd("setting_separator_profil", { ...(data.setting_separator_profil || {}), text: e.target.value })}
+                  placeholder="& atau dan atau dengan"
+                  className="w-full px-3 py-1.5 bg-white border border-[#064e3b]/20 rounded-xl text-xs text-[#064e3b] outline-none font-bold focus:border-[#d4af37]"
+                />
+              </div>
+              <div className="pt-3 border-t border-[#064e3b]/10">
+                <FontSettingsWidget
+                  label="Style Separator"
+                  value={data.setting_separator_profil || {}}
+                  onChange={(val) => upd("setting_separator_profil", { ...(data.setting_separator_profil || {}), ...val })}
+                />
+              </div>
+            </div>
+          </SectionInput>
+
           <SectionInput label="Background Profil">
             <BackgroundWidget value={data.background || { type: "solid", value: "#fefcf6" }} onChange={v => upd("background", v)} />
           </SectionInput>
@@ -315,14 +337,18 @@ export function ProfilPreview({ data }: { data: any }) {
               {group.map((p, i) => (
                 <Fragment key={`${p.foto || ""}-${p.nama || i}`}>
                   {i > 0 && (
-                    <div 
-                      className="flex items-center justify-center font-serif text-3xl -my-1 md:my-0 self-center select-none font-bold min-w-[20px]"
-                      style={{
-                        color: data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#d4af37",
-                        fontFamily: data.setting_nama_profil?.family || "serif"
-                      }}
-                    >
-                      &
+                    <div className="flex items-center justify-center -my-1 md:my-0 self-center select-none font-bold min-w-[20px]">
+                      <AnimatedWrapper val={data.setting_separator_profil}>
+                        <span
+                          style={{
+                            color: data.setting_separator_profil?.color || data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#d4af37",
+                            fontFamily: data.setting_separator_profil?.family || data.setting_nama_profil?.family || "serif",
+                            fontSize: data.setting_separator_profil?.size || "30px",
+                          }}
+                        >
+                          {data.setting_separator_profil?.text ?? "&"}
+                        </span>
+                      </AnimatedWrapper>
                     </div>
                   )}
                   <div className="flex flex-col items-center gap-2 text-center">

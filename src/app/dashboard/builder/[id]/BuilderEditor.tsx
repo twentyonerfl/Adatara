@@ -40,7 +40,7 @@ import {
   ArrowDown,
   GripVertical
 } from "lucide-react";
-import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget } from "../../templates/BuilderWidgets";
+import { FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget, AnimatedWrapper } from "../../templates/BuilderWidgets";
 import { CeritaPreview, PenutupPreview } from "../../templates/BuilderTabsCeritaPenutup";
 import { GALERI_LAYOUT_OPTIONS, GALERI_LAYOUT_DETAILS } from "../../templates/builder-constants";
 
@@ -2083,14 +2083,18 @@ export function BuilderEditor({
                       {data.profil?.profils?.map((prof: any, idx: number) => (
                         <Fragment key={idx}>
                           {idx > 0 && (
-                            <div 
-                              className="flex items-center justify-center font-serif text-3xl self-center select-none font-bold min-w-[20px]"
-                              style={{
-                                color: data.profil?.setting_nama_profil?.color || data.profil?.setting_ucapan_profil?.color || "#d4af37",
-                                fontFamily: data.profil?.setting_nama_profil?.family || "serif"
-                              }}
-                            >
-                              &
+                            <div className="flex items-center justify-center self-center select-none font-bold min-w-[20px]">
+                              <AnimatedWrapper val={data.profil?.setting_separator_profil}>
+                                <span
+                                  style={{
+                                    color: data.profil?.setting_separator_profil?.color || data.profil?.setting_nama_profil?.color || data.profil?.setting_ucapan_profil?.color || "#d4af37",
+                                    fontFamily: data.profil?.setting_separator_profil?.family || data.profil?.setting_nama_profil?.family || "serif",
+                                    fontSize: data.profil?.setting_separator_profil?.size || "30px",
+                                  }}
+                                >
+                                  {data.profil?.setting_separator_profil?.text ?? "&"}
+                                </span>
+                              </AnimatedWrapper>
                             </div>
                           )}
                           <div className="flex flex-col items-center">

@@ -28,6 +28,7 @@ export const defaultTemplateJson = {
     setting_nama_profil: { size: "14px", color: "#ffffff", family: "Inter", position: "center", animation: "none" },
     setting_keterangan_profil: { size: "10px", color: "#ffffff", family: "Inter", position: "center", animation: "none" },
     setting_urutan_profil: { size: "9px", color: "#ffffff", family: "Inter", position: "center", animation: "none" },
+    setting_separator_profil: { text: "&", size: "30px", color: "#ffffff", family: "serif", position: "center", animation: "none" },
     profils: [
       { foto: "", bingkai: "oval", foto_width: "120px", foto_height: "120px", overlay_url: "", nama: "Nama Pertama", keterangan: "Putra/i dari Bpk. & Ibu." },
     ],
