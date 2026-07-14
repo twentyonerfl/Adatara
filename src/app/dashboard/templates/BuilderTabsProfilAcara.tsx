@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -311,15 +311,15 @@ export function ProfilPreview({ data }: { data: any }) {
           if (group.length === 0) return null;
           const justifyClass = align === "left" ? "justify-start" : align === "right" ? "justify-end" : "justify-center";
           return (
-            <div key={align} className={`flex gap-6 flex-wrap w-full items-center ${justifyClass}`}>
+            <div key={align} className={`flex gap-6 flex-wrap w-full ${justifyClass}`}>
               {group.map((p, i) => (
-                <React.Fragment key={`${p.foto || ""}-${p.nama || i}`}>
+                <Fragment key={`${p.foto || ""}-${p.nama || i}`}>
                   {i > 0 && (
-                    <div
-                      className="text-3xl font-serif px-2 opacity-80 select-none flex items-center justify-center shrink-0"
+                    <div 
+                      className="flex items-center justify-center font-serif text-3xl my-2 self-center select-none font-bold min-w-[20px]"
                       style={{
-                        fontFamily: "serif",
-                        color: p.setting_nama?.color || data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                        color: data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#d4af37",
+                        fontFamily: data.setting_nama_profil?.family || "serif"
                       }}
                     >
                       &
@@ -372,7 +372,7 @@ export function ProfilPreview({ data }: { data: any }) {
                       )}
                     </div>
                   </div>
-                </React.Fragment>
+                </Fragment>
               ))}
             </div>
           );

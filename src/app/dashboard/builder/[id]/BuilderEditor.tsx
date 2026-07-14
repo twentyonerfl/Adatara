@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { saveInvitation } from "../actions";
@@ -2084,32 +2084,45 @@ export function BuilderEditor({
 
                     <div className="space-y-6 pt-2">
                       {data.profil?.profils?.map((prof: any, idx: number) => (
-                        <div key={idx} className="flex flex-col items-center">
-                          <FramedPhoto
-                            src={prof.foto}
-                            bingkai={prof.bingkai || "oval"}
-                            className="w-24 h-24"
-                            customWidth={prof.foto_width}
-                            customHeight={prof.foto_height}
-                            overlayUrl={prof.overlay_url}
-                            photoScale={prof.foto_scale}
-                            photoX={prof.foto_x}
-                            photoY={prof.foto_y}
-                          />
-                          <div className="relative w-full min-h-[80px] mt-2">
-                            <div style={getFontStyles(data.profil?.setting_nama_profil || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold">
-                              {prof.nama}
+                        <Fragment key={idx}>
+                          {idx > 0 && (
+                            <div 
+                              className="flex items-center justify-center font-serif text-3xl my-2 self-center select-none font-bold min-w-[20px]"
+                              style={{
+                                color: data.profil?.setting_nama_profil?.color || data.profil?.setting_ucapan_profil?.color || "#d4af37",
+                                fontFamily: data.profil?.setting_nama_profil?.family || "serif"
+                              }}
+                            >
+                              &
                             </div>
-                            <div style={getFontStyles(data.profil?.setting_keterangan_profil || { size: "9px", color: "#ffffff", family: "Inter", position: "center" })} className="mt-1 max-w-[180px] mx-auto leading-normal">
-                              {prof.keterangan}
-                            </div>
-                            {prof.urutan_anak && (
-                              <div style={getFontStyles(data.profil?.setting_urutan_profil || { size: "8px", color: "#ffffff", family: "Inter", position: "center" })} className="mt-1 max-w-[180px] mx-auto leading-normal italic">
-                                {prof.urutan_anak}
+                          )}
+                          <div className="flex flex-col items-center">
+                            <FramedPhoto
+                              src={prof.foto}
+                              bingkai={prof.bingkai || "oval"}
+                              className="w-24 h-24"
+                              customWidth={prof.foto_width}
+                              customHeight={prof.foto_height}
+                              overlayUrl={prof.overlay_url}
+                              photoScale={prof.foto_scale}
+                              photoX={prof.foto_x}
+                              photoY={prof.foto_y}
+                            />
+                            <div className="relative w-full min-h-[80px] mt-2">
+                              <div style={getFontStyles(data.profil?.setting_nama_profil || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold">
+                                {prof.nama}
                               </div>
-                            )}
+                              <div style={getFontStyles(data.profil?.setting_keterangan_profil || { size: "9px", color: "#ffffff", family: "Inter", position: "center" })} className="mt-1 max-w-[180px] mx-auto leading-normal">
+                                {prof.keterangan}
+                              </div>
+                              {prof.urutan_anak && (
+                                <div style={getFontStyles(data.profil?.setting_urutan_profil || { size: "8px", color: "#ffffff", family: "Inter", position: "center" })} className="mt-1 max-w-[180px] mx-auto leading-normal italic">
+                                  {prof.urutan_anak}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
+                        </Fragment>
                       ))}
                     </div>
                   </div>
