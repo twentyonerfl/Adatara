@@ -348,17 +348,17 @@ export default function InvitationsListAdmin({
                         <Sliders className="w-3.5 h-3.5" />
                       </button>
                       <Link
-                        href={`/builder/${inv.id}`}
+                        href={`/${inv.slug}`}
                         target="_blank"
                         className="p-2 bg-slate-100 hover:bg-slate-200 text-[#064e3b] border border-slate-200 rounded-xl transition-all"
-                        title="Generator Link Tamu Undangan & Share WhatsApp"
+                        title="Lihat Pratinjau Undangan Live"
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </Link>
                       <button
                         onClick={() => handleOpenGuestGenerator(inv)}
-                        className="p-2 bg-[#d4af37]/10 hover:bg-[#d4af37]/20 text-[#d4af37] border border-[#d4af37]/35 rounded-xl transition-all cursor-pointer"
-                        title="Kelola & Share Tamu (Batch)"
+                        className="p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl transition-all cursor-pointer"
+                        title="Generator Link Tamu & Kirim WhatsApp"
                       >
                         <Users className="w-3.5 h-3.5" />
                       </button>
