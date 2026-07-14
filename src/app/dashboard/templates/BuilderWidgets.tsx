@@ -341,12 +341,32 @@ export function FileUploader({
             }
           } else {
             const errData = await uploadRes.json().catch(() => ({}));
+            const errDetail = errData.error?.message || JSON.stringify(errData);
             console.warn("Direct Cloudinary upload failed response:", errData);
+            if (file.size > 4 * 1024 * 1024) {
+              throw new Error(`Direct Cloudinary Error: ${errDetail}`);
+            }
           }
+        } else {
+          if (file.size > 4 * 1024 * 1024) {
+            throw new Error(sigData.error || "Gagal mendapatkan signature Cloudinary.");
+          }
+        }
+      } else {
+        if (file.size > 4 * 1024 * 1024) {
+          const sigErrData = await sigRes.json().catch(() => ({}));
+          const sigErrDetail = sigErrData.error || `HTTP ${sigRes.status} ${sigRes.statusText}`;
+          throw new Error(`Signature API Error: ${sigErrDetail}`);
         }
       }
     } catch (err) {
       console.warn("Direct upload error, falling back to server upload:", err);
+      if (file.size > 4 * 1024 * 1024) {
+        const errorMsg = err instanceof Error ? err.message : "Terjadi kesalahan saat mengunggah";
+        setError(errorMsg);
+        setIsUploading(false);
+        return;
+      }
     }
 
     // Fallback: Mengunggah lewat Server API Route (terbatas 4.5MB di Vercel, tetapi tanpa batas di Localhost)
@@ -360,13 +380,16 @@ export function FileUploader({
       });
 
       if (!res.ok) {
-        let errMsg = "Gagal mengunggah file";
+        let errMsg = `Gagal mengunggah file (Status: ${res.status})`;
         try {
           const errData = await res.json();
           errMsg = errData.error || errMsg;
         } catch {
           try {
-            errMsg = await res.text() || errMsg;
+            const txt = await res.text();
+            if (txt) {
+              errMsg = txt.length > 80 ? `${txt.substring(0, 80)}...` : txt;
+            }
           } catch {}
         }
         throw new Error(errMsg);
