@@ -29,12 +29,13 @@ function extractCoverImage(dataJson: any, templateThumbnail?: string | null): st
   return null;
 }
 
-export default async function OgImage({
+export default async function GuestOgImage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; guestName: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, guestName } = await params;
+  const decodedGuestName = decodeURIComponent(guestName.replace(/\+/g, " "));
 
   const invitation = await db.invitation
     .findUnique({
@@ -131,9 +132,9 @@ export default async function OgImage({
               bottom: 0,
               left: 0,
               right: 0,
-              height: "45%",
+              height: "50%",
               background:
-                "linear-gradient(to bottom, transparent, rgba(4, 25, 19, 0.92))",
+                "linear-gradient(to bottom, transparent, rgba(4, 25, 19, 0.94))",
             }}
           />
 
@@ -172,7 +173,7 @@ export default async function OgImage({
             </span>
           </div>
 
-          {/* Text Title Overlay (Bottom Left) */}
+          {/* Text Title & Guest Overlay (Bottom Left) */}
           <div
             style={{
               position: "absolute",
@@ -188,18 +189,18 @@ export default async function OgImage({
                 color: "#d4af37",
                 fontSize: 16,
                 margin: 0,
-                letterSpacing: "0.25em",
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 fontFamily: "serif",
                 fontWeight: 700,
               }}
             >
-              UNDANGAN DIGITAL RESMI
+              UNDANGAN SPESIAL UNTUK: {decodedGuestName}
             </p>
             <h1
               style={{
                 color: "#ffffff",
-                fontSize: 48,
+                fontSize: 46,
                 fontWeight: 800,
                 margin: "4px 0 0",
                 fontFamily: "serif",
@@ -250,12 +251,12 @@ export default async function OgImage({
             style={{
               color: "rgba(212,175,55,0.8)",
               fontSize: 16,
-              letterSpacing: "0.3em",
+              letterSpacing: "0.2em",
               margin: 0,
               textTransform: "uppercase",
             }}
           >
-            UNDANGAN DIGITAL
+            UNDANGAN UNTUK {decodedGuestName}
           </p>
           <h1
             style={{
@@ -269,15 +270,6 @@ export default async function OgImage({
           >
             {namaAcara}
           </h1>
-          <p
-            style={{
-              color: "rgba(245,245,220,0.7)",
-              fontSize: 18,
-              margin: "14px 0 0",
-            }}
-          >
-            adatara.my.id/{slug}
-          </p>
         </div>
       </div>
     ),
