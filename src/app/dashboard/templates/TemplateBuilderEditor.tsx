@@ -8,6 +8,7 @@ import {
   Layout, BookOpen, Users, Calendar, Image, Heart, Eye, X, User, Phone, Mail, Link as LinkIcon
 } from "lucide-react";
 import { createTemplate, updateTemplate, publishTemplate, createActiveInvitationFromTemplate } from "./builder-actions";
+import { saveInvitationPublic } from "@/app/builder/[id]/actions";
 import { defaultTemplateJson, KATEGORI_OPTIONS, KATEGORI_EN_MAP } from "./builder-constants";
 import { FileUploader } from "./BuilderWidgets";
 import { CoverForm, CoverPreview } from "./BuilderTabsCoverPembuka";
@@ -29,6 +30,9 @@ const TABS = [
 
 interface Props {
   templateId?: string;
+  invitationId?: string;
+  invitationSlug?: string;
+  isInvitationEdit?: boolean;
   initialData?: any;
   initialName?: string;
   initialKategori?: string;
@@ -42,7 +46,8 @@ interface Props {
 }
 
 export default function TemplateBuilderEditor({
-  templateId, initialData, initialName = "", initialKategori = "",
+  templateId, invitationId, invitationSlug, isInvitationEdit = false,
+  initialData, initialName = "", initialKategori = "",
   initialPaket = "BASIC",
   initialThumbnail = "", initialDeskripsi = "", initialStatus = "DRAFT",
   initialBahasa = "id", musicLibrary = [], categories = []
@@ -123,17 +128,29 @@ export default function TemplateBuilderEditor({
   });
 
   const handleSave = async () => {
-    if (!namaTemplate.trim()) { setErrorMsg("Nama template wajib diisi."); setSaveStatus("error"); return; }
     setSaveStatus("saving");
     setErrorMsg("");
     startTransition(async () => {
-      const payload = { nama_template: namaTemplate, kategori, paket, thumbnail, deskripsi, template_json: buildJson() };
-      const res = templateId ? await updateTemplate(templateId, payload) : await createTemplate(payload);
-      if (res.error) { setSaveStatus("error"); setErrorMsg(res.error); }
-      else {
-        setSaveStatus("saved");
-        setTimeout(() => setSaveStatus("idle"), 2000);
-        if (!templateId && (res as any).id) router.replace(`/dashboard/templates/edit/${(res as any).id}`);
+      const json = buildJson();
+      if (isInvitationEdit && invitationId) {
+        const res = await saveInvitationPublic(invitationId, json, status as any);
+        if (res?.error) {
+          setSaveStatus("error");
+          setErrorMsg(res.error);
+        } else {
+          setSaveStatus("saved");
+          setTimeout(() => setSaveStatus("idle"), 2000);
+        }
+      } else {
+        if (!namaTemplate.trim()) { setErrorMsg("Nama template wajib diisi."); setSaveStatus("error"); return; }
+        const payload = { nama_template: namaTemplate, kategori, paket, thumbnail, deskripsi, template_json: json };
+        const res = templateId ? await updateTemplate(templateId, payload) : await createTemplate(payload);
+        if (res.error) { setSaveStatus("error"); setErrorMsg(res.error); }
+        else {
+          setSaveStatus("saved");
+          setTimeout(() => setSaveStatus("idle"), 2000);
+          if (!templateId && (res as any).id) router.replace(`/dashboard/templates/edit/${(res as any).id}`);
+        }
       }
     });
   };
@@ -172,35 +189,45 @@ export default function TemplateBuilderEditor({
       <header className="sticky top-0 z-20 bg-[#f5f5dc]/95 backdrop-blur-sm border-b border-[#064e3b]/10 px-6 py-3 flex items-center justify-between gap-4 flex-wrap">
         {/* Left Section: Navigation & Info Inputs */}
         <div className="flex items-center gap-3 flex-wrap">
-          <button onClick={() => router.push("/dashboard/templates")}
-            className="p-2 hover:bg-[#064e3b]/10 rounded-xl text-[#064e3b] transition-all shrink-0">
+          <button onClick={() => isInvitationEdit ? router.push("/dashboard/invitations") : router.push("/dashboard/templates")}
+            className="p-2 hover:bg-[#064e3b]/10 rounded-xl text-[#064e3b] transition-all shrink-0" title="Kembali">
             <ArrowLeft className="w-5 h-5" />
           </button>
 
-          <input value={namaTemplate} onChange={e => setNamaTemplate(e.target.value)} placeholder="Nama Template..."
-            className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-44 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors shrink-0" />
+          {isInvitationEdit ? (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black uppercase text-[#d4af37] tracking-widest bg-[#064e3b] px-2.5 py-1 rounded-lg">Undangan</span>
+              <input value={namaTemplate} onChange={e => setNamaTemplate(e.target.value)} placeholder="Nama / Slug Undangan..."
+                className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-52 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors shrink-0" />
+            </div>
+          ) : (
+            <>
+              <input value={namaTemplate} onChange={e => setNamaTemplate(e.target.value)} placeholder="Nama Template..."
+                className="text-lg font-black bg-transparent border-b-2 border-[#064e3b]/20 focus:border-[#d4af37] outline-none px-1 py-0.5 w-44 text-[#064e3b] placeholder-[#064e3b]/30 transition-colors shrink-0" />
 
-          <select
-            value={kategori}
-            onChange={e => { setKategori(e.target.value); setCoverData((p: any) => ({ ...p, kategori: e.target.value })); }}
-            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[150px] shrink-0"
-          >
-            <option value="">-- Kategori --</option>
-            {(categories.length > 0 ? categories.map(c => c.nama) : KATEGORI_OPTIONS).map(k => (
-              <option key={k} value={k}>{k}</option>
-            ))}
-          </select>
+              <select
+                value={kategori}
+                onChange={e => { setKategori(e.target.value); setCoverData((p: any) => ({ ...p, kategori: e.target.value })); }}
+                className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[150px] shrink-0"
+              >
+                <option value="">-- Kategori --</option>
+                {(categories.length > 0 ? categories.map(c => c.nama) : KATEGORI_OPTIONS).map(k => (
+                  <option key={k} value={k}>{k}</option>
+                ))}
+              </select>
 
-          <select
-            value={paket}
-            onChange={e => setPaket(e.target.value as PaketTier)}
-            className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[120px] shrink-0"
-          >
-            <option value="BASIC">BASIC</option>
-            <option value="PREMIUM">PREMIUM</option>
-            <option value="SULTAN">SULTAN</option>
-            <option value="EXCLUSIVE">EXCLUSIVE</option>
-          </select>
+              <select
+                value={paket}
+                onChange={e => setPaket(e.target.value as PaketTier)}
+                className="text-xs font-black bg-white border border-[#064e3b]/20 rounded-xl px-3 py-1.5 outline-none focus:border-[#d4af37] text-[#064e3b] w-[120px] shrink-0"
+              >
+                <option value="BASIC">BASIC</option>
+                <option value="PREMIUM">PREMIUM</option>
+                <option value="SULTAN">SULTAN</option>
+                <option value="EXCLUSIVE">EXCLUSIVE</option>
+              </select>
+            </>
+          )}
         </div>
 
         {/* Right Section: Language, Status & Actions */}
@@ -234,23 +261,35 @@ export default function TemplateBuilderEditor({
             </div>
           </div>
 
-          {/* Status badge */}
+          {/* Status badge / selector */}
           <div className="flex items-center gap-1.5 shrink-0">
-            <span className={`text-[9px] font-black px-3 py-1 rounded-full border uppercase tracking-wider ${
-              status === "PUBLISHED" ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-amber-50 border-amber-200 text-amber-800"
-            }`}>{status}</span>
-            
-            {status === "PUBLISHED" && templateId && (
-              <a 
-                href={`/demo/${templateId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 bg-white border border-[#064e3b]/20 text-[#064e3b] hover:text-white hover:bg-[#064e3b] rounded-xl transition-all shadow-sm flex items-center justify-center shrink-0"
-                title="Lihat Hasil Undangan"
+            {isInvitationEdit ? (
+              <select
+                value={status}
+                onChange={e => setStatus(e.target.value)}
+                className={`text-[9px] font-black px-3 py-1 rounded-full border uppercase tracking-wider outline-none cursor-pointer ${
+                  status === "ACTIVE" ? "bg-emerald-50 border-emerald-200 text-emerald-800" : status === "DRAFT" ? "bg-amber-50 border-amber-200 text-amber-800" : "bg-slate-100 border-slate-300 text-slate-700"
+                }`}
               >
-                <Eye className="w-3.5 h-3.5" />
-              </a>
+                <option value="DRAFT">DRAF</option>
+                <option value="ACTIVE">AKTIF</option>
+                <option value="INACTIVE">NON-AKTIF</option>
+              </select>
+            ) : (
+              <span className={`text-[9px] font-black px-3 py-1 rounded-full border uppercase tracking-wider ${
+                status === "PUBLISHED" ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-amber-50 border-amber-200 text-amber-800"
+              }`}>{status}</span>
             )}
+            
+            <a 
+              href={isInvitationEdit ? `/${invitationSlug}` : `/demo/${templateId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5 bg-white border border-[#064e3b]/20 text-[#064e3b] hover:text-white hover:bg-[#064e3b] rounded-xl transition-all shadow-sm flex items-center justify-center shrink-0"
+              title="Lihat Pratinjau Live Undangan"
+            >
+              <Eye className="w-3.5 h-3.5" />
+            </a>
           </div>
 
           {/* Alerts */}
@@ -262,7 +301,7 @@ export default function TemplateBuilderEditor({
 
           {/* Actions */}
           <div className="flex gap-2 shrink-0">
-            {templateId && (
+            {!isInvitationEdit && templateId && (
               <button 
                 onClick={() => {
                   setActiveName("");
@@ -281,17 +320,28 @@ export default function TemplateBuilderEditor({
               </button>
             )}
             <button onClick={handleSave} disabled={isPending}
-              className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${
-                saveStatus === "saved" ? "bg-emerald-600 text-white border-emerald-700" : "bg-white border-[#064e3b]/20 text-[#064e3b] hover:bg-[#064e3b]/5"
+              className={`px-4 py-2 rounded-xl border font-black text-xs flex items-center gap-2 transition-all cursor-pointer ${
+                saveStatus === "saved"
+                  ? "bg-emerald-600 text-white border-emerald-700"
+                  : "bg-[#064e3b] text-white border-[#d4af37] hover:bg-[#064e3b]/90 shadow-lg shadow-[#064e3b]/10"
               } disabled:opacity-50 shrink-0`}
-              title={saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Draft"}>
-              {saveStatus === "saving" ? <Loader2 className="w-4 h-4 animate-spin" /> : saveStatus === "saved" ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+              title={saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Perubahan"}>
+              {saveStatus === "saving" ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : saveStatus === "saved" ? (
+                <CheckCircle className="w-4 h-4" />
+              ) : (
+                <Save className="w-4 h-4 text-[#d4af37]" />
+              )}
+              <span>{saveStatus === "saving" ? "Menyimpan..." : saveStatus === "saved" ? "Tersimpan!" : "Simpan Perubahan"}</span>
             </button>
-            <button onClick={handlePublish} disabled={isPending}
-              className="px-4 py-2 rounded-xl text-xs font-black bg-[#064e3b] hover:bg-[#064e3b]/90 text-white border border-[#d4af37] flex items-center gap-2 shadow-lg shadow-[#064e3b]/10 disabled:opacity-50 shrink-0">
-              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4 text-[#d4af37]" />}
-              Publish
-            </button>
+            {!isInvitationEdit && (
+              <button onClick={handlePublish} disabled={isPending}
+                className="px-4 py-2 rounded-xl text-xs font-black bg-[#064e3b] hover:bg-[#064e3b]/90 text-white border border-[#d4af37] flex items-center gap-2 shadow-lg shadow-[#064e3b]/10 disabled:opacity-50 shrink-0">
+                {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4 text-[#d4af37]" />}
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </header>
