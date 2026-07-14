@@ -44,7 +44,7 @@ export async function generateMetadata({
 
   const dataJson = invitation.data_undangan_json as any;
   const namaAcara: string = dataJson?.cover?.nama_acara || "Undangan Spesial";
-  const ogImageUrl = `${BASE_URL}/${slug}/${guestName}/opengraph-image`;
+  const ogImage = extractOgImage(dataJson, invitation.template.thumbnail);
 
   const title = `Undangan untuk ${decodedGuestName} – ${namaAcara}`;
   const description = `Kepada Yth. ${decodedGuestName}, Anda mendapat undangan dari ${namaAcara}. Silakan buka link ini untuk melihat undangan digital interaktif di Adatara.`;
@@ -62,7 +62,7 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: ogImageUrl,
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: title,
@@ -73,7 +73,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [ogImageUrl],
+      images: [ogImage],
     },
   };
 }

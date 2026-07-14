@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
-export const size = { width: 1200, height: 630 };
+export const size = { width: 1000, height: 1000 };
 export const contentType = "image/png";
 
 const BASE_URL = "https://adatara.my.id";
@@ -36,14 +36,13 @@ export default async function OgImage({
 }) {
   const { slug } = await params;
 
-  const invitation = await db.invitation
-    .findUnique({
-      where: { slug },
-      include: { template: true },
-    })
-    .catch(() => null);
+  const invitation = await db.invitation.findUnique({
+    where: { slug },
+    include: { template: true },
+  }).catch(() => null);
 
   if (!invitation) {
+    // Fallback: Adatara branding
     return new ImageResponse(
       (
         <div
@@ -58,8 +57,8 @@ export default async function OgImage({
         >
           <img
             src={`${BASE_URL}/logo.png`}
-            width={240}
-            height={240}
+            width={300}
+            height={300}
             style={{ borderRadius: "50%" }}
           />
         </div>
@@ -73,6 +72,7 @@ export default async function OgImage({
   const coverImageUrl = extractCoverImage(dataJson, invitation.template.thumbnail);
 
   if (coverImageUrl) {
+    // Show cover photo full-bleed with couple name overlay at the bottom
     return new ImageResponse(
       (
         <div
@@ -81,13 +81,11 @@ export default async function OgImage({
             width: "100%",
             height: "100%",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#064e3b",
+            alignItems: "flex-end",
             overflow: "hidden",
           }}
         >
-          {/* Blurred Background to fill landscape banner ratio perfectly */}
+          {/* Cover image */}
           <img
             src={coverImageUrl}
             style={{
@@ -97,118 +95,93 @@ export default async function OgImage({
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              filter: "blur(24px) brightness(0.4)",
-              transform: "scale(1.1)",
             }}
           />
-
-          {/* Full Uncropped Photo Container */}
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              src={coverImageUrl}
-              style={{
-                height: "100%",
-                maxHeight: "630px",
-                objectFit: "contain",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-              }}
-            />
-          </div>
-
-          {/* Dark Gradient Overlay for readability at bottom */}
+          {/* Gradient overlay at bottom */}
           <div
             style={{
               position: "absolute",
               bottom: 0,
               left: 0,
               right: 0,
-              height: "45%",
-              background:
-                "linear-gradient(to bottom, transparent, rgba(4, 25, 19, 0.92))",
+              height: "48%",
+              background: "linear-gradient(to bottom, transparent, rgba(6,28,22,0.88))",
             }}
           />
-
-          {/* Logo & Brand Tag (Top Left) */}
+          {/* Logo top-left badge */}
           <div
             style={{
               position: "absolute",
-              top: 28,
-              left: 36,
+              top: 36,
+              left: 44,
               display: "flex",
               alignItems: "center",
-              gap: 12,
-              backgroundColor: "rgba(6, 78, 59, 0.75)",
-              padding: "8px 20px",
-              borderRadius: 30,
-              border: "1px solid rgba(212,175,55,0.4)",
+              gap: 14,
             }}
           >
             <img
               src={`${BASE_URL}/logo.png`}
-              width={36}
-              height={36}
+              width={56}
+              height={56}
               style={{ borderRadius: "50%" }}
             />
             <span
               style={{
-                color: "#d4af37",
-                fontSize: 16,
-                fontWeight: 800,
-                letterSpacing: "0.2em",
+                color: "rgba(212,175,55,0.9)",
+                fontSize: 22,
+                letterSpacing: "0.18em",
                 fontFamily: "serif",
                 textTransform: "uppercase",
               }}
             >
-              ADATARA
+              Adatara
             </span>
           </div>
-
-          {/* Text Title Overlay (Bottom Left) */}
+          {/* Text overlay at bottom */}
           <div
             style={{
-              position: "absolute",
-              bottom: 32,
-              left: 40,
-              right: 40,
+              position: "relative",
+              padding: "0 56px 52px",
               display: "flex",
               flexDirection: "column",
+              width: "100%",
             }}
           >
             <p
               style={{
-                color: "#d4af37",
-                fontSize: 16,
+                color: "rgba(212,175,55,0.85)",
+                fontSize: 20,
                 margin: 0,
-                letterSpacing: "0.25em",
+                letterSpacing: "0.22em",
                 textTransform: "uppercase",
                 fontFamily: "serif",
-                fontWeight: 700,
               }}
             >
-              UNDANGAN DIGITAL RESMI
+              UNDANGAN DIGITAL
             </p>
             <h1
               style={{
-                color: "#ffffff",
-                fontSize: 48,
-                fontWeight: 800,
-                margin: "4px 0 0",
+                color: "#fff",
+                fontSize: 64,
+                fontWeight: 700,
+                margin: "10px 0 0",
                 fontFamily: "serif",
-                lineHeight: 1.15,
-                textShadow: "0 4px 12px rgba(0,0,0,0.6)",
+                lineHeight: 1.1,
               }}
             >
               {namaAcara}
             </h1>
+            <p
+              style={{
+                color: "rgba(255,255,255,0.55)",
+                fontSize: 20,
+                margin: "12px 0 0",
+                fontFamily: "sans-serif",
+                letterSpacing: "0.05em",
+              }}
+            >
+              adatara.my.id/{slug}
+            </p>
           </div>
         </div>
       ),
@@ -216,31 +189,30 @@ export default async function OgImage({
     );
   }
 
-  // Fallback branded banner
+  // No cover image — styled branded card with couple name
   return new ImageResponse(
     (
       <div
         style={{
-          background:
-            "linear-gradient(145deg, #064e3b 0%, #0a3d2f 40%, #041f18 100%)",
+          background: "linear-gradient(145deg, #064e3b 0%, #0a3d2f 40%, #041f18 100%)",
           width: "100%",
           height: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "40px",
+          padding: "60px",
         }}
       >
         <img
           src={`${BASE_URL}/logo.png`}
-          width={160}
-          height={160}
+          width={220}
+          height={220}
           style={{ borderRadius: "50%" }}
         />
         <div
           style={{
-            marginTop: 24,
+            marginTop: 36,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -248,8 +220,8 @@ export default async function OgImage({
         >
           <p
             style={{
-              color: "rgba(212,175,55,0.8)",
-              fontSize: 16,
+              color: "rgba(212,175,55,0.6)",
+              fontSize: 18,
               letterSpacing: "0.3em",
               margin: 0,
               textTransform: "uppercase",
@@ -260,23 +232,31 @@ export default async function OgImage({
           <h1
             style={{
               color: "#d4af37",
-              fontSize: 52,
-              fontWeight: 800,
-              margin: "10px 0 0",
+              fontSize: 68,
+              fontWeight: 700,
+              margin: "14px 0 0",
               textAlign: "center",
               fontFamily: "serif",
             }}
           >
             {namaAcara}
           </h1>
+          <div
+            style={{
+              width: 160,
+              height: 1,
+              background: "rgba(212,175,55,0.35)",
+              margin: "20px 0",
+            }}
+          />
           <p
             style={{
-              color: "rgba(245,245,220,0.7)",
-              fontSize: 18,
-              margin: "14px 0 0",
+              color: "rgba(245,245,220,0.65)",
+              fontSize: 22,
+              margin: 0,
             }}
           >
-            adatara.my.id/{slug}
+            Lihat Undangan di adatara.my.id/{slug}
           </p>
         </div>
       </div>
