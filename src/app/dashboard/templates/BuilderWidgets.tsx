@@ -547,12 +547,12 @@ export function SectionInput({ label, className = "", children }: { label: strin
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`border border-[#064e3b]/10 rounded-2xl overflow-hidden bg-white/40 backdrop-blur-md transition-all duration-300 ${isOpen ? "shadow-sm border-[#064e3b]/15 bg-white/60" : ""} ${className}`}>
+    <div className={`border border-[#064e3b]/10 rounded-2xl bg-white/40 backdrop-blur-md transition-all duration-300 ${isOpen ? "shadow-sm border-[#064e3b]/15 bg-white/60" : "overflow-hidden"} ${className}`}>
       {/* Accordion Header Button */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-[#064e3b]/5 hover:bg-[#064e3b]/8 text-left transition-colors duration-200"
+        className="w-full flex items-center justify-between px-4 py-3 bg-[#064e3b]/5 hover:bg-[#064e3b]/8 text-left transition-colors duration-200 rounded-t-2xl"
       >
         <span className="text-xs font-black uppercase tracking-wider text-[#064e3b]/80">
           {label}
@@ -1811,15 +1811,13 @@ export function ScrollReveal({
   delay = 0,
   duration = 0.6,
   animationType = "fade-up", // "fade-up", "zoom-in", "fade-left", "fade-right"
-  className = "",
-  style = {}
+  className = ""
 }: {
   children: React.ReactNode;
   delay?: number;
   duration?: number;
   animationType?: "fade-up" | "zoom-in" | "fade-left" | "fade-right";
   className?: string;
-  style?: React.CSSProperties;
 }) {
   const variants = {
     hidden: {
@@ -1848,7 +1846,7 @@ export function ScrollReveal({
       viewport={{ once: true, amount: 0.1 }}
       variants={variants}
       className={className}
-      style={style}
+      style={{ display: "contents" }}
     >
       {children}
     </motion.div>
