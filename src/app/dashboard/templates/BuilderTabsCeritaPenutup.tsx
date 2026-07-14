@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget, AnimatedWrapper } from "./BuilderWidgets";
+import { getBgStyle, BackgroundWidget, SectionInput, InputField, FileUploader, FontSettingsWidget, ButtonSettingsWidget, AnimatedWrapper, ScrollReveal } from "./BuilderWidgets";
 import { GALERI_LAYOUT_OPTIONS, GALERI_LAYOUT_DETAILS } from "./builder-constants";
 import { Plus, Trash2, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 
@@ -739,9 +739,11 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="grid grid-cols-2 gap-2">
                     {galeris.map((g, i) => (
-                      <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
-                        <img src={g} alt="" className="w-full h-full object-cover" />
-                      </div>
+                      <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                        <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -750,9 +752,11 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="grid grid-cols-3 gap-1.5">
                     {galeris.map((g, i) => (
-                      <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
-                        <img src={g} alt="" className="w-full h-full object-cover" />
-                      </div>
+                      <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.03}>
+                        <div className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -761,9 +765,11 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="columns-2 gap-2 space-y-2">
                     {galeris.map((g, i) => (
-                      <div key={i} className="break-inside-avoid">
-                        <img src={g} alt="" className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" />
-                      </div>
+                      <ScrollReveal key={i} animationType="fade-up" duration={0.6} delay={i * 0.04}>
+                        <div className="break-inside-avoid">
+                          <img src={g} alt="" className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" />
+                        </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -772,9 +778,11 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
                     {galeris.map((g, i) => (
-                      <div key={i} className="w-[160px] shrink-0 snap-center">
-                        <img src={g} alt="" className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" />
-                      </div>
+                      <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.05}>
+                        <div className="w-[160px] shrink-0 snap-center">
+                          <img src={g} alt="" className="w-full aspect-[3/4] object-cover rounded-xl border border-white/25 shadow-md" />
+                        </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -788,9 +796,11 @@ export function CeritaPreview({ data }: { data: any }) {
                     <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-2 pr-1 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent`}
                       style={{ scrollbarWidth: "thin" }}>
                       {galeris.map((g, i) => (
-                        <div key={i} className="aspect-square rounded-xl overflow-hidden border border-white/20 shadow-sm shrink-0">
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className="aspect-square rounded-xl overflow-hidden border border-white/20 shadow-sm shrink-0">
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       ))}
                     </div>
                     {/* Fade gradient hint at bottom */}
@@ -804,9 +814,11 @@ export function CeritaPreview({ data }: { data: any }) {
                     {galeris.map((g, i) => {
                       const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
                       return (
-                        <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -833,9 +845,11 @@ export function CeritaPreview({ data }: { data: any }) {
                         gridClass = "col-span-6 max-w-[150px] mx-auto aspect-[3/4]";
                       }
                       return (
-                        <div key={i} className={`${gridClass} border-2 border-white shadow-lg overflow-hidden rounded-none`}>
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className={`${gridClass} border-2 border-white shadow-lg overflow-hidden rounded-none`}>
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -848,10 +862,12 @@ export function CeritaPreview({ data }: { data: any }) {
                       const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
                       const rot = rotations[i % rotations.length];
                       return (
-                        <div key={i} className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
-                          <img src={g} alt="" className="w-full aspect-square object-cover" />
-                          <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{i + 1}</div>
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
+                            <img src={g} alt="" className="w-full aspect-square object-cover" />
+                            <div className="mt-1.5 text-center font-serif text-[7px] text-gray-400 tracking-widest font-black uppercase">Love #{i + 1}</div>
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -861,9 +877,11 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="grid grid-cols-4 gap-1 pt-1">
                     {galeris.map((g, i) => (
-                      <div key={i} className="aspect-square rounded-md overflow-hidden border border-white/20 shadow-sm">
-                        <img src={g} alt="" className="w-full h-full object-cover" />
-                      </div>
+                      <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.03}>
+                        <div className="aspect-square rounded-md overflow-hidden border border-white/20 shadow-sm">
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -872,9 +890,11 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="columns-3 gap-1.5 space-y-1.5 pt-1">
                     {galeris.map((g, i) => (
-                      <div key={i} className="break-inside-avoid">
-                        <img src={g} alt="" className="w-full h-auto rounded-lg object-cover border border-white/20 shadow-sm" />
-                      </div>
+                      <ScrollReveal key={i} animationType="fade-up" duration={0.6} delay={i * 0.04}>
+                        <div className="break-inside-avoid">
+                          <img src={g} alt="" className="w-full h-auto rounded-lg object-cover border border-white/20 shadow-sm" />
+                        </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -892,9 +912,11 @@ export function CeritaPreview({ data }: { data: any }) {
                       else if (indexPattern === 4) colSpan = "col-span-3 aspect-[4/3]";
                       else if (indexPattern === 5) colSpan = "col-span-3 aspect-[4/3]";
                       return (
-                        <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -906,11 +928,13 @@ export function CeritaPreview({ data }: { data: any }) {
                     {galeris.map((g, i) => {
                       const isEven = i % 2 === 0;
                       return (
-                        <div key={i} className={`flex ${isEven ? "justify-start" : "justify-end"}`}>
-                          <div className="w-[85%] aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-white/25 transform hover:scale-[1.02] transition-transform duration-300">
-                            <img src={g} alt="" className="w-full h-full object-cover" />
+                        <ScrollReveal key={i} animationType={isEven ? "fade-right" : "fade-left"} duration={0.6} delay={0.05}>
+                          <div className={`flex ${isEven ? "justify-start" : "justify-end"}`}>
+                            <div className="w-[85%] aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-white/25 transform hover:scale-[1.02] transition-transform duration-300">
+                              <img src={g} alt="" className="w-full h-full object-cover" />
+                            </div>
                           </div>
-                        </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -923,9 +947,11 @@ export function CeritaPreview({ data }: { data: any }) {
                       const indexPattern = i % 4;
                       const colSpan = (indexPattern === 0 || indexPattern === 3) ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-[4/3]";
                       return (
-                        <div key={i} className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className={`${colSpan} overflow-hidden rounded-xl border border-white/20 shadow-sm`}>
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -940,9 +966,11 @@ export function CeritaPreview({ data }: { data: any }) {
                         ? "aspect-square rounded-full scale-95 hover:scale-100" 
                         : "aspect-[3/4] rounded-[100px] translate-y-3 hover:translate-y-1";
                       return (
-                        <div key={i} className={`${bubbleClass} overflow-hidden border-2 border-white shadow-md transition-all duration-300`}>
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.7} delay={i * 0.05}>
+                          <div className={`${bubbleClass} overflow-hidden border-2 border-white shadow-md transition-all duration-300`}>
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -957,9 +985,11 @@ export function CeritaPreview({ data }: { data: any }) {
                       if (indexPattern === 1) offsetClass = "w-[75%] ml-auto -mt-6 -rotate-2 relative z-10";
                       else if (indexPattern === 2) offsetClass = "w-[85%] mx-auto -mt-4 rotate-2";
                       return (
-                        <div key={i} className={`${offsetClass} aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/30 transform hover:rotate-0 transition-all duration-500`}>
-                          <img src={g} alt="" className="w-full h-full object-cover" />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.7} delay={i * 0.05}>
+                          <div className={`${offsetClass} aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/30 transform hover:rotate-0 transition-all duration-500`}>
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -972,12 +1002,14 @@ export function CeritaPreview({ data }: { data: any }) {
                       const isEven = i % 2 === 0;
                       const rotation = isEven ? "rotate-1" : "-rotate-1";
                       return (
-                        <div key={i} className="flex justify-center">
-                          <div className={`w-[85%] bg-white p-2.5 pb-6 shadow-xl border border-black/5 rounded-none transform ${rotation} hover:rotate-0 transition-transform duration-300`}>
-                            <img src={g} alt="" className="w-full aspect-square object-cover" />
-                            <div className="mt-2 text-center font-serif text-[8px] text-gray-400 tracking-wider">Photo {i + 1}</div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.7} delay={0.05}>
+                          <div className="flex justify-center">
+                            <div className={`w-[85%] bg-white p-2.5 pb-6 shadow-xl border border-black/5 rounded-none transform ${rotation} hover:rotate-0 transition-transform duration-300`}>
+                              <img src={g} alt="" className="w-full aspect-square object-cover" />
+                              <div className="mt-2 text-center font-serif text-[8px] text-gray-400 tracking-wider">Photo {i + 1}</div>
+                            </div>
                           </div>
-                        </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>
@@ -987,11 +1019,13 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="grid grid-cols-2 gap-4 pt-1">
                     {galeris.map((g, i) => (
-                      <div key={i} className="aspect-[3/4] rounded-lg overflow-hidden bg-white p-2 shadow-lg border-2 border-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
-                        <div className="w-full h-full overflow-hidden border border-[#d4af37]/20 relative">
-                          <img src={g} alt="" className="w-full h-full object-cover" />
+                      <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                        <div className="aspect-[3/4] rounded-lg overflow-hidden bg-white p-2 shadow-lg border-2 border-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
+                          <div className="w-full h-full overflow-hidden border border-[#d4af37]/20 relative">
+                            <img src={g} alt="" className="w-full h-full object-cover" />
+                          </div>
                         </div>
-                      </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -1000,24 +1034,26 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="flex gap-2 overflow-x-auto bg-neutral-900 py-3 px-2 border-y-4 border-dashed border-neutral-700 scrollbar-none snap-x snap-mandatory pt-1">
                     {galeris.map((g, i) => (
-                      <div key={i} className="w-[130px] aspect-square shrink-0 bg-black relative border-x border-neutral-800 snap-center flex items-center justify-center p-1">
-                        <img src={g} alt="" className="w-full h-full object-cover" />
-                        {/* Decorative Film Sprocket Holes */}
-                        <div className="absolute top-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                      <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.05}>
+                        <div className="w-[130px] aspect-square shrink-0 bg-black relative border-x border-neutral-800 snap-center flex items-center justify-center p-1">
+                          <img src={g} alt="" className="w-full h-full object-cover" />
+                          {/* Decorative Film Sprocket Holes */}
+                          <div className="absolute top-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          </div>
+                          <div className="absolute bottom-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                            <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
+                          </div>
                         </div>
-                        <div className="absolute bottom-0.5 left-0 right-0 flex justify-between px-1 pointer-events-none opacity-40">
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                          <div className="w-1 h-1.5 bg-neutral-300 rounded-sm"></div>
-                        </div>
-                      </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 );
@@ -1028,16 +1064,20 @@ export function CeritaPreview({ data }: { data: any }) {
                 return (
                   <div className="space-y-2 pt-1">
                     {first && (
-                      <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md">
-                        <img src={first} alt="" className="w-full h-full object-cover" />
-                      </div>
+                      <ScrollReveal animationType="zoom-in" duration={0.8}>
+                        <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md">
+                          <img src={first} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      </ScrollReveal>
                     )}
                     {others.length > 0 && (
                       <div className="grid grid-cols-3 gap-1.5">
                         {others.map((g, i) => (
-                          <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/10 shadow-sm">
-                            <img src={g} alt="" className="w-full h-full object-cover" />
-                          </div>
+                          <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                            <div className="aspect-square rounded-lg overflow-hidden border border-white/10 shadow-sm">
+                              <img src={g} alt="" className="w-full h-full object-cover" />
+                            </div>
+                          </ScrollReveal>
                         ))}
                       </div>
                     )}
@@ -1070,9 +1110,11 @@ export function CeritaPreview({ data }: { data: any }) {
                       }
 
                       return (
-                        <div key={i} className={`${colSpan} ${aspect} ${rotate} ${styleClass} overflow-hidden transition-all duration-300`}>
-                          <img src={g} alt="" className={imgClass} />
-                        </div>
+                        <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
+                          <div className={`${colSpan} ${aspect} ${rotate} ${styleClass} overflow-hidden transition-all duration-300`}>
+                            <img src={g} alt="" className={imgClass} />
+                          </div>
+                        </ScrollReveal>
                       );
                     })}
                   </div>

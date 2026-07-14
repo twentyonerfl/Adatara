@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { UploadCloud, X, Loader2, FileVideo, Play, Pause } from "lucide-react";
+import { motion } from "framer-motion";
 import { FONT_FAMILIES, ANIMATION_OPTIONS, BINGKAI_OPTIONS } from "./builder-constants";
 
 interface FontSettings {
@@ -1802,5 +1803,52 @@ export function AnimatedWrapper({
     >
       {children}
     </div>
+  );
+}
+
+export function ScrollReveal({
+  children,
+  delay = 0,
+  duration = 0.6,
+  animationType = "fade-up", // "fade-up", "zoom-in", "fade-left", "fade-right"
+  className = ""
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  duration?: number;
+  animationType?: "fade-up" | "zoom-in" | "fade-left" | "fade-right";
+  className?: string;
+}) {
+  const variants = {
+    hidden: {
+      opacity: 0,
+      y: animationType === "fade-up" ? 30 : 0,
+      scale: animationType === "zoom-in" ? 0.85 : 1,
+      x: animationType === "fade-left" ? 40 : animationType === "fade-right" ? -40 : 0,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      x: 0,
+      transition: {
+        duration: duration,
+        delay: delay,
+        ease: [0.21, 1.02, 0.43, 1.01] as [number, number, number, number]
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
+      variants={variants}
+      className={className}
+      style={{ display: "contents" }}
+    >
+      {children}
+    </motion.div>
   );
 }
