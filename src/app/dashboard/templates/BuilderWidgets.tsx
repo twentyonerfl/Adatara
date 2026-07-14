@@ -324,11 +324,8 @@ export function FileUploader({
           directFormData.append("signature", sigData.signature);
           directFormData.append("folder", sigData.folder);
 
-          const isLargeGif = file.type === "image/gif" || file.name.endsWith(".gif");
-          const resourceType = (isLargeGif && file.size > 9 * 1024 * 1024) ? "video" : "auto";
-
           const uploadRes = await fetch(
-            `https://api.cloudinary.com/v1_1/${sigData.cloudName}/${resourceType}/upload`,
+            `https://api.cloudinary.com/v1_1/${sigData.cloudName}/auto/upload`,
             {
               method: "POST",
               body: directFormData,
@@ -525,6 +522,16 @@ export function FileUploader({
           )}
         </div>
       )}
+
+      <div className="w-full flex gap-1.5 items-center">
+        <input
+          type="text"
+          placeholder={`Atau tempel URL ${type === "image" ? "gambar" : type === "video" ? "video" : "audio"} eksternal di sini...`}
+          value={value || ""}
+          onChange={e => onChange(e.target.value)}
+          className="w-full px-2.5 py-1.5 text-[9px] bg-white border border-[#064e3b]/20 rounded-xl outline-none focus:border-[#d4af37] font-semibold h-8"
+        />
+      </div>
 
       {error && (
         <p className="text-[10px] font-bold text-red-600 bg-red-50 border border-red-100 rounded-lg px-2.5 py-1">
