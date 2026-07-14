@@ -737,7 +737,7 @@ export function CeritaPreview({ data }: { data: any }) {
               const layout = data.galeri_layout || "grid-2";
               if (layout === "grid" || layout === "grid-2") {
                 return (
-                  <div className="grid grid-cols-2 gap-2.5 gap-y-7">
+                  <div className="grid grid-cols-2 gap-3 gap-y-8">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                         <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
@@ -793,7 +793,7 @@ export function CeritaPreview({ data }: { data: any }) {
                 const colsClass = scrollCols === "1" ? "grid-cols-1" : scrollCols === "3" ? "grid-cols-3" : "grid-cols-2";
                 return (
                   <div className="relative">
-                    <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-2.5 gap-y-6 pr-1 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent`}
+                    <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-3 gap-y-6 pr-1 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent`}
                       style={{ scrollbarWidth: "thin" }}>
                       {galeris.map((g, i) => (
                         <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
@@ -810,7 +810,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "collage") {
                 return (
-                  <div className="grid grid-cols-6 gap-2.5 gap-y-7">
+                  <div className="grid grid-cols-6 gap-3 gap-y-8">
                     {galeris.map((g, i) => {
                       const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
                       return (
@@ -826,7 +826,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "aesthetic") {
                 return (
-                  <div className="grid grid-cols-6 gap-x-3 gap-y-7 pt-1 pb-4">
+                  <div className="grid grid-cols-6 gap-x-3 gap-y-8 pt-1 pb-4">
                     {galeris.map((g, i) => {
                       let gridClass = "";
                       if (i % 7 === 0) {
@@ -857,7 +857,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "polaroid") {
                 return (
-                  <div className="grid grid-cols-2 gap-3.5 gap-y-7 pt-1">
+                  <div className="grid grid-cols-2 gap-3 gap-y-8 pt-1">
                     {galeris.map((g, i) => {
                       const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
                       const rot = rotations[i % rotations.length];
@@ -875,7 +875,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "grid-4") {
                 return (
-                  <div className="grid grid-cols-4 gap-2 gap-y-5 pt-1">
+                  <div className="grid grid-cols-4 gap-2 gap-y-6 pt-1">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.03}>
                         <div className="aspect-square rounded-md overflow-hidden border border-white/20 shadow-sm">
@@ -888,7 +888,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "masonry-3") {
                 return (
-                  <div className="columns-3 gap-2 space-y-5 pt-1">
+                  <div className="columns-3 gap-2 space-y-6 pt-1">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="fade-up" duration={0.6} delay={i * 0.04}>
                         <div className="break-inside-avoid">
@@ -901,7 +901,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "mosaic-modern") {
                 return (
-                  <div className="grid grid-cols-6 gap-2.5 gap-y-7 pt-1">
+                  <div className="grid grid-cols-6 gap-3 gap-y-8 pt-1">
                     {galeris.map((g, i) => {
                       const indexPattern = i % 6;
                       let colSpan = "col-span-3 aspect-[4/3]";
@@ -942,7 +942,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "asymmetric") {
                 return (
-                  <div className="grid grid-cols-3 gap-2.5 gap-y-7 pt-1">
+                  <div className="grid grid-cols-3 gap-3 gap-y-8 pt-1">
                     {galeris.map((g, i) => {
                       const indexPattern = i % 4;
                       const colSpan = (indexPattern === 0 || indexPattern === 3) ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-[4/3]";
@@ -959,7 +959,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "bubbles") {
                 return (
-                  <div className="grid grid-cols-2 gap-4 gap-y-7 pt-1">
+                  <div className="grid grid-cols-2 gap-4 gap-y-8 pt-1">
                     {galeris.map((g, i) => {
                       const isEven = i % 2 === 0;
                       const bubbleClass = isEven 
@@ -1017,7 +1017,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "classic-frame") {
                 return (
-                  <div className="grid grid-cols-2 gap-4 gap-y-7 pt-1">
+                  <div className="grid grid-cols-2 gap-4 gap-y-8 pt-1">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                         <div className="aspect-[3/4] rounded-lg overflow-hidden bg-white p-2 shadow-lg border-2 border-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
@@ -1062,7 +1062,7 @@ export function CeritaPreview({ data }: { data: any }) {
                 const first = galeris[0];
                 const others = galeris.slice(1);
                 return (
-                  <div className="space-y-2 pt-1">
+                  <div className="space-y-4 pt-1">
                     {first && (
                       <ScrollReveal animationType="zoom-in" duration={0.8}>
                         <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md">
@@ -1071,7 +1071,7 @@ export function CeritaPreview({ data }: { data: any }) {
                       </ScrollReveal>
                     )}
                     {others.length > 0 && (
-                      <div className="grid grid-cols-3 gap-1.5">
+                      <div className="grid grid-cols-3 gap-2 gap-y-6">
                         {others.map((g, i) => (
                           <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className="aspect-square rounded-lg overflow-hidden border border-white/10 shadow-sm">
@@ -1086,15 +1086,16 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "custom") {
                 const rawCustomGap = data.galeri_custom_gap || "gap-2";
-                let customGapClass = rawCustomGap;
-                if (!rawCustomGap.includes("gap-y-")) {
-                  if (rawCustomGap === "gap-0") customGapClass = "gap-0 gap-y-4";
-                  else if (rawCustomGap === "gap-1") customGapClass = "gap-1 gap-y-5";
-                  else if (rawCustomGap === "gap-2") customGapClass = "gap-2 gap-y-7";
-                  else if (rawCustomGap === "gap-3") customGapClass = "gap-3 gap-y-8";
-                  else if (rawCustomGap === "gap-4") customGapClass = "gap-4 gap-y-9";
-                  else customGapClass = `${rawCustomGap} gap-y-8`;
-                }
+                let customGapClass = "gap-2 gap-y-8";
+                if (rawCustomGap === "gap-0") customGapClass = "gap-0 gap-y-4";
+                else if (rawCustomGap === "gap-1") customGapClass = "gap-1 gap-y-6";
+                else if (rawCustomGap === "gap-2") customGapClass = "gap-2 gap-y-8";
+                else if (rawCustomGap === "gap-3") customGapClass = "gap-3 gap-y-8";
+                else if (rawCustomGap === "gap-4") customGapClass = "gap-4 gap-y-10";
+                else if (rawCustomGap === "gap-6") customGapClass = "gap-6 gap-y-12";
+                else if (rawCustomGap === "gap-8") customGapClass = "gap-8 gap-y-12";
+                else customGapClass = `${rawCustomGap} gap-y-8`;
+
                 return (
                   <div className={`grid grid-cols-6 ${customGapClass} pt-1 pb-4`}>
                     {galeris.map((g, i) => {
