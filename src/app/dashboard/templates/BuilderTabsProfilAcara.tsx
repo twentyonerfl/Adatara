@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getBgStyle, FontSettingsWidget, BackgroundWidget, SectionInput, InputField, FileUploader, FramedPhoto, PhotoStyleWidget, CountdownSettingsWidget, MapsButtonStyleWidget, AnimatedWrapper } from "./BuilderWidgets";
 import { Plus, Trash2 } from "lucide-react";
 
@@ -311,55 +311,68 @@ export function ProfilPreview({ data }: { data: any }) {
           if (group.length === 0) return null;
           const justifyClass = align === "left" ? "justify-start" : align === "right" ? "justify-end" : "justify-center";
           return (
-            <div key={align} className={`flex gap-6 flex-wrap w-full ${justifyClass}`}>
+            <div key={align} className={`flex gap-6 flex-wrap w-full items-center ${justifyClass}`}>
               {group.map((p, i) => (
-                <div key={`${p.foto || ""}-${p.nama || i}`} className="flex flex-col items-center gap-2 text-center">
-                  <FramedPhoto
-                    src={p.foto}
-                    bingkai={p.bingkai || "oval"}
-                    className="w-24 h-24"
-                    customWidth={p.foto_width}
-                    customHeight={p.foto_height}
-                    overlayUrl={p.overlay_url}
-                    photoScale={p.foto_scale}
-                    photoX={p.foto_x}
-                    photoY={p.foto_y}
-                  />
-                  <div>
+                <React.Fragment key={`${p.foto || ""}-${p.nama || i}`}>
+                  {i > 0 && (
                     <div
-                      className="text-sm font-bold"
+                      className="text-3xl font-serif px-2 opacity-80 select-none flex items-center justify-center shrink-0"
                       style={{
-                        fontFamily: p.setting_nama?.family || data.setting_nama_profil?.family || "Inter",
-                        fontSize: p.setting_nama?.size || data.setting_nama_profil?.size || "14px",
+                        fontFamily: "serif",
                         color: p.setting_nama?.color || data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
                       }}
                     >
-                      {p.nama || "Nama"}
+                      &
                     </div>
-                    <div
-                      className="text-[10px] opacity-70 mt-1 leading-normal"
-                      style={{
-                        fontFamily: p.setting_keterangan?.family || data.setting_keterangan_profil?.family || "Inter",
-                        fontSize: p.setting_keterangan?.size || data.setting_keterangan_profil?.size || "10px",
-                        color: p.setting_keterangan?.color || data.setting_keterangan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
-                      }}
-                    >
-                      {p.keterangan || "Keterangan"}
-                    </div>
-                    {p.urutan_anak && (
+                  )}
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <FramedPhoto
+                      src={p.foto}
+                      bingkai={p.bingkai || "oval"}
+                      className="w-24 h-24"
+                      customWidth={p.foto_width}
+                      customHeight={p.foto_height}
+                      overlayUrl={p.overlay_url}
+                      photoScale={p.foto_scale}
+                      photoX={p.foto_x}
+                      photoY={p.foto_y}
+                    />
+                    <div>
                       <div
-                        className="text-[9px] opacity-60 italic mt-0.5 leading-normal"
+                        className="text-sm font-bold"
                         style={{
-                          fontFamily: p.setting_urutan?.family || data.setting_urutan_profil?.family || "Inter",
-                          fontSize: p.setting_urutan?.size || data.setting_urutan_profil?.size || "9px",
-                          color: p.setting_urutan?.color || data.setting_urutan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                          fontFamily: p.setting_nama?.family || data.setting_nama_profil?.family || "Inter",
+                          fontSize: p.setting_nama?.size || data.setting_nama_profil?.size || "14px",
+                          color: p.setting_nama?.color || data.setting_nama_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
                         }}
                       >
-                        {p.urutan_anak}
+                        {p.nama || "Nama"}
                       </div>
-                    )}
+                      <div
+                        className="text-[10px] opacity-70 mt-1 leading-normal"
+                        style={{
+                          fontFamily: p.setting_keterangan?.family || data.setting_keterangan_profil?.family || "Inter",
+                          fontSize: p.setting_keterangan?.size || data.setting_keterangan_profil?.size || "10px",
+                          color: p.setting_keterangan?.color || data.setting_keterangan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                        }}
+                      >
+                        {p.keterangan || "Keterangan"}
+                      </div>
+                      {p.urutan_anak && (
+                        <div
+                          className="text-[9px] opacity-60 italic mt-0.5 leading-normal"
+                          style={{
+                            fontFamily: p.setting_urutan?.family || data.setting_urutan_profil?.family || "Inter",
+                            fontSize: p.setting_urutan?.size || data.setting_urutan_profil?.size || "9px",
+                            color: p.setting_urutan?.color || data.setting_urutan_profil?.color || data.setting_ucapan_profil?.color || "#064e3b"
+                          }}
+                        >
+                          {p.urutan_anak}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </React.Fragment>
               ))}
             </div>
           );
