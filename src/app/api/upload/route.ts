@@ -72,11 +72,14 @@ export async function POST(req: NextRequest) {
     }
 
     // 4. Upload to Cloudinary using upload_stream
+    const isLargeGif = file.type === "image/gif" || file.name.endsWith(".gif");
+    const resourceType = (isLargeGif && file.size > 9 * 1024 * 1024) ? "video" : "auto";
+
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         {
           folder: "adatara",
-          resource_type: "auto",
+          resource_type: resourceType as any,
         },
         (error, result) => {
           if (error) {

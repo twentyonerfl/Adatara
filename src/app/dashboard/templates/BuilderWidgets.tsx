@@ -324,8 +324,11 @@ export function FileUploader({
           directFormData.append("signature", sigData.signature);
           directFormData.append("folder", sigData.folder);
 
+          const isLargeGif = file.type === "image/gif" || file.name.endsWith(".gif");
+          const resourceType = (isLargeGif && file.size > 9 * 1024 * 1024) ? "video" : "auto";
+
           const uploadRes = await fetch(
-            `https://api.cloudinary.com/v1_1/${sigData.cloudName}/auto/upload`,
+            `https://api.cloudinary.com/v1_1/${sigData.cloudName}/${resourceType}/upload`,
             {
               method: "POST",
               body: directFormData,
