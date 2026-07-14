@@ -1176,7 +1176,10 @@ export function PenutupForm({ data, onChange, mode }: { data: any; onChange: (d:
               />
             </div>
           </SectionInput>
-          <SectionInput label="Background Penutup">
+          <SectionInput label="Background RSVP & Gift">
+            <BackgroundWidget value={data.background_rsvp || data.background || { type: "solid", value: "#064e3b" }} onChange={v => upd("background_rsvp", v)} />
+          </SectionInput>
+          <SectionInput label="Background Pesan Penutup">
             <BackgroundWidget value={data.background || { type: "solid", value: "#064e3b" }} onChange={v => upd("background", v)} />
           </SectionInput>
         </>
@@ -1260,8 +1263,12 @@ export function PenutupPreview({
     else setLocalUcapan(v);
   };
 
-  const bgPenutup = getBgStyle(data.background);
+  const bgRsvp = getBgStyle(data.background_rsvp || data.background || { type: "solid", value: "#064e3b" });
+  const rsvpBgData = data.background_rsvp || data.background || { type: "solid", value: "#064e3b" };
+  const bgPenutup = getBgStyle(data.background || { type: "solid", value: "#064e3b" });
+  const penutupBgData = data.background || { type: "solid", value: "#064e3b" };
   const amplops: any[] = data.amplops || [];
+  const showRsvpBlock = data.rsvp_aktif || amplops.length > 0;
 
   const getDividerClass = (align?: string) => {
     if (align === "left") return "w-8 h-0.5 bg-[#d4af37] mt-2 mr-auto ml-0";
@@ -1276,19 +1283,7 @@ export function PenutupPreview({
   const inputBorderColor = getTranslucentColor(textColor, "18"); // ~10% opacity
 
   return (
-    <div className="w-full min-h-[512px] bg-[#f5f5dc] rounded-none overflow-hidden p-6 space-y-6 penutup-preview-container relative" style={bgPenutup}>
-      {data.background?.type === "video" && data.background?.value && (
-        <video
-          key={data.background.value}
-          src={data.background.value}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
-      )}
-      <div className="relative z-10 w-full space-y-6">
+    <div className="w-full rounded-none overflow-hidden penutup-preview-container flex flex-col">
       <style dangerouslySetInnerHTML={{__html: `
         .penutup-preview-container input::placeholder,
         .penutup-preview-container textarea::placeholder {
@@ -1297,306 +1292,337 @@ export function PenutupPreview({
         }
       `}} />
 
-      {data.rsvp_aktif && (
-        <div 
-          className="backdrop-blur-md border p-5 text-center space-y-4 shadow-xl relative" 
-          style={{ 
-            borderRadius: "6%",
-            backgroundColor: bgCardColor,
-            borderColor: borderCardColor
-          }}
-        >
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
-            <AnimatedWrapper val={data.setting_head_rsvp}>
-              <div>Konfirmasi Kehadiran</div>
-              <div className={getDividerClass(data.setting_head_rsvp?.position)} />
-            </AnimatedWrapper>
-          </div>
-          {formSuccess ? (
-            <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
-                <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="space-y-1">
-                <div className="font-extrabold text-[12px] tracking-wider" style={{ color: textColor }}>Konfirmasi Terkirim!</div>
-                <div className="text-[9.5px] max-w-[200px] mx-auto leading-relaxed" style={{ color: textColor, opacity: 0.7 }}>Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={onRsvpSubmit || ((e) => e.preventDefault())} className="space-y-4 pt-1 text-left">
-              {formError && (
-                <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 text-[9px] font-semibold" style={{ borderRadius: "6%" }}>
-                  {formError}
-                </div>
-              )}
-
-              {/* 1. Nama Tamu */}
-              <div className="space-y-1.5">
-                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Nama Tamu</label>
-                <input
-                  type="text"
-                  required
-                  value={activeNamaTamu}
-                  onChange={(e) => handleNamaChange(e.target.value)}
-                  placeholder="Masukkan nama lengkap Anda..."
-                  className="w-full px-3.5 py-2.5 border text-[10px] outline-none transition-all duration-300"
-                  style={{ 
-                    borderRadius: "10px",
-                    backgroundColor: inputBgColor,
-                    borderColor: inputBorderColor,
-                    color: textColor
-                  }}
-                />
-              </div>
-
-              {/* 2. Ucapan & Doa Restu */}
-              <div className="space-y-1.5">
-                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Ucapan & Doa Restu</label>
-                <textarea
-                  value={activeUcapan}
-                  onChange={(e) => handleUcapanChange(e.target.value)}
-                  rows={2.5}
-                  placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
-                  className="w-full px-3.5 py-2.5 border text-[10px] outline-none resize-none transition-all duration-300"
-                  style={{ 
-                    borderRadius: "10px",
-                    backgroundColor: inputBgColor,
-                    borderColor: inputBorderColor,
-                    color: textColor
-                  }}
-                />
-              </div>
-
-              {/* 3. Konfirmasi Kehadiran */}
-              <div className="space-y-1.5">
-                <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Konfirmasi Kehadiran ?</label>
-                <div className="grid grid-cols-2 gap-2.5">
-                  {[
-                    {
-                      value: "HADIR",
-                      label: "Hadir",
-                      icon: (
-                        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      ),
-                      activeStyle: {
-                        backgroundColor: "rgba(16, 185, 129, 0.15)",
-                        borderColor: "#10b981",
-                        color: "#10b981"
-                      },
-                      inactiveStyle: {
-                        backgroundColor: inputBgColor,
-                        borderColor: inputBorderColor,
-                        color: getTranslucentColor(textColor, "99")
-                      }
-                    },
-                    {
-                      value: "TIDAK_HADIR",
-                      label: "Tidak Hadir",
-                      icon: (
-                        <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      ),
-                      activeStyle: {
-                        backgroundColor: "rgba(244, 63, 94, 0.15)",
-                        borderColor: "#f43f5e",
-                        color: "#f43f5e"
-                      },
-                      inactiveStyle: {
-                        backgroundColor: inputBgColor,
-                        borderColor: inputBorderColor,
-                        color: getTranslucentColor(textColor, "99")
-                      }
-                    }
-                  ].map((opt) => {
-                    const isSelected = activeKehadiran === opt.value;
-                    const btnStyle = isSelected ? opt.activeStyle : opt.inactiveStyle;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => handleKehadiranChange(opt.value as any)}
-                        className="py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 font-bold"
-                        style={{ borderRadius: "10px", ...btnStyle }}
-                      >
-                        {opt.icon}
-                        <span>{opt.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {(() => {
-                const btnSetting = data.setting_tombol || {};
-                const btnText = btnSetting.text || "Konfirmasi";
-                const btnSize = btnSetting.size || "9.5px";
-                const btnColor = btnSetting.color || "#064e3b";
-                const btnBg = btnSetting.bg_color || "#d4af37";
-                const btnBorder = btnSetting.border_color || "transparent";
-                const btnFamily = btnSetting.family || "Inter";
-                
-                const hasCustomBg = btnSetting.bg_color && btnSetting.bg_color !== "#d4af37";
-                const bgStyle = hasCustomBg ? { backgroundColor: btnBg } : {};
-
-                return (
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className={`w-full py-2 hover:brightness-105 active:scale-[0.98] font-extrabold tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 border ${!hasCustomBg ? 'bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37]' : ''}`}
-                    style={{
-                      borderRadius: "10px",
-                      fontSize: btnSize,
-                      color: btnColor,
-                      borderColor: btnBorder,
-                      fontFamily: btnFamily,
-                      ...bgStyle,
-                    }}
-                  >
-                    {submitting ? (
-                      <>
-                        <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                        <span>Mengirim...</span>
-                      </>
-                    ) : (
-                      <span>{btnText}</span>
-                    )}
-                  </button>
-                );
-              })()}
-            </form>
+      {/* BLOCK 1: RSVP & SPECIAL GIFT */}
+      {showRsvpBlock && (
+        <div className="w-full p-6 space-y-6 relative overflow-hidden flex flex-col justify-center min-h-[250px]" style={bgRsvp}>
+          {rsvpBgData.type === "video" && rsvpBgData.value && (
+            <video
+              key={rsvpBgData.value}
+              src={rsvpBgData.value}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover z-0"
+            />
           )}
-        </div>
-      )}
-
-      {wishes && wishes.length > 0 && (
-        <div 
-          className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative animate-fade-in" 
-          style={{ 
-            borderRadius: "6%",
-            backgroundColor: bgCardColor,
-            borderColor: borderCardColor
-          }}
-        >
-          <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
-            <AnimatedWrapper val={data.setting_head_rsvp}>
-              <div>Ucapan & Doa Restu</div>
-              <div className={getDividerClass(data.setting_head_rsvp?.position)} />
-            </AnimatedWrapper>
-          </div>
-          <div className="space-y-3 pt-1.5 max-h-[250px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-[#d4af37]/30 text-left">
-            {wishes.map((w, idx) => (
+          <div className="relative z-10 w-full space-y-6">
+            {data.rsvp_aktif && (
               <div 
-                key={w.id || idx} 
-                className="backdrop-blur-md p-3.5 border border-slate-100/10 flex flex-col gap-1 transition-all duration-300 shadow-sm rounded-xl" 
-                style={{ 
-                  backgroundColor: getTranslucentColor(textColor, "05"),
-                  borderColor: inputBorderColor,
-                }}
-              >
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: textColor }}>{w.nama_tamu || w.nama || "Tamu"}</span>
-                  {w.kehadiran && (
-                    <span 
-                      className="px-1.5 py-0.5 text-[7.5px] font-extrabold rounded" 
-                      style={{ 
-                        backgroundColor: w.kehadiran === "HADIR" ? "rgba(16, 185, 129, 0.1)" : "rgba(244, 63, 94, 0.1)",
-                        color: w.kehadiran === "HADIR" ? "#10b981" : "#f43f5e",
-                        border: `1px solid ${w.kehadiran === "HADIR" ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)"}`
-                      }}
-                    >
-                      {w.kehadiran === "HADIR" ? "Hadir" : "Tidak Hadir"}
-                    </span>
-                  )}
-                </div>
-                <p className="text-[9.5px] italic leading-relaxed" style={{ color: textColor, opacity: 0.85 }}>"{w.ucapan || w.pesan || "Mengirim doa restu."}"</p>
-                {w.created_at && (
-                  <span className="text-[7px] self-end" style={{ color: textColor, opacity: 0.4 }}>
-                    {new Date(w.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {amplops.length > 0 && (
-        <div 
-          className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative" 
-          style={{ 
-            borderRadius: "6%",
-            backgroundColor: bgCardColor,
-            borderColor: borderCardColor
-          }}
-        >
-          <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
-            <AnimatedWrapper val={data.setting_head_gift}>
-              <div>Special Gift</div>
-              <div className={getDividerClass(data.setting_head_gift?.position)} />
-            </AnimatedWrapper>
-          </div>
-          <div className="space-y-3 pt-1.5">
-            {amplops.map((a, i) => (
-              <div 
-                key={i} 
-                className="backdrop-blur-md p-3.5 border border-l-2 flex justify-between items-center transition-all duration-300 shadow-sm" 
+                className="backdrop-blur-md border p-5 text-center space-y-4 shadow-xl relative" 
                 style={{ 
                   borderRadius: "6%",
-                  backgroundColor: getTranslucentColor(textColor, "05"),
-                  borderColor: inputBorderColor,
-                  borderLeftColor: "#d4af37"
+                  backgroundColor: bgCardColor,
+                  borderColor: borderCardColor
                 }}
               >
-                <div className="space-y-0.5 text-left">
-                  <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: textColor, opacity: 0.5 }}>{a.bank || "Bank / E-Wallet"}</div>
-                  <div className="text-xs font-mono font-bold tracking-wider my-0.5" style={{ color: textColor }}>{a.nomor_rekening || "No. Rekening"}</div>
-                  <div className="text-[9.5px] font-medium" style={{ color: "#d4af37" }}>a.n. {a.atas_nama || "Atas Nama"}</div>
+                <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
+                  <AnimatedWrapper val={data.setting_head_rsvp}>
+                    <div>Konfirmasi Kehadiran</div>
+                    <div className={getDividerClass(data.setting_head_rsvp?.position)} />
+                  </AnimatedWrapper>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
-                  className="px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer"
-                  style={{ 
-                    borderRadius: "6%",
-                    backgroundColor: copiedIndex === i ? getTranslucentColor("#10b981", "30") : getTranslucentColor(textColor, "15"),
-                    borderColor: copiedIndex === i ? "#10b981" : borderCardColor,
-                    color: copiedIndex === i ? "#10b981" : textColor
-                  }}
-                >
-                  {copiedIndex === i ? "Tersalin" : "Salin"}
-                </button>
+                {formSuccess ? (
+                  <div className="text-center py-6 space-y-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/10 to-emerald-500/30 border border-emerald-400/40 rounded-full flex items-center justify-center mx-auto shadow-md">
+                      <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="font-extrabold text-[12px] tracking-wider" style={{ color: textColor }}>Konfirmasi Terkirim!</div>
+                      <div className="text-[9.5px] max-w-[200px] mx-auto leading-relaxed" style={{ color: textColor, opacity: 0.7 }}>Terima kasih atas konfirmasi Anda. Kehadiran Anda sangat berarti bagi kami.</div>
+                    </div>
+                  </div>
+                ) : (
+                  <form onSubmit={onRsvpSubmit || ((e) => e.preventDefault())} className="space-y-4 pt-1 text-left">
+                    {formError && (
+                      <div className="bg-rose-950/35 border border-rose-500/30 text-rose-300 p-2.5 text-[9px] font-semibold" style={{ borderRadius: "6%" }}>
+                        {formError}
+                      </div>
+                    )}
+
+                    {/* 1. Nama Tamu */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Nama Tamu</label>
+                      <input
+                        type="text"
+                        required
+                        value={activeNamaTamu}
+                        onChange={(e) => handleNamaChange(e.target.value)}
+                        placeholder="Masukkan nama lengkap Anda..."
+                        className="w-full px-3.5 py-2.5 border text-[10px] outline-none transition-all duration-300"
+                        style={{ 
+                          borderRadius: "10px",
+                          backgroundColor: inputBgColor,
+                          borderColor: inputBorderColor,
+                          color: textColor
+                        }}
+                      />
+                    </div>
+
+                    {/* 2. Ucapan & Doa Restu */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Ucapan & Doa Restu</label>
+                      <textarea
+                        value={activeUcapan}
+                        onChange={(e) => handleUcapanChange(e.target.value)}
+                        rows={2.5}
+                        placeholder="Tuliskan ucapan selamat & doa restu Anda di sini..."
+                        className="w-full px-3.5 py-2.5 border text-[10px] outline-none resize-none transition-all duration-300"
+                        style={{ 
+                          borderRadius: "10px",
+                          backgroundColor: inputBgColor,
+                          borderColor: inputBorderColor,
+                          color: textColor
+                        }}
+                      />
+                    </div>
+
+                    {/* 3. Konfirmasi Kehadiran */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[8.5px] font-extrabold uppercase tracking-widest" style={{ color: textColor, opacity: 0.85 }}>Konfirmasi Kehadiran ?</label>
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {[
+                          {
+                            value: "HADIR",
+                            label: "Hadir",
+                            icon: (
+                              <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            ),
+                            activeStyle: {
+                              backgroundColor: "rgba(16, 185, 129, 0.15)",
+                              borderColor: "#10b981",
+                              color: "#10b981"
+                            },
+                            inactiveStyle: {
+                              backgroundColor: inputBgColor,
+                              borderColor: inputBorderColor,
+                              color: getTranslucentColor(textColor, "99")
+                            }
+                          },
+                          {
+                            value: "TIDAK_HADIR",
+                            label: "Tidak Hadir",
+                            icon: (
+                              <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            ),
+                            activeStyle: {
+                              backgroundColor: "rgba(244, 63, 94, 0.15)",
+                              borderColor: "#f43f5e",
+                              color: "#f43f5e"
+                            },
+                            inactiveStyle: {
+                              backgroundColor: inputBgColor,
+                              borderColor: inputBorderColor,
+                              color: getTranslucentColor(textColor, "99")
+                            }
+                          }
+                        ].map((opt) => {
+                          const isSelected = activeKehadiran === opt.value;
+                          const btnStyle = isSelected ? opt.activeStyle : opt.inactiveStyle;
+                          return (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => handleKehadiranChange(opt.value as any)}
+                              className="py-2 px-3 text-[9.5px] border transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 font-bold"
+                              style={{ borderRadius: "10px", ...btnStyle }}
+                            >
+                              {opt.icon}
+                              <span>{opt.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {(() => {
+                      const btnSetting = data.setting_tombol || {};
+                      const btnText = btnSetting.text || "Konfirmasi";
+                      const btnSize = btnSetting.size || "9.5px";
+                      const btnColor = btnSetting.color || "#064e3b";
+                      const btnBg = btnSetting.bg_color || "#d4af37";
+                      const btnBorder = btnSetting.border_color || "transparent";
+                      const btnFamily = btnSetting.family || "Inter";
+                      
+                      const hasCustomBg = btnSetting.bg_color && btnSetting.bg_color !== "#d4af37";
+                      const bgStyle = hasCustomBg ? { backgroundColor: btnBg } : {};
+
+                      return (
+                        <button
+                          type="submit"
+                          disabled={submitting}
+                          className={`w-full py-2 hover:brightness-105 active:scale-[0.98] font-extrabold tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 border ${!hasCustomBg ? 'bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#d4af37]' : ''}`}
+                          style={{
+                            borderRadius: "10px",
+                            fontSize: btnSize,
+                            color: btnColor,
+                            borderColor: btnBorder,
+                            fontFamily: btnFamily,
+                            ...bgStyle,
+                          }}
+                        >
+                          {submitting ? (
+                            <>
+                              <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                              <span>Mengirim...</span>
+                            </>
+                          ) : (
+                            <span>{btnText}</span>
+                          )}
+                        </button>
+                      );
+                    })()}
+                  </form>
+                )}
               </div>
-            ))}
+            )}
+
+            {wishes && wishes.length > 0 && (
+              <div 
+                className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative animate-fade-in" 
+                style={{ 
+                  borderRadius: "6%",
+                  backgroundColor: bgCardColor,
+                  borderColor: borderCardColor
+                }}
+              >
+                <div style={getFontStyles(data.setting_head_rsvp || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
+                  <AnimatedWrapper val={data.setting_head_rsvp}>
+                    <div>Ucapan & Doa Restu</div>
+                    <div className={getDividerClass(data.setting_head_rsvp?.position)} />
+                  </AnimatedWrapper>
+                </div>
+                <div className="space-y-3 pt-1.5 max-h-[250px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-[#d4af37]/30 text-left">
+                  {wishes.map((w, idx) => (
+                    <div 
+                      key={w.id || idx} 
+                      className="backdrop-blur-md p-3.5 border border-slate-100/10 flex flex-col gap-1 transition-all duration-300 shadow-sm rounded-xl" 
+                      style={{ 
+                        backgroundColor: getTranslucentColor(textColor, "05"),
+                        borderColor: inputBorderColor,
+                      }}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: textColor }}>{w.nama_tamu || w.nama || "Tamu"}</span>
+                        {w.kehadiran && (
+                          <span 
+                            className="px-1.5 py-0.5 text-[7.5px] font-extrabold rounded" 
+                            style={{ 
+                              backgroundColor: w.kehadiran === "HADIR" ? "rgba(16, 185, 129, 0.1)" : "rgba(244, 63, 94, 0.1)",
+                              color: w.kehadiran === "HADIR" ? "#10b981" : "#f43f5e",
+                              border: `1px solid ${w.kehadiran === "HADIR" ? "rgba(16, 185, 129, 0.2)" : "rgba(244, 63, 94, 0.2)"}`
+                            }}
+                          >
+                            {w.kehadiran === "HADIR" ? "Hadir" : "Tidak Hadir"}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[9.5px] italic leading-relaxed" style={{ color: textColor, opacity: 0.85 }}>"{w.ucapan || w.pesan || "Mengirim doa restu."}"</p>
+                      {w.created_at && (
+                        <span className="text-[7px] self-end" style={{ color: textColor, opacity: 0.4 }}>
+                          {new Date(w.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {amplops.length > 0 && (
+              <div 
+                className="backdrop-blur-md border p-5 space-y-4 shadow-xl relative" 
+                style={{ 
+                  borderRadius: "6%",
+                  backgroundColor: bgCardColor,
+                  borderColor: borderCardColor
+                }}
+              >
+                <div style={getFontStyles(data.setting_head_gift || { size: "14px", color: "#ffffff", family: "Inter", position: "center" })} className="font-extrabold tracking-wider">
+                  <AnimatedWrapper val={data.setting_head_gift}>
+                    <div>Special Gift</div>
+                    <div className={getDividerClass(data.setting_head_gift?.position)} />
+                  </AnimatedWrapper>
+                </div>
+                <div className="space-y-3 pt-1.5">
+                  {amplops.map((a, i) => (
+                    <div 
+                      key={i} 
+                      className="backdrop-blur-md p-3.5 border border-l-2 flex justify-between items-center transition-all duration-300 shadow-sm" 
+                      style={{ 
+                        borderRadius: "6%",
+                        backgroundColor: getTranslucentColor(textColor, "05"),
+                        borderColor: inputBorderColor,
+                        borderLeftColor: "#d4af37"
+                      }}
+                    >
+                      <div className="space-y-0.5 text-left">
+                        <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: textColor, opacity: 0.5 }}>{a.bank || "Bank / E-Wallet"}</div>
+                        <div className="text-xs font-mono font-bold tracking-wider my-0.5" style={{ color: textColor }}>{a.nomor_rekening || "No. Rekening"}</div>
+                        <div className="text-[9.5px] font-medium" style={{ color: "#d4af37" }}>a.n. {a.atas_nama || "Atas Nama"}</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onCopyClick ? onCopyClick(a.nomor_rekening || "", i) : navigator.clipboard.writeText(a.nomor_rekening || "")}
+                        className="px-2.5 py-1 border text-[8px] font-extrabold tracking-wider transition-all duration-300 cursor-pointer"
+                        style={{ 
+                          borderRadius: "6%",
+                          backgroundColor: copiedIndex === i ? getTranslucentColor("#10b981", "30") : getTranslucentColor(textColor, "15"),
+                          borderColor: copiedIndex === i ? "#10b981" : borderCardColor,
+                          color: copiedIndex === i ? "#10b981" : textColor
+                        }}
+                      >
+                        {copiedIndex === i ? "Tersalin" : "Salin"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      <div className="text-center space-y-2.5 pt-5 border-t" style={{ borderTopColor: borderCardColor }}>
-        <div style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
-          <AnimatedWrapper val={data.setting_pesan_penutup}>
-            <p className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
-          </AnimatedWrapper>
-        </div>
-
-        {data.salam && (
-          <div style={getFontStyles(data.setting_salam || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
-            <AnimatedWrapper val={data.setting_salam}>
-              <p className="font-bold">{data.salam}</p>
+      {/* BLOCK 2: PESAN PENUTUP */}
+      <div className="w-full p-6 py-10 relative overflow-hidden flex flex-col justify-center text-center" style={bgPenutup}>
+        {penutupBgData.type === "video" && penutupBgData.value && (
+          <video
+            key={penutupBgData.value}
+            src={penutupBgData.value}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover z-0"
+          />
+        )}
+        <div className="relative z-10 w-full space-y-4">
+          <div style={getFontStyles(data.setting_pesan_penutup || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
+            <AnimatedWrapper val={data.setting_pesan_penutup}>
+              <p className="leading-relaxed whitespace-pre-wrap">{data.pesan_penutup || "Pesan penutup belum diisi."}</p>
             </AnimatedWrapper>
           </div>
-        )}
 
-        <div style={getFontStyles(data.setting_tertanda || { size: "14px", color: "#d4af37", family: "Inter", position: "center" })}>
-          <AnimatedWrapper val={data.setting_tertanda}>
-            <p className="font-black mt-2">{data.tertanda || "Nama & Nama"}</p>
-          </AnimatedWrapper>
+          {data.salam && (
+            <div style={getFontStyles(data.setting_salam || { size: "12px", color: "#ffffff", family: "Inter", position: "center" })}>
+              <AnimatedWrapper val={data.setting_salam}>
+                <p className="font-bold">{data.salam}</p>
+              </AnimatedWrapper>
+            </div>
+          )}
+
+          <div style={getFontStyles(data.setting_tertanda || { size: "14px", color: "#d4af37", family: "Inter", position: "center" })}>
+            <AnimatedWrapper val={data.setting_tertanda}>
+              <p className="font-black mt-2">{data.tertanda || "Nama & Nama"}</p>
+            </AnimatedWrapper>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
