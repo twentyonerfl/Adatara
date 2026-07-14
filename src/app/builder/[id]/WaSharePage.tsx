@@ -65,11 +65,38 @@ export default function WaSharePage({ invitation }: Props) {
     data.cover?.nama_acara ||
     data.penutup?.tertanda ||
     invitation.slug ||
-    "Mempelai";
+    "Tasya & Haikal";
 
-  const shareTextMessage = `*Undangan Pernikahan ${coupleName}*\n\nKepada Yth. Bpk/Ibu/Saudara/i\n*${
-    guestName.trim() || "Tamu Undangan"
-  }*\n\nTanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri acara pernikahan kami:\n\nLink Undangan:\n${customGuestUrl}\n\nTerima kasih.`;
+  const firstEvent = data?.acara?.acaras?.[0] || {};
+  const tanggalAcara =
+    data?.pembuka?.tanggal_acara || firstEvent.tanggal || "2026-08-04";
+  const namaAcara =
+    data.cover?.judul_acara
+      ? `${data.cover.judul_acara} ${coupleName}`
+      : `Resepsi Pernikahan ${coupleName}`;
+  const tertanda = data.penutup?.tertanda || coupleName;
+
+  const targetGuestName = guestName.trim() || "Tasya";
+
+  const shareTextMessage = `Bismillahirrahmanirrahim.
+Assalamu’alaikum wr.wb.
+Yth. Bapak/Ibu/Saudara/i
+${targetGuestName}
+Di Tempat
+
+Dengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :
+
+${namaAcara}
+Tanggal : ${tanggalAcara}
+
+Klik tautan berikut : ${customGuestUrl}
+
+Merupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. 
+
+Atas kehadiran dan doa restunya, kami ucapkan terima kasih.
+
+Hormat kami,
+${tertanda}`;
 
   const waShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
     shareTextMessage
@@ -101,7 +128,25 @@ export default function WaSharePage({ invitation }: Props) {
               name.replace(/ /g, "+")
             )}`;
 
-      const msg = `*Undangan Pernikahan ${coupleName}*\n\nKepada Yth. Bpk/Ibu/Saudara/i\n*${name}*\n\nTanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri acara pernikahan kami:\n\nLink Undangan:\n${gUrl}\n\nTerima kasih.`;
+      const msg = `Bismillahirrahmanirrahim.
+Assalamu’alaikum wr.wb.
+Yth. Bapak/Ibu/Saudara/i
+${name}
+Di Tempat
+
+Dengan segala kerendahan hati dan dengan ungkapan syukur atas karunia Allah SWT, izinkan kami mengundang Bapak/Ibu/Teman-Teman untuk hadir dan memberikan doa restu pada Acara :
+
+${namaAcara}
+Tanggal : ${tanggalAcara}
+
+Klik tautan berikut : ${gUrl}
+
+Merupakan sebuah kehormatan dan kebahagian bagi kami apabila Bapak/Ibu/Teman-Teman berkenan hadir dan memberikan doa restu di acara kami. 
+
+Atas kehadiran dan doa restunya, kami ucapkan terima kasih.
+
+Hormat kami,
+${tertanda}`;
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
         msg
       )}`;
