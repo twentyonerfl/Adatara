@@ -439,14 +439,14 @@ export function CeritaForm({ data, onChange, mode }: { data: any; onChange: (d: 
                 <div className="flex gap-1.5 flex-wrap">
                   {[
                     { val: "gap-0", label: "Tanpa Jarak" },
-                    { val: "gap-1", label: "Sangat Rapat" },
-                    { val: "gap-2", label: "Rapat" },
-                    { val: "gap-3", label: "Sedang" },
-                    { val: "gap-4", label: "Normal" },
-                    { val: "gap-6", label: "Lebar" },
-                    { val: "gap-8", label: "Sangat Lebar" },
+                    { val: "gap-1 gap-y-2", label: "Sangat Rapat" },
+                    { val: "gap-2 gap-y-3.5", label: "Rapat" },
+                    { val: "gap-3 gap-y-4.5", label: "Sedang" },
+                    { val: "gap-4 gap-y-6", label: "Normal" },
+                    { val: "gap-6 gap-y-8", label: "Lebar" },
+                    { val: "gap-8 gap-y-10", label: "Sangat Lebar" },
                   ].map(({ val, label }) => {
-                    const isActive = (data.galeri_custom_gap || "gap-2") === val;
+                    const isActive = (data.galeri_custom_gap || "gap-2 gap-y-3.5") === val;
                     return (
                       <button key={val} type="button" onClick={() => upd("galeri_custom_gap", val)}
                         className={`px-2.5 py-1 rounded-lg text-[9px] font-bold border transition-all duration-200 ${
@@ -737,7 +737,7 @@ export function CeritaPreview({ data }: { data: any }) {
               const layout = data.galeri_layout || "grid-2";
               if (layout === "grid" || layout === "grid-2") {
                 return (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2.5 gap-y-4">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                         <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
