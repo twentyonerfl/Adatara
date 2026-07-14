@@ -96,8 +96,8 @@ export function BuilderEditor({
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  // Manage view toggle: show editing form inside active screen
-  const [showActiveEditForm, setShowActiveEditForm] = useState(false);
+  // Manage view toggle: show editing form inside active screen (default true for immediate editing)
+  const [showActiveEditForm, setShowActiveEditForm] = useState(true);
 
   // Checkout states
   const [selectedPackage, setSelectedPackage] = useState<"PREMIUM" | "SULTAN" | "EXCLUSIVE">("PREMIUM");
@@ -768,7 +768,38 @@ export function BuilderEditor({
                       <Music className="w-5 h-5 text-[#d4af37]" />
                       Cover Undangan & Musik Latar
                     </h3>
-                    <p className="text-xs text-slate-500">Unggah cover vertical 9:16 dan pilih audio background.</p>
+                    <p className="text-xs text-slate-500">Sesuaikan judul, ucapan pembuka, foto cover vertical (9:16), dan audio background.</p>
+                  </div>
+
+                  {/* Judul Pasangan / Acara */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-slate-100">
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]">
+                        Nama Pasangan / Judul Utama
+                      </label>
+                      <input
+                        type="text"
+                        value={data?.cover?.nama_acara || ""}
+                        onChange={(e) => updateNestedVal("cover", "nama_acara", e.target.value)}
+                        placeholder="contoh: Aditya & Tara"
+                        className="w-full px-3.5 py-2 bg-white border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-semibold outline-none"
+                      />
+                      <p className="text-[9px] text-slate-400">Tampil menonjol di halaman depan (Cover).</p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-black uppercase tracking-wider text-[#064e3b]">
+                        Teks Ucapan Pembuka
+                      </label>
+                      <input
+                        type="text"
+                        value={data?.pembuka?.ucapan || ""}
+                        onChange={(e) => updateNestedVal("pembuka", "ucapan", e.target.value)}
+                        placeholder="Dengan memohon rahmat dan ridho Allah SWT..."
+                        className="w-full px-3.5 py-2 bg-white border border-slate-200 focus:border-[#d4af37] rounded-xl text-xs font-semibold outline-none"
+                      />
+                      <p className="text-[9px] text-slate-400">Tampil di bagian pembukaan kata sambutan.</p>
+                    </div>
                   </div>
 
                   {/* Cover Background File Upload */}

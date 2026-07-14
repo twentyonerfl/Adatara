@@ -13,9 +13,13 @@ import {
   Calendar,
   Layers,
   Link2,
-  Users
+  Users,
+  Pencil,
+  Sliders,
+  X,
+  Save
 } from "lucide-react";
-import { deleteInvitationAdmin, updateInvitationStatusAdmin } from "./actions";
+import { deleteInvitationAdmin, updateInvitationStatusAdmin, updateInvitationDetailsAdmin } from "./actions";
 import { DEFAULT_SHARE_TEMPLATE, formatShareText } from "@/app/dashboard/templates/builder-constants";
 
 interface InvitationWithRelations {
@@ -49,6 +53,80 @@ export default function InvitationsListAdmin({
   const [linkType, setLinkType] = useState<"query" | "path">("path");
   const [shareTextTemplate, setShareTextTemplate] = useState(DEFAULT_SHARE_TEMPLATE);
   const [generatedGuests, setGeneratedGuests] = useState<Array<{ name: string; url: string; waUrl: string; waText: string }>>([]);
+
+  // Quick Edit Modal states
+  const [quickEditInv, setQuickEditInv] = useState<any | null>(null);
+  const [quickSlug, setQuickSlug] = useState("");
+  const [quickStatus, setQuickStatus] = useState<"DRAFT" | "ACTIVE" | "INACTIVE">("DRAFT");
+  const [quickNamaAcara, setQuickNamaAcara] = useState("");
+  const [quickTanggal, setQuickTanggal] = useState("");
+  const [savingQuick, setSavingQuick] = useState(false);
+  const [quickError, setQuickError] = useState<string | null>(null);
+  const [quickSuccess, setQuickSuccess] = useState(false);
+
+  const handleOpenQuickEdit = (inv: any) => {
+    setQuickEditInv(inv);
+    setQuickSlug(inv.slug || "");
+    setQuickStatus(inv.status || "DRAFT");
+    const dataJson = inv.data_undangan_json || {};
+    setQuickNamaAcara(dataJson.cover?.nama_acara || "");
+    setQuickTanggal(dataJson.pembuka?.tanggal_acara || "");
+    setQuickError(null);
+    setQuickSuccess(false);
+  };
+
+  const handleSaveQuickEdit = async () => {
+    if (!quickEditInv) return;
+    setSavingQuick(true);
+    setQuickError(null);
+    setQuickSuccess(false);
+
+    try {
+      const currentJson = quickEditInv.data_undangan_json || {};
+      const updatedJson = {
+        ...currentJson,
+        cover: {
+          ...(currentJson.cover || {}),
+          nama_acara: quickNamaAcara
+        },
+        pembuka: {
+          ...(currentJson.pembuka || {}),
+          tanggal_acara: quickTanggal
+        }
+      };
+
+      const res = await updateInvitationDetailsAdmin(quickEditInv.id, {
+        slug: quickSlug,
+        status: quickStatus,
+        data_undangan_json: updatedJson
+      });
+
+      if (res.error) {
+        setQuickError(res.error);
+      } else {
+        setQuickSuccess(true);
+        setInvitations(prev =>
+          prev.map(inv =>
+            inv.id === quickEditInv.id
+              ? {
+                  ...inv,
+                  slug: quickSlug,
+                  status: quickStatus,
+                  data_undangan_json: updatedJson
+                }
+              : inv
+          )
+        );
+        setTimeout(() => {
+          setQuickEditInv(null);
+        }, 1200);
+      }
+    } catch (err) {
+      setQuickError("Gagal memperbarui data.");
+    } finally {
+      setSavingQuick(false);
+    }
+  };
 
   const handleOpenGuestGenerator = (inv: any) => {
     setSelectedInvForGuests(inv);
@@ -252,12 +330,28 @@ export default function InvitationsListAdmin({
 
                   {/* Actions */}
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-1.5">
                       <Link
-                        href={`/builder/${inv.id}`}
+                        href={`/builder/${inv.id}?edit=true`}
                         target="_blank"
-                        className="p-2 bg-[#064e3b] text-white border border-[#d4af37] rounded-xl hover:opacity-90 transition-opacity"
-                        title="Buka Live Editor"
+                        className="px-2.5 py-1.5 bg-[#064e3b] text-white border border-[#d4af37] rounded-xl hover:opacity-90 transition-opacity flex items-center gap-1 text-[11px] font-bold shadow-sm"
+                        title="Sunting / Edit Builder Undangan Keseluruhan"
+                      >
+                        <Pencil className="w-3.5 h-3.5 text-[#d4af37]" />
+                        <span className="hidden sm:inline">Edit Builder</span>
+                      </Link>
+                      <button
+                        onClick={() => handleOpenQuickEdit(inv)}
+                        className="p-2 bg-[#064e3b]/10 hover:bg-[#064e3b]/20 text-[#064e3b] border border-[#064e3b]/20 rounded-xl transition-all cursor-pointer"
+                        title="Edit Cepat (Slug, Judul, Status)"
+                      >
+                        <Sliders className="w-3.5 h-3.5" />
+                      </button>
+                      <Link
+                        href={`/${inv.slug}`}
+                        target="_blank"
+                        className="p-2 bg-slate-100 hover:bg-slate-200 text-[#064e3b] border border-slate-200 rounded-xl transition-all"
+                        title="Lihat Pratinjau Undangan Live"
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </Link>
@@ -440,6 +534,131 @@ export default function InvitationsListAdmin({
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* QUICK EDIT MODAL */}
+      {quickEditInv && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white border border-[#064e3b]/10 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col">
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-[#064e3b]/10 flex items-center justify-between bg-[#064e3b]/5">
+              <div>
+                <h3 className="font-black text-sm uppercase text-[#064e3b] tracking-wider flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-[#d4af37]" />
+                  Sunting Cepat Undangan
+                </h3>
+                <p className="text-[10px] text-[#064e3b]/60 font-semibold mt-0.5">
+                  Pelanggan: {quickEditInv.user.name} ({quickEditInv.user.email})
+                </p>
+              </div>
+              <button
+                onClick={() => setQuickEditInv(null)}
+                className="p-1.5 hover:bg-[#064e3b]/10 rounded-lg text-[#064e3b] font-bold text-xs cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body Form */}
+            <div className="p-6 space-y-4 text-[#064e3b]">
+              {quickError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{quickError}</span>
+                </div>
+              )}
+              {quickSuccess && (
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2">
+                  <Check className="w-4 h-4 shrink-0 text-emerald-600" />
+                  <span>Data undangan berhasil diperbarui!</span>
+                </div>
+              )}
+
+              {/* Slug URL */}
+              <div>
+                <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block mb-1">
+                  Slug Tautan Undangan (URL)
+                </label>
+                <div className="flex items-center gap-1 bg-[#f5f5dc]/20 border border-[#064e3b]/10 rounded-xl px-3 py-2 text-xs">
+                  <span className="opacity-50 font-semibold">/</span>
+                  <input
+                    type="text"
+                    value={quickSlug}
+                    onChange={(e) => setQuickSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                    className="bg-transparent border-none outline-none font-bold text-[#064e3b] flex-1"
+                  />
+                </div>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block mb-1">
+                  Status Publikasi
+                </label>
+                <select
+                  value={quickStatus}
+                  onChange={(e) => setQuickStatus(e.target.value as any)}
+                  className="w-full px-3 py-2 bg-white border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs font-bold outline-none cursor-pointer"
+                >
+                  <option value="DRAFT">DRAF</option>
+                  <option value="ACTIVE">AKTIF</option>
+                  <option value="INACTIVE">NON-AKTIF</option>
+                </select>
+              </div>
+
+              {/* Judul Acara / Nama Pasangan */}
+              <div>
+                <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block mb-1">
+                  Nama Pasangan / Judul Acara
+                </label>
+                <input
+                  type="text"
+                  value={quickNamaAcara}
+                  onChange={(e) => setQuickNamaAcara(e.target.value)}
+                  placeholder="contoh: Aditya & Tara"
+                  className="w-full px-3 py-2 bg-white border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs font-semibold outline-none"
+                />
+              </div>
+
+              {/* Tanggal Utama */}
+              <div>
+                <label className="text-[10px] font-black uppercase text-[#064e3b]/80 block mb-1">
+                  Tanggal Utama Acara
+                </label>
+                <input
+                  type="date"
+                  value={quickTanggal}
+                  onChange={(e) => setQuickTanggal(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-[#064e3b]/10 focus:border-[#d4af37] rounded-xl text-xs font-semibold outline-none"
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-3 border-t border-[#064e3b]/10">
+                <button
+                  type="button"
+                  onClick={() => setQuickEditInv(null)}
+                  className="flex-1 py-2.5 border border-[#064e3b]/20 hover:bg-[#064e3b]/5 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveQuickEdit}
+                  disabled={savingQuick}
+                  className="flex-1 py-2.5 bg-[#064e3b] hover:bg-[#064e3b]/95 text-white border border-[#d4af37] rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  {savingQuick ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  Simpan Perubahan
+                </button>
+              </div>
             </div>
           </div>
         </div>
