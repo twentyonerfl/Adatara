@@ -737,9 +737,9 @@ export function CeritaPreview({ data }: { data: any }) {
               const layout = data.galeri_layout || "grid-2";
               if (layout === "grid" || layout === "grid-2") {
                 return (
-                  <div className="grid grid-cols-2 gap-3 gap-y-8">
+                  <div className="grid grid-cols-2 gap-2.5">
                     {galeris.map((g, i) => (
-                      <div key={i} className="mb-6">
+                      <div key={i} className="mb-2.5">
                         <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                           <div className="aspect-[4/3] rounded-xl overflow-hidden border border-white/20 shadow-sm">
                             <img src={g} alt="" className="w-full h-full object-cover" />
@@ -752,9 +752,9 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "grid-3") {
                 return (
-                  <div className="grid grid-cols-3 gap-2 gap-y-6">
+                  <div className="grid grid-cols-3 gap-2">
                     {galeris.map((g, i) => (
-                      <div key={i} className="mb-5">
+                      <div key={i} className="mb-2">
                         <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.03}>
                           <div className="aspect-square rounded-lg overflow-hidden border border-white/20 shadow-sm">
                             <img src={g} alt="" className="w-full h-full object-cover" />
@@ -767,10 +767,10 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "masonry") {
                 return (
-                  <div className="columns-2 gap-3 space-y-6">
+                  <div className="columns-2 gap-2.5 space-y-2.5">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="fade-up" duration={0.6} delay={i * 0.04}>
-                        <div className="break-inside-avoid mb-6">
+                        <div className="break-inside-avoid mb-2.5">
                           <img src={g} alt="" className="w-full h-auto rounded-xl object-cover border border-white/20 shadow-sm" />
                         </div>
                       </ScrollReveal>
@@ -780,7 +780,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "carousel") {
                 return (
-                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
+                  <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="zoom-in" duration={0.6} delay={i * 0.05}>
                         <div className="w-[160px] shrink-0 snap-center">
@@ -797,10 +797,10 @@ export function CeritaPreview({ data }: { data: any }) {
                 const colsClass = scrollCols === "1" ? "grid-cols-1" : scrollCols === "3" ? "grid-cols-3" : "grid-cols-2";
                 return (
                   <div className="relative">
-                    <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-3 gap-y-6 pr-1 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent`}
+                    <div className={`${scrollH} overflow-y-auto grid ${colsClass} gap-2.5 pr-1 scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent`}
                       style={{ scrollbarWidth: "thin" }}>
                       {galeris.map((g, i) => (
-                        <div key={i} className="mb-4">
+                        <div key={i} className="mb-2.5">
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className="aspect-square rounded-xl overflow-hidden border border-white/20 shadow-sm shrink-0">
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -816,11 +816,11 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "collage") {
                 return (
-                  <div className="grid grid-cols-6 gap-3 gap-y-8">
+                  <div className="grid grid-cols-6 gap-2.5">
                     {galeris.map((g, i) => {
                       const colSpan = (i % 4 === 0 || i % 4 === 3) ? "col-span-4 aspect-[4/3]" : "col-span-2 aspect-square";
                       return (
-                        <div key={i} className={`${colSpan} mb-6`}>
+                        <div key={i} className={`${colSpan} mb-2.5`}>
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className="w-full h-full overflow-hidden rounded-xl border border-white/20 shadow-sm">
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -834,7 +834,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "aesthetic") {
                 return (
-                  <div className="grid grid-cols-6 gap-x-3 gap-y-8 pt-1 pb-4">
+                  <div className="grid grid-cols-6 gap-2.5 pt-1 pb-4">
                     {galeris.map((g, i) => {
                       let gridClass = "";
                       if (i % 7 === 0) {
@@ -853,7 +853,7 @@ export function CeritaPreview({ data }: { data: any }) {
                         gridClass = "col-span-6 max-w-[150px] mx-auto aspect-[3/4]";
                       }
                       return (
-                        <div key={i} className={`${gridClass} mb-6`}>
+                        <div key={i} className={`${gridClass} mb-2.5`}>
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className="w-full h-full border-2 border-white shadow-lg overflow-hidden rounded-none">
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -867,12 +867,12 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "polaroid") {
                 return (
-                  <div className="grid grid-cols-2 gap-3 gap-y-8 pt-1">
+                  <div className="grid grid-cols-2 gap-3 pt-1">
                     {galeris.map((g, i) => {
                       const rotations = ["-rotate-2", "rotate-3", "rotate-1", "-rotate-3", "rotate-2", "-rotate-1"];
                       const rot = rotations[i % rotations.length];
                       return (
-                        <div key={i} className="mb-6">
+                        <div key={i} className="mb-3">
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className={`bg-white p-1.5 pb-4 shadow-md border border-black/5 ${rot} transition-transform hover:rotate-0 duration-300`}>
                               <img src={g} alt="" className="w-full aspect-square object-cover" />
@@ -887,9 +887,9 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "grid-4") {
                 return (
-                  <div className="grid grid-cols-4 gap-2 gap-y-6 pt-1">
+                  <div className="grid grid-cols-4 gap-1.5 pt-1">
                     {galeris.map((g, i) => (
-                      <div key={i} className="mb-4">
+                      <div key={i} className="mb-1.5">
                         <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.03}>
                           <div className="aspect-square rounded-md overflow-hidden border border-white/20 shadow-sm">
                             <img src={g} alt="" className="w-full h-full object-cover" />
@@ -902,10 +902,10 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "masonry-3") {
                 return (
-                  <div className="columns-3 gap-2 space-y-6 pt-1">
+                  <div className="columns-3 gap-1.5 space-y-1.5 pt-1">
                     {galeris.map((g, i) => (
                       <ScrollReveal key={i} animationType="fade-up" duration={0.6} delay={i * 0.04}>
-                        <div className="break-inside-avoid mb-5">
+                        <div className="break-inside-avoid mb-1.5">
                           <img src={g} alt="" className="w-full h-auto rounded-lg object-cover border border-white/20 shadow-sm" />
                         </div>
                       </ScrollReveal>
@@ -915,7 +915,7 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "mosaic-modern") {
                 return (
-                  <div className="grid grid-cols-6 gap-3 gap-y-8 pt-1">
+                  <div className="grid grid-cols-6 gap-2.5 pt-1">
                     {galeris.map((g, i) => {
                       const indexPattern = i % 6;
                       let colSpan = "col-span-3 aspect-[4/3]";
@@ -926,7 +926,7 @@ export function CeritaPreview({ data }: { data: any }) {
                       else if (indexPattern === 4) colSpan = "col-span-3 aspect-[4/3]";
                       else if (indexPattern === 5) colSpan = "col-span-3 aspect-[4/3]";
                       return (
-                        <div key={i} className={`${colSpan} mb-6`}>
+                        <div key={i} className={`${colSpan} mb-2.5`}>
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className="w-full h-full overflow-hidden rounded-xl border border-white/20 shadow-sm">
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -940,12 +940,12 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "zigzag") {
                 return (
-                  <div className="space-y-6 pt-1">
+                  <div className="space-y-3 pt-1">
                     {galeris.map((g, i) => {
                       const isEven = i % 2 === 0;
                       return (
                         <ScrollReveal key={i} animationType={isEven ? "fade-right" : "fade-left"} duration={0.6} delay={0.05}>
-                          <div className={`flex ${isEven ? "justify-start" : "justify-end"} mb-6`}>
+                          <div className={`flex ${isEven ? "justify-start" : "justify-end"} mb-3`}>
                             <div className="w-[85%] aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-white/25 transform hover:scale-[1.02] transition-transform duration-300">
                               <img src={g} alt="" className="w-full h-full object-cover" />
                             </div>
@@ -958,12 +958,12 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "asymmetric") {
                 return (
-                  <div className="grid grid-cols-3 gap-3 gap-y-8 pt-1">
+                  <div className="grid grid-cols-3 gap-2.5 pt-1">
                     {galeris.map((g, i) => {
                       const indexPattern = i % 4;
                       const colSpan = (indexPattern === 0 || indexPattern === 3) ? "col-span-2 aspect-[4/3]" : "col-span-1 aspect-[4/3]";
                       return (
-                        <div key={i} className={`${colSpan} mb-6`}>
+                        <div key={i} className={`${colSpan} mb-2.5`}>
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className="w-full h-full overflow-hidden rounded-xl border border-white/20 shadow-sm">
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -977,14 +977,14 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "bubbles") {
                 return (
-                  <div className="grid grid-cols-2 gap-4 gap-y-8 pt-1">
+                  <div className="grid grid-cols-2 gap-3 pt-1">
                     {galeris.map((g, i) => {
                       const isEven = i % 2 === 0;
                       const bubbleClass = isEven 
                         ? "aspect-square rounded-full scale-95 hover:scale-100" 
                         : "aspect-[3/4] rounded-[100px] translate-y-3 hover:translate-y-1";
                       return (
-                        <div key={i} className="mb-6">
+                        <div key={i} className="mb-3">
                           <ScrollReveal animationType="zoom-in" duration={0.7} delay={i * 0.05}>
                             <div className={`${bubbleClass} overflow-hidden border-2 border-white shadow-md transition-all duration-300`}>
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -998,14 +998,14 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "parallax-floating") {
                 return (
-                  <div className="space-y-6 pt-2 pb-6 relative">
+                  <div className="space-y-4 pt-2 pb-4 relative">
                     {galeris.map((g, i) => {
                       const indexPattern = i % 3;
                       let offsetClass = "w-[75%] mr-auto rotate-1";
                       if (indexPattern === 1) offsetClass = "w-[75%] ml-auto -mt-6 -rotate-2 relative z-10";
                       else if (indexPattern === 2) offsetClass = "w-[85%] mx-auto -mt-4 rotate-2";
                       return (
-                        <div key={i} className="mb-6">
+                        <div key={i} className="mb-4">
                           <ScrollReveal animationType="zoom-in" duration={0.7} delay={i * 0.05}>
                             <div className={`${offsetClass} aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/30 transform hover:rotate-0 transition-all duration-500`}>
                               <img src={g} alt="" className="w-full h-full object-cover" />
@@ -1019,12 +1019,12 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "minimal-polaroid") {
                 return (
-                  <div className="space-y-6 pt-1">
+                  <div className="space-y-4 pt-1">
                     {galeris.map((g, i) => {
                       const isEven = i % 2 === 0;
                       const rotation = isEven ? "rotate-1" : "-rotate-1";
                       return (
-                        <div key={i} className="mb-6">
+                        <div key={i} className="mb-4">
                           <ScrollReveal animationType="zoom-in" duration={0.7} delay={0.05}>
                             <div className="flex justify-center">
                               <div className={`w-[85%] bg-white p-2.5 pb-6 shadow-xl border border-black/5 rounded-none transform ${rotation} hover:rotate-0 transition-transform duration-300`}>
@@ -1041,9 +1041,9 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "classic-frame") {
                 return (
-                  <div className="grid grid-cols-2 gap-4 gap-y-8 pt-1">
+                  <div className="grid grid-cols-2 gap-3 pt-1">
                     {galeris.map((g, i) => (
-                      <div key={i} className="mb-6">
+                      <div key={i} className="mb-3">
                         <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                           <div className="aspect-[3/4] rounded-lg overflow-hidden bg-white p-2 shadow-lg border-2 border-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
                             <div className="w-full h-full overflow-hidden border border-[#d4af37]/20 relative">
@@ -1088,18 +1088,18 @@ export function CeritaPreview({ data }: { data: any }) {
                 const first = galeris[0];
                 const others = galeris.slice(1);
                 return (
-                  <div className="space-y-4 pt-1">
+                  <div className="space-y-3 pt-1">
                     {first && (
                       <ScrollReveal animationType="zoom-in" duration={0.8}>
-                        <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md mb-6">
+                        <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/20 shadow-md mb-3">
                           <img src={first} alt="" className="w-full h-full object-cover" />
                         </div>
                       </ScrollReveal>
                     )}
                     {others.length > 0 && (
-                      <div className="grid grid-cols-3 gap-2 gap-y-6">
+                      <div className="grid grid-cols-3 gap-2">
                         {others.map((g, i) => (
-                          <div key={i} className="mb-5">
+                          <div key={i} className="mb-2">
                             <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                               <div className="aspect-square rounded-lg overflow-hidden border border-white/10 shadow-sm">
                                 <img src={g} alt="" className="w-full h-full object-cover" />
@@ -1114,18 +1114,19 @@ export function CeritaPreview({ data }: { data: any }) {
               }
               if (layout === "custom") {
                 const rawCustomGap = data.galeri_custom_gap || "gap-2";
-                let customGapClass = "gap-2 gap-y-8";
-                if (rawCustomGap === "gap-0") customGapClass = "gap-0 gap-y-4";
-                else if (rawCustomGap === "gap-1") customGapClass = "gap-1 gap-y-6";
-                else if (rawCustomGap === "gap-2") customGapClass = "gap-2 gap-y-8";
-                else if (rawCustomGap === "gap-3") customGapClass = "gap-3 gap-y-8";
-                else if (rawCustomGap === "gap-4") customGapClass = "gap-4 gap-y-10";
-                else if (rawCustomGap === "gap-6") customGapClass = "gap-6 gap-y-12";
-                else if (rawCustomGap === "gap-8") customGapClass = "gap-8 gap-y-12";
-                else customGapClass = `${rawCustomGap} gap-y-8`;
+                let gapClass = "gap-2.5";
+                let mbClass = "mb-2.5";
+
+                if (rawCustomGap === "gap-0") { gapClass = "gap-0"; mbClass = "mb-0"; }
+                else if (rawCustomGap === "gap-1") { gapClass = "gap-1"; mbClass = "mb-1"; }
+                else if (rawCustomGap === "gap-2") { gapClass = "gap-2"; mbClass = "mb-2"; }
+                else if (rawCustomGap === "gap-3") { gapClass = "gap-3"; mbClass = "mb-3"; }
+                else if (rawCustomGap === "gap-4") { gapClass = "gap-4"; mbClass = "mb-4"; }
+                else if (rawCustomGap === "gap-6") { gapClass = "gap-6"; mbClass = "mb-6"; }
+                else if (rawCustomGap === "gap-8") { gapClass = "gap-8"; mbClass = "mb-8"; }
 
                 return (
-                  <div className={`grid grid-cols-6 ${customGapClass} pt-1 pb-4`}>
+                  <div className={`grid grid-cols-6 ${gapClass} pt-1 pb-4`}>
                     {galeris.map((g, i) => {
                       const config = data.galeri_custom_configs?.[i] || {};
                       const colSpan = config.colSpan || "col-span-3";
@@ -1148,7 +1149,7 @@ export function CeritaPreview({ data }: { data: any }) {
                       }
 
                       return (
-                        <div key={i} className={`${colSpan} mb-6`}>
+                        <div key={i} className={`${colSpan} ${mbClass}`}>
                           <ScrollReveal animationType="zoom-in" duration={0.6} delay={i * 0.04}>
                             <div className={`w-full ${aspect} ${rotate} ${styleClass} overflow-hidden transition-all duration-300`}>
                               <img src={g} alt="" className={imgClass} />
