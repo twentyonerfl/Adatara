@@ -55,9 +55,7 @@ export default function WaSharePage({ invitation }: Props) {
   const customGuestUrl = guestName.trim()
     ? linkType === "query"
       ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestName.trim())}`
-      : `${primaryInvitationUrl}/${encodeURIComponent(
-          guestName.trim().replace(/ /g, "+")
-        )}`
+      : `${primaryInvitationUrl}/${encodeURIComponent(guestName.trim()).replace(/%20/g, "+")}`
     : primaryInvitationUrl;
 
   const data = invitation.data_undangan_json || {};
@@ -124,9 +122,7 @@ ${tertanda}`;
       const gUrl =
         linkType === "query"
           ? `${primaryInvitationUrl}?to=${encodeURIComponent(name)}`
-          : `${primaryInvitationUrl}/${encodeURIComponent(
-              name.replace(/ /g, "+")
-            )}`;
+          : `${primaryInvitationUrl}/${encodeURIComponent(name).replace(/%20/g, "+")}`;
 
       const msg = `Bismillahirrahmanirrahim.
 Assalamu’alaikum wr.wb.

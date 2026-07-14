@@ -404,7 +404,7 @@ export function BuilderEditor({
   const customGuestUrl = guestNameInput
     ? (linkType === "query"
       ? `${primaryInvitationUrl}?to=${encodeURIComponent(guestNameInput.trim())}`
-      : `${primaryInvitationUrl}/${encodeURIComponent(guestNameInput.trim().replace(/ /g, "+"))}`)
+      : `${primaryInvitationUrl}/${encodeURIComponent(guestNameInput.trim()).replace(/%20/g, "+")}`)
     : primaryInvitationUrl;
 
   const copyToClipboard = (text: string) => {

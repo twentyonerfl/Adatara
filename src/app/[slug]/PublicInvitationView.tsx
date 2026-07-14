@@ -95,7 +95,10 @@ export function PublicInvitationView({
 }) {
   const searchParams = useSearchParams();
   const data = invitation.data_undangan_json;
-  const guestName = guestNameOverride || searchParams.get("to") || data.cover?.default_guest_label || "Tamu Undangan";
+  const rawGuestParam = guestNameOverride || searchParams.get("to");
+  const guestName = rawGuestParam
+    ? decodeURIComponent(rawGuestParam.replace(/\+/g, " "))
+    : (data.cover?.default_guest_label || "Tamu Undangan");
 
   const musicUrl = data.cover?.music_url;
   const bahasa: "id" | "en" = data.cover?.bahasa || "id";

@@ -156,7 +156,7 @@ export default function InvitationsListAdmin({
       if (linkType === "query") {
         url = `${primaryUrl}?to=${encodeURIComponent(name)}`;
       } else {
-        url = `${primaryUrl}/${encodeURIComponent(name.replace(/ /g, "+"))}`;
+        url = `${primaryUrl}/${encodeURIComponent(name).replace(/%20/g, "+")}`;
       }
       
       const waText = formatShareText(shareTextTemplate, name, url, selectedInvForGuests);

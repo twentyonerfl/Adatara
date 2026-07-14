@@ -88,7 +88,7 @@ export default function TemplateBuilderEditor({
   const customWaGuestUrl = waGuestName.trim()
     ? (waLinkFormat === "query"
         ? `${baseWaUrl}?to=${encodeURIComponent(waGuestName.trim())}`
-        : `${baseWaUrl}/${encodeURIComponent(waGuestName.trim().replace(/ /g, "+"))}`)
+        : `${baseWaUrl}/${encodeURIComponent(waGuestName.trim()).replace(/%20/g, "+")}`)
     : baseWaUrl;
 
   const currentCoupleName = coverData?.nama_acara || penutupData?.tertanda || "Mempelai";
@@ -100,7 +100,7 @@ export default function TemplateBuilderEditor({
     const resList = names.map(name => {
       const guestUrl = waLinkFormat === "query"
         ? `${baseWaUrl}?to=${encodeURIComponent(name)}`
-        : `${baseWaUrl}/${encodeURIComponent(name.replace(/ /g, "+"))}`;
+        : `${baseWaUrl}/${encodeURIComponent(name).replace(/%20/g, "+")}`;
       const waText = `*Undangan Pernikahan ${currentCoupleName}*\n\nKepada Yth. Bpk/Ibu/Saudara/i\n*${name}*\n\nTanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri acara pernikahan kami:\n\nLink Undangan:\n${guestUrl}\n\nTerima kasih.`;
       const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`;
       return { name, url: guestUrl, waText, waUrl };
