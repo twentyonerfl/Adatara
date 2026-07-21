@@ -6,8 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { submitRsvp } from "./actions";
 import { 
-  Volume2,
-  VolumeX
+  Music
 } from "lucide-react";
 
 import { CoverPreview, PembukaPreview } from "../dashboard/templates/BuilderTabsCoverPembuka";
@@ -333,13 +332,10 @@ export function PublicInvitationView({
       {isOpen && musicUrl && (
         <button
           onClick={toggleMusic}
-          className="fixed bottom-6 right-6 z-40 p-3.5 bg-indigo-600 border border-indigo-500/30 text-white rounded-full shadow-lg shadow-indigo-600/20 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+          className="fixed bottom-5 right-5 z-40 p-2.5 bg-black/50 backdrop-blur-sm border border-white/20 text-white rounded-full shadow-lg cursor-pointer hover:bg-black/70 active:scale-95 transition-all"
+          title={isPlaying ? "Matikan Musik" : "Putar Musik"}
         >
-          {isPlaying ? (
-            <Volume2 className="w-5 h-5 animate-pulse" />
-          ) : (
-            <VolumeX className="w-5 h-5" />
-          )}
+          <Music className={`w-4 h-4 ${isPlaying ? "animate-pulse text-white" : "opacity-40 text-white"}`} />
         </button>
       )}
 

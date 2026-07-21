@@ -26,6 +26,7 @@ export default async function InvitationsPageAdmin() {
       },
       template: {
         select: {
+          id: true,
           nama_template: true,
           kategori: true
         }

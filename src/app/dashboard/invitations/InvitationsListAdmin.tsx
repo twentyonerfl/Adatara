@@ -17,7 +17,8 @@ import {
   Pencil,
   Sliders,
   X,
-  Save
+  Save,
+  Share2
 } from "lucide-react";
 import { deleteInvitationAdmin, updateInvitationStatusAdmin, updateInvitationDetailsAdmin } from "./actions";
 import { DEFAULT_SHARE_TEMPLATE, formatShareText } from "@/app/dashboard/templates/builder-constants";
@@ -32,6 +33,7 @@ interface InvitationWithRelations {
     name: string;
   };
   template: {
+    id: string;
     nama_template: string;
     kategori: string;
   };
@@ -334,19 +336,19 @@ export default function InvitationsListAdmin({
                       <Link
                         href={`/builder/${inv.id}?edit=true`}
                         target="_blank"
-                        className="px-2.5 py-1.5 bg-[#064e3b] text-white border border-[#d4af37] rounded-xl hover:opacity-90 transition-opacity flex items-center gap-1 text-[11px] font-bold shadow-sm"
-                        title="Sunting / Edit Builder Undangan Keseluruhan"
+                        className="p-2 bg-[#064e3b] text-white border border-[#d4af37] rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center shadow-sm"
+                        title="Generator Link & Share WA Undangan"
                       >
-                        <Pencil className="w-3.5 h-3.5 text-[#d4af37]" />
-                        <span className="hidden sm:inline">Edit Builder</span>
+                        <Share2 className="w-3.5 h-3.5 text-[#d4af37]" />
                       </Link>
-                      <button
-                        onClick={() => handleOpenQuickEdit(inv)}
-                        className="p-2 bg-[#064e3b]/10 hover:bg-[#064e3b]/20 text-[#064e3b] border border-[#064e3b]/20 rounded-xl transition-all cursor-pointer"
-                        title="Edit Cepat (Slug, Judul, Status)"
+                      <Link
+                        href={`/dashboard/invitations/edit/${inv.id}`}
+                        target="_blank"
+                        className="p-2 bg-[#064e3b]/10 hover:bg-[#064e3b]/20 text-[#064e3b] border border-[#064e3b]/20 rounded-xl transition-all"
+                        title="Edit Langsung Undangan Keseluruhan (Cover, Pembuka, Profil, Acara, Cerita, Penutup)"
                       >
                         <Sliders className="w-3.5 h-3.5" />
-                      </button>
+                      </Link>
                       <Link
                         href={`/${inv.slug}`}
                         target="_blank"
